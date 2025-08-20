@@ -1,5 +1,5 @@
 // Site-wide name variable
-const siteName = "The WrkShop";
+const siteName = "TheWrkShop";
 
 // Replace all .sitename spans with the site name
 document.querySelectorAll(".sitename").forEach(el => {
