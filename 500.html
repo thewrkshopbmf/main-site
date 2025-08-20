@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Server Error | The WrkShop</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .error-container h1 {
+            font-size: 6rem;
+            color: #3e2c23;
+            margin-bottom: 1rem;
+        }
+        .error-container p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .error-container a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background-color: #3e2c23;
+            color: #f4f1ee;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .error-container a:hover {
+            background-color: #5b3a29;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header/Navbar -->
+    <header>
+        <nav class="navbar">
+            <div class="logo"><span class="sitename"></span></div>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="podcasts.html">Our Podcast</a></li>
+                <li><a href="index.html#contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="error-container">
+        <h1>500</h1>
+        <p>Sorry, something went wrong on our end.<br/>Please try again later.</p>
+        <a href="index.html">Return Home</a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo"><span class="sitename"></span></div>
+            <p>&copy; 2025 <span class="sitename"></span> All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
