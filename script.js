@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
 
     const email = document.getElementById("email").value;
-    const formId = "cb4ba088db"; // Replace with your ConvertKit form ID
+    const formId = "8460334"; // Replace with your ConvertKit form ID
     const apiKey = "qwXtdRjQfoLppDUjjcd_8Q"; // Replace with your ConvertKit API Key
 
     try {
