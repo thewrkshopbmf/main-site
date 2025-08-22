@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Daily Archive</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <meta name="description" content="Browse past Daily devotionals—Hidden Gem + Verse of the Day—by date."/>
+  <style>
+    .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
+    .page-hero h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin-bottom:.4rem; }
+    .page-hero p { opacity:.95; max-width:720px; margin:0 auto; }
+
+    .container { max-width:1100px; margin:0 auto; padding:0 1rem; }
+
+    .toolbar { display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; justify-content:center;
+      padding:1rem; background:rgba(0,0,0,.04); border-top:1px solid rgba(0,0,0,.06); border-bottom:1px solid rgba(0,0,0,.06); }
+    .search-input, .select { padding:.6rem .8rem; border-radius:10px; border:1px solid rgba(0,0,0,.2); }
+    .search-input { width:280px; }
+    .results-count { text-align:center; padding:.5rem; color:#3e2c23; font-weight:600; }
+
+    .archive-grid { display:grid; gap:1rem; grid-template-columns:repeat(3, 1fr); }
+    .archive-card {
+      background:#f4f1ee; color:#2b2b2b; border:1px solid rgba(0,0,0,.08);
+      border-radius:14px; padding:1rem; box-shadow:0 2px 6px rgba(0,0,0,.07);
+      display:flex; flex-direction:column; gap:.4rem; text-decoration:none;
+    }
+    .archive-card:hover { transform: translateY(-2px); transition: transform .08s ease; }
+    .badge { display:inline-block; font-size:.8rem; font-weight:700; background:#3e2c23; color:#f4f1ee; padding:.15rem .55rem; border-radius:999px; }
+    .ac-head { display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+    .ac-date { color:#6b5b53; font-size:.9rem; white-space:nowrap; }
+    .ac-title { color:#3e2c23; margin:.2rem 0 0; font-size:1.05rem; }
+    .ac-verse { color:#6b5b53; font-style:italic; font-size:.95rem; }
+    .empty { text-align:center; padding:2rem; color:#6b5b53; }
+
+    .pager { display:flex; justify-content:center; gap:.5rem; padding:1rem 0; }
+    .pager button { border:1px solid rgba(0,0,0,.15); padding:.5rem .8rem; border-radius:8px; background:#fff; cursor:pointer; }
+    .pager button[disabled] { opacity:.5; cursor:not-allowed; }
+
+    @media (max-width: 1020px){ .archive-grid { grid-template-columns:repeat(2,1fr);} }
+    @media (max-width: 640px){ .archive-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- Header/Navbar -->
+  <div id="site-header"></div>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <h1>Daily Archive</h1>
+    <p>Find previous devotionals by date. Hidden Gem + Verse of the Day, ready when you are.</p>
+  </section>
+
+  <!-- Filters -->
+  <section class="toolbar">
+    <select id="yearSel" class="select" aria-label="Filter by year">
+      <!-- filled by JS -->
+    </select>
+    <select id="monthSel" class="select" aria-label="Filter by month">
+      <option value="all">All Months</option>
+      <option value="01">January</option><option value="02">February</option><option value="03">March</option>
+      <option value="04">April</option><option value="05">May</option><option value="06">June</option>
+      <option value="07">July</option><option value="08">August</option><option value="09">September</option>
+      <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+    </select>
+    <input id="archSearch" class="search-input" type="search" placeholder="Search… (title, verse)"/>
+  </section>
+
+  <div class="results-count" id="resultsCount" aria-live="polite"></div>
+
+  <!-- Archive Grid -->
+  <main class="content-section container">
+    <section class="archive-grid" id="archiveGrid" aria-label="Daily entries">
+      <!-- Fallback samples; replaced by /data/daily-archive.json if present -->
+      <a class="archive-card" href="daily/2025-08-22.html" data-date="2025-08-22" data-title="First Things First" data-verse="Matthew 6:33">
+        <div class="ac-head">
+          <span class="badge">Hidden Gem</span>
+          <time class="ac-date" datetime="2025-08-22">Aug 22, 2025</time>
+        </div>
+        <h3 class="ac-title">First Things First</h3>
+        <p class="ac-verse">Matthew 6:33</p>
+      </a>
+
+      <a class="archive-card" href="daily/2025-08-21.html" data-date="2025-08-21" data-title="Quiet Strength" data-verse="Psalm 46:10">
+        <div class="ac-head">
+          <span class="badge">Hidden Gem</span>
+          <time class="ac-date" datetime="2025-08-21">Aug 21, 2025</time>
+        </div>
+        <h3 class="ac-title">Quiet Strength</h3>
+        <p class="ac-verse">Psalm 46:10</p>
+      </a>
+
+      <a class="archive-card" href="daily/2025-08-20.html" data-date="2025-08-20" data-title="Built, Not Bought" data-verse="Proverbs 24:3-4">
+        <div class="ac-head">
+          <span class="badge">Hidden Gem</span>
+          <time class="ac-date" datetime="2025-08-20">Aug 20, 2025</time>
+        </div>
+        <h3 class="ac-title">Built, Not Bought</h3>
+        <p class="ac-verse">Proverbs 24:3–4</p>
+      </a>
+    </section>
+
+    <p class="empty" id="emptyMsg" style="display:none">No entries match your filters.</p>
+
+    <!-- Simple pager (client-side) -->
+    <nav class="pager" aria-label="Pagination">
+      <button id="prevPage" disabled>← Newer</button>
+      <button id="nextPage" disabled>Older →</button>
+    </nav>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+  <script>
+    // Branding + mobile nav safety
+    document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
+    const hb = document.getElementById('hamburger'); const nl = document.getElementById('nav-links');
+    if (hb && nl) hb.addEventListener('click',()=>nl.classList.toggle('open'));
+
+    (function(){
+      const grid = document.getElementById('archiveGrid');
+      const yrSel = document.getElementById('yearSel');
+      const moSel = document.getElementById('monthSel');
+      const search = document.getElementById('archSearch');
+      const empty = document.getElementById('emptyMsg');
+      const countEl = document.getElementById('resultsCount');
+      const prevBtn = document.getElementById('prevPage');
+      const nextBtn = document.getElementById('nextPage');
+
+      let all = Array.from(grid.querySelectorAll('.archive-card')).map(cardToObj);
+      let view = [];
+      const PAGE = 12; // entries per page
+      let page = 0;
+
+      function cardToObj(a){
+        const date = a.getAttribute('data-date'); // yyyy-mm-dd
+        const title = a.getAttribute('data-title') || '';
+        const verse = a.getAttribute('data-verse') || '';
+        const href = a.getAttribute('href') || '#';
+        return {date, title, verse, href};
+      }
+      function objToCard(o){
+        const a = document.createElement('a');
+        a.className = 'archive-card';
+        a.href = o.href || '#';
+        a.setAttribute('data-date', o.date);
+        a.setAttribute('data-title', o.title || '');
+        a.setAttribute('data-verse', o.verse || '');
+
+        const dt = new Date(o.date + 'T00:00:00');
+        const human = dt.toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
+
+        a.innerHTML = `
+          <div class="ac-head">
+            <span class="badge">Hidden Gem</span>
+            <time class="ac-date" datetime="${o.date}">${human}</time>
+          </div>
+          <h3 class="ac-title">${o.title || 'Untitled'}</h3>
+          <p class="ac-verse">${o.verse || ''}</p>
+        `;
+        return a;
+      }
+
+      function populateYearOptions(){
+        const years = Array.from(new Set(all.map(e => e.date.slice(0,4)))).sort((a,b)=>b.localeCompare(a));
+        yrSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+      }
+
+      function apply(){
+        const y = yrSel.value;
+        const m = moSel.value; // 'all' or '01'..'12'
+        const q = (search.value||'').trim().toLowerCase();
+
+        let filtered = all.filter(e => e.date.startsWith(y));
+        if (m !== 'all') filtered = filtered.filter(e => e.date.slice(5,7) === m);
+        if (q) filtered = filtered.filter(e =>
+          (e.title||'').toLowerCase().includes(q) ||
+          (e.verse||'').toLowerCase().includes(q)
+        );
+
+        // newest first
+        filtered.sort((a,b) => b.date.localeCompare(a.date));
+
+        view = filtered;
+        page = 0;
+        render();
+      }
+
+      function render(){
+        grid.innerHTML = '';
+        const start = page * PAGE;
+        const chunk = view.slice(start, start + PAGE);
+        chunk.forEach(o => grid.appendChild(objToCard(o)));
+
+        const shown = chunk.length;
+        empty.style.display = shown ? 'none' : '';
+        if (countEl) countEl.textContent = `${view.length} entr${view.length===1?'y':'ies'}`;
+
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = start + PAGE >= view.length;
+      }
+
+      prevBtn.addEventListener('click', () => { if(page>0){ page--; render(); }});
+      nextBtn.addEventListener('click', () => { if((page+1)*PAGE < view.length){ page++; render(); }});
+
+      yrSel.addEventListener('change', apply);
+      moSel.addEventListener('change', apply);
+      search.addEventListener('input', apply);
+
+      // Try loading /data/daily-archive.json
+      // Expected array of: { "date":"2025-08-22", "gem_title":"First Things First", "verse_ref":"Matthew 6:33", "href":"daily/2025-08-22.html" }
+      (async function loadJSON(){
+        try{
+          const r = await fetch('/data/daily/daily-archive.json', {cache:'no-store'});
+          if(!r.ok) { initFromFallback(); return; }
+          const list = await r.json();
+          if(!Array.isArray(list) || !list.length) { initFromFallback(); return; }
+
+          all = list.map(x => ({
+            date: x.date,
+            title: x.gem_title || '',
+            verse: x.verse_ref || '',
+            href: x.href || `daily/${x.date}.html`
+          }));
+          populateYearOptions();
+          apply();
+        }catch(e){
+          initFromFallback();
+        }
+      })();
+
+      function initFromFallback(){
+        // use hardcoded samples already in DOM
+        populateYearOptions();
+        apply();
+      }
+    })();
+  </script>
+</body>
+</html>

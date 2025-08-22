@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Blog</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <meta name="description" content="TheWrkShop Blog — short, weighty reads on faith, work, discipline, and brotherhood."/>
+  <style>
+    /* Page polish (keeps your palette) */
+    .page-hero {
+      background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center;
+    }
+    .page-hero h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin-bottom:.4rem; }
+    .page-hero p { opacity:.95; max-width:720px; margin:0 auto; }
+
+    .container { max-width:1100px; margin:0 auto; padding:0 1rem; }
+
+    .toolbar { display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; justify-content:center;
+      padding:1rem; background:rgba(0,0,0,.04); border-top:1px solid rgba(0,0,0,.06); border-bottom:1px solid rgba(0,0,0,.06); }
+    .search-input { width:280px; padding:.65rem .9rem; border-radius:10px; border:1px solid rgba(0,0,0,.15); outline:none; }
+    .chip { cursor:pointer; }
+    .results-count { text-align:center; padding:.5rem; color:#3e2c23; font-weight:600; }
+
+    .blog-grid { display:grid; gap:1rem; grid-template-columns:repeat(3, 1fr); }
+    .blog-card {
+      background:#f4f1ee; border:1px solid rgba(0,0,0,.08); border-radius:14px; padding:1rem;
+      box-shadow:0 2px 6px rgba(0,0,0,.07); display:flex; flex-direction:column; gap:.5rem;
+    }
+    .blog-card h3 { margin:.1rem 0; }
+    .blog-card h3 a { color:#3e2c23; text-decoration:none; }
+    .meta { color:#6b5b53; font-size:.9rem; }
+    .excerpt { color:#2b2b2b; }
+    .tag { display:inline-block; font-size:.8rem; padding:.15rem .5rem; border-radius:999px; border:1px solid rgba(0,0,0,.12); color:#3e2c23; background:#fff; }
+    .tag-row { display:flex; gap:.35rem; flex-wrap:wrap; }
+    .empty { text-align:center; padding:2rem; color:#6b5b53; }
+
+    /* Mobile */
+    @media (max-width: 1020px){ .blog-grid { grid-template-columns:repeat(2,1fr);} }
+    @media (max-width: 640px){ .blog-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- Header/Navbar -->
+  <div id="site-header"></div>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <h1>From the Blog</h1>
+    <p>Short, weighty reads that sharpen your walk — faith, work, discipline, and brotherhood.</p>
+  </section>
+
+  <!-- Filters + Search -->
+  <section class="toolbar">
+    <div class="filters">
+      <button class="chip active" data-tag="all">All</button>
+      <button class="chip" data-tag="faith">Faith</button>
+      <button class="chip" data-tag="work">Work</button>
+      <button class="chip" data-tag="discipline">Discipline</button>
+      <button class="chip" data-tag="brotherhood">Brotherhood</button>
+    </div>
+    <input id="blogSearch" class="search-input" type="search" placeholder="Search posts… (e.g., integrity, prayer, habits)"/>
+  </section>
+
+  <div class="results-count" id="resultsCount" aria-live="polite"></div>
+
+  <!-- Blog Grid -->
+  <main class="content-section container">
+    <section class="blog-grid" id="blogGrid" aria-label="Blog posts">
+      <!-- Fallback posts (replaced by /data/blog.json if available) -->
+      <article class="blog-card" data-tags="discipline,faith">
+        <h3><a href="blog/seek-first.html">Seek First: One Focus That Rewires Everything</a></h3>
+        <p class="meta">5 min • Discipline</p>
+        <p class="excerpt">You don’t need ten habits—you need one priority that orders the rest…</p>
+        <div class="tag-row">
+          <span class="tag">Discipline</span><span class="tag">Faith</span>
+        </div>
+      </article>
+
+      <article class="blog-card" data-tags="brotherhood,faith">
+        <h3><a href="blog/iron-sharpens-iron.html">Iron Sharpens Iron: Brotherhood that Builds</a></h3>
+        <p class="meta">6 min • Brotherhood</p>
+        <p class="excerpt">We don’t grow in isolation. Here’s how to build a circle that makes you better…</p>
+        <div class="tag-row">
+          <span class="tag">Brotherhood</span><span class="tag">Faith</span>
+        </div>
+      </article>
+
+      <article class="blog-card" data-tags="work,discipline">
+        <h3><a href="blog/work-with-integrity.html">Work with Integrity: Excellence as Worship</a></h3>
+        <p class="meta">7 min • Work</p>
+        <p class="excerpt">Excellence isn’t perfectionism—it’s stewardship. Bring your best, daily…</p>
+        <div class="tag-row">
+          <span class="tag">Work</span><span class="tag">Discipline</span>
+        </div>
+      </article>
+    </section>
+
+    <p class="empty" id="emptyMsg" style="display:none">No posts match your filters.</p>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+  <script>
+    // Brand + mobile nav (in case script.js hasn't run yet)
+    document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
+    const hb = document.getElementById('hamburger');
+    const nl = document.getElementById('nav-links');
+    if (hb && nl) hb.addEventListener('click',()=>nl.classList.toggle('open'));
+
+    // Blog loader + filters
+    (function(){
+      const grid = document.getElementById('blogGrid');
+      const search = document.getElementById('blogSearch');
+      const chips = document.querySelectorAll('.chip');
+      const empty = document.getElementById('emptyMsg');
+      const countEl = document.getElementById('resultsCount');
+      let active = 'all';
+      let cards = Array.from(grid.querySelectorAll('.blog-card'));
+
+      function textOf(el){ return (el.textContent || '').toLowerCase(); }
+      function visible(card, q){
+        const tags = (card.getAttribute('data-tags')||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+        const okTag = active === 'all' || tags.includes(active);
+        const okSearch = !q || textOf(card).includes(q.toLowerCase());
+        return okTag && okSearch;
+      }
+      function apply(){
+        const q = search.value.trim();
+        let shown = 0;
+        cards.forEach(c => {
+          const show = visible(c, q);
+          c.style.display = show ? '' : 'none';
+          if (show) shown++;
+        });
+        empty.style.display = shown ? 'none' : '';
+        if (countEl) countEl.textContent = shown + (shown === 1 ? ' post' : ' posts');
+      }
+      chips.forEach(ch => ch.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        ch.classList.add('active');
+        active = ch.getAttribute('data-tag') || 'all';
+        apply();
+      }));
+      if (search) search.addEventListener('input', apply);
+
+      // Try loading /data/blog.json (optional)
+      // Expected: [{title, href, excerpt, readTime: "5 min", tags:["discipline","faith"], date:"2025-08-22"}]
+      (async function loadJSON(){
+        try{
+          const r = await fetch('/data/blog.json',{cache:'no-store'});
+          if(!r.ok) { apply(); return; }
+          const list = await r.json();
+          if(!Array.isArray(list) || !list.length) { apply(); return; }
+
+          grid.innerHTML = '';
+          list.forEach(p => {
+            const art = document.createElement('article');
+            art.className = 'blog-card';
+            if (Array.isArray(p.tags)) art.setAttribute('data-tags', p.tags.join(','));
+
+            const h3 = document.createElement('h3');
+            const a = document.createElement('a');
+            a.href = p.href || '#';
+            a.textContent = p.title || 'Untitled Post';
+            h3.appendChild(a);
+
+            const meta = document.createElement('p');
+            meta.className = 'meta';
+            meta.textContent = (p.readTime || '').trim() + (p.tags?.[0] ? ` • ${p.tags[0][0].toUpperCase()+p.tags[0].slice(1)}` : '');
+
+            const ex = document.createElement('p');
+            ex.className = 'excerpt';
+            ex.textContent = p.excerpt || '';
+
+            const tr = document.createElement('div');
+            tr.className = 'tag-row';
+            (p.tags || []).forEach(t => {
+              const s = document.createElement('span');
+              s.className = 'tag';
+              s.textContent = t[0].toUpperCase()+t.slice(1);
+              tr.appendChild(s);
+            });
+
+            art.appendChild(h3); art.appendChild(meta); art.appendChild(ex); art.appendChild(tr);
+            grid.appendChild(art);
+          });
+
+          cards = Array.from(grid.querySelectorAll('.blog-card'));
+          apply();
+        }catch(e){ apply(); }
+      })();
+
+      apply();
+    })();
+  </script>
+</body>
+</html>
