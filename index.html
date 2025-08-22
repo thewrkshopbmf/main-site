@@ -80,13 +80,30 @@
     <!-- Contact Us Section -->
     <section id="contact" class="content-section contact-section">
         <h2>Contact Us</h2>
-        <form action="#" method="post">
-            <input type="text" name="name" placeholder="Your Name" required/>
-            <input type="email" name="email" placeholder="Your Email" required/>
+        <form action="https://formsubmit.co/steven@thewrkshop.com" method="POST">
+            <input type="text" name="name" placeholder="Your Name" required />
+            <input type="email" name="email" placeholder="Your Email" required />
             <textarea name="message" placeholder="Your Message" required></textarea>
+
+            <!-- Auto-reply message -->
+            <input type="hidden" name="_autoresponse" value="Hey there! 👋
+
+    Thanks so much for reaching out to TheBldrShop — we’ve received your message and will get back to you soon.
+
+    In the meantime, stay bold, stay faithful, and keep building with purpose.
+
+    — TheBldrShop Team" />
+
+            <!-- FormSubmit formatting -->
+            <input type="hidden" name="_template" value="table" />
+
+            <!-- Optional: redirect to thank you page or home -->
+            <!-- <input type="hidden" name="_next" value="https://thebldrshop.com/thank-you.html"> -->
+
             <button type="submit">Send Message</button>
         </form>
     </section>
+
 
     <!-- Footer -->
     <footer>
