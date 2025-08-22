@@ -1,299 +1,308 @@
 /* General Reset & Fonts */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    line-height: 1.6;
-    background-color: #d89d61;
-    color: #333;
+  line-height: 1.6;
+  background-color: #d89d61;
+  color: #333;
 }
 
 /* Navbar */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #3e2c23; /* deep wood brown */
-    padding: 1rem 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3e2c23;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .navbar .logo {
-    color: #f4f1ee;
-    font-size: 1.8rem;
-    font-weight: bold;
+  color: #f4f1ee;
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
 .navbar .nav-links {
-    list-style: none;
-    display: flex;
+  list-style: none;
+  display: flex;
 }
 
 .navbar .nav-links li {
-    margin-left: 1.5rem;
+  margin-left: 1.5rem;
 }
 
 .navbar .nav-links a {
-    color: #f4f1ee;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
+  color: #f4f1ee;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .navbar .nav-links a:hover {
-    color: #d4b49c; /* light wood accent */
+  color: #d4b49c;
+}
+
+/* Hamburger button (hidden on desktop) */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #f4f1ee;
+  cursor: pointer;
+  z-index: 1001;
 }
 
 /* Hero Section */
 .hero {
-    background: url('images/WoodShopPhoto36.png') center / cover no-repeat;
-    height: 100vh;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: url('images/WoodShopPhoto36.png') center / cover no-repeat;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-overlay {
-    background-color: rgba(0,0,0,0.6);
-    padding: 3rem;
-    text-align: center;
-    color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 3rem;
+  text-align: center;
+  color: white;
 }
 
 .hero-overlay h1 {
-    font-size: 4rem;
-    margin-bottom: 1rem;
+  font-size: 4rem;
+  margin-bottom: 1rem;
 }
 
 .hero-overlay p {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .hero-button {
-    padding: 0.75rem 2rem;
-    background-color: #d4b49c;
-    color: #3e2c23;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+  padding: 0.75rem 2rem;
+  background-color: #d4b49c;
+  color: #3e2c23;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .hero-button:hover {
-    background-color: #e4c5ac;
+  background-color: #e4c5ac;
 }
 
 /* Content Sections */
 .content-section {
-    padding: 4rem 2rem;
-    max-width: 1200px;
-    margin: auto;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: auto;
 }
 
 .content-section h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #3e2c23;
-    font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #3e2c23;
+  font-size: 2.5rem;
 }
 
 /* About Us Cards */
 .cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
 .card {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .card h3 {
-    margin-bottom: 1rem;
-    color: #3e2c23;
+  margin-bottom: 1rem;
+  color: #3e2c23;
 }
 
 /* Podcast Section */
 .podcast-section p {
-    text-align: center;
-    max-width: 700px;
-    margin: auto;
-    margin-bottom: 2rem;
+  text-align: center;
+  max-width: 700px;
+  margin: auto;
+  margin-bottom: 2rem;
 }
 
 .podcast-button {
-    display: block;
-    width: fit-content;
-    margin: auto;
-    padding: 0.75rem 2rem;
-    background-color: #3e2c23;
-    color: #f4f1ee;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+  display: block;
+  width: fit-content;
+  margin: auto;
+  padding: 0.75rem 2rem;
+  background-color: #3e2c23;
+  color: #f4f1ee;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .podcast-button:hover {
-    background-color: #5b3a29;
+  background-color: #5b3a29;
 }
 
 /* Contact Section */
 .contact-section form {
-    display: flex;
-    flex-direction: column;
-    max-width: 600px;
-    margin: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: auto;
 }
 
 .contact-section input,
 .contact-section textarea {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .contact-section button {
-    padding: 1rem;
-    background-color: #3e2c23;
-    color: #f4f1ee;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 1rem;
+  background-color: #3e2c23;
+  color: #f4f1ee;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .contact-section button:hover {
-    background-color: #5b3a29;
+  background-color: #5b3a29;
 }
 
 /* Footer */
 footer {
-    background-color: #3e2c23;
-    color: #f4f1ee;
-    text-align: center;
-    padding: 2rem 1rem;
-    margin-top: 3rem;
+  background-color: #3e2c23;
+  color: #f4f1ee;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 3rem;
 }
 
 /* Podcast List Section */
 .podcast-list-section .intro-text {
-    text-align: center;
-    max-width: 700px;
-    margin: auto;
-    margin-bottom: 2rem;
+  text-align: center;
+  max-width: 700px;
+  margin: auto;
+  margin-bottom: 2rem;
 }
 
 .podcast-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
 }
 
 .podcast-card {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
 .podcast-card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .podcast-card h3 {
-    margin-bottom: 0.5rem;
-    color: #3e2c23;
+  margin-bottom: 0.5rem;
+  color: #3e2c23;
 }
 
 .podcast-card p {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .podcast-card audio {
-    width: 100%;
+  width: 100%;
 }
 
 /* Podcast Episode Page */
 .podcast-episode h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
-    color: #3e2c23;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  color: #3e2c23;
 }
 
 .podcast-player-container {
-    position: sticky;
-    top: 80px; /* adjust based on your navbar height */
-    background-color: #f4f1ee;
-    padding: 1rem;
-    z-index: 999;
+  position: sticky;
+  top: 80px;
+  background-color: #f4f1ee;
+  padding: 1rem;
+  z-index: 999;
 }
 
 .podcast-player-container audio {
-    width: 100%;
+  width: 100%;
 }
 
 .transcript {
-    margin-top: 2rem;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+  margin-top: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .transcript h3 {
-    margin-bottom: 1rem;
-    color: #3e2c23;
+  margin-bottom: 1rem;
+  color: #3e2c23;
 }
 
 .transcript p {
-    line-height: 1.8;
+  line-height: 1.8;
 }
 
-/* Remove default link styles in podcast cards */
 .podcast-card a {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    height: 70%;
-    width: 100%;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 70%;
+  width: 100%;
 }
 
 .podcast-card:hover {
-    transform: translateY(-5px);
-    background-color: #f9f6f2; /* optional light hover background */
+  transform: translateY(-5px);
+  background-color: #f9f6f2;
 }
 
-/* Podcast summary styling */
 .podcast-summary {
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto 2rem auto;
-    font-style: italic;
-    color: #555;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 2rem auto;
+  font-style: italic;
+  color: #555;
 }
 
 /* Subscription Box Styling */
 .subscribe-form {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   margin-bottom: 1.5rem;
   display: flex;
   gap: 0.5rem;
@@ -348,6 +357,12 @@ footer {
 
   .hamburger {
     display: block;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: #f4f1ee;
+    cursor: pointer;
+    z-index: 1001;
   }
 
   .nav-links {
@@ -370,10 +385,7 @@ footer {
   .nav-links li {
     margin: 0.5rem 0;
   }
-}
 
-
-  /* Hero Section */
   .hero-overlay {
     padding: 2rem 1rem;
   }
@@ -386,13 +398,11 @@ footer {
     font-size: 1rem;
   }
 
-  /* Content Section Headings */
   .content-section h2,
   .podcast-episode h2 {
     font-size: 2rem;
   }
 
-  /* Podcast Cards / About Cards */
   .cards-container,
   .podcast-list {
     grid-template-columns: 1fr;
@@ -404,12 +414,10 @@ footer {
     padding: 1.25rem;
   }
 
-  /* Transcript Section */
   .transcript {
     padding: 0 1rem;
   }
 
-  /* Contact Form */
   .contact-section form {
     padding: 0 1rem;
   }
@@ -423,51 +431,9 @@ footer {
     font-size: 1rem;
   }
 
-  /* Subscribe Form */
   .subscribe-form input[type="email"],
   .subscribe-form button {
     width: 100%;
     font-size: 1rem;
-  }
-}
-
-/* Hamburger button (hidden on desktop) */
-.hamburger {
-  display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: #f4f1ee;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-/* Mobile layout adjustments */
-@media (max-width: 768px) {
-  .hamburger {
-    display: block;
-  }
-
-  .nav-links {
-    flex-direction: column;
-    width: 100%;
-    margin-top: 1rem;
-    background-color: #3e2c23;
-    padding: 0 1rem;
-    border-radius: 6px;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-}
-
-/* When shown */
-.nav-links.show {
-  max-height: 300px; /* enough to fit all menu items */
-  padding: 1rem;
-}
-
-
-  .nav-links li {
-    margin: 0.5rem 0;
   }
 }
