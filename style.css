@@ -430,15 +430,20 @@ footer {
     flex-direction: column;
     width: 100%;
     margin-top: 1rem;
-    display: none; /* hidden by default */
     background-color: #3e2c23;
-    padding: 1rem;
+    padding: 0 1rem;
     border-radius: 6px;
-  }
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
 
-  .nav-links.show {
-    display: flex;
-  }
+/* When shown */
+.nav-links.show {
+  max-height: 300px; /* enough to fit all menu items */
+  padding: 1rem;
+}
+
 
   .nav-links li {
     margin: 0.5rem 0;
