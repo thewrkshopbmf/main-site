@@ -6,16 +6,6 @@ document.querySelectorAll(".sitename").forEach(el => {
     el.textContent = siteName;
 });
 
-// Smooth scroll for internal links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e){
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
-
 // ✅ Only ONE DOMContentLoaded block
 document.addEventListener("DOMContentLoaded", function () {
   // 🎯 1. Hamburger menu toggle
@@ -93,3 +83,25 @@ async function loadHeader(){
   document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
 }
 loadHeader();
+
+// Smooth-scroll nav links (keeps URL clean on homepage)
+(function () {
+  const isHome = location.pathname === '/' || location.pathname.endsWith('/index.html');
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[data-scroll]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const sel = a.getAttribute('data-scroll'); // e.g. "#about"
+        if (isHome) {
+          const target = document.querySelector(sel);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Remove #about from the URL
+            if (history.replaceState) history.replaceState(null, '', '/');
+          }
+        }
+        // if NOT home, link behaves normally and goes to "/#about"
+      });
+    });
+  });
+})();
