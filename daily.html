@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Daily</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <meta name="description" content="Daily devotionals: Hidden Gem + Verse of the Day, with practical reflection and prayer."/>
+  <style>
+    .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
+    .page-hero h1 { font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom:.4rem; }
+    .daily-wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
+    .daily-meta { display:flex; gap:.5rem; align-items:center; color:#6b5b53; margin-bottom: .75rem; }
+    .daily-card {
+      background:#f4f1ee; color:#2b2b2b; border:1px solid rgba(0,0,0,.08);
+      border-radius:14px; padding:1.25rem; box-shadow:0 2px 6px rgba(0,0,0,.07);
+    }
+    .daily-card h2 { color:#3e2c23; margin:.25rem 0 .35rem; }
+    .verse-block {
+      margin:.75rem 0; padding:.8rem 1rem; border-left:4px solid #3e2c23; background: #fff;
+      color:#2b2b2b; border-radius: 8px;
+    }
+    .section-head { color:#3e2c23; margin:1rem 0 .4rem; }
+    .nav-archive { display:flex; justify-content:space-between; gap:.5rem; margin-top:1rem; }
+    .nav-archive a { text-decoration:none; color:#3e2c23; font-weight:600; }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <section class="page-hero">
+    <h1>Daily</h1>
+    <p>Hidden Gem + Verse of the Day—then a practical step to live it out.</p>
+  </section>
+
+  <main class="daily-wrap">
+    <article class="daily-card" id="dailyCard">
+      <div class="daily-meta">
+        <span class="badge">Hidden Gem</span>
+        <time id="dDate" datetime=""></time>
+      </div>
+      <h2 id="dTitle">First Things First</h2>
+      <p id="dGem">When you reorder your loves, your life follows. Give God the first word and the last word today.</p>
+
+      <div class="verse-block">
+        <div><strong id="dRef">Matthew 6:33</strong></div>
+        <div id="dVerse">“But seek first the kingdom of God and His righteousness, and all these things will be added to you.”</div>
+      </div>
+
+      <h3 class="section-head">Reflection</h3>
+      <p id="dBody">
+        Put God first in attention, time, and trust. Start and end with Him today—then let everything else find its place.
+      </p>
+
+      <h3 class="section-head">One Step</h3>
+      <p id="dStep">Begin and end your day by praying this: “Lord, reorder my loves. Help me seek You first.”</p>
+
+      <div class="nav-archive">
+        <a href="#" id="prevDay" aria-disabled="true">← Previous</a>
+        <a href="daily-archive.html">See Archive →</a>
+        <a href="#" id="nextDay" aria-disabled="true">Next →</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Brand + mobile nav
+    document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
+    document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('nav-links').classList.toggle('open'));
+
+    // Load /data/daily.json if present
+    (async function(){
+      try{
+        const r = await fetch('/data/daily.json',{cache:'no-store'});
+        if(!r.ok) return;
+        const d = await r.json();
+
+        const toDate = (s)=>{ const dt = new Date(s + 'T00:00:00'); return dt.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}); };
+
+        if(d.date){
+          const el = document.getElementById('dDate');
+          el.textContent = toDate(d.date);
+          el.setAttribute('datetime', d.date);
+        }
+        if(d.gem_title) document.getElementById('dTitle').textContent = d.gem_title;
+        if(d.gem_body)  document.getElementById('dGem').textContent   = d.gem_body;
+        if(d.verse_ref) document.getElementById('dRef').textContent   = d.verse_ref;
+        if(d.verse_text)document.getElementById('dVerse').textContent = '“' + d.verse_text + '”';
+
+        // Optional long body + step if you add them to JSON
+        if(d.body) document.getElementById('dBody').textContent = d.body;
+        if(d.step) document.getElementById('dStep').textContent = d.step;
+      }catch(e){ /* graceful fallback to inline sample */ }
+    })();
+  </script>
+</body>
+</html>

@@ -6,80 +6,196 @@
     <title>TheWrkShop</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+    <meta name="description" content="TheWrkShop — Building Christian Men of Purpose and Excellence. Podcast, Daily Devotionals, Blog, and Resources."/>
 </head>
 <body>
 
     <!-- Header/Navbar -->
-    <header>
-        <nav class="navbar">
-            <div class="logo"><span class="sitename"></span></div>
-            <!-- Hamburger Button (only shows on mobile) -->
-            <button class="hamburger" id="hamburger">&#9776;</button>
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#podcast">Our Podcast</a></li>
-                <li><a href="#contact">Contact Us</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div id="site-header"></div>
 
     <!-- Hero Section -->
     <section class="hero">
-    <div class="hero-overlay">
-        <h1><span class="sitename"></span></h1>
-        <p>Building Christian Men Of Purpose And Excellence.</p>
+        <div class="hero-overlay">
+            <h1><span class="sitename"></span></h1>
+            <p>Building Christian Men Of Purpose And Excellence.</p>
 
-        <!-- Subscription Box -->
-        <form id="emailForm" class="subscribe-form">
-        <input type="email" id="email" name="email" placeholder="Your Email - Our Newsletter" required />
-        <button type="submit">Subscribe</button>
-        </form>
-        <p id="successMessage" class="subscribe-success">Thanks! Check your email to confirm your subscription</p>
+            <!-- Subscription Box -->
+            <form id="emailForm" class="subscribe-form">
+                <input type="email" id="email" name="email" placeholder="Your Email - Our Newsletter" required />
+                <button type="submit">Subscribe</button>
+            </form>
+            <p id="successMessage" class="subscribe-success">Thanks! Check your email to confirm your subscription</p>
 
-        <a href="#about" class="hero-button">Learn More</a>
+            <a href="#about" class="hero-button">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Quick Actions (New) -->
+    <section class="quick-actions" aria-label="Quick Actions">
+        <a class="qa-pill" href="#daily">
+            <span>📖</span> Today’s Verse
+        </a>
+        <a class="qa-pill" href="#blog">
+            <span>✍️</span> Latest Blog
+        </a>
+        <a class="qa-pill" href="#resources">
+            <span>🧰</span> Starter Kit
+        </a>
+    </section>
+
+    <!-- Home Feature Row (Daily + side cards) -->
+    <section class="home-feature container" id="daily" aria-label="Today at TheWrkShop">
+    <!-- Daily Feature: Hidden Gem + Verse (snippet only) -->
+    <article class="daily-feature">
+        <div class="df-head">
+        <span class="badge">Hidden Gem</span>
+        <time class="df-date" datetime="2025-08-22">Aug 22</time>
+        </div>
+        <h3 class="df-title">First Things First</h3>
+        <p class="df-teaser">
+        The quieter you are before God, the clearer your next step gets. Start with the One who orders the rest…
+        </p>
+
+        <div class="df-verse">
+        <span class="verse-ref">Matthew 6:33</span>
+        <span class="verse-snippet">“Seek first the kingdom of God…”</span>
+        </div>
+
+        <a class="cta df-cta" href="daily.html">Read Today’s Devotional →</a>
+    </article>
+
+    <!-- Side stack: Latest Podcast & Blog (compact) -->
+    <div class="side-stack">
+        <article class="mini-card">
+        <h4>Latest Podcast</h4>
+        <p class="mini-teaser">Ep 12 — “Built, Not Bought” • 24m</p>
+        <a class="cta" href="podcasts.html">Play →</a>
+        </article>
+
+        <article class="mini-card">
+        <h4>Latest Blog</h4>
+        <p class="mini-teaser">Seek First: One Focus That Rewires Everything • 5 min</p>
+        <a class="cta" href="blog.html">Read →</a>
+        </article>
     </div>
     </section>
 
 
-    <!-- About Us Section -->
+    <!-- About Us Section (Existing) -->
     <section id="about" class="content-section about-section">
         <h2>About Us</h2>
         <div class="cards-container">
             <div class="card">
                 <h3>Our Mission</h3>
-                <p>
-                    <!-- Replace with actual mission -->
-                    To equip Christian men with tools, teachings, and community to build strong spiritual and practical foundations in their lives.
-                </p>
+                <p>To equip Christian men with tools, teachings, and community to build strong spiritual and practical foundations in their lives.</p>
             </div>
             <div class="card">
                 <h3>Our Vision</h3>
-                <p>
-                    <!-- Replace with actual vision -->
-                    To inspire a generation of men who lead with integrity, courage, and wisdom rooted in Christ.
-                </p>
+                <p>To inspire a generation of men who lead with integrity, courage, and wisdom rooted in Christ.</p>
             </div>
             <div class="card">
                 <h3>Our Values</h3>
-                <p>
-                    <!-- Replace with actual values -->
-                    Brotherhood, accountability, growth, and authentic faith lived out daily.
-                </p>
+                <p>Brotherhood, accountability, growth, and authentic faith lived out daily.</p>
             </div>
         </div>
     </section>
 
     <!-- Our Podcast Section -->
-    <section id="podcast" class="content-section podcast-section">
+    <section id="podcast" class="content-section podcast-section container">
+    <div class="podcast-grid">
+        <!-- Vertical Image -->
+        <div class="podcast-image">
+        <img src="assets/images/Our_Podcast_looking_up.png" alt="Podcast illustration" />
+        </div>
+
+        <!-- Podcast Text -->
+        <div class="podcast-text">
         <h2>Our Podcast</h2>
         <p>
-            <!-- Replace with actual podcast description -->
             Dive into impactful conversations that challenge and grow you in your walk with God, work, and relationships.
         </p>
         <a href="podcasts.html" class="podcast-button">Click to See Our Podcasts</a>
+        </div>
+    </div>
     </section>
 
-    <!-- Contact Us Section -->
+
+    <!-- Blog Section (New) -->
+    <section id="blog" class="content-section blog-list">
+        <h2>From the Blog</h2>
+        <div class="cards">
+            <!-- Example Post Card (duplicate and replace as needed) -->
+            <article class="blog-card">
+                <h3><a href="blog/seek-first.html">Seek First: One Focus That Rewires Everything</a></h3>
+                <p class="meta">5 min • Discipline</p>
+                <p class="excerpt">You don’t need ten habits—you need one priority that orders the rest…</p>
+            </article>
+
+            <article class="blog-card">
+                <h3><a href="blog/iron-sharpens-iron.html">Iron Sharpens Iron: Brotherhood that Builds</a></h3>
+                <p class="meta">6 min • Brotherhood</p>
+                <p class="excerpt">We don’t grow in isolation. Here’s how to build a circle that makes you better…</p>
+            </article>
+
+            <article class="blog-card">
+                <h3><a href="blog/work-with-integrity.html">Work with Integrity: Excellence as Worship</a></h3>
+                <p class="meta">7 min • Work</p>
+                <p class="excerpt">Excellence isn’t perfectionism—it’s stewardship. How to bring your best, daily…</p>
+            </article>
+        </div>
+        <a class="cta" href="blog.html">See all posts →</a>
+    </section>
+
+    <!-- Resources Section (New) -->
+    <section id="resources" class="content-section resources">
+        <h2>Resources</h2>
+        <div class="filters" role="tablist" aria-label="Resource Filters">
+            <button class="chip active" data-tag="all" role="tab">All</button>
+            <button class="chip" data-tag="bible" role="tab">Bible Study</button>
+            <button class="chip" data-tag="habits" role="tab">Habits</button>
+            <button class="chip" data-tag="pdfs" role="tab">PDFs</button>
+            <button class="chip" data-tag="books" role="tab">Books</button>
+            <button class="chip" data-tag="tools" role="tab">Tools</button>
+        </div>
+
+        <div class="resource-grid" id="resource-grid">
+            <!-- Example Resource Cards -->
+            <a class="resource-card" href="assets/pdfs/30-day-seek-first.pdf">
+                <div class="rc-top">📄</div>
+                <div class="rc-body">
+                    <h3>30-Day Seek First Plan</h3>
+                    <p>Short daily prompts to build the right first step.</p>
+                </div>
+            </a>
+
+            <a class="resource-card" href="https://www.biblegateway.com/" target="_blank" rel="noopener">
+                <div class="rc-top">🔎</div>
+                <div class="rc-body">
+                    <h3>Verse Lookup</h3>
+                    <p>Find passages quickly while you study.</p>
+                </div>
+            </a>
+
+            <a class="resource-card" href="assets/pdfs/habit-checklist.pdf">
+                <div class="rc-top">✅</div>
+                <div class="rc-body">
+                    <h3>Habit Checklist</h3>
+                    <p>Simple weekly rhythm—faith, family, work.</p>
+                </div>
+            </a>
+
+            <a class="resource-card" href="resources.html">
+                <div class="rc-top">🧰</div>
+                <div class="rc-body">
+                    <h3>Starter Kit</h3>
+                    <p>New here? Start with these essentials.</p>
+                </div>
+            </a>
+        </div>
+        <a class="cta" href="resources.html">See all resources →</a>
+    </section>
+
+    <!-- Contact Us Section (Existing) -->
     <section id="contact" class="content-section contact-section">
         <h2>Contact Us</h2>
         <form action="https://formsubmit.co/f25468eae77a6323c66f6f8e7ff728be" method="POST">
@@ -90,11 +206,11 @@
             <!-- Auto-reply message -->
             <input type="hidden" name="_autoresponse" value="Hey there! 👋
 
-    Thanks so much for reaching out to TheBldrShop — we’ve received your message and will get back to you soon.
+Thanks so much for reaching out to TheBldrShop — we’ve received your message and will get back to you soon.
 
-    In the meantime, stay bold, stay faithful, and keep building with purpose.
+In the meantime, stay bold, stay faithful, and keep building with purpose.
 
-    — TheBldrShop Team" />
+— TheBldrShop Team" />
 
             <!-- FormSubmit formatting -->
             <input type="hidden" name="_template" value="table" />
@@ -106,7 +222,6 @@
         </form>
     </section>
 
-
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -115,6 +230,75 @@
         </div>
     </footer>
 
+    <!-- Your existing script -->
     <script src="script.js"></script>
+
+    <!-- Inline enhancements so you don't need to edit script.js right now -->
+    <script>
+    // Site name fill
+    document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
+
+    // Mobile nav toggle
+    (function(){
+        const btn = document.getElementById('hamburger');
+        const nav = document.getElementById('nav-links');
+        if(btn && nav){
+            btn.addEventListener('click', () => {
+                nav.classList.toggle('open');
+            });
+        }
+    })();
+
+    // Optional: Load daily content from /data/daily.json if present
+    (async function loadDaily(){
+        const refEl = document.querySelector('.today .ref');
+        const teaserEls = document.querySelectorAll('.today .teaser');
+        const dailyRef = document.querySelector('.daily-ref');
+        const dailyVerse = document.querySelector('.daily-verse');
+        const gemCard = document.getElementById('gem-card');
+        try {
+            const res = await fetch('/data/daily.json', {cache:'no-store'});
+            if(!res.ok) return;
+            const d = await res.json();
+
+            if (refEl && d.verse_ref) refEl.textContent = d.verse_ref;
+            if (teaserEls[0] && d.gem_body) teaserEls[0].textContent = (d.gem_body || '').slice(0, 120) + '…';
+            if (gemCard && d.gem_title) {
+                const p = gemCard.querySelector('.teaser');
+                if (p) p.textContent = d.gem_body ? d.gem_body.slice(0, 120) + '…' : p.textContent;
+            }
+            if (dailyRef && d.verse_ref) dailyRef.textContent = d.verse_ref;
+            if (dailyVerse && d.verse_text) dailyVerse.textContent = '“' + d.verse_text + '”';
+        } catch(e){
+            // silent fail if file doesn't exist
+        }
+    })();
+
+    // Resource filter chips (front-end only)
+    (function(){
+        const chips = document.querySelectorAll('.chip');
+        const cards = document.querySelectorAll('.resource-card');
+        if(!chips.length || !cards.length) return;
+
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                const tag = chip.getAttribute('data-tag');
+                cards.forEach(card => {
+                    // naive tag filter: match by href or keywords in text (customize later)
+                    const text = card.textContent.toLowerCase();
+                    const match = tag === 'all' ||
+                                  (tag === 'bible' && /verse|bible|study|scripture/.test(text)) ||
+                                  (tag === 'habits' && /habit|checklist|routine/.test(text)) ||
+                                  (tag === 'pdfs' && /\.pdf$/i.test(card.getAttribute('href')||'')) ||
+                                  (tag === 'books' && /book|read/.test(text)) ||
+                                  (tag === 'tools' && /tool|starter|kit|lookup/.test(text));
+                    card.style.display = match ? '' : 'none';
+                });
+            });
+        });
+    })();
+    </script>
 </body>
 </html>

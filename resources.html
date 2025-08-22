@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Resources</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <meta name="description" content="Field-tested resources for Christian men: study tools, habits, reading plans, PDFs, books, and more."/>
+  <style>
+    /* Page-specific light styles (keeps using your palette and classes) */
+    .page-hero {
+      background: #3e2c23;
+      color: #f4f1ee;
+      padding: 3.5rem 1rem;
+      text-align: center;
+    }
+    .page-hero h1 { font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom:.5rem; }
+    .page-hero p { opacity:.95; max-width: 720px; margin: 0 auto; }
+
+    .toolbar {
+      display:flex; gap: .75rem; flex-wrap: wrap; align-items: center; justify-content: center;
+      padding: 1rem; background: rgba(0,0,0,.04);
+      border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .search-wrap { position: relative; min-width: 260px; }
+    .search-input {
+      width: 100%; padding: .65rem .9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,.15);
+      outline: none;
+    }
+    .results-count { text-align:center; padding:.5rem; color:#3e2c23; font-weight:600; }
+
+    .tag { display:inline-block; font-size:.85rem; padding:.15rem .5rem; border-radius:999px; border:1px solid rgba(0,0,0,.12); color:#3e2c23; background:#f4f1ee; }
+    .resource-card .rc-tags { margin-top:.5rem; display:flex; gap:.35rem; flex-wrap:wrap; }
+
+    .empty { text-align:center; padding:2rem; color:#6b5b53; }
+
+    /* little polish on grid for this page */
+    .resource-grid { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Header/Navbar -->
+  <div id="site-header"></div>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <h1>Resources</h1>
+    <p>Field-tested tools, plans, and reads to build a steady life—faith, family, work.</p>
+  </section>
+
+  <!-- Filters + Search -->
+  <section class="toolbar" aria-label="Resource Filters">
+    <div class="filters" role="tablist" aria-label="Filters">
+      <button class="chip active" data-tag="all" role="tab" aria-selected="true">All</button>
+      <button class="chip" data-tag="bible" role="tab">Bible Study</button>
+      <button class="chip" data-tag="habits" role="tab">Habits</button>
+      <button class="chip" data-tag="pdfs" role="tab">PDFs</button>
+      <button class="chip" data-tag="books" role="tab">Books</button>
+      <button class="chip" data-tag="tools" role="tab">Tools</button>
+    </div>
+    <div class="search-wrap" role="search">
+      <input id="resSearch" class="search-input" type="search" placeholder="Search resources… (e.g., discipline, prayer, plan)"/>
+    </div>
+  </section>
+
+  <div class="results-count" id="resultsCount" aria-live="polite"></div>
+
+  <!-- Resources Grid -->
+  <main class="content-section resources" aria-labelledby="gridTitle">
+    <h2 id="gridTitle" class="sr-only" style="position:absolute;left:-9999px">Resource List</h2>
+    <div class="resource-grid" id="resource-grid">
+      <!-- Fallback examples (replaced by JSON when available) -->
+      <a class="resource-card" href="assets/pdfs/30-day-seek-first.pdf" data-tags="pdfs,bible,habits">
+        <div class="rc-top">📄</div>
+        <div class="rc-body">
+          <h3>30-Day Seek First Plan</h3>
+          <p>Short daily prompts to build the right first step.</p>
+          <div class="rc-tags">
+            <span class="tag">PDF</span><span class="tag">Bible Study</span><span class="tag">Habits</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="resource-card" href="https://www.biblegateway.com/" target="_blank" rel="noopener" data-tags="tools,bible">
+        <div class="rc-top">🔎</div>
+        <div class="rc-body">
+          <h3>Verse Lookup</h3>
+          <p>Find passages quickly while you study.</p>
+          <div class="rc-tags">
+            <span class="tag">Tool</span><span class="tag">Bible Study</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="resource-card" href="assets/pdfs/habit-checklist.pdf" data-tags="pdfs,habits">
+        <div class="rc-top">✅</div>
+        <div class="rc-body">
+          <h3>Habit Checklist</h3>
+          <p>Simple weekly rhythm—faith, family, work.</p>
+          <div class="rc-tags">
+            <span class="tag">PDF</span><span class="tag">Habits</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="resource-card" href="resources/starter-kit.html" data-tags="tools,habits,bible">
+        <div class="rc-top">🧰</div>
+        <div class="rc-body">
+          <h3>Starter Kit</h3>
+          <p>New here? Start with these essentials.</p>
+          <div class="rc-tags">
+            <span class="tag">Tools</span><span class="tag">Habits</span><span class="tag">Bible Study</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="resource-card" href="https://www.crossway.org/books/esv-study-bible-hconly/" target="_blank" rel="noopener" data-tags="books,bible">
+        <div class="rc-top">📚</div>
+        <div class="rc-body">
+          <h3>Study Bible (Recommendation)</h3>
+          <p>Solid notes and maps to deepen your reading.</p>
+          <div class="rc-tags">
+            <span class="tag">Book</span><span class="tag">Bible Study</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="resource-card" href="https://dwellapp.io/" target="_blank" rel="noopener" data-tags="tools,bible,habits">
+        <div class="rc-top">🎧</div>
+        <div class="rc-body">
+          <h3>Scripture Listening App</h3>
+          <p>Build a daily Scripture habit on the move.</p>
+          <div class="rc-tags">
+            <span class="tag">Tool</span><span class="tag">Habits</span><span class="tag">Bible Study</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <p class="empty" id="emptyMsg" style="display:none">No resources match your filters—try clearing search or switching tags.</p>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Optional global script -->
+  <script>
+    // Site name fill
+    document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
+
+    // Mobile nav toggle
+    (function(){
+      const btn = document.getElementById('hamburger');
+      const nav = document.getElementById('nav-links');
+      if(btn && nav){ btn.addEventListener('click', () => nav.classList.toggle('open')); }
+    })();
+
+    // Resources loader (static JSON optional) + filter/search logic
+    (function(){
+      const grid = document.getElementById('resource-grid');
+      const chips = document.querySelectorAll('.chip');
+      const search = document.getElementById('resSearch');
+      const emptyMsg = document.getElementById('emptyMsg');
+      const countEl = document.getElementById('resultsCount');
+
+      let activeTag = 'all';
+      let allCards = Array.from(grid.querySelectorAll('.resource-card')); // fallback list
+      let datasetLoaded = false;
+
+      const tagMap = {
+        bible: (t) => /bible|scripture|verse|study/i.test(t),
+        habits: (t) => /habit|routine|checklist/i.test(t),
+        pdfs: (t) => /\.pdf$/i.test(t) || /pdf/i.test(t),
+        books: (t) => /book|read/i.test(t),
+        tools: (t) => /tool|app|kit|lookup|starter/i.test(t),
+      };
+
+      function getTagsFromCard(card){
+        const explicit = (card.getAttribute('data-tags') || '').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+        return new Set(explicit);
+      }
+
+      function cardText(card){
+        return (card.textContent || '').toLowerCase();
+      }
+
+      function matchesTag(card){
+        if(activeTag === 'all') return true;
+        const tags = getTagsFromCard(card);
+        if(tags.has(activeTag)) return true;
+        // heuristic fallback on text
+        const txt = cardText(card);
+        const fn = tagMap[activeTag];
+        return fn ? fn(txt) : true;
+      }
+
+      function matchesSearch(card, q){
+        if(!q) return true;
+        return cardText(card).includes(q.toLowerCase());
+      }
+
+      function applyFilters(){
+        const q = (search && search.value || '').trim();
+        let visibleCount = 0;
+        allCards.forEach(card => {
+          const show = matchesTag(card) && matchesSearch(card, q);
+          card.style.display = show ? '' : 'none';
+          if(show) visibleCount++;
+        });
+        emptyMsg.style.display = visibleCount === 0 ? '' : 'none';
+        if(countEl){
+          countEl.textContent = visibleCount + (visibleCount === 1 ? ' result' : ' results');
+        }
+      }
+
+      // Chip interactions
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          chips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          activeTag = chip.getAttribute('data-tag') || 'all';
+          chip.setAttribute('aria-selected','true');
+          chips.forEach(c => { if(c!==chip) c.removeAttribute('aria-selected'); });
+          applyFilters();
+        });
+      });
+
+      if(search){
+        search.addEventListener('input', applyFilters);
+      }
+
+      // Try to load /data/resources.json and replace grid content if present
+      // Expected shape:
+      // [{ title, desc, href, icon, tags: ["pdfs","bible"], external: true|false }]
+      (async function loadJSON(){
+        try {
+          const res = await fetch('/data/resources.json', {cache:'no-store'});
+          if(!res.ok) return;
+          const list = await res.json();
+          if(!Array.isArray(list) || !list.length) return;
+
+          grid.innerHTML = '';
+          list.forEach(item => {
+            const a = document.createElement('a');
+            a.className = 'resource-card';
+            a.href = item.href || '#';
+            if(item.external) { a.target = '_blank'; a.rel = 'noopener'; }
+            if(Array.isArray(item.tags) && item.tags.length){
+              a.setAttribute('data-tags', item.tags.join(','));
+            }
+
+            const top = document.createElement('div');
+            top.className = 'rc-top';
+            top.textContent = item.icon || '🧰';
+
+            const body = document.createElement('div');
+            body.className = 'rc-body';
+
+            const h3 = document.createElement('h3');
+            h3.textContent = item.title || 'Untitled Resource';
+
+            const p = document.createElement('p');
+            p.textContent = item.desc || '';
+
+            const tagWrap = document.createElement('div');
+            tagWrap.className = 'rc-tags';
+            (item.tags || []).forEach(t => {
+              const span = document.createElement('span');
+              span.className = 'tag';
+              span.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+              tagWrap.appendChild(span);
+            });
+
+            body.appendChild(h3);
+            body.appendChild(p);
+            if((item.tags||[]).length) body.appendChild(tagWrap);
+
+            a.appendChild(top);
+            a.appendChild(body);
+            grid.appendChild(a);
+          });
+
+          datasetLoaded = true;
+          allCards = Array.from(grid.querySelectorAll('.resource-card'));
+          applyFilters();
+        } catch(e){
+          // keep fallback cards
+          applyFilters();
+        }
+      })();
+
+      // Initial count for fallback
+      applyFilters();
+    })();
+  </script>
+</body>
+</html>

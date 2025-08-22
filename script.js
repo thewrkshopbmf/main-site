@@ -63,3 +63,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+async function loadDaily() {
+  const elRef = document.querySelector('.today .ref');
+  const elTeaser = document.querySelector('.today .teaser');
+  if (!elRef || !elTeaser) return;
+  try {
+    const res = await fetch('/data/daily.json');
+    const d = await res.json();
+    elRef.textContent = d.verse_ref;
+    elTeaser.textContent = d.gem_body.slice(0, 120) + '…';
+  } catch(e){ /* fail quietly */ }
+}
+document.addEventListener('DOMContentLoaded', loadDaily);
+
+// Load header.html into #site-header
+async function loadHeader(){
+  const res = await fetch("pages/details/header.html");
+  const html = await res.text();
+  document.getElementById("site-header").innerHTML = html;
+
+  // after inject, re-init nav toggle
+  const btn = document.getElementById('hamburger');
+  const nav = document.getElementById('nav-links');
+  if(btn && nav){
+    btn.addEventListener('click', () => nav.classList.toggle('open'));
+  }
+  // fill sitename again
+  document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
+}
+loadHeader();
