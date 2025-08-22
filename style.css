@@ -408,3 +408,39 @@ footer {
     font-size: 1rem;
   }
 }
+
+/* Hamburger button (hidden on desktop) */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #f4f1ee;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Mobile layout adjustments */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+    display: none; /* hidden by default */
+    background-color: #3e2c23;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 0.5rem 0;
+  }
+}
