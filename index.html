@@ -233,72 +233,123 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
     <!-- Your existing script -->
     <script src="script.js"></script>
 
-    <!-- Inline enhancements so you don't need to edit script.js right now -->
+    <!-- Inline enhancements (replace your existing inline <script> with this) -->
     <script>
-    // Site name fill
+    // Brand fill
     document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
 
-    // Mobile nav toggle
+    // Mobile nav toggle (safe if header is injected)
     (function(){
         const btn = document.getElementById('hamburger');
         const nav = document.getElementById('nav-links');
-        if(btn && nav){
-            btn.addEventListener('click', () => {
-                nav.classList.toggle('open');
-            });
-        }
+        if (btn && nav) btn.addEventListener('click', () => nav.classList.toggle('open'));
     })();
 
-    // Optional: Load daily content from /data/daily.json if present
-    (async function loadDaily(){
-        const refEl = document.querySelector('.today .ref');
-        const teaserEls = document.querySelectorAll('.today .teaser');
-        const dailyRef = document.querySelector('.daily-ref');
-        const dailyVerse = document.querySelector('.daily-verse');
-        const gemCard = document.getElementById('gem-card');
+    // --- Daily Feature loader (new model: title/insight_teaser/verse_ref/verse_text) ---
+    (async function loadDailyFeature(){
+        const ctx = document.querySelector('.daily-feature');
+        if (!ctx) return;
+
+        const el = {
+        title:   ctx.querySelector('.df-title'),
+        teaser:  ctx.querySelector('.df-teaser'),
+        date:    ctx.querySelector('.df-date'),
+        ref:     ctx.querySelector('.verse-ref'),
+        snip:    ctx.querySelector('.verse-snippet'),
+        cta:     ctx.querySelector('.df-cta')
+        };
+
+        // helper: scripture + title → slug, to build fallback href if archive isn't reachable
+        function baseSlug(s){
+        return (s||'').normalize('NFKD')
+            .replace(/[\u0300-\u036f]/g,'')
+            .replace(/['"]/g,'')
+            .replace(/[^A-Za-z0-9\s:–—-]+/g,' ')
+            .replace(/\s+/g,' ')
+            .trim();
+        }
+        function scriptureSlug(ref){
+        return baseSlug(ref).replace(/[:–—]/g,'-').replace(/\s+/g,'-').replace(/-+/g,'-');
+        }
+        function titleSlug(title){
+        return baseSlug(title).replace(/[:–—]/g,'-').replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,60).replace(/-+$/,'');
+        }
+        function humanDate(iso){
+        const dt = new Date(iso + 'T00:00:00');
+        // e.g., "Sep 2"
+        return dt.toLocaleDateString(undefined,{month:'short', day:'numeric'});
+        }
+
         try {
-            const res = await fetch('/data/daily.json', {cache:'no-store'});
-            if(!res.ok) return;
-            const d = await res.json();
+        // 1) Load the latest daily content (homepage payload)
+        const r = await fetch('/data/daily.json', { cache: 'no-store' });
+        if (!r.ok) return;
+        const d = await r.json();
 
-            if (refEl && d.verse_ref) refEl.textContent = d.verse_ref;
-            if (teaserEls[0] && d.insight) teaserEls[0].textContent = (d.insight || '').slice(0, 120) + '…';
-            if (gemCard && d.title) {
-                const p = gemCard.querySelector('.teaser');
-                if (p) p.textContent = d.insight ? d.insight.slice(0, 120) + '…' : p.textContent;
+        // Fill text
+        if (el.title && d.title) el.title.textContent = d.title;
+        if (el.teaser) {
+            // Prefer explicit teaser; fallback to first insight paragraph if present
+            const teaser = d.insight_teaser || (Array.isArray(d.insight) ? d.insight[0] : (d.insight || ''));
+            el.teaser.textContent = (teaser || '').trim();
+        }
+        if (el.ref && d.verse_ref) el.ref.textContent = d.verse_ref;
+        if (el.snip && d.verse_text) el.snip.textContent = '“' + d.verse_text + '”';
+        if (el.date && d.date) {
+            el.date.textContent = humanDate(d.date);
+            el.date.setAttribute('datetime', d.date);
+        }
+
+        // 2) Get the correct page href: try archive first (exact date match), then fallback to constructed URL
+        let href = 'daily.html';
+        try {
+            const ra = await fetch('/data/daily-archive.json', { cache: 'no-store' });
+            if (ra.ok) {
+            const list = await ra.json();
+            // find exact date match
+            const item = Array.isArray(list) ? list.find(x => x.date === d.date) : null;
+            if (item && item.href) href = item.href;
             }
-            if (dailyRef && d.verse_ref) dailyRef.textContent = d.verse_ref;
-            if (dailyVerse && d.verse_text) dailyVerse.textContent = '“' + d.verse_text + '”';
-        } catch(e){
-            // silent fail if file doesn't exist
+        } catch (_) { /* ignore and use fallback */ }
+
+        // Fallback: build scripture-first link locally if archive not available yet
+        if (!href || href === 'daily.html') {
+            if (d.verse_ref && d.title && d.date) {
+            href = '/daily/' + scriptureSlug(d.verse_ref) + '_' + titleSlug(d.title) + '_' + d.date + '.html';
+            }
+        }
+
+        if (el.cta && href) el.cta.setAttribute('href', href);
+        } catch (e) {
+        // silent fail—keep the static example content
         }
     })();
 
-    // Resource filter chips (front-end only)
+    // Resource filter chips (unchanged)
     (function(){
         const chips = document.querySelectorAll('.chip');
         const cards = document.querySelectorAll('.resource-card');
         if(!chips.length || !cards.length) return;
 
         chips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                chips.forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                const tag = chip.getAttribute('data-tag');
-                cards.forEach(card => {
-                    // naive tag filter: match by href or keywords in text (customize later)
-                    const text = card.textContent.toLowerCase();
-                    const match = tag === 'all' ||
-                                  (tag === 'bible' && /verse|bible|study|scripture/.test(text)) ||
-                                  (tag === 'habits' && /habit|checklist|routine/.test(text)) ||
-                                  (tag === 'pdfs' && /\.pdf$/i.test(card.getAttribute('href')||'')) ||
-                                  (tag === 'books' && /book|read/.test(text)) ||
-                                  (tag === 'tools' && /tool|starter|kit|lookup/.test(text));
-                    card.style.display = match ? '' : 'none';
-                });
+        chip.addEventListener('click', () => {
+            chips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            const tag = chip.getAttribute('data-tag');
+            cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            const match = tag === 'all' ||
+                            (tag === 'bible' && /verse|bible|study|scripture/.test(text)) ||
+                            (tag === 'habits' && /habit|checklist|routine/.test(text)) ||
+                            (tag === 'pdfs' && /\.pdf$/i.test(card.getAttribute('href')||'')) ||
+                            (tag === 'books' && /book|read/.test(text)) ||
+                            (tag === 'tools' && /tool|starter|kit|lookup/.test(text));
+            card.style.display = match ? '' : 'none';
             });
+        });
         });
     })();
     </script>
+
 </body>
 </html>
