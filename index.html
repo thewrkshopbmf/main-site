@@ -262,10 +262,10 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
             const d = await res.json();
 
             if (refEl && d.verse_ref) refEl.textContent = d.verse_ref;
-            if (teaserEls[0] && d.gem_body) teaserEls[0].textContent = (d.gem_body || '').slice(0, 120) + '…';
-            if (gemCard && d.gem_title) {
+            if (teaserEls[0] && d.insight) teaserEls[0].textContent = (d.insight || '').slice(0, 120) + '…';
+            if (gemCard && d.title) {
                 const p = gemCard.querySelector('.teaser');
-                if (p) p.textContent = d.gem_body ? d.gem_body.slice(0, 120) + '…' : p.textContent;
+                if (p) p.textContent = d.insight ? d.insight.slice(0, 120) + '…' : p.textContent;
             }
             if (dailyRef && d.verse_ref) dailyRef.textContent = d.verse_ref;
             if (dailyVerse && d.verse_text) dailyVerse.textContent = '“' + d.verse_text + '”';
