@@ -217,27 +217,30 @@
       moSel.addEventListener('change', apply);
       search.addEventListener('input', apply);
 
-      // Try loading /data/daily-archive.json
-      // Expected array of: { "date":"2025-08-22", "gem_title":"First Things First", "verse_ref":"Matthew 6:33", "href":"daily/2025-08-22.html" }
+      // Try loading /data/daily-archive.json (new schema)
+      // Expected: [{ "date":"YYYY-MM-DD", "title":"...", "verse_ref":"...", "href":"/daily/Scripture_Title_Date.html" }]
       (async function loadJSON(){
         try{
-          const r = await fetch('/data/daily/daily-archive.json', {cache:'no-store'});
-          if(!r.ok) { initFromFallback(); return; }
+          const r = await fetch('/data/daily-archive.json', { cache: 'no-store' });
+          if (!r.ok) { initFromFallback(); return; }
           const list = await r.json();
-          if(!Array.isArray(list) || !list.length) { initFromFallback(); return; }
+          if (!Array.isArray(list) || !list.length) { initFromFallback(); return; }
 
           all = list.map(x => ({
             date: x.date,
-            title: x.gem_title || '',
+            title: x.title || '',
             verse: x.verse_ref || '',
-            href: x.href || `daily/${x.date}.html`
+            // ensure leading slash for absolute path
+            href: (x.href && x.href.startsWith('/')) ? x.href : ('/' + (x.href || `daily/${x.date}.html`).replace(/^\/+/, ''))
           }));
+
           populateYearOptions();
           apply();
-        }catch(e){
+        } catch(e) {
           initFromFallback();
         }
       })();
+
 
       function initFromFallback(){
         // use hardcoded samples already in DOM
