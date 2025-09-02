@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — {{TITLE}} ({{HUMAN_DATE}})</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico">
+  <meta name="description" content="{{TITLE}} — {{VERSE_REF}}. Insight, one-minute win, and declaration."/>
+  <style>
+    .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
+    .page-hero h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin-bottom:.35rem; }
+    .page-hero .sub { opacity:.95; }
+    .wrap { max-width:760px; margin:0 auto; padding:2rem 1rem; }
+    .daily-card { background:#f4f1ee; color:#2b2b2b; border:1px solid rgba(0,0,0,.08); border-radius:14px; padding:1.25rem; box-shadow:0 2px 6px rgba(0,0,0,.07); }
+    .meta { display:flex; gap:.5rem; align-items:center; color:#6b5b53; margin-bottom:.5rem; flex-wrap:wrap; }
+    .badge { display:inline-block; font-size:.8rem; font-weight:700; background:#3e2c23; color:#f4f1ee; padding:.15rem .55rem; border-radius:999px; }
+    .verse-block { margin:.9rem 0; padding:.9rem 1rem; border-left:4px solid #3e2c23; background:#fff; border-radius:8px; color:#2b2b2b; }
+    .section { margin-top:1rem; }
+    .section h3 { color:#3e2c23; margin-bottom:.4rem; }
+    .callout {
+      background:#fff; border:1px dashed rgba(0,0,0,.18); border-radius:10px; padding:.9rem 1rem; margin-top:.6rem;
+    }
+    .decl { font-weight:700; color:#3e2c23; }
+    .nav-rows { display:flex; justify-content:space-between; gap:.5rem; margin-top:1rem; }
+    .nav-rows a { color:#3e2c23; font-weight:600; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo"><a href="/" class="site-link"><span class="sitename"></span></a></div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/#about" data-scroll="#about">About</a></li>
+        <li><a href="/podcasts.html">Podcast</a></li>
+        <li><a class="active" href="/daily.html">Daily</a></li>
+        <li><a href="/blog.html">Blog</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+        <li><a href="/#contact" data-scroll="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <h1>{{TITLE}}</h1>
+    <p class="sub"><time datetime="{{DATE}}">{{HUMAN_DATE}}</time> • {{VERSE_REF}}</p>
+  </section>
+
+  <main class="wrap">
+    <article class="daily-card">
+      <div class="meta">
+        <span class="badge">Insight</span>
+        <span>{{VERSE_REF}}</span>
+      </div>
+
+      <div class="verse-block">
+        <div><strong>{{VERSE_REF}}</strong></div>
+        <div>“{{VERSE_TEXT}}”</div>
+      </div>
+
+      <section class="section">
+        <h3>Insight</h3>
+        {{INSIGHT_HTML}}
+      </section>
+
+      <section class="section">
+        <h3>One-Minute Win</h3>
+        <div class="callout">{{ONE_MINUTE_WIN}}</div>
+      </section>
+
+      <section class="section">
+        <h3>Declaration</h3>
+        <p class="decl">“{{DECLARATION}}”</p>
+      </section>
+
+      <div class="nav-rows">
+        <a href="{{PREV_HREF}}">← Previous</a>
+        <a href="../daily-archive.html">See Archive</a>
+        <a href="{{NEXT_HREF}}">Next →</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+  <script>document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');</script>
+</body>
+</html>

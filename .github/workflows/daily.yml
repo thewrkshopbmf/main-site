@@ -1,0 +1,27 @@
+name: Daily Publish
+on:
+  schedule:
+    # 11:00 UTC ≈ 6:00 AM CDT (summer) or 5:00 AM CST (winter).
+    # Adjust if you want a fixed local release time.
+    - cron: "0 11 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install (if you have deps)
+        run: npm ci || true
+
+      - name: Build visible dailies (CST filter)
+        run: npm run build:daily
+
+      - name: Trigger Netlify build
+        run: curl -X POST -d '{}' "${{ secrets.NETLIFY_BUILD_HOOK_URL }}"

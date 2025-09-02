@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — First Things First (Aug 22, 2025)</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico">
+  <meta name="description" content="Hidden Gem + Verse of the Day — First Things First (Matthew 6:33). Reflection and one practical step."/>
+  <style>
+    /* Page-specific polish (keeps your palette) */
+    .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
+    .page-hero h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin-bottom:.35rem; }
+    .page-hero .sub { opacity:.95; }
+    .wrap { max-width:760px; margin:0 auto; padding:2rem 1rem; }
+    .daily-card {
+      background:#f4f1ee; color:#2b2b2b; border:1px solid rgba(0,0,0,.08);
+      border-radius:14px; padding:1.25rem; box-shadow:0 2px 6px rgba(0,0,0,.07);
+    }
+    .meta { display:flex; gap:.5rem; align-items:center; color:#6b5b53; margin-bottom:.5rem; flex-wrap:wrap; }
+    .badge { display:inline-block; font-size:.8rem; font-weight:700; background:#3e2c23; color:#f4f1ee; padding:.15rem .55rem; border-radius:999px; }
+    .verse-block {
+      margin:.9rem 0; padding:.9rem 1rem; border-left:4px solid #3e2c23; background:#fff;
+      border-radius:8px; color:#2b2b2b;
+    }
+    .section { margin-top:1rem; }
+    .section h3 { color:#3e2c23; margin-bottom:.4rem; }
+    .nav-rows { display:flex; justify-content:space-between; gap:.5rem; margin-top:1rem; }
+    .nav-rows a { color:#3e2c23; font-weight:600; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <!-- Header/Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="/" class="site-link"><span class="sitename"></span></a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/#about" data-scroll="#about">About</a></li>
+        <li><a href="/podcasts.html">Podcast</a></li>
+        <li><a class="active" href="/daily.html">Daily</a></li>
+        <li><a href="/blog.html">Blog</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+        <li><a href="/#contact" data-scroll="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="page-hero">
+    <h1 id="title">First Things First</h1>
+    <p class="sub"><time id="date" datetime="2025-08-22">Aug 22, 2025</time> • Hidden Gem + Verse of the Day</p>
+  </section>
+
+  <!-- Daily Content -->
+  <main class="wrap">
+    <article class="daily-card">
+      <div class="meta">
+        <span class="badge">Hidden Gem</span>
+        <span id="ref">Matthew 6:33</span>
+      </div>
+
+      <p id="gem">
+        When you reorder your loves, your life follows. Give God the first word and the last word today.
+      </p>
+
+      <div class="verse-block">
+        <div><strong id="verseRef">Matthew 6:33</strong></div>
+        <div id="verse">“But seek first the kingdom of God and His righteousness, and all these things will be added to you.”</div>
+      </div>
+
+      <section class="section">
+        <h3>Reflection</h3>
+        <p id="body">
+          Put God first in attention, time, and trust. Start and end with Him today—then let everything else find its place.
+        </p>
+      </section>
+
+      <section class="section">
+        <h3>One Step</h3>
+        <p id="step">Begin and end your day by praying: “Lord, reorder my loves. Help me seek You first.”</p>
+      </section>
+
+      <div class="nav-rows">
+        <!-- Update these hrefs per day -->
+        <a id="prev" href="./2025-08-21.html">← Previous</a>
+        <a href="../daily-archive.html">See Archive</a>
+        <a id="next" href="./2025-08-23.html">Next →</a>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../script.js"></script>
+  <script>
+    // Safety: brand + mobile nav (in case script.js hasn’t run yet)
+    document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
+    const hb = document.getElementById('hamburger'); const nl = document.getElementById('nav-links');
+    if (hb && nl) hb.addEventListener('click',()=>nl.classList.toggle('open'));
+
+    // Optional: if you prefer to drive daily pages from JSON, you can load:
+    // /data/daily/2025-08-22.json with fields:
+    // { "date":"2025-08-22","gem_title":"First Things First","verse_ref":"Matthew 6:33","verse_text":"...","gem_body":"...","body":"...","step":"..." }
+    // and then set the content below. Otherwise, just keep it static.
+    /*
+    (async function(){
+      try{
+        const pathDate = '2025-08-22'; // hardcode per file or compute from filename
+        const r = await fetch(`/data/daily/${pathDate}.json`, {cache:'no-store'});
+        if(!r.ok) return;
+        const d = await r.json();
+        const toHuman = s => new Date(s+'T00:00:00').toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
+
+        if(d.gem_title) document.getElementById('title').textContent = d.gem_title;
+        if(d.date){ const t=document.getElementById('date'); t.textContent = toHuman(d.date); t.setAttribute('datetime', d.date); }
+        if(d.verse_ref){ document.getElementById('ref').textContent = d.verse_ref; document.getElementById('verseRef').textContent = d.verse_ref; }
+        if(d.verse_text) document.getElementById('verse').textContent = '“' + d.verse_text + '”';
+        if(d.gem_body) document.getElementById('gem').textContent = d.gem_body;
+        if(d.body) document.getElementById('body').textContent = d.body;
+        if(d.step) document.getElementById('step').textContent = d.step;
+      }catch(e){}
+    })();
+    */
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "thewrkshop",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:daily": "node scripts/build-daily.js"
+  }
+}
