@@ -590,13 +590,3 @@ footer {
   cursor: default;
 }
 
-/* (optional) base styling if you don't already have it) */
-.nav-rows { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.25rem; }
-.nav-rows a { 
-  display: inline-flex; align-items: center; gap: .5rem;
-  text-decoration: none; 
-  color: #3e2c23; 
-  border: 1px solid rgba(62,44,35,.3); 
-  padding: .6rem .9rem; 
-  border-radius: 10px; 
-}
