@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
 
 const CONTENT_DIR = path.join(ROOT, 'content', 'daily');
-const DATA_DIR    = path.join(ROOT, 'data');
+const DATA_DIR    = path.join(ROOT, 'data', 'v2');
 const DAILY_DIR   = path.join(ROOT, 'daily');
 const TPL_PATH    = path.join(ROOT, 'templates', 'daily.html');
 const REDIRECTS   = path.join(ROOT, '_redirects'); // Netlify redirects at repo root

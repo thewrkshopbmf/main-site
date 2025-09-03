@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
       navLinks.classList.toggle('show');
     });
   }
+  // Kill any old service worker that might be caching pages
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+  }
 
   // 📬 2. ConvertKit subscription form
   const form = document.getElementById("emailForm");

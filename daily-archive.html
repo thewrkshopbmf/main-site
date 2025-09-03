@@ -197,7 +197,7 @@
       // Expected: [{ "date":"YYYY-MM-DD", "title":"...", "verse_ref":"...", "href":"/daily/Scripture_Title_Date.html" }]
       (async function loadJSON(){
         try{
-          const r = await fetch('/data/daily-archive.json', { cache: 'no-store' });
+          const r = await fetch('/data/v2/daily-archive.json', { cache: 'no-store' });
           if (!r.ok) { initEmpty(); return; }
           const list = await r.json();
           if (!Array.isArray(list) || !list.length) { initEmpty(); return; }
