@@ -9,19 +9,23 @@ const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
 
 const CONTENT_DIR = path.join(ROOT, 'content', 'daily');
-const DATA_DIR    = path.join(ROOT, 'data', 'v2');
+const DATA_DIR    = path.join(ROOT, 'data');        // keep v1 paths unless you've moved to v2
 const DAILY_DIR   = path.join(ROOT, 'daily');
 const TPL_PATH    = path.join(ROOT, 'templates', 'daily.html');
-const REDIRECTS   = path.join(ROOT, '_redirects'); // Netlify redirects at repo root
+const REDIRECTS   = path.join(ROOT, '_redirects');  // Netlify redirects at repo root
+
+/* ---------- config ---------- */
+// 🚫 Absolutely ignore anything before this day.
+// This makes 2025-09-02 the first allowed entry (no “Prev”).
+const START_DATE = '2025-09-02'; // YYYY-MM-DD
 
 /* ---------- helpers ---------- */
 
 function todayCentralISO() {
-  const fmt = new Intl.DateTimeFormat('en-US', {
+  // Unambiguous YYYY-MM-DD in America/Chicago
+  return new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit'
-  });
-  const [m, d, y] = fmt.format(new Date()).split('/');
-  return `${y}-${m}-${d}`;
+  }).format(new Date());
 }
 
 function toHuman(dateStr) {
@@ -84,12 +88,9 @@ async function main() {
     if (j.body && !j.insight) j.insight = j.body;
     if (j['one-minute_win'] && !j.one_minute_win) j.one_minute_win = j['one-minute_win'];
 
-    if (!j.date || !/^\d{4}-\d{2}-\d{2}$/.test(j.date)) {
-      throw new Error(`Bad or missing "date" in ${f}`);
-    }
-    if (!j.verse_ref) {
-      throw new Error(`Missing "verse_ref" in ${f}`);
-    }
+    if (!j.date || !/^\d{4}-\d{2}-\d{2}$/.test(j.date)) throw new Error(`Bad/missing "date" in ${f}`);
+    if (!j.verse_ref) throw new Error(`Missing "verse_ref" in ${f}`);
+
     entries.push(j);
   }
 
@@ -98,17 +99,17 @@ async function main() {
 
   const today = todayCentralISO();
 
-  // Partition into visible vs future
-  const visible = entries.filter(e => e.date <= today);
-  const future  = entries.filter(e => e.date > today);
+  // Partition with hard start: only START_DATE..today are allowed/visible
+  const allowed = entries.filter(e => e.date >= START_DATE);       // everything on/after start
+  const visible = allowed.filter(e => e.date <= today);            // and not in the future
+  const future  = allowed.filter(e => e.date > today);             // for optional redirects
+  const older   = entries.filter(e => e.date < START_DATE);        // before the start → block
 
-  /* --------- HARD RESET DAILY FOLDER ---------
-     This guarantees NO stale files remain from prior deploys.
-  ------------------------------------------------ */
+  /* --------- HARD RESET DAILY FOLDER --------- */
   try { await fs.rm(DAILY_DIR, { recursive: true, force: true }); } catch {}
   await fs.mkdir(DAILY_DIR, { recursive: true });
 
-  // --- Archive JSON (newest first) from visible only ---
+  // --- Archive JSON (newest first) strictly from visible ---
   const archive = visible
     .slice()
     .sort((a, b) => b.date.localeCompare(a.date))
@@ -138,7 +139,7 @@ async function main() {
     };
     await fs.writeFile(path.join(DATA_DIR, 'daily.json'), JSON.stringify(dailyData, null, 2));
   } else {
-    // If nothing visible yet, remove stale daily.json
+    // nothing visible yet → remove stale daily.json if it exists
     try { await fs.unlink(path.join(DATA_DIR, 'daily.json')); } catch {}
   }
 
@@ -146,7 +147,7 @@ async function main() {
   const tpl = await fs.readFile(TPL_PATH, 'utf-8');
   for (let i = 0; i < visible.length; i++) {
     const e = visible[i];
-    const prev = visible[i - 1];
+    const prev = visible[i - 1];   // will be undefined for the first (START_DATE) entry
     const next = visible[i + 1];
 
     const insightHTML = normalizeInsight(e.insight).map(p => `<p>${p}</p>`).join('\n');
@@ -167,20 +168,14 @@ async function main() {
     await fs.writeFile(path.join(DAILY_DIR, fileNameFor(e)), html, 'utf-8');
   }
 
-  // --- Generate Netlify _redirects to block/re-route FUTURE URLs ---
-  // We’ll 302 redirect any future daily URL to the archive (you can change to 404 if you prefer).
-  // Also include a catch-all to leave other routes alone.
-  const futureLines = future.map(e => `/daily/${fileNameFor(e)}  /daily-archive.html  302!`);
-  const redirectsContent = [
-    ...futureLines,
-    // (Optional) protect raw content JSONs from direct access
-    '/content/*  /daily-archive.html  302!',
-    // default: do nothing special for others
-  ].join('\n') + '\n';
-
+  // --- Generate Netlify _redirects to block older-than-start and future URLs ---
+  // Everything before START_DATE and after today → send to archive (or 404 if you prefer)
+  const olderLines  = older.map(e  => `/daily/${fileNameFor(e)}   /daily-archive.html   302!`);
+  const futureLines = future.map(e => `/daily/${fileNameFor(e)}   /daily-archive.html   302!`);
+  const redirectsContent = [...olderLines, ...futureLines].join('\n') + (olderLines.length||futureLines.length ? '\n' : '');
   await fs.writeFile(REDIRECTS, redirectsContent, 'utf-8');
 
-  console.log(`Built ${visible.length} daily pages (<= ${today}). Future blocked: ${future.length}.`);
+  console.log(`Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}.`);
 }
 
 main().catch(err => {
