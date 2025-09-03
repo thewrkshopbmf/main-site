@@ -1,4 +1,4 @@
-Format for daily titles:
+Format for daily titles: Note that the daily is based on what is written in the file not the name
 /daily/<SCRIPTURE-SLUG>_<TITLE-SLUG>_<YYYY-MM-DD>.html
 Format for daily bodies:
 ```JSON{
