@@ -106,6 +106,25 @@ async function main() {
       href: `/daily/${fileNameFor(e)}`
     }));
 
+  // after: const today = todayCentralISO();
+await cleanupFutureDailyPages(DAILY_DIR, today);
+
+async function cleanupFutureDailyPages(dir, todayISO){
+  try{
+    const files = (await fs.readdir(dir)).filter(f => f.endsWith('.html'));
+    for (const f of files){
+      // Expect: Scripture_Title_YYYY-MM-DD.html  → extract date
+      const m = f.match(/_(\d{4}-\d{2}-\d{2})\.html$/);
+      if (m && m[1] > todayISO){
+        await fs.unlink(path.join(dir, f)); // remove unreleased file
+      }
+    }
+  }catch(e){
+    // ignore if dir does not exist yet
+  }
+}
+
+
   await fs.writeFile(path.join(DATA_DIR, 'daily-archive.json'), JSON.stringify(archive, null, 2));
 
   // today's json for homepage card

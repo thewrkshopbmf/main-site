@@ -8,6 +8,7 @@
   <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
   <meta name="description" content="Browse past Daily devotionals—Hidden Gem + Verse of the Day—by date."/>
   <style>
+    .archive-grid.preload { visibility: hidden; }
     .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
     .page-hero h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin-bottom:.4rem; }
     .page-hero p { opacity:.95; max-width:720px; margin:0 auto; }
@@ -72,34 +73,8 @@
 
   <!-- Archive Grid -->
   <main class="content-section container">
-    <section class="archive-grid" id="archiveGrid" aria-label="Daily entries">
-      <!-- Fallback samples; replaced by /data/daily-archive.json if present -->
-      <a class="archive-card" href="daily/2025-08-22.html" data-date="2025-08-22" data-title="First Things First" data-verse="Matthew 6:33">
-        <div class="ac-head">
-          <span class="badge">Hidden Gem</span>
-          <time class="ac-date" datetime="2025-08-22">Aug 22, 2025</time>
-        </div>
-        <h3 class="ac-title">First Things First</h3>
-        <p class="ac-verse">Matthew 6:33</p>
-      </a>
-
-      <a class="archive-card" href="daily/2025-08-21.html" data-date="2025-08-21" data-title="Quiet Strength" data-verse="Psalm 46:10">
-        <div class="ac-head">
-          <span class="badge">Hidden Gem</span>
-          <time class="ac-date" datetime="2025-08-21">Aug 21, 2025</time>
-        </div>
-        <h3 class="ac-title">Quiet Strength</h3>
-        <p class="ac-verse">Psalm 46:10</p>
-      </a>
-
-      <a class="archive-card" href="daily/2025-08-20.html" data-date="2025-08-20" data-title="Built, Not Bought" data-verse="Proverbs 24:3-4">
-        <div class="ac-head">
-          <span class="badge">Hidden Gem</span>
-          <time class="ac-date" datetime="2025-08-20">Aug 20, 2025</time>
-        </div>
-        <h3 class="ac-title">Built, Not Bought</h3>
-        <p class="ac-verse">Proverbs 24:3–4</p>
-      </a>
+    <section class="archive-grid preload" id="archiveGrid" aria-label="Daily entries">
+      <!-- No fallback cards; filled entirely from /data/daily-archive.json -->
     </section>
 
     <p class="empty" id="emptyMsg" style="display:none">No entries match your filters.</p>
@@ -137,18 +112,11 @@
       const prevBtn = document.getElementById('prevPage');
       const nextBtn = document.getElementById('nextPage');
 
-      let all = Array.from(grid.querySelectorAll('.archive-card')).map(cardToObj);
+      let all = []; // no hardcoded fallbacks
       let view = [];
       const PAGE = 12; // entries per page
       let page = 0;
 
-      function cardToObj(a){
-        const date = a.getAttribute('data-date'); // yyyy-mm-dd
-        const title = a.getAttribute('data-title') || '';
-        const verse = a.getAttribute('data-verse') || '';
-        const href = a.getAttribute('href') || '#';
-        return {date, title, verse, href};
-      }
       function objToCard(o){
         const a = document.createElement('a');
         a.className = 'archive-card';
@@ -162,7 +130,7 @@
 
         a.innerHTML = `
           <div class="ac-head">
-            <span class="badge">Hidden Gem</span>
+            <span class="badge">Insight</span>
             <time class="ac-date" datetime="${o.date}">${human}</time>
           </div>
           <h3 class="ac-title">${o.title || 'Untitled'}</h3>
@@ -173,6 +141,12 @@
 
       function populateYearOptions(){
         const years = Array.from(new Set(all.map(e => e.date.slice(0,4)))).sort((a,b)=>b.localeCompare(a));
+        // if no data yet, show current year so the control isn't empty
+        if (!years.length) {
+          const y = String(new Date().getFullYear());
+          yrSel.innerHTML = `<option value="${y}">${y}</option>`;
+          return;
+        }
         yrSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
       }
 
@@ -181,7 +155,8 @@
         const m = moSel.value; // 'all' or '01'..'12'
         const q = (search.value||'').trim().toLowerCase();
 
-        let filtered = all.filter(e => e.date.startsWith(y));
+        let filtered = all;
+        if (y) filtered = filtered.filter(e => e.date.startsWith(y));
         if (m !== 'all') filtered = filtered.filter(e => e.date.slice(5,7) === m);
         if (q) filtered = filtered.filter(e =>
           (e.title||'').toLowerCase().includes(q) ||
@@ -197,6 +172,7 @@
       }
 
       function render(){
+        grid.classList.remove('preload');
         grid.innerHTML = '';
         const start = page * PAGE;
         const chunk = view.slice(start, start + PAGE);
@@ -217,33 +193,31 @@
       moSel.addEventListener('change', apply);
       search.addEventListener('input', apply);
 
-      // Try loading /data/daily-archive.json (new schema)
+      // Load /data/daily-archive.json (new schema)
       // Expected: [{ "date":"YYYY-MM-DD", "title":"...", "verse_ref":"...", "href":"/daily/Scripture_Title_Date.html" }]
       (async function loadJSON(){
         try{
           const r = await fetch('/data/daily-archive.json', { cache: 'no-store' });
-          if (!r.ok) { initFromFallback(); return; }
+          if (!r.ok) { initEmpty(); return; }
           const list = await r.json();
-          if (!Array.isArray(list) || !list.length) { initFromFallback(); return; }
+          if (!Array.isArray(list) || !list.length) { initEmpty(); return; }
 
           all = list.map(x => ({
             date: x.date,
             title: x.title || '',
             verse: x.verse_ref || '',
-            // ensure leading slash for absolute path
-            href: (x.href && x.href.startsWith('/')) ? x.href : ('/' + (x.href || `daily/${x.date}.html`).replace(/^\/+/, ''))
+            href: (x.href && x.href.startsWith('/')) ? x.href : ('/' + (x.href || '').replace(/^\/+/, ''))
           }));
 
           populateYearOptions();
           apply();
         } catch(e) {
-          initFromFallback();
+          initEmpty();
         }
       })();
 
-
-      function initFromFallback(){
-        // use hardcoded samples already in DOM
+      function initEmpty(){
+        all = [];
         populateYearOptions();
         apply();
       }
