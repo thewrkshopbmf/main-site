@@ -1,0 +1,16 @@
+[build]
+  command = "npm run build:daily"
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+  Cache-Control = "no-store"
+
+[[headers]]
+  for = "/daily/*"
+  [headers.values]
+  Cache-Control = "no-store"
