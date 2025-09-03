@@ -12,10 +12,10 @@ const CONTENT_DIR = path.join(ROOT, 'content', 'daily');
 const DATA_DIR    = path.join(ROOT, 'data');
 const DAILY_DIR   = path.join(ROOT, 'daily');
 const TPL_PATH    = path.join(ROOT, 'templates', 'daily.html');
+const REDIRECTS   = path.join(ROOT, '_redirects'); // Netlify redirects at repo root
 
 /* ---------- helpers ---------- */
 
-// YYYY-MM-DD for America/Chicago "today"
 function todayCentralISO() {
   const fmt = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit'
@@ -36,15 +36,15 @@ function fill(template, map) {
 function slugBase(s) {
   return (s || '')
     .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')    // strip accents
-    .replace(/['"]/g, '')               // remove quotes
-    .replace(/[^A-Za-z0-9\s:–—-]+/g, ' ') // keep letters/numbers/space/:/-
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/['"]/g, '')
+    .replace(/[^A-Za-z0-9\s:–—-]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
 function scriptureToSlug(ref) {
   return slugBase(ref)
-    .replace(/[:–—]/g, '-') // unify separators
+    .replace(/[:–—]/g, '-')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
@@ -57,52 +57,33 @@ function titleToSlug(title) {
     .slice(0, 60)
     .replace(/-+$/,'');
 }
-// scripture-first filename: <SCRIPTURE>_<TITLE>_<DATE>.html
 function fileNameFor(e) {
   const scripture = scriptureToSlug(e.verse_ref || 'Scripture');
   const title = titleToSlug(e.title || 'Daily');
   return `${scripture}_${title}_${e.date}.html`;
 }
-
 function normalizeInsight(x) {
   if (Array.isArray(x)) return x.filter(Boolean).map(String);
   if (typeof x === 'string') return [x];
   return [];
 }
 
-async function cleanupFutureDailyPages(dir, todayISO){
-  try{
-    const files = (await fs.readdir(dir)).filter(f => f.endsWith('.html'));
-    for (const f of files){
-      // Expect: Something_Something_YYYY-MM-DD.html → pull date
-      const m = f.match(/_(\d{4}-\d{2}-\d{2})\.html$/);
-      if (m && m[1] > todayISO){
-        await fs.unlink(path.join(dir, f)); // remove unreleased file
-      }
-    }
-  }catch(e){
-    // directory may not exist yet—ignore
-  }
-}
-
 /* ---------- main ---------- */
 
 async function main() {
   await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.mkdir(DAILY_DIR, { recursive: true });
 
-  // Load content JSONs
+  // Load all content JSONs
   const files = (await fs.readdir(CONTENT_DIR)).filter(f => f.endsWith('.json'));
   const entries = [];
   for (const f of files) {
     const raw = await fs.readFile(path.join(CONTENT_DIR, f), 'utf-8');
     const j = JSON.parse(raw);
 
-    // Back-compat key renames
+    // Back-compat
     if (j.body && !j.insight) j.insight = j.body;
     if (j['one-minute_win'] && !j.one_minute_win) j.one_minute_win = j['one-minute_win'];
 
-    // Basic validation (soft but protective)
     if (!j.date || !/^\d{4}-\d{2}-\d{2}$/.test(j.date)) {
       throw new Error(`Bad or missing "date" in ${f}`);
     }
@@ -112,18 +93,22 @@ async function main() {
     entries.push(j);
   }
 
-  // Sort ascending by date so indices map to prev/next in time
+  // Sort ascending by date
   entries.sort((a, b) => a.date.localeCompare(b.date));
 
   const today = todayCentralISO();
 
-  // Remove any future HTML files so they can't be guessed
-  await cleanupFutureDailyPages(DAILY_DIR, today);
-
-  // Visible = entries up to (and including) today (CST)
+  // Partition into visible vs future
   const visible = entries.filter(e => e.date <= today);
+  const future  = entries.filter(e => e.date > today);
 
-  // --- Write Archive JSON (newest first) strictly from visible ---
+  /* --------- HARD RESET DAILY FOLDER ---------
+     This guarantees NO stale files remain from prior deploys.
+  ------------------------------------------------ */
+  try { await fs.rm(DAILY_DIR, { recursive: true, force: true }); } catch {}
+  await fs.mkdir(DAILY_DIR, { recursive: true });
+
+  // --- Archive JSON (newest first) from visible only ---
   const archive = visible
     .slice()
     .sort((a, b) => b.date.localeCompare(a.date))
@@ -135,7 +120,7 @@ async function main() {
     }));
   await fs.writeFile(path.join(DATA_DIR, 'daily-archive.json'), JSON.stringify(archive, null, 2));
 
-  // --- Write Today's JSON (homepage hook) from latest visible ---
+  // --- Today's JSON (homepage) from latest visible ---
   const todayEntry = visible.at(-1);
   if (todayEntry) {
     const insight = normalizeInsight(todayEntry.insight);
@@ -146,27 +131,25 @@ async function main() {
       title: todayEntry.title || '',
       verse_ref: todayEntry.verse_ref || '',
       verse_text: todayEntry.verse_text || '',
-      insight,                 // array of paragraphs
-      insight_teaser: teaser,  // handy for the home card
+      insight,
+      insight_teaser: teaser,
       one_minute_win: todayEntry.one_minute_win || '',
       declaration: todayEntry.declaration || ''
     };
     await fs.writeFile(path.join(DATA_DIR, 'daily.json'), JSON.stringify(dailyData, null, 2));
   } else {
-    // If nothing is visible yet, remove stale daily.json so the home card doesn't show old data
+    // If nothing visible yet, remove stale daily.json
     try { await fs.unlink(path.join(DATA_DIR, 'daily.json')); } catch {}
   }
 
-  // --- Generate per-day HTML for each visible entry only ---
+  // --- Generate HTML pages for visible only ---
   const tpl = await fs.readFile(TPL_PATH, 'utf-8');
   for (let i = 0; i < visible.length; i++) {
     const e = visible[i];
     const prev = visible[i - 1];
     const next = visible[i + 1];
 
-    const insightHTML = normalizeInsight(e.insight)
-      .map(p => `<p>${p}</p>`)
-      .join('\n');
+    const insightHTML = normalizeInsight(e.insight).map(p => `<p>${p}</p>`).join('\n');
 
     const html = fill(tpl, {
       TITLE: e.title || 'Untitled',
@@ -184,7 +167,20 @@ async function main() {
     await fs.writeFile(path.join(DAILY_DIR, fileNameFor(e)), html, 'utf-8');
   }
 
-  console.log(`Built ${visible.length} daily pages. Today (CST): ${today}`);
+  // --- Generate Netlify _redirects to block/re-route FUTURE URLs ---
+  // We’ll 302 redirect any future daily URL to the archive (you can change to 404 if you prefer).
+  // Also include a catch-all to leave other routes alone.
+  const futureLines = future.map(e => `/daily/${fileNameFor(e)}  /daily-archive.html  302!`);
+  const redirectsContent = [
+    ...futureLines,
+    // (Optional) protect raw content JSONs from direct access
+    '/content/*  /daily-archive.html  302!',
+    // default: do nothing special for others
+  ].join('\n') + '\n';
+
+  await fs.writeFile(REDIRECTS, redirectsContent, 'utf-8');
+
+  console.log(`Built ${visible.length} daily pages (<= ${today}). Future blocked: ${future.length}.`);
 }
 
 main().catch(err => {
