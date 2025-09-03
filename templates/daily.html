@@ -92,5 +92,38 @@
 
   <script src="../script.js"></script>
   <script>document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');</script>
+  <script>
+(function(){
+  // Get "today" in America/Chicago as YYYY-MM-DD
+  function todayCentralISO(){
+    const fmt = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit'
+    });
+    return fmt.format(new Date()); // en-CA -> YYYY-MM-DD
+  }
+  const today = todayCentralISO();
+
+  function extractDateFromHref(href){
+    const m = (href||'').match(/_(\d{4}-\d{2}-\d{2})\.html$/);
+    return m ? m[1] : null;
+  }
+  function clampLink(a){
+    if (!a) return;
+    const d = extractDateFromHref(a.getAttribute('href'));
+    if (d && d > today){
+      a.setAttribute('href', '#');
+      a.setAttribute('aria-disabled', 'true');
+      a.style.pointerEvents = 'none';
+      a.style.opacity = '0.5';
+      a.title = `Available on ${d}`;
+    }
+  }
+
+  // Left link = Previous, Right link = Next inside .nav-rows
+  clampLink(document.querySelector('.nav-rows a:first-child'));
+  clampLink(document.querySelector('.nav-rows a:last-child'));
+})();
+</script>
+
 </body>
 </html>

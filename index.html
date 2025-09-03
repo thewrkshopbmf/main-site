@@ -259,7 +259,6 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
         cta:     ctx.querySelector('.df-cta')
         };
 
-        // helper: scripture + title → slug, to build fallback href if archive isn't reachable
         function baseSlug(s){
         return (s||'').normalize('NFKD')
             .replace(/[\u0300-\u036f]/g,'')
@@ -274,54 +273,60 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
         function titleSlug(title){
         return baseSlug(title).replace(/[:–—]/g,'-').replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,60).replace(/-+$/,'');
         }
-        function humanDate(iso){
+        function humanShort(iso){
         const dt = new Date(iso + 'T00:00:00');
-        // e.g., "Sep 2"
         return dt.toLocaleDateString(undefined,{month:'short', day:'numeric'});
+        }
+        function todayCentralISO(){
+        const fmt = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit'
+        });
+        return fmt.format(new Date());
         }
 
         try {
-        // 1) Load the latest daily content (homepage payload)
         const r = await fetch('/data/daily.json', { cache: 'no-store' });
         if (!r.ok) return;
         const d = await r.json();
 
-        // Fill text
         if (el.title && d.title) el.title.textContent = d.title;
         if (el.teaser) {
-            // Prefer explicit teaser; fallback to first insight paragraph if present
             const teaser = d.insight_teaser || (Array.isArray(d.insight) ? d.insight[0] : (d.insight || ''));
             el.teaser.textContent = (teaser || '').trim();
         }
         if (el.ref && d.verse_ref) el.ref.textContent = d.verse_ref;
         if (el.snip && d.verse_text) el.snip.textContent = '“' + d.verse_text + '”';
         if (el.date && d.date) {
-            el.date.textContent = humanDate(d.date);
+            el.date.textContent = humanShort(d.date);
             el.date.setAttribute('datetime', d.date);
         }
 
-        // 2) Get the correct page href: try archive first (exact date match), then fallback to constructed URL
+        // Build/link to the correct page
         let href = 'daily.html';
         try {
             const ra = await fetch('/data/daily-archive.json', { cache: 'no-store' });
             if (ra.ok) {
             const list = await ra.json();
-            // find exact date match
             const item = Array.isArray(list) ? list.find(x => x.date === d.date) : null;
             if (item && item.href) href = item.href;
             }
-        } catch (_) { /* ignore and use fallback */ }
+        } catch (_) {}
 
-        // Fallback: build scripture-first link locally if archive not available yet
         if (!href || href === 'daily.html') {
             if (d.verse_ref && d.title && d.date) {
             href = '/daily/' + scriptureSlug(d.verse_ref) + '_' + titleSlug(d.title) + '_' + d.date + '.html';
             }
         }
 
+        // Guard: if the daily date is in the future (CST/CDT), don't link to it
+        const today = todayCentralISO();
+        if (d.date && d.date > today) {
+            href = '/daily-archive.html'; // or '#' to disable
+        }
+
         if (el.cta && href) el.cta.setAttribute('href', href);
         } catch (e) {
-        // silent fail—keep the static example content
+        // keep static content
         }
     })();
 

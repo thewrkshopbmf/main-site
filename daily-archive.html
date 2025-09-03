@@ -208,6 +208,15 @@
             verse: x.verse_ref || '',
             href: (x.href && x.href.startsWith('/')) ? x.href : ('/' + (x.href || '').replace(/^\/+/, ''))
           }));
+          // Guard: hide future entries (America/Chicago)
+          (function(){
+          const fmt = new Intl.DateTimeFormat('en-CA', {
+              timeZone: 'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit'
+          });
+          const today = fmt.format(new Date()); // YYYY-MM-DD
+          all = all.filter(x => x.date && x.date <= today);
+          })();
+
 
           populateYearOptions();
           apply();
