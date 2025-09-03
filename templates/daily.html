@@ -124,6 +124,18 @@
   clampLink(document.querySelector('.nav-rows a:last-child'));
 })();
 </script>
+<script>
+(function(){
+  // Mark links that have no destination as disabled (lighter brown)
+  const links = document.querySelectorAll('.nav-rows a');
+  links.forEach(a => {
+    const href = (a.getAttribute('href') || '').trim();
+    const disabled = href === '#' || a.getAttribute('aria-disabled') === 'true';
+    if (disabled) a.classList.add('is-disabled');
+  });
+})();
+</script>
+
 
 </body>
 </html>

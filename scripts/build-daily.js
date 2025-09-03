@@ -17,7 +17,7 @@ const REDIRECTS   = path.join(ROOT, '_redirects');  // Netlify redirects at repo
 /* ---------- config ---------- */
 // 🚫 Absolutely ignore anything before this day.
 // This makes 2025-09-02 the first allowed entry (no “Prev”).
-const START_DATE = '2025-09-01'; // YYYY-MM-DD
+const START_DATE = '2025-09-02'; // YYYY-MM-DD
 
 /* ---------- helpers ---------- */
 
