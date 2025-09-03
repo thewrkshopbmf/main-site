@@ -1,0 +1,5 @@
+/data/*
+  Cache-Control: no-store
+
+/daily/*
+  Cache-Control: no-store
