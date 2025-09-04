@@ -37,17 +37,17 @@
         <div class="meta">
           <time datetime="{{DATE}}">{{HUMAN_DATE}}</time>
           <span>• {{READING_MIN}} min</span>
-          {{#IF_AUTHOR}}<span>• {{AUTHOR}}</span>{{/IF_AUTHOR}}
+          <span id="authorSlot" hidden>• <span id="authorText">{{AUTHOR}}</span></span>
         </div>
-        {{#IF_EXCERPT}}<p class="excerpt">{{EXCERPT}}</p>{{/IF_EXCERPT}}
+        <p id="excerptSlot" class="excerpt" hidden>{{EXCERPT}}</p>
       </header>
 
       <!-- All rich content goes here -->
       {{BODY_HTML}}
 
       <nav class="nav-rows" aria-label="Post navigation">
-        <a class="btn {{PREV_CLASS}}" href="{{PREV_HREF}}">← Previous</a>
-        <a class="btn {{NEXT_CLASS}}" href="{{NEXT_HREF}}">Next →</a>
+        <a class="btn" id="prevLink" href="{{PREV_HREF}}">← Previous</a>
+        <a class="btn" id="nextLink" href="{{NEXT_HREF}}">Next →</a>
       </nav>
     </article>
   </main>
@@ -62,21 +62,34 @@
   <script src="/script.js"></script>
   <script>
   (function(){
+    // brand
     document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
 
+    // hide author/excerpt if empty
+    const a = document.getElementById('authorText');
+    const aSlot = document.getElementById('authorSlot');
+    if (a && a.textContent.trim()) aSlot.hidden = false;
+    const ex = document.getElementById('excerptSlot');
+    if (ex && ex.textContent.trim()) ex.hidden = false;
+
+    // redirect away if this post is from the future
     const today = new Intl.DateTimeFormat('en-CA', {
       timeZone:'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit'
     }).format(new Date());
-
     const pageTime = document.querySelector('time[datetime]');
     const pageDate = pageTime ? pageTime.getAttribute('datetime') : null;
     if (pageDate && pageDate > today) {
       window.location.replace('/blog-archive.html');
       return;
     }
-    document.querySelectorAll('.nav-rows a').forEach(a=>{
+
+    // disable prev/next if missing
+    const prev = document.getElementById('prevLink');
+    const next = document.getElementById('nextLink');
+    [prev,next].forEach(a=>{
+      if (!a) return;
       const href = (a.getAttribute('href')||'').trim();
-      if (href === '#') a.classList.add('is-disabled');
+      if (href === '#' || !href) a.classList.add('is-disabled');
     });
   })();
   </script>

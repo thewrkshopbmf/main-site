@@ -8,13 +8,13 @@ const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
 
 const CONTENT_DIR = path.join(ROOT, 'content', 'blog');
-const DATA_DIR    = path.join(ROOT, 'data');         // keep consistent with your daily
-const BLOG_DIR    = path.join(ROOT, 'blog');         // output HTML here
+const DATA_DIR    = path.join(ROOT, 'data');
+const BLOG_DIR    = path.join(ROOT, 'blog');
 const TPL_PATH    = path.join(ROOT, 'templates', 'blog.html');
 const REDIRECTS   = path.join(ROOT, '_redirects');
 
 // Hard start if you want to hide anything older:
-const START_DATE = '2025-08-01'; // first Monday week or whatever you prefer
+const START_DATE = '2025-08-01';
 
 function todayCentralISO() {
   return new Intl.DateTimeFormat('en-CA', {
@@ -26,15 +26,10 @@ function toHuman(dateStr){
   return dt.toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
 }
 function fill(t, map){
-  return Object.entries(map).reduce((acc,[k,v])=>acc.replaceAll(`{{${k}}}`, v ?? ''), t);
-}
-function slugBase(s){
-  return (s||'').normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g,'')
-    .replace(/['"]/g,'')
-    .replace(/[^A-Za-z0-9\s:–—-]+/g,' ')
-    .replace(/\s+/g,' ')
-    .trim();
+  return Object.entries(map).reduce(
+    (acc,[k,v]) => acc.replaceAll(`{{${k}}}`, v ?? ''),
+    t
+  );
 }
 function titleToSlug(title) {
   return (title || '')
@@ -43,7 +38,6 @@ function titleToSlug(title) {
     .replace(/[^a-z0-9]+/g, '-')   // collapse everything else to hyphen
     .replace(/^-+|-+$/g, '');      // trim leading/trailing hyphens
 }
-
 function fileNameFor(e){
   const slug = titleToSlug(e.title || 'post');
   return `${e.date}_${slug}.html`;
@@ -58,26 +52,23 @@ function paraHTML(arr){
 async function ensurePassthroughs() {
   const passthroughs = [
     '/blog/*   /blog/:splat   200',
-    '/daily/*   /daily/:splat   200', // parity; harmless if you already serve dailies directly
+    '/daily/*   /daily/:splat   200',
   ];
 
   let existing = '';
   try {
     existing = await fs.readFile(REDIRECTS, 'utf-8');
-  } catch {
-    // _redirects doesn't exist yet; we'll create it below
-  }
+  } catch { /* file not there yet */ }
 
   const existingLines = existing
     .split('\n')
     .map(l => l.trim())
     .filter(Boolean);
 
-  // De-dupe and ensure passthroughs are first
   const missing = passthroughs.filter(p => !existingLines.includes(p));
   const merged = [
-    ...missing,      // ensure these are at the very top
-    ...existingLines // keep whatever you already had (daily future guards, etc.)
+    ...missing,
+    ...existingLines
   ].join('\n') + '\n';
 
   await fs.writeFile(REDIRECTS, merged, 'utf-8');
@@ -85,15 +76,14 @@ async function ensurePassthroughs() {
 }
 
 async function main(){
-  // make sure passthrough rules exist before we append any other redirects
   await ensurePassthroughs();
-
   await fs.mkdir(DATA_DIR, { recursive: true });
 
   // Load content
   let files = [];
-  try { files = (await fs.readdir(CONTENT_DIR)).filter(f => f.endsWith('.json')); }
-  catch { /* no blogs yet */ }
+  try {
+    files = (await fs.readdir(CONTENT_DIR)).filter(f => f.endsWith('.json'));
+  } catch { /* no blogs yet */ }
 
   const entries = [];
   for (const f of files){
@@ -108,7 +98,6 @@ async function main(){
 
   // Sort ascending
   entries.sort((a,b)=>a.date.localeCompare(b.date));
-
   const today = todayCentralISO();
 
   // Allowed window
@@ -130,6 +119,7 @@ async function main(){
       title: e.title || '',
       category: e.category || '',
       excerpt: e.excerpt || '',
+      author: e.author || '',
       reading_minutes: e.reading_minutes || 0,
       href: `/blog/${fileNameFor(e)}`
     }));
@@ -143,6 +133,7 @@ async function main(){
       title: latest.title || '',
       category: latest.category || '',
       excerpt: latest.excerpt || '',
+      author: latest.author || '',
       reading_minutes: latest.reading_minutes || 0,
       href: `/blog/${fileNameFor(latest)}`
     };
@@ -164,6 +155,7 @@ async function main(){
       DATE: e.date,
       HUMAN_DATE: toHuman(e.date),
       EXCERPT: e.excerpt || '',
+      AUTHOR: e.author || '',
       READING_MIN: String(e.reading_minutes || 0),
       BODY_HTML: paraHTML(e.body_html),
       PREV_HREF: prev ? `./${fileNameFor(prev)}` : '#',
@@ -173,13 +165,12 @@ async function main(){
     await fs.writeFile(path.join(BLOG_DIR, fileNameFor(e)), html, 'utf-8');
   }
 
-  // Redirect blocklist (older than start + future → archive)
+  // Redirect guards
   const guardLines = [
     ...older.map(e => `/blog/${fileNameFor(e)}   /blog-archive.html   302!`),
     ...future.map(e => `/blog/${fileNameFor(e)}   /blog-archive.html   302!`)
   ];
 
-  // Merge guards AFTER passthroughs and without duplicating
   let existing = '';
   try { existing = await fs.readFile(REDIRECTS, 'utf-8'); } catch {}
   const existingSet = new Set(
