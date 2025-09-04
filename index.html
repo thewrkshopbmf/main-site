@@ -1,213 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>TheWrkShop</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
-    <meta name="description" content="TheWrkShop — Building Christian Men of Purpose and Excellence. Podcast, Daily Devotionals, Blog, and Resources."/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <meta name="description" content="TheWrkShop — Building Christian Men of Purpose and Excellence. Podcast, Daily Devotionals, Blog, and Resources."/>
 </head>
 <body>
 
-    <!-- Header/Navbar -->
-    <div id="site-header"></div>
+  <!-- Header/Navbar (injected by /script.js) -->
+  <div id="site-header"></div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-overlay">
-            <h1><span class="sitename"></span></h1>
-            <p>Building Christian Men Of Purpose And Excellence.</p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay">
+      <h1><span class="sitename"></span></h1>
+      <p>Building Christian Men Of Purpose And Excellence.</p>
 
-            <!-- Subscription Box -->
-            <form id="emailForm" class="subscribe-form">
-                <input type="email" id="email" name="email" placeholder="Your Email - Our Newsletter" required />
-                <button type="submit">Subscribe</button>
-            </form>
-            <p id="successMessage" class="subscribe-success">Thanks! Check your email to confirm your subscription</p>
+      <!-- Subscription Box -->
+      <form id="emailForm" class="subscribe-form">
+        <input type="email" id="email" name="email" placeholder="Your Email - Our Newsletter" required />
+        <button type="submit">Subscribe</button>
+      </form>
+      <p id="successMessage" class="subscribe-success">Thanks! Check your email to confirm your subscription</p>
 
-            <a href="#about" class="hero-button">Learn More</a>
-        </div>
-    </section>
+      <a href="#about" class="hero-button" data-scroll="#about">Learn More</a>
+    </div>
+  </section>
 
-    <!-- Quick Actions (New) -->
-    <section class="quick-actions" aria-label="Quick Actions">
-        <a class="qa-pill" href="#daily">
-            <span>📖</span> Today’s Verse
-        </a>
-        <a class="qa-pill" href="#blog">
-            <span>✍️</span> Latest Blog
-        </a>
-        <a class="qa-pill" href="#resources">
-            <span>🧰</span> Starter Kit
-        </a>
-    </section>
+  <!-- Quick Actions -->
+  <section class="quick-actions" aria-label="Quick Actions">
+    <a class="qa-pill" href="#daily" data-scroll="#daily">
+      <span>📖</span> Today’s Verse
+    </a>
+    <a class="qa-pill" href="#blog" data-scroll="#blog">
+      <span>✍️</span> Latest Blog
+    </a>
+    <a class="qa-pill" href="#resources" data-scroll="#resources">
+      <span>🧰</span> Starter Kit
+    </a>
+  </section>
 
-    <!-- Home Feature Row (Daily + side cards) -->
-    <section class="home-feature container" id="daily" aria-label="Today at TheWrkShop">
+  <!-- Home Feature Row (Daily + side cards) -->
+  <section class="home-feature container" id="daily" aria-label="Today at TheWrkShop">
     <!-- Daily Feature: Hidden Gem + Verse (snippet only) -->
     <article class="daily-feature">
-        <div class="df-head">
+      <div class="df-head">
         <span class="badge">Hidden Gem</span>
         <time class="df-date" datetime="2025-08-22">Aug 22</time>
-        </div>
-        <h3 class="df-title">First Things First</h3>
-        <p class="df-teaser">
+      </div>
+      <h3 class="df-title">First Things First</h3>
+      <p class="df-teaser">
         The quieter you are before God, the clearer your next step gets. Start with the One who orders the rest…
-        </p>
+      </p>
 
-        <div class="df-verse">
+      <div class="df-verse">
         <span class="verse-ref">Matthew 6:33</span>
         <span class="verse-snippet">“Seek first the kingdom of God…”</span>
-        </div>
+      </div>
 
-        <a class="cta df-cta" href="daily.html">Read Today’s Devotional →</a>
+      <a class="cta df-cta" href="daily.html">Read Today’s Devotional →</a>
     </article>
 
     <!-- Side stack: Latest Podcast & Blog (compact) -->
     <div class="side-stack">
-        <article class="mini-card">
+      <article class="mini-card">
         <h4>Latest Podcast</h4>
         <p class="mini-teaser">Ep 12 — “Built, Not Bought” • 24m</p>
         <a class="cta" href="podcasts.html">Play →</a>
-        </article>
+      </article>
 
-        <article class="mini-card" id="latestBlogCard">
+      <article class="mini-card" id="latestBlogCard">
         <h4>Latest Blog</h4>
         <p class="mini-teaser">Loading…</p>
         <a class="cta" href="blog-archive.html">Read →</a>
-        </article>
+      </article>
     </div>
-    </section>
+  </section>
 
+  <!-- About Us Section -->
+  <section id="about" class="content-section about-section">
+    <h2>About Us</h2>
+    <div class="cards-container">
+      <div class="card">
+        <h3>Our Mission</h3>
+        <p>To equip Christian men with tools, teachings, and community to build strong spiritual and practical foundations in their lives.</p>
+      </div>
+      <div class="card">
+        <h3>Our Vision</h3>
+        <p>To inspire a generation of men who lead with integrity, courage, and wisdom rooted in Christ.</p>
+      </div>
+      <div class="card">
+        <h3>Our Values</h3>
+        <p>Brotherhood, accountability, growth, and authentic faith lived out daily.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- About Us Section (Existing) -->
-    <section id="about" class="content-section about-section">
-        <h2>About Us</h2>
-        <div class="cards-container">
-            <div class="card">
-                <h3>Our Mission</h3>
-                <p>To equip Christian men with tools, teachings, and community to build strong spiritual and practical foundations in their lives.</p>
-            </div>
-            <div class="card">
-                <h3>Our Vision</h3>
-                <p>To inspire a generation of men who lead with integrity, courage, and wisdom rooted in Christ.</p>
-            </div>
-            <div class="card">
-                <h3>Our Values</h3>
-                <p>Brotherhood, accountability, growth, and authentic faith lived out daily.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Our Podcast Section -->
-    <section id="podcast" class="content-section podcast-section container">
+  <!-- Our Podcast Section -->
+  <section id="podcast" class="content-section podcast-section container">
     <div class="podcast-grid">
-        <!-- Vertical Image -->
-        <div class="podcast-image">
+      <!-- Vertical Image -->
+      <div class="podcast-image">
         <img src="assets/images/Our_Podcast_looking_up.png" alt="Podcast illustration" />
-        </div>
+      </div>
 
-        <!-- Podcast Text -->
-        <div class="podcast-text">
+      <!-- Podcast Text -->
+      <div class="podcast-text">
         <h2>Our Podcast</h2>
         <p>
-            Dive into impactful conversations that challenge and grow you in your walk with God, work, and relationships.
+          Dive into impactful conversations that challenge and grow you in your walk with God, work, and relationships.
         </p>
         <a href="podcasts.html" class="podcast-button">Click to See Our Podcasts</a>
-        </div>
+      </div>
     </div>
-    </section>
+  </section>
 
-
-    <!-- Blog Section (Dynamic) -->
-    <section id="blog" class="content-section blog-list">
+  <!-- Blog Section (Dynamic) -->
+  <section id="blog" class="content-section blog-list">
     <h2>From the Blog</h2>
 
-    <!-- Fallback cards (will be replaced if JSON loads) -->
+    <!-- Fallback cards (replaced if JSON loads) -->
     <div class="cards" id="blogCards">
-        <article class="blog-card">
+      <article class="blog-card">
         <h3><a href="blog/seek-first.html">Seek First: One Focus That Rewires Everything</a></h3>
         <p class="meta">5 min • Discipline</p>
         <p class="excerpt">You don’t need ten habits—you need one priority that orders the rest…</p>
-        </article>
+      </article>
 
-        <article class="blog-card">
+      <article class="blog-card">
         <h3><a href="blog/iron-sharpens-iron.html">Iron Sharpens Iron: Brotherhood that Builds</a></h3>
         <p class="meta">6 min • Brotherhood</p>
         <p class="excerpt">We don’t grow in isolation. Here’s how to build a circle that makes you better…</p>
-        </article>
+      </article>
 
-        <article class="blog-card">
+      <article class="blog-card">
         <h3><a href="blog/work-with-integrity.html">Work with Integrity: Excellence as Worship</a></h3>
         <p class="meta">7 min • Work</p>
         <p class="excerpt">Excellence isn’t perfectionism—it’s stewardship. How to bring your best, daily…</p>
-        </article>
+      </article>
     </div>
 
     <a class="cta" href="blog-archive.html">See all posts →</a>
-    </section>
+  </section>
 
+  <!-- Resources Section -->
+  <section id="resources" class="content-section resources">
+    <h2>Resources</h2>
+    <div class="filters" role="tablist" aria-label="Resource Filters">
+      <button class="chip active" data-tag="all" role="tab">All</button>
+      <button class="chip" data-tag="bible" role="tab">Bible Study</button>
+      <button class="chip" data-tag="habits" role="tab">Habits</button>
+      <button class="chip" data-tag="pdfs" role="tab">PDFs</button>
+      <button class="chip" data-tag="books" role="tab">Books</button>
+      <button class="chip" data-tag="tools" role="tab">Tools</button>
+    </div>
 
-    <!-- Resources Section (New) -->
-    <section id="resources" class="content-section resources">
-        <h2>Resources</h2>
-        <div class="filters" role="tablist" aria-label="Resource Filters">
-            <button class="chip active" data-tag="all" role="tab">All</button>
-            <button class="chip" data-tag="bible" role="tab">Bible Study</button>
-            <button class="chip" data-tag="habits" role="tab">Habits</button>
-            <button class="chip" data-tag="pdfs" role="tab">PDFs</button>
-            <button class="chip" data-tag="books" role="tab">Books</button>
-            <button class="chip" data-tag="tools" role="tab">Tools</button>
+    <div class="resource-grid" id="resource-grid">
+      <!-- Example Resource Cards -->
+      <a class="resource-card" href="assets/pdfs/30-day-seek-first.pdf">
+        <div class="rc-top">📄</div>
+        <div class="rc-body">
+          <h3>30-Day Seek First Plan</h3>
+          <p>Short daily prompts to build the right first step.</p>
         </div>
+      </a>
 
-        <div class="resource-grid" id="resource-grid">
-            <!-- Example Resource Cards -->
-            <a class="resource-card" href="assets/pdfs/30-day-seek-first.pdf">
-                <div class="rc-top">📄</div>
-                <div class="rc-body">
-                    <h3>30-Day Seek First Plan</h3>
-                    <p>Short daily prompts to build the right first step.</p>
-                </div>
-            </a>
-
-            <a class="resource-card" href="https://www.biblegateway.com/" target="_blank" rel="noopener">
-                <div class="rc-top">🔎</div>
-                <div class="rc-body">
-                    <h3>Verse Lookup</h3>
-                    <p>Find passages quickly while you study.</p>
-                </div>
-            </a>
-
-            <a class="resource-card" href="assets/pdfs/habit-checklist.pdf">
-                <div class="rc-top">✅</div>
-                <div class="rc-body">
-                    <h3>Habit Checklist</h3>
-                    <p>Simple weekly rhythm—faith, family, work.</p>
-                </div>
-            </a>
-
-            <a class="resource-card" href="resources.html">
-                <div class="rc-top">🧰</div>
-                <div class="rc-body">
-                    <h3>Starter Kit</h3>
-                    <p>New here? Start with these essentials.</p>
-                </div>
-            </a>
+      <a class="resource-card" href="https://www.biblegateway.com/" target="_blank" rel="noopener">
+        <div class="rc-top">🔎</div>
+        <div class="rc-body">
+          <h3>Verse Lookup</h3>
+          <p>Find passages quickly while you study.</p>
         </div>
-        <a class="cta" href="resources.html">See all resources →</a>
-    </section>
+      </a>
 
-    <!-- Contact Us Section (Existing) -->
-    <section id="contact" class="content-section contact-section">
-        <h2>Contact Us</h2>
-        <form action="https://formsubmit.co/f25468eae77a6323c66f6f8e7ff728be" method="POST">
-            <input type="text" name="name" placeholder="Your Name" required />
-            <input type="email" name="email" placeholder="Your Email" required />
-            <textarea name="message" placeholder="Your Message" required></textarea>
+      <a class="resource-card" href="assets/pdfs/habit-checklist.pdf">
+        <div class="rc-top">✅</div>
+        <div class="rc-body">
+          <h3>Habit Checklist</h3>
+          <p>Simple weekly rhythm—faith, family, work.</p>
+        </div>
+      </a>
 
-            <!-- Auto-reply message -->
-            <input type="hidden" name="_autoresponse" value="Hey there! 👋
+      <a class="resource-card" href="resources.html">
+        <div class="rc-top">🧰</div>
+        <div class="rc-body">
+          <h3>Starter Kit</h3>
+          <p>New here? Start with these essentials.</p>
+        </div>
+      </a>
+    </div>
+    <a class="cta" href="resources.html">See all resources →</a>
+  </section>
+
+  <!-- Contact Us Section -->
+  <section id="contact" class="content-section contact-section">
+    <h2>Contact Us</h2>
+    <form action="https://formsubmit.co/f25468eae77a6323c66f6f8e7ff728be" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" placeholder="Your Message" required></textarea>
+
+      <!-- Auto-reply message -->
+      <input type="hidden" name="_autoresponse" value="Hey there! 👋
 
 Thanks so much for reaching out to TheBldrShop — we’ve received your message and will get back to you soon.
 
@@ -215,220 +212,22 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
 
 — TheBldrShop Team" />
 
-            <!-- FormSubmit formatting -->
-            <input type="hidden" name="_template" value="table" />
+      <!-- FormSubmit formatting -->
+      <input type="hidden" name="_template" value="table" />
 
-            <!-- Optional: redirect to thank you page or home -->
-            <!-- <input type="hidden" name="_next" value="https://thebldrshop.com/thank-you.html"> -->
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
 
-            <button type="submit">Send Message</button>
-        </form>
-    </section>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo"><span class="sitename"></span></div>
-            <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Your existing script -->
-    <script src="script.js"></script>
-
-    <!-- Inline enhancements (replace your existing inline <script> with this) -->
-    <script>
-    // Brand fill
-    document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
-
-    // Mobile nav toggle (safe if header is injected)
-    (function(){
-        const btn = document.getElementById('hamburger');
-        const nav = document.getElementById('nav-links');
-        if (btn && nav) btn.addEventListener('click', () => nav.classList.toggle('open'));
-    })();
-
-    // --- Daily Feature loader (new model: title/insight_teaser/verse_ref/verse_text) ---
-    (async function loadDailyFeature(){
-        const ctx = document.querySelector('.daily-feature');
-        if (!ctx) return;
-
-        const el = {
-        title:   ctx.querySelector('.df-title'),
-        teaser:  ctx.querySelector('.df-teaser'),
-        date:    ctx.querySelector('.df-date'),
-        ref:     ctx.querySelector('.verse-ref'),
-        snip:    ctx.querySelector('.verse-snippet'),
-        cta:     ctx.querySelector('.df-cta')
-        };
-
-        function baseSlug(s){
-        return (s||'').normalize('NFKD')
-            .replace(/[\u0300-\u036f]/g,'')
-            .replace(/['"]/g,'')
-            .replace(/[^A-Za-z0-9\s:–—-]+/g,' ')
-            .replace(/\s+/g,' ')
-            .trim();
-        }
-        function scriptureSlug(ref){
-        return baseSlug(ref).replace(/[:–—]/g,'-').replace(/\s+/g,'-').replace(/-+/g,'-');
-        }
-        function titleSlug(title){
-        return baseSlug(title).replace(/[:–—]/g,'-').replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,60).replace(/-+$/,'');
-        }
-        function humanShort(iso){
-        const dt = new Date(iso + 'T00:00:00');
-        return dt.toLocaleDateString(undefined,{month:'short', day:'numeric'});
-        }
-        function todayCentralISO(){
-        const fmt = new Intl.DateTimeFormat('en-CA', {
-            timeZone: 'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit'
-        });
-        return fmt.format(new Date());
-        }
-
-        try {
-        const r = await fetch('/data/daily.json', { cache: 'no-store' });
-        if (!r.ok) return;
-        const d = await r.json();
-
-        if (el.title && d.title) el.title.textContent = d.title;
-        if (el.teaser) {
-            const teaser = d.insight_teaser || (Array.isArray(d.insight) ? d.insight[0] : (d.insight || ''));
-            el.teaser.textContent = (teaser || '').trim();
-        }
-        if (el.ref && d.verse_ref) el.ref.textContent = d.verse_ref;
-        if (el.snip && d.verse_text) el.snip.textContent = '“' + d.verse_text + '”';
-        if (el.date && d.date) {
-            el.date.textContent = humanShort(d.date);
-            el.date.setAttribute('datetime', d.date);
-        }
-
-        // Build/link to the correct page
-        let href = 'daily.html';
-        try {
-            const ra = await fetch('/data/daily-archive.json', { cache: 'no-store' });
-            if (ra.ok) {
-            const list = await ra.json();
-            const item = Array.isArray(list) ? list.find(x => x.date === d.date) : null;
-            if (item && item.href) href = item.href;
-            }
-        } catch (_) {}
-
-        if (!href || href === 'daily.html') {
-            if (d.verse_ref && d.title && d.date) {
-            href = '/daily/' + scriptureSlug(d.verse_ref) + '_' + titleSlug(d.title) + '_' + d.date + '.html';
-            }
-        }
-
-        // Guard: if the daily date is in the future (CST/CDT), don't link to it
-        const today = todayCentralISO();
-        if (d.date && d.date > today) {
-            href = '/daily-archive.html'; // or '#' to disable
-        }
-
-        if (el.cta && href) el.cta.setAttribute('href', href);
-        } catch (e) {
-        // keep static content
-        }
-    })();
-
-    // Resource filter chips (unchanged)
-    (function(){
-        const chips = document.querySelectorAll('.chip');
-        const cards = document.querySelectorAll('.resource-card');
-        if(!chips.length || !cards.length) return;
-
-        chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            chips.forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            const tag = chip.getAttribute('data-tag');
-            cards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            const match = tag === 'all' ||
-                            (tag === 'bible' && /verse|bible|study|scripture/.test(text)) ||
-                            (tag === 'habits' && /habit|checklist|routine/.test(text)) ||
-                            (tag === 'pdfs' && /\.pdf$/i.test(card.getAttribute('href')||'')) ||
-                            (tag === 'books' && /book|read/.test(text)) ||
-                            (tag === 'tools' && /tool|starter|kit|lookup/.test(text));
-            card.style.display = match ? '' : 'none';
-            });
-        });
-        });
-    })();
-    </script>
-    <script>
-(async function loadLatestBlog(){
-  const card = document.getElementById('latestBlogCard');
-  if (!card) return;
-
-  const teaser = card.querySelector('.mini-teaser');
-  const cta = card.querySelector('a.cta');
-
-  try {
-    const r = await fetch('/data/blog.json?ts=' + Date.now(), { cache:'no-store' });
-    if (!r.ok) return;
-
-    const b = await r.json();
-    if (teaser && b.title) {
-      teaser.textContent = `${b.title} • ${b.reading_minutes || 0} min`;
-    }
-    if (cta && b.href) {
-      cta.setAttribute('href', b.href);
-    }
-  } catch(e) {
-    // fallback if fetch fails
-    if (teaser) teaser.textContent = 'See all blog posts';
-    if (cta) cta.setAttribute('href', '/blog-archive.html');
-  }
-})();
-</script>
-<script>
-(async function hydrateHomeBlogRow(){
-  const wrap = document.getElementById('blogCards');
-  if (!wrap) return;
-
-  // Helpers
-  const todayISO = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit'
-  }).format(new Date());
-
-  function cardHTML(post){
-    const mins = post.reading_minutes || 0;
-    const cat  = post.category || 'Article';
-    const href = post.href || '#';
-    const title = post.title || 'Untitled';
-    const excerpt = post.excerpt || '';
-    return `
-      <article class="blog-card">
-        <h3><a href="${href}">${title}</a></h3>
-        <p class="meta">${mins} min • ${cat}</p>
-        <p class="excerpt">${excerpt}</p>
-      </article>
-    `;
-  }
-
-  try {
-    const r = await fetch('/data/blog-archive.json?ts=' + Date.now(), { cache: 'no-store' });
-    if (!r.ok) return; // keep fallback
-    const list = await r.json();
-
-    // Expect array from build script; guard and filter out future just in case
-    const posts = (Array.isArray(list) ? list : [])
-      .filter(p => p.date && p.date <= todayISO)
-      .sort((a,b) => b.date.localeCompare(a.date))
-      .slice(0, 3);
-
-    if (!posts.length) return; // keep fallback if nothing visible yet
-
-    wrap.innerHTML = posts.map(cardHTML).join('');
-  } catch (_) {
-    // swallow; fallback stays
-  }
-})();
-</script>
-
-
+  <!-- Single source of truth for all client JS -->
+  <script src="/script.js"></script>
 </body>
 </html>
