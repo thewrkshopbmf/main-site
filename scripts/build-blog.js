@@ -38,9 +38,10 @@ function titleToSlug(title) {
     .replace(/[^a-z0-9]+/g, '-')   // collapse everything else to hyphen
     .replace(/^-+|-+$/g, '');      // trim leading/trailing hyphens
 }
+// ✅ NEW: return folder path with index.html
 function fileNameFor(e) {
   const slug = titleToSlug(e.title || 'post');
-  return `${e.date}_${slug}.html`;
+  return `${e.date}_${slug}/index.html`;
 }
 
 // --- Ensure passthrough rules in `_redirects` (daily only, no blog passthrough)
@@ -115,7 +116,7 @@ async function main() {
       excerpt: e.excerpt || '',
       author: e.author || '',
       reading_minutes: e.reading_minutes || 0,
-      href: `/blog/${fileNameFor(e)}`
+      href: `/blog/${path.dirname(fileNameFor(e))}/`
     }));
   await fs.writeFile(path.join(DATA_DIR, 'blog-archive.json'), JSON.stringify(archive, null, 2));
 
@@ -129,14 +130,14 @@ async function main() {
       excerpt: latest.excerpt || '',
       author: latest.author || '',
       reading_minutes: latest.reading_minutes || 0,
-      href: `/blog/${fileNameFor(latest)}`
+      href: `/blog/${path.dirname(fileNameFor(latest))}/`
     };
     await fs.writeFile(path.join(DATA_DIR, 'blog.json'), JSON.stringify(blogData, null, 2));
   } else {
     try { await fs.unlink(path.join(DATA_DIR, 'blog.json')); } catch {}
   }
 
-  // Generate blog pages (same dynamic body builder as before)
+  // Generate blog pages
   const tpl = await fs.readFile(TPL_PATH, 'utf-8');
   for (let i = 0; i < visible.length; i++) {
     const e = visible[i];
@@ -189,17 +190,19 @@ async function main() {
       AUTHOR: e.author || '',
       READING_MIN: String(e.reading_minutes || 0),
       BODY_HTML: bodyHTML,
-      PREV_HREF: prev ? `./${fileNameFor(prev)}` : '#',
-      NEXT_HREF: next ? `./${fileNameFor(next)}` : '#'
+      PREV_HREF: prev ? `../${path.dirname(fileNameFor(prev))}/` : '#',
+      NEXT_HREF: next ? `../${path.dirname(fileNameFor(next))}/` : '#'
     });
 
-    await fs.writeFile(path.join(BLOG_DIR, fileNameFor(e)), html, 'utf-8');
+    const outPath = path.join(BLOG_DIR, fileNameFor(e));
+    await fs.mkdir(path.dirname(outPath), { recursive: true });
+    await fs.writeFile(outPath, html, 'utf-8');
   }
 
   // Redirect guards
   const guardLines = [
-    ...older.map(e => `/blog/${fileNameFor(e)}   /blog-archive.html   302!`),
-    ...future.map(e => `/blog/${fileNameFor(e)}   /blog-archive.html   302!`)
+    ...older.map(e => `/blog/${path.dirname(fileNameFor(e))}/   /blog-archive.html   302!`),
+    ...future.map(e => `/blog/${path.dirname(fileNameFor(e))}/   /blog-archive.html   302!`)
   ];
 
   let existing = '';
@@ -213,7 +216,7 @@ async function main() {
 
   console.log(`Blogs built: ${visible.length} in [${START_DATE}..${today}], future: ${future.length}, older: ${older.length}`);
   console.log('Blog pages generated:');
-  for (const e of visible) console.log(' -', `/blog/${fileNameFor(e)}`);
+  for (const e of visible) console.log(' -', `/blog/${path.dirname(fileNameFor(e))}/`);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
