@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:daily": "node scripts/build-daily.js"
+    "build:daily": "node scripts/build-daily.js",
+    "build:blog": "node scripts/validate-blog-dates.js && node scripts/build-blog.js",
+    "build:all": "npm run build:daily && npm run build:blog"
   }
 }

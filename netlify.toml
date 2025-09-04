@@ -1,9 +1,10 @@
 [build]
-  command = "npm run build:daily"
+  command = "npm run build:all"
   publish = "."
 
 [build.environment]
   NODE_VERSION = "18"
+  TZ = "America/Chicago"
 
 [[headers]]
   for = "/data/*"
@@ -12,5 +13,10 @@
 
 [[headers]]
   for = "/daily/*"
+  [headers.values]
+  Cache-Control = "no-store"
+
+[[headers]]
+  for = "/blog/*"
   [headers.values]
   Cache-Control = "no-store"

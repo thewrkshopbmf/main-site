@@ -72,10 +72,10 @@
         <a class="cta" href="podcasts.html">Play →</a>
         </article>
 
-        <article class="mini-card">
+        <article class="mini-card" id="latestBlogCard">
         <h4>Latest Blog</h4>
-        <p class="mini-teaser">Seek First: One Focus That Rewires Everything • 5 min</p>
-        <a class="cta" href="blog.html">Read →</a>
+        <p class="mini-teaser">Loading…</p>
+        <a class="cta" href="blog-archive.html">Read →</a>
         </article>
     </div>
     </section>
@@ -120,31 +120,34 @@
     </section>
 
 
-    <!-- Blog Section (New) -->
+    <!-- Blog Section (Dynamic) -->
     <section id="blog" class="content-section blog-list">
-        <h2>From the Blog</h2>
-        <div class="cards">
-            <!-- Example Post Card (duplicate and replace as needed) -->
-            <article class="blog-card">
-                <h3><a href="blog/seek-first.html">Seek First: One Focus That Rewires Everything</a></h3>
-                <p class="meta">5 min • Discipline</p>
-                <p class="excerpt">You don’t need ten habits—you need one priority that orders the rest…</p>
-            </article>
+    <h2>From the Blog</h2>
 
-            <article class="blog-card">
-                <h3><a href="blog/iron-sharpens-iron.html">Iron Sharpens Iron: Brotherhood that Builds</a></h3>
-                <p class="meta">6 min • Brotherhood</p>
-                <p class="excerpt">We don’t grow in isolation. Here’s how to build a circle that makes you better…</p>
-            </article>
+    <!-- Fallback cards (will be replaced if JSON loads) -->
+    <div class="cards" id="blogCards">
+        <article class="blog-card">
+        <h3><a href="blog/seek-first.html">Seek First: One Focus That Rewires Everything</a></h3>
+        <p class="meta">5 min • Discipline</p>
+        <p class="excerpt">You don’t need ten habits—you need one priority that orders the rest…</p>
+        </article>
 
-            <article class="blog-card">
-                <h3><a href="blog/work-with-integrity.html">Work with Integrity: Excellence as Worship</a></h3>
-                <p class="meta">7 min • Work</p>
-                <p class="excerpt">Excellence isn’t perfectionism—it’s stewardship. How to bring your best, daily…</p>
-            </article>
-        </div>
-        <a class="cta" href="blog.html">See all posts →</a>
+        <article class="blog-card">
+        <h3><a href="blog/iron-sharpens-iron.html">Iron Sharpens Iron: Brotherhood that Builds</a></h3>
+        <p class="meta">6 min • Brotherhood</p>
+        <p class="excerpt">We don’t grow in isolation. Here’s how to build a circle that makes you better…</p>
+        </article>
+
+        <article class="blog-card">
+        <h3><a href="blog/work-with-integrity.html">Work with Integrity: Excellence as Worship</a></h3>
+        <p class="meta">7 min • Work</p>
+        <p class="excerpt">Excellence isn’t perfectionism—it’s stewardship. How to bring your best, daily…</p>
+        </article>
+    </div>
+
+    <a class="cta" href="blog-archive.html">See all posts →</a>
     </section>
+
 
     <!-- Resources Section (New) -->
     <section id="resources" class="content-section resources">
@@ -355,6 +358,77 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
         });
     })();
     </script>
+    <script>
+(async function loadLatestBlog(){
+  const card = document.getElementById('latestBlogCard');
+  if (!card) return;
+
+  const teaser = card.querySelector('.mini-teaser');
+  const cta = card.querySelector('a.cta');
+
+  try {
+    const r = await fetch('/data/blog.json?ts=' + Date.now(), { cache:'no-store' });
+    if (!r.ok) return;
+
+    const b = await r.json();
+    if (teaser && b.title) {
+      teaser.textContent = `${b.title} • ${b.reading_minutes || 0} min`;
+    }
+    if (cta && b.href) {
+      cta.setAttribute('href', b.href);
+    }
+  } catch(e) {
+    // fallback if fetch fails
+    if (teaser) teaser.textContent = 'See all blog posts';
+    if (cta) cta.setAttribute('href', '/blog-archive.html');
+  }
+})();
+</script>
+<script>
+(async function hydrateHomeBlogRow(){
+  const wrap = document.getElementById('blogCards');
+  if (!wrap) return;
+
+  // Helpers
+  const todayISO = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit'
+  }).format(new Date());
+
+  function cardHTML(post){
+    const mins = post.reading_minutes || 0;
+    const cat  = post.category || 'Article';
+    const href = post.href || '#';
+    const title = post.title || 'Untitled';
+    const excerpt = post.excerpt || '';
+    return `
+      <article class="blog-card">
+        <h3><a href="${href}">${title}</a></h3>
+        <p class="meta">${mins} min • ${cat}</p>
+        <p class="excerpt">${excerpt}</p>
+      </article>
+    `;
+  }
+
+  try {
+    const r = await fetch('/data/blog-archive.json?ts=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return; // keep fallback
+    const list = await r.json();
+
+    // Expect array from build script; guard and filter out future just in case
+    const posts = (Array.isArray(list) ? list : [])
+      .filter(p => p.date && p.date <= todayISO)
+      .sort((a,b) => b.date.localeCompare(a.date))
+      .slice(0, 3);
+
+    if (!posts.length) return; // keep fallback if nothing visible yet
+
+    wrap.innerHTML = posts.map(cardHTML).join('');
+  } catch (_) {
+    // swallow; fallback stays
+  }
+})();
+</script>
+
 
 </body>
 </html>

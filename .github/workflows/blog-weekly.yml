@@ -1,0 +1,17 @@
+name: Blog Weekly Publish
+on:
+  schedule:
+    - cron: "0 11 * * 6"   # Saturday 06:00 America/Chicago (11:00 UTC during CDT)
+  workflow_dispatch: {}
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 18 }
+      - run: npm ci || true
+      - run: npm run build:all
+      # If you switched to Netlify CLI publish (recommended), use the same step here:
+      # - run: npx netlify-cli deploy --dir . --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN
