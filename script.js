@@ -9,28 +9,28 @@ function todayCentralISO() {
   }).format(new Date());
 }
 
-// Guarded injector that never inserts a 404/full document into a fragment
+// Guarded injector (used only on non-blog pages)
 async function injectHTML(selector, url) {
   try {
     const absolute = url.startsWith('/') ? url : '/' + url.replace(/^\/+/, '');
     const res = await fetch(absolute, { cache: 'no-store' });
-    if (!res.ok) return; // don't inject failed fetches
+    if (!res.ok) return;
+
     const text = await res.text();
 
-    // crude—but effective—full-document/404 detection
-    const looksLikeFullDoc = /<!doctype html/i.test(text) || /<html[\s>]/i.test(text);
-    if (looksLikeFullDoc && /404/i.test(text)) return;
+    // crude guard: skip full documents (404s, etc.)
+    if (/<!doctype html/i.test(text) || /<html[\s>]/i.test(text)) return;
 
     const el = document.querySelector(selector);
     if (el) el.innerHTML = text;
   } catch (_) {
-    // swallow; better to render without header than inject garbage
+    // swallow errors silently
   }
 }
 
 // --------- DOM Ready ----------
 document.addEventListener("DOMContentLoaded", function () {
-  // Hamburger menu (works if header was inline OR injected later)
+  // Hamburger menu
   const rebindNavToggle = () => {
     const hamburger = document.getElementById('hamburger');
     const navLinks  = document.getElementById('nav-links');
@@ -74,12 +74,15 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Inject header (root-absolute path!) then rebind nav toggle & refill brand
-  (async () => {
-    await injectHTML("#site-header", "/pages/details/header.html");
-    document.querySelectorAll(".sitename").forEach(el => (el.textContent = siteName));
-    rebindNavToggle();
-  })();
+  // ✅ Only inject header on non-blog pages
+  const onBlog = location.pathname.startsWith('/blog/');
+  if (!onBlog) {
+    (async () => {
+      await injectHTML("#site-header", "/pages/details/header.html");
+      document.querySelectorAll(".sitename").forEach(el => (el.textContent = siteName));
+      rebindNavToggle();
+    })();
+  }
 });
 
 // --------- Home: Daily Feature teaser ----------
@@ -128,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
       el.date.setAttribute('datetime', d.date);
     }
 
-    // Try to resolve today's href via archive (preferred)
+    // Try to resolve today's href via archive
     let href = 'daily.html';
     try {
       const ra = await fetch('/data/daily-archive.json', { cache: 'no-store' });
@@ -139,14 +142,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     } catch {}
 
-    // Fallback: construct
     if (!href || href === 'daily.html') {
       if (d.verse_ref && d.title && d.date) {
         href = '/daily/' + scriptureSlug(d.verse_ref) + '_' + titleSlug(d.title) + '_' + d.date + '.html';
       }
     }
 
-    // Hide future daily
     if (d.date && d.date > todayCentralISO()) href = '/daily-archive.html';
 
     if (el.cta && href) el.cta.setAttribute('href', href);
