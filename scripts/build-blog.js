@@ -14,7 +14,7 @@ const TPL_PATH    = path.join(ROOT, 'templates', 'blog.html');
 const REDIRECTS   = path.join(ROOT, '_redirects');
 
 // Hard start if you want to hide anything older:
-const START_DATE = '2025-09-01'; // first Monday week or whatever you prefer
+const START_DATE = '2025-08-01'; // first Monday week or whatever you prefer
 
 function todayCentralISO() {
   return new Intl.DateTimeFormat('en-CA', {

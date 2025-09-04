@@ -12,11 +12,11 @@
   Cache-Control = "no-store"
 
 [[headers]]
-  for = "/daily/*"
+  for = "/blog/*"
   [headers.values]
   Cache-Control = "no-store"
 
 [[headers]]
-  for = "/blog/*"
+  for = "/daily/*"
   [headers.values]
   Cache-Control = "no-store"
