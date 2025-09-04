@@ -41,7 +41,7 @@ function titleToSlug(title){
 }
 function fileNameFor(e){
   const slug = titleToSlug(e.title || 'post');
-  return `${slug}_${e.date}.html`;
+  return `${e.date}_${slug}.html`;
 }
 function paraHTML(arr){
   if (Array.isArray(arr)) return arr.join('\n');
