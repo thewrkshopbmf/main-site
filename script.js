@@ -1,3 +1,6 @@
+// --------- Build/version marker (check this in DevTools console) ----------
+console.log("script.js :: build=blogfix3");
+
 // --------- Brand ----------
 const siteName = "TheWrkShop";
 document.querySelectorAll(".sitename").forEach(el => (el.textContent = siteName));
@@ -9,28 +12,9 @@ function todayCentralISO() {
   }).format(new Date());
 }
 
-// Guarded injector (used only on non-blog pages)
-async function injectHTML(selector, url) {
-  try {
-    const absolute = url.startsWith('/') ? url : '/' + url.replace(/^\/+/, '');
-    const res = await fetch(absolute, { cache: 'no-store' });
-    if (!res.ok) return;
-
-    const text = await res.text();
-
-    // crude guard: skip full documents (404s, etc.)
-    if (/<!doctype html/i.test(text) || /<html[\s>]/i.test(text)) return;
-
-    const el = document.querySelector(selector);
-    if (el) el.innerHTML = text;
-  } catch (_) {
-    // swallow errors silently
-  }
-}
-
 // --------- DOM Ready ----------
 document.addEventListener("DOMContentLoaded", function () {
-  // Hamburger menu
+  // Hamburger menu (works with hard-coded header in templates)
   const rebindNavToggle = () => {
     const hamburger = document.getElementById('hamburger');
     const navLinks  = document.getElementById('nav-links');
@@ -38,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
       hamburger.onclick = () => navLinks.classList.toggle('open');
     }
   };
-
   rebindNavToggle();
 
   // Kill any service worker that might cache stale pages
@@ -72,16 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("There was a problem subscribing.");
       }
     });
-  }
-
-  // ✅ Only inject header on non-blog pages
-  const onBlog = location.pathname.startsWith('/blog/');
-  if (!onBlog) {
-    (async () => {
-      await injectHTML("#site-header", "/pages/details/header.html");
-      document.querySelectorAll(".sitename").forEach(el => (el.textContent = siteName));
-      rebindNavToggle();
-    })();
   }
 });
 
