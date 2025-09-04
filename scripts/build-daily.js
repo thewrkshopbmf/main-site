@@ -54,12 +54,11 @@ function scriptureToSlug(ref) {
     .replace(/^-|-$/g, '');
 }
 function titleToSlug(title) {
-  return slugBase(title)
-    .replace(/[:–—]/g, '-')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .slice(0, 60)
-    .replace(/-+$/,'');
+  return (title || '')
+    .toLowerCase()
+    .replace(/['’]/g, '')          // remove apostrophes entirely
+    .replace(/[^a-z0-9]+/g, '-')   // collapse everything else to hyphen
+    .replace(/^-+|-+$/g, '');      // trim leading/trailing hyphens
 }
 function fileNameFor(e) {
   const scripture = scriptureToSlug(e.verse_ref || 'Scripture');

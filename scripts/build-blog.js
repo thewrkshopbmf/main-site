@@ -36,9 +36,14 @@ function slugBase(s){
     .replace(/\s+/g,' ')
     .trim();
 }
-function titleToSlug(title){
-  return slugBase(title).replace(/[:–—]/g,'-').replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,80).replace(/-+$/,'');
+function titleToSlug(title) {
+  return (title || '')
+    .toLowerCase()
+    .replace(/['’]/g, '')          // remove apostrophes entirely
+    .replace(/[^a-z0-9]+/g, '-')   // collapse everything else to hyphen
+    .replace(/^-+|-+$/g, '');      // trim leading/trailing hyphens
 }
+
 function fileNameFor(e){
   const slug = titleToSlug(e.title || 'post');
   return `${e.date}_${slug}.html`;

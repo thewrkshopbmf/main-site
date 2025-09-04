@@ -1,7 +1,7 @@
-Format for daily titles: Note that the daily is based on what is written in the file not the name
+Format for daily titles: Note that the daily is based on what is written in the file not the name, ensure "dosen't" becomes "doesnt" and all non alphanumeric characters become nothing or "-"
 /daily/<SCRIPTURE-SLUG>_<TITLE-SLUG>_<YYYY-MM-DD>.html
 Format for daily bodies:
-```JSON{
+```JSON({
   "date": "2025-09-22",
   "title": "Scroll or Soul?",
   "verse_ref": "Psalm 119:37",
@@ -12,5 +12,85 @@ Format for daily bodies:
   ],
   "one_minute_win": "Replace one 5-minute scroll break with one 5-minute Scripture break.",
   "declaration": "My soul deserves better than endless scrolls."
-}```
+})```
 Note - If you prefer a single paragraph for insight, you can use a string instead of an array. The build script handles both.
+
+Format for blog bodies:
+
+```JSON{{
+  "date": "2025-08-30",
+  "title": "RENEWED: Why God Doesn’t Move at Your Pace",
+  "category": "Weekend 4-3-2-1",
+  "excerpt": "We want ASAP from an eternal God. This weekend we trade speed for depth.",
+  "reading_minutes": 7,
+  "author": "TheWrkShop Team",
+
+  "kicker": "TheWrkShop Happy 4-3-2-1 Weekend Edition",
+  "salutation": "Dear WorkShopper,",
+
+  "intro": [
+    "We want ASAP results from an eternal God who’s building us for the long game.",
+    "That’s the real battlefield, between our demand for speed and God’s design for depth."
+  ],
+
+  "one_minute_win": "Don’t confuse spiritual activity with spiritual intimacy. Pick one passage and dwell.",
+
+  "picture_this": [
+    "Two men stand at a crossroads.",
+    "One grabs a microwave meal. The other waits for a slow-cooked feast."
+  ],
+
+  "scriptures": [
+    {
+      "ref": "Ephesians 4:23-24",
+      "text": "Be made new in the attitude of your minds...",
+      "insight": "Your mindset is the gate to your identity.",
+      "gem": "You don’t become new by trying harder; you become new by thinking truer."
+    },
+    {
+      "ref": "John 15:4",
+      "text": "Abide in me, and I in you.",
+      "insight": "You can’t bear fruit on the run.",
+      "gem": "Fruit grows in the abiding, not the hustling."
+    }
+  ],
+
+  "ways_to_live": [
+    { "title": "Rewire a Loop", "body": "Pick one frustrating thought pattern and replace it with Scripture." },
+    { "title": "Set a Dwell Time", "body": "15 minutes: Scripture, worship, stillness. No scrolling." },
+    { "title": "Fast from Fast", "body": "Give up one rush trigger and sit with God in unhurried honesty." }
+  ],
+
+  "insights": [
+    "Isolation isn’t rest; it’s starvation.",
+    "Defaults reveal discipline.",
+    "God works like a slow cooker."
+  ],
+
+  "reflective_questions": [
+    "Where have I been demanding instant from a God who’s forming me eternally?",
+    "What’s one way I can trade activity for alignment this weekend?"
+  ],
+
+  "action_step": "Write a Dwelling Declaration and say it each morning.",
+
+  "bonus_title": "How Rewiring Happens",
+  "bonus_body": [
+    "This is spiritual and neurological warfare. Rewiring is a practice.",
+    "The 5-Step Rewire Formula:"
+  ],
+  "bonus_list": [
+    "Identify the Lie",
+    "Find the Truth (Scripture)",
+    "Repeat It Daily",
+    "Act Accordingly",
+    "Reinforce It in Community"
+  ],
+
+  "prayer": "Father, reset my pace to match Yours... In Jesus’ name, amen.",
+  "declaration": "I walk at God’s pace, not mine.",
+  "weekly_challenge": "Replace 30 minutes of scrolling with 30 minutes of Scripture and stillness.",
+  "invitation": "If this hit home, share it with a brother.",
+  "gem_to_carry": "You’re not stuck—you’re rehearsing the wrong script. God’s giving you a new one."
+}
+}
