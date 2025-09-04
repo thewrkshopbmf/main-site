@@ -1,5 +1,5 @@
 Format for daily titles: Note that the daily is based on what is written in the file not the name, ensure "dosen't" becomes "doesnt" and all non alphanumeric characters become nothing or "-"
-/daily/<SCRIPTURE-SLUG>_<TITLE-SLUG>_<YYYY-MM-DD>.html
+content/daily/<SCRIPTURE-SLUG>_<TITLE-SLUG>_<YYYY-MM-DD>.html
 Format for daily bodies:
 ```JSON({
   "date": "2025-09-22",
@@ -15,8 +15,9 @@ Format for daily bodies:
 })```
 Note - If you prefer a single paragraph for insight, you can use a string instead of an array. The build script handles both.
 
-Format for blog bodies:
-
+Format for blod titles:
+Format for blog bodies: 
+content/blog/<YYYY-MM-DD>_<TITLE-SLUG>.html
 ```JSON{{
   "date": "2025-08-30",
   "title": "RENEWED: Why God Doesn’t Move at Your Pace",
