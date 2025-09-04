@@ -54,7 +54,40 @@ function paraHTML(arr){
   return '';
 }
 
+// --- NEW: ensure passthrough rules are always at the top of `_redirects`
+async function ensurePassthroughs() {
+  const passthroughs = [
+    '/blog/*   /blog/:splat   200',
+    '/daily/*   /daily/:splat   200', // parity; harmless if you already serve dailies directly
+  ];
+
+  let existing = '';
+  try {
+    existing = await fs.readFile(REDIRECTS, 'utf-8');
+  } catch {
+    // _redirects doesn't exist yet; we'll create it below
+  }
+
+  const existingLines = existing
+    .split('\n')
+    .map(l => l.trim())
+    .filter(Boolean);
+
+  // De-dupe and ensure passthroughs are first
+  const missing = passthroughs.filter(p => !existingLines.includes(p));
+  const merged = [
+    ...missing,      // ensure these are at the very top
+    ...existingLines // keep whatever you already had (daily future guards, etc.)
+  ].join('\n') + '\n';
+
+  await fs.writeFile(REDIRECTS, merged, 'utf-8');
+  console.log('✅ Ensured passthroughs for /blog/* and /daily/* are in _redirects (top of file).');
+}
+
 async function main(){
+  // make sure passthrough rules exist before we append any other redirects
+  await ensurePassthroughs();
+
   await fs.mkdir(DATA_DIR, { recursive: true });
 
   // Load content
@@ -141,19 +174,24 @@ async function main(){
   }
 
   // Redirect blocklist (older than start + future → archive)
-  const lines = [
+  const guardLines = [
     ...older.map(e => `/blog/${fileNameFor(e)}   /blog-archive.html   302!`),
     ...future.map(e => `/blog/${fileNameFor(e)}   /blog-archive.html   302!`)
   ];
-  // Append (don’t overwrite) to the existing redirects if you also write daily rules there.
-  // If your daily script also writes _redirects, you can merge; simplest is: let Daily own it.
-  // For now, append (create if missing):
+
+  // Merge guards AFTER passthroughs and without duplicating
   let existing = '';
   try { existing = await fs.readFile(REDIRECTS, 'utf-8'); } catch {}
-  const merged = (existing.trim() + '\n' + lines.join('\n')).trim() + (lines.length ? '\n' : '');
+  const existingSet = new Set(
+    existing.split('\n').map(l => l.trim()).filter(Boolean)
+  );
+  const toAppend = guardLines.filter(l => l && !existingSet.has(l));
+  const merged = (existing.trim() + (toAppend.length ? '\n' + toAppend.join('\n') : '')).trim() + '\n';
   await fs.writeFile(REDIRECTS, merged, 'utf-8');
 
   console.log(`Blogs built: ${visible.length} in [${START_DATE}..${today}], future: ${future.length}, older: ${older.length}`);
+  console.log('Blog pages generated:');
+  for (const e of visible) console.log(' -', `/blog/${fileNameFor(e)}`);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
