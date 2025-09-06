@@ -1,0 +1,23 @@
+# Node
+node_modules/
+npm-debug.log*
+.yarn/*
+.pnpm-store/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local env
+.env
+.env.*.local
+
+# Netlify local stuff
+.netlify/
+
+# Build outputs (generated each build)
+daily/
+blog/
+data/*.json
+_redirects
