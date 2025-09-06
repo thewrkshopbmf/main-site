@@ -187,24 +187,49 @@ document.addEventListener("DOMContentLoaded", function () {
   const teaser = card.querySelector('.mini-teaser');
   const cta    = card.querySelector('a.cta');
 
+  // helper: normalize duration string
+  function formatDuration(raw) {
+    if (!raw) return '';
+    // If it's already HH:MM:SS or MM:SS
+    if (raw.includes(':')) {
+      const parts = raw.split(':').map(x => parseInt(x, 10) || 0);
+      let h=0, m=0, s=0;
+      if (parts.length === 3) [h, m, s] = parts;
+      else if (parts.length === 2) [m, s] = parts;
+      // Round seconds if >=30
+      if (s >= 30) m++;
+      if (m >= 60) { h++; m -= 60; }
+      if (h) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
+    // Otherwise assume it's total seconds
+    const sec = parseInt(raw, 10);
+    if (isNaN(sec)) return raw;
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60 + (sec % 60 >= 30 ? 1 : 0));
+    if (h) return `${h}h ${m}m`;
+    if (m) return `${m}m`;
+    return `${sec}s`;
+  }
+
   try {
     const r = await fetch('/data/podcast.json?ts=' + Date.now(), { cache:'no-store' });
     if (!r.ok) return;
     const p = await r.json();
 
-    // Format teaser like: "Ep Title • 24m"
-    const mins = p.duration ? ` • ${p.duration}` : '';
-    if (teaser && p.title) teaser.textContent = `${p.title}${mins}`;
+    const mins = formatDuration(p.duration);
+    if (teaser && p.title) teaser.textContent = `${p.title}${mins ? ' • ' + mins : ''}`;
     if (cta) {
-      cta.setAttribute('href', p.page_url || p.audio_url || '#');
-      cta.setAttribute('target', '_blank');
-      cta.setAttribute('rel', 'noopener');
+      cta.href = p.page_url || p.audio_url || '#';
+      cta.target = '_blank';
+      cta.rel = 'noopener';
     }
-  } catch(e) {
+  } catch {
     if (teaser) teaser.textContent = 'See all podcast episodes';
-    if (cta) cta.setAttribute('href', '/podcasts.html');
+    if (cta) cta.href = '/podcasts.html';
   }
 })();
+
 
 
 // --------- Blog row (3 latest) ----------
