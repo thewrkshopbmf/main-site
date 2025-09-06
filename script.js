@@ -1,5 +1,5 @@
-// --------- Build/version marker (check this in DevTools console) ----------
-console.log("script.js :: build=blogfix3");
+// --------- Build/version marker ----------
+console.log("script.js :: build=headerfix1");
 
 // --------- Brand ----------
 const siteName = "TheWrkShop";
@@ -12,16 +12,34 @@ function todayCentralISO() {
   }).format(new Date());
 }
 
+// --------- Header injection (safe) ----------
+async function injectHTML(selector, url) {
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) return;
+    const text = await res.text();
+
+    // skip if it looks like a whole HTML doc (e.g., 404 page)
+    if (/<!doctype html/i.test(text) || /<html[\s>]/i.test(text)) return;
+
+    const host = document.querySelector(selector);
+    if (host) host.innerHTML = text;
+  } catch (err) {
+    console.warn("Header injection failed:", err);
+  }
+}
+
 // --------- DOM Ready ----------
 document.addEventListener("DOMContentLoaded", function () {
-  // Hamburger menu (works with hard-coded header in templates)
-  const rebindNavToggle = () => {
+  // Hamburger menu rebinder
+  function rebindNavToggle() {
     const hamburger = document.getElementById('hamburger');
     const navLinks  = document.getElementById('nav-links');
     if (hamburger && navLinks) {
       hamburger.onclick = () => navLinks.classList.toggle('open');
     }
-  };
+  }
+
   rebindNavToggle();
 
   // Kill any service worker that might cache stale pages
@@ -36,8 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
       const email = document.getElementById("email").value;
-      const formId = "8460334"; // your ConvertKit form ID
-      const apiKey = "qwXtdRjQfoLppDUjjcd_8Q"; // your ConvertKit API Key
+      const formId = "8460334";
+      const apiKey = "qwXtdRjQfoLppDUjjcd_8Q";
       try {
         const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
           method: "POST",
@@ -56,9 +74,20 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  // ✅ Only inject header on non-blog pages
+  const onBlog = location.pathname.startsWith('/blog/');
+  const needsHeader = document.getElementById('site-header');
+  if (!onBlog && needsHeader) {
+    injectHTML('#site-header', '/pages/details/header.html').then(() => {
+      // Fill brand after injection
+      document.querySelectorAll(".sitename").forEach(el => (el.textContent = siteName));
+      rebindNavToggle();
+    });
+  }
 });
 
-// --------- Home: Daily Feature teaser ----------
+// --------- Daily Feature loader (unchanged) ----------
 (async function loadDailyFeature(){
   const ctx = document.querySelector('.daily-feature');
   if (!ctx) return;
@@ -104,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function () {
       el.date.setAttribute('datetime', d.date);
     }
 
-    // Try to resolve today's href via archive
     let href = 'daily.html';
     try {
       const ra = await fetch('/data/daily-archive.json', { cache: 'no-store' });
@@ -127,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } catch {}
 })();
 
-// --------- Home: Latest Blog mini-card ----------
+// --------- Latest Blog mini-card ----------
 (async function loadLatestBlog(){
   const card = document.getElementById('latestBlogCard');
   if (!card) return;
@@ -152,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 })();
 
-// --------- Home: Blog row (3 latest) ----------
+// --------- Blog row (3 latest) ----------
 (async function hydrateHomeBlogRow(){
   const wrap = document.getElementById('blogCards');
   if (!wrap) return;
@@ -176,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   try {
     const r = await fetch('/data/blog-archive.json?ts=' + Date.now(), { cache: 'no-store' });
-    if (!r.ok) return; // keep fallback
+    if (!r.ok) return;
     const list = await r.json();
 
     const posts = (Array.isArray(list) ? list : [])
@@ -189,13 +217,13 @@ document.addEventListener("DOMContentLoaded", function () {
   } catch {}
 })();
 
-// --------- Smooth-scroll on home ---------
+// --------- Smooth-scroll on home ----------
 (function () {
   const isHome = location.pathname === '/' || location.pathname.endsWith('/index.html');
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[data-scroll]').forEach(a => {
       a.addEventListener('click', (e) => {
-        const sel = a.getAttribute('data-scroll'); // "#about"
+        const sel = a.getAttribute('data-scroll');
         if (isHome) {
           const target = document.querySelector(sel);
           if (target) {
