@@ -1,0 +1,13 @@
+name: Refresh podcast JSON (rebuild site)
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours (adjust as you like)
+  workflow_dispatch: {}      # allow manual run
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Netlify build hook
+        run: curl -X POST "${{ secrets.NETLIFY_BUILD_HOOK_URL }}"

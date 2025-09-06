@@ -179,6 +179,34 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 })();
 
+// --------- Latest Podcast mini-card ----------
+(async function loadLatestPodcast(){
+  const card = document.getElementById('latestPodcastCard');
+  if (!card) return;
+
+  const teaser = card.querySelector('.mini-teaser');
+  const cta    = card.querySelector('a.cta');
+
+  try {
+    const r = await fetch('/data/podcast.json?ts=' + Date.now(), { cache:'no-store' });
+    if (!r.ok) return;
+    const p = await r.json();
+
+    // Format teaser like: "Ep Title • 24m"
+    const mins = p.duration ? ` • ${p.duration}` : '';
+    if (teaser && p.title) teaser.textContent = `${p.title}${mins}`;
+    if (cta) {
+      cta.setAttribute('href', p.page_url || p.audio_url || '#');
+      cta.setAttribute('target', '_blank');
+      cta.setAttribute('rel', 'noopener');
+    }
+  } catch(e) {
+    if (teaser) teaser.textContent = 'See all podcast episodes';
+    if (cta) cta.setAttribute('href', '/podcasts.html');
+  }
+})();
+
+
 // --------- Blog row (3 latest) ----------
 (async function hydrateHomeBlogRow(){
   const wrap = document.getElementById('blogCards');
