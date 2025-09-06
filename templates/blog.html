@@ -9,27 +9,42 @@
   <link rel="stylesheet" href="/style.css"/>
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
   <style>
-    .blog-post{max-width:800px;margin:0 auto;}
-    .blog-head h1{margin-bottom:.25rem}
-    .blog-head .meta{display:flex;gap:.6rem;align-items:center;color:#6b5b53}
-    .badge{display:inline-block;font-size:.8rem;font-weight:700;background:#3e2c23;color:#f4f1ee;padding:.15rem .55rem;border-radius:999px}
+    /* Layout */
+    .blog-shell{max-width:960px;margin:0 auto;padding:0 1rem}
+    .blog-post{max-width:760px;margin:0 auto}
+    .blog-head{margin:2rem 0 1.25rem}
+    .blog-head h1{margin:.25rem 0 .35rem;line-height:1.15}
+    .badge{display:inline-block;font-size:.75rem;font-weight:700;background:#3e2c23;color:#f4f1ee;padding:.2rem .6rem;border-radius:999px;letter-spacing:.02em}
+    .meta{display:flex;gap:.6rem;align-items:center;color:#6b5b53}
+    .excerpt{color:#4b3f39;margin-top:.5rem}
+
+    /* Sections */
     .section{margin:1.25rem 0}
-    .callout{background:#f4f1ee;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:1rem}
-    .h2{font-size:1.15rem;color:#3e2c23;margin:.25rem 0 .5rem}
-    .list{padding-left:1.2rem}
-    .kv{display:grid;gap:.5rem}
-    .kv > div{background:#faf8f6;border:1px solid rgba(0,0,0,.06);border-radius:10px;padding:.75rem}
-    .kv .k{font-weight:700;color:#3e2c23}
     .rule{border-top:1px solid rgba(0,0,0,.08);margin:1.25rem 0}
-    .nav-rows{display:flex;justify-content:space-between;gap:1rem;margin-top:1.25rem}
+    .kicker{font-weight:700;color:#3e2c23;text-transform:uppercase;letter-spacing:.04em;font-size:.8rem;margin-bottom:.2rem}
+    .h2{font-size:1.15rem;color:#3e2c23;margin:.25rem 0 .5rem}
+    .callout{background:#f7f4f1;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:1rem}
+    .tip{background:#fff7ec;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:1rem}
+    .kv{display:grid;gap:.75rem}
+    .kv > div{background:#faf8f6;border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:.85rem}
+    .kv .k{font-weight:700;color:#3e2c23;margin-bottom:.25rem}
+    .kv .sub{color:#6b5b53;margin:.15rem 0 .4rem}
+    .quote{padding-left:1rem;border-left:3px solid #3e2c23;color:#3e2c23}
+    .list{padding-left:1.2rem}
+    .list li{margin:.25rem 0}
+
+    /* Nav */
+    .nav-rows{display:flex;justify-content:space-between;gap:1rem;margin:1.5rem 0 2.25rem}
     .nav-rows a{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;color:#3e2c23;border:1px solid rgba(62,44,35,.3);padding:.6rem .9rem;border-radius:10px}
     .nav-rows a.is-disabled{color:#b9a79d;border-color:rgba(62,44,35,.18);opacity:.8;pointer-events:none;cursor:default}
   </style>
 </head>
 <body>
+
+  <!-- Injected header -->
   <div id="site-header"></div>
 
-  <main class="content-section container">
+  <main class="content-section blog-shell">
     <article class="blog-post">
       <header class="blog-head">
         <span class="badge">{{CATEGORY}}</span>
@@ -42,7 +57,7 @@
         <p id="excerptSlot" class="excerpt" hidden>{{EXCERPT}}</p>
       </header>
 
-      <!-- All rich content goes here -->
+      <!-- Rich body -->
       {{BODY_HTML}}
 
       <nav class="nav-rows" aria-label="Post navigation">
@@ -58,6 +73,7 @@
       <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
     </div>
   </footer>
+
   <script>
   (function(){
     // brand
@@ -91,6 +107,7 @@
     });
   })();
   </script>
-  <script src="/script.js"></script>
+
+  <script src="/script.js?v=blogfmt1"></script>
 </body>
 </html>

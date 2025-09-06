@@ -5,72 +5,94 @@
   "excerpt": "We want ASAP from an eternal God. This weekend we trade speed for depth.",
   "reading_minutes": 7,
   "author": "TheWrkShop Team",
+  "body_html": [
+    "<section class=\"section\">",
+    "  <div class=\"kicker\">TheWrkShop Happy 4-3-2-1 Weekend Edition</div>",
+    "  <p>Dear WorkShopper,</p>",
+    "  <p>We want ASAP results from an eternal God who’s building us for the long game. That’s the real battlefield—between our demand for speed and God’s design for depth.</p>",
+    "  <div class=\"tip\"><p><strong>One-Minute Win of the Week</strong><br>Don’t confuse spiritual activity with spiritual intimacy. Choose depth over doing. Pick a passage and dwell; return to it through the day.</p></div>",
+    "</section>",
 
-  "kicker": "TheWrkShop Happy 4-3-2-1 Weekend Edition",
-  "salutation": "Dear WorkShopper,",
+    "<div class=\"rule\"></div>",
 
-  "intro": [
-    "We want ASAP results from an eternal God who’s building us for the long game.",
-    "That’s the real battlefield, between our demand for speed and God’s design for depth."
-  ],
+    "<section class=\"section\">",
+    "  <h2 class=\"h2\">4 Scriptures · Insights · Gems</h2>",
+    "  <div class=\"kv\">",
+    "    <div>",
+    "      <div class=\"k\">Ephesians 4:23–24</div>",
+    "      <p class=\"quote\">“Be made new in the attitude of your minds…”</p>",
+    "      <p class=\"sub\">Insight: Your mindset is the gate to your identity.</p>",
+    "      <p><em>Gem:</em> You don’t become new by trying harder; you become new by thinking truer.</p>",
+    "    </div>",
+    "    <div>",
+    "      <div class=\"k\">John 15:4</div>",
+    "      <p class=\"quote\">“Abide in me, and I in you.”</p>",
+    "      <p class=\"sub\">Insight: You can’t bear fruit on the run.</p>",
+    "      <p><em>Gem:</em> Fruit grows in the abiding, not the hustling.</p>",
+    "    </div>",
+    "    <div>",
+    "      <div class=\"k\">Isaiah 40:31</div>",
+    "      <p class=\"quote\">“They who wait on the Lord shall renew their strength.”</p>",
+    "      <p class=\"sub\">Insight: Waiting isn’t passive. It’s a power move.</p>",
+    "      <p><em>Gem:</em> In God’s economy, stillness is strength.</p>",
+    "    </div>",
+    "    <div>",
+    "      <div class=\"k\">2 Peter 3:9</div>",
+    "      <p class=\"quote\">“The Lord is not slow in keeping his promise, as some understand slowness.”</p>",
+    "      <p class=\"sub\">Insight: God’s timing isn’t delayed; it’s designed.</p>",
+    "      <p><em>Gem:</em> What feels slow is actually sacred.</p>",
+    "    </div>",
+    "  </div>",
+    "</section>",
 
-  "one_minute_win": "Don’t confuse spiritual activity with spiritual intimacy. Pick one passage and dwell.",
+    "<section class=\"section\">",
+    "  <h2 class=\"h2\">3 Ways to Live It Out</h2>",
+    "  <ol class=\"list\">",
+    "    <li><strong>Rewire a Loop:</strong> Identify one frustrating thought pattern and replace it with Scripture. Write it, repeat it, declare it.</li>",
+    "    <li><strong>Set a Dwell Time:</strong> 15 minutes of Scripture, worship, stillness. No scrolling.</li>",
+    "    <li><strong>Fast from Fast:</strong> Give up a rush trigger (social, email, multi-tasking) and sit with God in unhurried honesty.</li>",
+    "  </ol>",
+    "</section>",
 
-  "picture_this": [
-    "Two men stand at a crossroads.",
-    "One grabs a microwave meal. The other waits for a slow-cooked feast."
-  ],
+    "<section class=\"section\">",
+    "  <h2 class=\"h2\">2 Reflective Questions</h2>",
+    "  <ol class=\"list\">",
+    "    <li>Where have I been demanding instant from a God who’s forming me eternally?</li>",
+    "    <li>What’s one way I can trade activity for alignment this weekend?</li>",
+    "  </ol>",
+    "</section>",
 
-  "scriptures": [
-    {
-      "ref": "Ephesians 4:23-24",
-      "text": "Be made new in the attitude of your minds...",
-      "insight": "Your mindset is the gate to your identity.",
-      "gem": "You don’t become new by trying harder; you become new by thinking truer."
-    },
-    {
-      "ref": "John 15:4",
-      "text": "Abide in me, and I in you.",
-      "insight": "You can’t bear fruit on the run.",
-      "gem": "Fruit grows in the abiding, not the hustling."
-    }
-  ],
+    "<section class=\"section\">",
+    "  <h2 class=\"h2\">1 Action Step</h2>",
+    "  <p><strong>Write a Dwelling Declaration:</strong> “I don’t chase quick change. I dwell in God’s truth and grow deep roots. I walk at His pace, not mine.” Say it each morning this weekend.</p>",
+    "</section>",
 
-  "ways_to_live": [
-    { "title": "Rewire a Loop", "body": "Pick one frustrating thought pattern and replace it with Scripture." },
-    { "title": "Set a Dwell Time", "body": "15 minutes: Scripture, worship, stillness. No scrolling." },
-    { "title": "Fast from Fast", "body": "Give up one rush trigger and sit with God in unhurried honesty." }
-  ],
+    "<div class=\"rule\"></div>",
 
-  "insights": [
-    "Isolation isn’t rest; it’s starvation.",
-    "Defaults reveal discipline.",
-    "God works like a slow cooker."
-  ],
+    "<section class=\"section\">",
+    "  <h2 class=\"h2\">How Rewiring Happens (Bonus)</h2>",
+    "  <p>This is spiritual and neurological practice—simple and repeatable.</p>",
+    "  <ol class=\"list\">",
+    "    <li>Identify the Lie</li>",
+    "    <li>Find the Truth (Scripture)</li>",
+    "    <li>Repeat It Daily</li>",
+    "    <li>Act Accordingly</li>",
+    "    <li>Reinforce It in Community</li>",
+    "  </ol>",
+    "  <p><em>Gem:</em> You’re not stuck—you’re rehearsing the wrong script. God’s giving you a new one.</p>",
+    "</section>",
 
-  "reflective_questions": [
-    "Where have I been demanding instant from a God who’s forming me eternally?",
-    "What’s one way I can trade activity for alignment this weekend?"
-  ],
+    "<section class=\"section callout\">",
+    "  <p><strong>Prayer</strong><br>Father, reset my pace to match Yours. Renew my mind where it’s been wired by fear or failure. Teach me to wait well, dwell deep, and trust fully. In Jesus’ name, amen.</p>",
+    "  <p><strong>Declaration</strong><br>I walk in step with the Spirit. My mind is renewed. My roots are deep. God is not slow; He is shaping me for eternity.</p>",
+    "</section>",
 
-  "action_step": "Write a Dwelling Declaration and say it each morning.",
-
-  "bonus_title": "How Rewiring Happens",
-  "bonus_body": [
-    "This is spiritual and neurological warfare. Rewiring is a practice.",
-    "The 5-Step Rewire Formula:"
-  ],
-  "bonus_list": [
-    "Identify the Lie",
-    "Find the Truth (Scripture)",
-    "Repeat It Daily",
-    "Act Accordingly",
-    "Reinforce It in Community"
-  ],
-
-  "prayer": "Father, reset my pace to match Yours... In Jesus’ name, amen.",
-  "declaration": "I walk at God’s pace, not mine.",
-  "weekly_challenge": "Replace 30 minutes of scrolling with 30 minutes of Scripture and stillness.",
-  "invitation": "If this hit home, share it with a brother.",
-  "gem_to_carry": "You’re not stuck—you’re rehearsing the wrong script. God’s giving you a new one."
+    "<section class=\"section\">",
+    "  <h2 class=\"h2\">Weekly Challenge + Invitation</h2>",
+    "  <p><strong>Challenge:</strong> Replace 30 minutes of scrolling with 30 minutes of Scripture and stillness. Don’t rush it. Dwell in it.</p>",
+    "  <p><strong>Invitation:</strong> If this hit you right where you are, reply or share with a friend. Let’s build men of faith, together.</p>",
+    "  <p>Here for you,<br>TheWrkShop Team</p>",
+    "  <p class=\"sub\">P.S. Know a man who needs this reset? Send his email to <a href=\"mailto:steven@thewrkshop.com\">steven@thewrkshop.com</a>.</p>",
+    "</section>"
+  ]
 }
