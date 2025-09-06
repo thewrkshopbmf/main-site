@@ -27,7 +27,6 @@ function toHuman(dateStr) {
   return dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 function fill(t, map) {
-  // bullet-proof: always stringify, avoid undefined leaking
   let out = t;
   for (const [k, v] of Object.entries(map)) {
     out = out.replaceAll(`{{${k}}}`, String(v ?? ''));
@@ -243,9 +242,20 @@ async function main() {
     const next = visible[i + 1];
 
     // Prefer body_html if provided; otherwise render legacy schema
-    const bodyHTML = (e.body_html !== undefined && e.body_html !== null)
-      ? paraHTML(e.body_html)
-      : renderLegacyBody(e);
+    let bodyHTML = '';
+    let source = 'legacy';
+    if (e.body_html !== undefined && e.body_html !== null) {
+      bodyHTML = paraHTML(e.body_html).trim();
+      source = 'body_html';
+    }
+    if (!bodyHTML) {
+      bodyHTML = renderLegacyBody(e).trim();
+      source = bodyHTML ? 'legacy' : 'empty';
+    }
+
+    // DEBUG LOG so we can see on Netlify what happened
+    const partsCount = Array.isArray(e.body_html) ? e.body_html.length : (typeof e.body_html);
+    console.log(`[blog] ${e.date} :: ${e.title} | source=${source} | body_parts=${partsCount ?? 'none'} | bytes=${bodyHTML.length}`);
 
     const html = fill(tpl, {
       TITLE: e.title || 'Untitled',
