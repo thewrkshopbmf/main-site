@@ -17,7 +17,7 @@ Thumbs.db
 .netlify/
 
 # Build outputs (generated each build)
-daily/
-blog/
-data/*.json
-_redirects
+/daily/
+/blog/
+/data/*.json
+/_redirects

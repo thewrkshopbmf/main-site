@@ -16,6 +16,7 @@ const REDIRECTS   = path.join(ROOT, '_redirects');
 // Hard start if you want to hide anything older:
 const START_DATE = '2025-08-01';
 
+/* ----------------- helpers ----------------- */
 function todayCentralISO() {
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit'
@@ -26,25 +27,128 @@ function toHuman(dateStr) {
   return dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 function fill(t, map) {
-  return Object.entries(map).reduce(
-    (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, v ?? ''),
-    t
-  );
+  // bullet-proof: always stringify, avoid undefined leaking
+  let out = t;
+  for (const [k, v] of Object.entries(map)) {
+    out = out.replaceAll(`{{${k}}}`, String(v ?? ''));
+  }
+  return out;
 }
 function titleToSlug(title) {
   return (title || '')
     .toLowerCase()
-    .replace(/['’]/g, '')          // remove apostrophes entirely
-    .replace(/[^a-z0-9]+/g, '-')   // collapse everything else to hyphen
-    .replace(/^-+|-+$/g, '');      // trim leading/trailing hyphens
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
-// ✅ NEW: return folder path with index.html
+// folder per post with index.html inside
 function fileNameFor(e) {
   const slug = titleToSlug(e.title || 'post');
   return `${e.date}_${slug}/index.html`;
 }
+// body_html can be string or array; normalize to a single string
+function paraHTML(val){
+  if (Array.isArray(val)) return val.join('');
+  if (typeof val === 'string') return val;
+  return '';
+}
 
-// --- Ensure passthrough rules in `_redirects` (daily only, no blog passthrough)
+/* ---------- minimal legacy renderer for structured fields ---------- */
+function esc(s=''){ return String(s); }
+function section(title, inner, extraClass=''){
+  const h = title ? `<h2 class="h2">${esc(title)}</h2>` : '';
+  return `<section class="section ${extraClass}">${h}${inner || ''}</section>`;
+}
+function list(items, ordered=false){
+  if (!Array.isArray(items) || !items.length) return '';
+  const li = items.map(x => `<li>${x}</li>`).join('\n');
+  return ordered ? `<ol class="list">${li}</ol>` : `<ul class="list">${li}</ul>`;
+}
+function scripturesBlock(arr){
+  if (!Array.isArray(arr) || !arr.length) return '';
+  const cards = arr.map(s => `
+    <div>
+      <div class="k">${esc(s.ref || '')}</div>
+      ${s.text ? `<p class="quote">${esc(s.text)}</p>` : ''}
+      ${s.insight ? `<p class="sub">Insight: ${esc(s.insight)}</p>` : ''}
+      ${s.gem ? `<p><em>Gem:</em> ${esc(s.gem)}</p>` : ''}
+    </div>`).join('\n');
+  return `<div class="kv">${cards}</div>`;
+}
+function renderLegacyBody(e){
+  const parts = [];
+
+  // Kicker / salutation / intro
+  if (e.kicker || e.salutation || e.intro) {
+    const introHTML = Array.isArray(e.intro)
+      ? e.intro.map(p=>`<p>${esc(p)}</p>`).join('\n')
+      : (e.intro ? `<p>${esc(e.intro)}</p>` : '');
+    parts.push(section('', `
+      ${e.kicker ? `<div class="kicker">${esc(e.kicker)}</div>` : ''}
+      ${e.salutation ? `<p>${esc(e.salutation)}</p>` : ''}
+      ${introHTML}
+    `));
+  }
+
+  if (e.one_minute_win) {
+    parts.push(section('One-Minute Win', `<p>${esc(e.one_minute_win)}</p>`, 'callout'));
+  }
+
+  if (Array.isArray(e.picture_this) && e.picture_this.length) {
+    parts.push(section('Picture This', e.picture_this.map(p=>`<p>${esc(p)}</p>`).join('\n')));
+  }
+
+  if (Array.isArray(e.scriptures) && e.scriptures.length) {
+    parts.push(section('4 Scriptures · Insights · Gems', scripturesBlock(e.scriptures)));
+  }
+
+  if (Array.isArray(e.ways_to_live) && e.ways_to_live.length) {
+    const items = e.ways_to_live.map(w => `${w.title ? `<strong>${esc(w.title)}:</strong> ` : ''}${esc(w.body||'')}`);
+    parts.push(section('3 Ways to Live It Out', list(items, true)));
+  }
+
+  if (Array.isArray(e.insights) && e.insights.length) {
+    parts.push(section('Insights', list(e.insights)));
+  }
+
+  if (Array.isArray(e.reflective_questions) && e.reflective_questions.length) {
+    parts.push(section('2 Reflective Questions', list(e.reflective_questions, true)));
+  }
+
+  if (e.action_step) {
+    parts.push(section('1 Action Step', `<p>${esc(e.action_step)}</p>`));
+  }
+
+  if (e.bonus_title || e.bonus_body || e.bonus_list) {
+    const body = Array.isArray(e.bonus_body)
+      ? e.bonus_body.map(p=>`<p>${esc(p)}</p>`).join('\n')
+      : (e.bonus_body ? `<p>${esc(e.bonus_body)}</p>` : '');
+    const listHTML = Array.isArray(e.bonus_list) && e.bonus_list.length
+      ? list(e.bonus_list, true)
+      : '';
+    parts.push(section(e.bonus_title || 'Bonus', body + listHTML));
+  }
+
+  if (e.prayer || e.declaration) {
+    const inner = `
+      ${e.prayer ? `<p><strong>Prayer</strong><br>${esc(e.prayer)}</p>` : ''}
+      ${e.declaration ? `<p><strong>Declaration</strong><br>${esc(e.declaration)}</p>` : ''}`;
+    parts.push(section('', inner, 'callout'));
+  }
+
+  if (e.weekly_challenge || e.invitation || e.gem_to_carry) {
+    const inner = `
+      <p><strong>Weekly Challenge + Invitation</strong></p>
+      ${e.weekly_challenge ? `<p><strong>Challenge:</strong> ${esc(e.weekly_challenge)}</p>` : ''}
+      ${e.invitation ? `<p><strong>Invitation:</strong> ${esc(e.invitation)}</p>` : ''}
+      ${e.gem_to_carry ? `<p><em>Gem:</em> ${esc(e.gem_to_carry)}</p>` : ''}`;
+    parts.push(section('', inner));
+  }
+
+  return parts.filter(Boolean).join('\n');
+}
+
+/* --- Ensure passthrough rules in `_redirects` (daily only) --- */
 async function ensurePassthroughs() {
   const passthroughs = [
     '/daily/*   /daily/:splat   200',
@@ -55,21 +159,15 @@ async function ensurePassthroughs() {
     existing = await fs.readFile(REDIRECTS, 'utf-8');
   } catch { /* file not there yet */ }
 
-  const existingLines = existing
-    .split('\n')
-    .map(l => l.trim())
-    .filter(Boolean);
-
+  const existingLines = existing.split('\n').map(l => l.trim()).filter(Boolean);
   const missing = passthroughs.filter(p => !existingLines.includes(p));
-  const merged = [
-    ...missing,
-    ...existingLines
-  ].join('\n') + '\n';
+  const merged = [...missing, ...existingLines].join('\n') + '\n';
 
   await fs.writeFile(REDIRECTS, merged, 'utf-8');
   console.log('✅ Ensured passthrough for /daily/* only.');
 }
 
+/* --------------------- main --------------------- */
 async function main() {
   await ensurePassthroughs();
   await fs.mkdir(DATA_DIR, { recursive: true });
@@ -144,42 +242,10 @@ async function main() {
     const prev = visible[i - 1];
     const next = visible[i + 1];
 
-    const bodyParts = [];
-    if (e.kicker) bodyParts.push(`<p class="kicker">${e.kicker}</p>`);
-    if (Array.isArray(e.intro)) bodyParts.push(e.intro.map(p => `<p>${p}</p>`).join('\n'));
-    if (e.one_minute_win) bodyParts.push(`<section class="section callout"><h2 class="h2">One-Minute Win</h2><p>${e.one_minute_win}</p></section>`);
-    if (Array.isArray(e.picture_this) && e.picture_this.length) {
-      bodyParts.push(`<section class="section"><h2 class="h2">Picture This</h2>${e.picture_this.map(p => `<p>${p}</p>`).join('\n')}</section>`);
-    }
-    if (Array.isArray(e.scriptures) && e.scriptures.length) {
-      bodyParts.push(`<section class="section"><h2 class="h2">Scriptures</h2><div class="kv">${e.scriptures.map(s => `
-        <div>
-          <div class="k">${s.ref}</div>
-          <div class="v">${s.text}</div>
-          ${s.insight ? `<p><em>${s.insight}</em></p>` : ''}
-          ${s.gem ? `<p><strong>${s.gem}</strong></p>` : ''}
-        </div>`).join('\n')}</div></section>`);
-    }
-    if (Array.isArray(e.ways_to_live) && e.ways_to_live.length) {
-      bodyParts.push(`<section class="section"><h2 class="h2">Ways to Live</h2><ul class="list">${e.ways_to_live.map(w => `<li><strong>${w.title}:</strong> ${w.body}</li>`).join('\n')}</ul></section>`);
-    }
-    if (Array.isArray(e.insights) && e.insights.length) {
-      bodyParts.push(`<section class="section callout"><h2 class="h2">Insights</h2>${e.insights.map(p => `<p>${p}</p>`).join('\n')}</section>`);
-    }
-    if (Array.isArray(e.reflective_questions) && e.reflective_questions.length) {
-      bodyParts.push(`<section class="section"><h2 class="h2">Reflective Questions</h2><ul class="list">${e.reflective_questions.map(q => `<li>${q}</li>`).join('\n')}</ul></section>`);
-    }
-    if (e.action_step) bodyParts.push(`<section class="section"><h2 class="h2">Action Step</h2><p>${e.action_step}</p></section>`);
-    if (e.bonus_title || e.bonus_body || e.bonus_list) {
-      bodyParts.push(`<section class="section"><h2 class="h2">${e.bonus_title || 'Bonus'}</h2>${Array.isArray(e.bonus_body) ? e.bonus_body.map(p => `<p>${p}</p>`).join('\n') : ''}${Array.isArray(e.bonus_list) ? `<ul class="list">${e.bonus_list.map(b => `<li>${b}</li>`).join('\n')}</ul>` : ''}</section>`);
-    }
-    if (e.prayer) bodyParts.push(`<section class="section"><h2 class="h2">Prayer</h2><p>${e.prayer}</p></section>`);
-    if (e.declaration) bodyParts.push(`<section class="section callout"><h2 class="h2">Declaration</h2><p>${e.declaration}</p></section>`);
-    if (e.weekly_challenge) bodyParts.push(`<section class="section"><h2 class="h2">Weekly Challenge</h2><p>${e.weekly_challenge}</p></section>`);
-    if (e.invitation) bodyParts.push(`<p class="section">${e.invitation}</p>`);
-    if (e.gem_to_carry) bodyParts.push(`<section class="section callout"><h2 class="h2">Gem to Carry</h2><p>${e.gem_to_carry}</p></section>`);
-
-    const bodyHTML = bodyParts.filter(Boolean).join('\n');
+    // Prefer body_html if provided; otherwise render legacy schema
+    const bodyHTML = (e.body_html !== undefined && e.body_html !== null)
+      ? paraHTML(e.body_html)
+      : renderLegacyBody(e);
 
     const html = fill(tpl, {
       TITLE: e.title || 'Untitled',
@@ -207,9 +273,7 @@ async function main() {
 
   let existing = '';
   try { existing = await fs.readFile(REDIRECTS, 'utf-8'); } catch {}
-  const existingSet = new Set(
-    existing.split('\n').map(l => l.trim()).filter(Boolean)
-  );
+  const existingSet = new Set(existing.split('\n').map(l => l.trim()).filter(Boolean));
   const toAppend = guardLines.filter(l => l && !existingSet.has(l));
   const merged = (existing.trim() + (toAppend.length ? '\n' + toAppend.join('\n') : '')).trim() + '\n';
   await fs.writeFile(REDIRECTS, merged, 'utf-8');
