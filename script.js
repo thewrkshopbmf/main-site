@@ -1,5 +1,5 @@
 // --------- Build/version marker ----------
-console.log("script.js :: build=headerfix1");
+console.log("script.js :: build=headerfix2");
 
 // --------- Brand ----------
 const siteName = "TheWrkShop";
@@ -75,19 +75,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ✅ Only inject header on non-blog pages
-  const onBlog = location.pathname.startsWith('/blog/');
+  // ✅ Inject header on any page that has #site-header (home + blog + others)
   const needsHeader = document.getElementById('site-header');
-  if (!onBlog && needsHeader) {
+  if (needsHeader) {
     injectHTML('#site-header', '/pages/details/header.html').then(() => {
-      // Fill brand after injection
+      // Fill brand after injection + rebind nav
       document.querySelectorAll(".sitename").forEach(el => (el.textContent = siteName));
       rebindNavToggle();
     });
   }
 });
 
-// --------- Daily Feature loader (unchanged) ----------
+// --------- Daily Feature loader ----------
 (async function loadDailyFeature(){
   const ctx = document.querySelector('.daily-feature');
   if (!ctx) return;
