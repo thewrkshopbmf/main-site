@@ -93,7 +93,7 @@ The build scripts use these files to generate static HTML + JSON archives automa
   "one_minute_win": "Replace one 5-minute scroll break with one 5-minute Scripture break.",
   "declaration": "My soul deserves better than endless scrolls."
 }
-
+```
 ### ✍️ Weekly Blogs
 
 - **File path:**  

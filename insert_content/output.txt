@@ -1,0 +1,4 @@
+Exists: "2025-09-20_wheres-your-light-leading-you.json" — already present; date="2025-09-20", title="Where’s Your Light Leading You"
+Info: Fixed: auto-quoted and escaped body_html lines in "2025-10-04_the-fight-youre-in-was-rigged.json"
+Created: "2025-10-04_the-fight-youre-in-was-rigged.json"
+Given 2 files, created 1 files

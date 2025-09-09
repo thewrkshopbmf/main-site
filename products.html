@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop — TheWrkShop</title>
+  <meta name="description" content="Shop discipleship PDFs for Individuals and Groups. Secure delivery via our shop. Includes a free gift PDF."/>
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+  <style>
+    /* --- Page-scoped palette (sales-friendly) --- */
+    body.products-theme { background:#0f1220; color:#e9eef6; }
+    .shop-shell { max-width:1100px; margin:0 auto; padding:2rem 1rem 3rem; }
+    .shop-hero { text-align:center; margin:1rem 0 2rem; }
+    .shop-hero .eyebrow { color:#8ea4ff; font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:.8rem; }
+    .shop-hero h1 { margin:.4rem 0; line-height:1.15; }
+    .shop-hero p.sub { color:#a9b5d1; margin:.25rem 0 0; }
+
+    .choice-grid { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); margin:1.75rem 0 2.25rem; }
+    .card { background:#141932; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:1.1rem; display:flex; flex-direction:column; gap:.6rem }
+    .card .k { font-weight:700; color:#c3cffc; font-size:.9rem; letter-spacing:.03em }
+    .card h3 { margin:0; color:#e9eef6 }
+    .card p { color:#b9c3da; margin:0 }
+    .cta-row { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.4rem }
+    .btn { display:inline-flex; align-items:center; gap:.5rem; text-decoration:none; padding:.6rem .9rem; border-radius:10px; font-weight:600 }
+    .btn.primary { background:#5c6cff; color:white; border:1px solid rgba(255,255,255,.08) }
+    .btn.ghost { background:transparent; color:#c3cffc; border:1px solid rgba(255,255,255,.18) }
+    .btn:hover { filter:brightness(1.07) }
+
+    .gift { background:linear-gradient(180deg, #182043 0%, #141932 100%); border:1px solid rgba(142,164,255,.25) }
+    .gift h3 { color:#f6f9ff }
+    .pill { display:inline-flex; align-items:center; gap:.35rem; font-size:.75rem; font-weight:700; background:#25306b; color:#c8d2ff; border:1px solid rgba(142,164,255,.25); padding:.15rem .55rem; border-radius:999px }
+    .list { padding-left:1.1rem; margin:.2rem 0 0 }
+    .list li { margin:.2rem 0; color:#c7d2ec }
+
+    /* Make injected header readable on dark bg */
+    header, .navbar, .nav-links a { background:transparent !important; color:#e9eef6 !important; }
+    .navbar .active { border-color:rgba(255,255,255,.25) !important }
+    footer { background:#0b0e1a }
+  </style>
+</head>
+<body class="products-theme">
+
+  <!-- Global header -->
+  <div id="site-header"></div>
+
+  <main class="shop-shell">
+    <div class="shop-hero">
+      <div class="eyebrow">TheWrkShop Store</div>
+      <h1>Shop for…</h1>
+      <p class="sub">Instant-download PDFs for men’s groups, ministries, and personal discipleship.</p>
+    </div>
+
+    <section class="choice-grid" aria-label="Shop by audience">
+      <!-- INDIVIDUAL -->
+      <article class="card">
+        <div class="k">Audience</div>
+        <h3>Individuals</h3>
+        <p>Self-paced guides, devotion packs, and personal growth tracks.</p>
+        <div class="cta-row">
+          <!-- Link to your Payhip collection for individuals -->
+          <a class="btn primary" href="https://shop.thewrkshop.com/collections/individual" target="_blank" rel="noopener">Browse Individual</a>
+          <!-- Optional featured item opens Payhip modal (replace b/XXXX) -->
+          <a class="btn ghost" href="https://payhip.com/b/XXXX" data-gumroad-overlay>Featured Guide</a>
+        </div>
+      </article>
+
+      <!-- GROUP -->
+      <article class="card">
+        <div class="k">Audience</div>
+        <h3>Groups & Churches</h3>
+        <p>Leader guides, session plans, and multi-seat licenses for ministry use.</p>
+        <div class="cta-row">
+          <!-- Link to your Payhip collection for groups -->
+          <a class="btn primary" href="https://shop.thewrkshop.com/collections/group" target="_blank" rel="noopener">Browse Group</a>
+          <!-- Optional featured item -->
+          <a class="btn ghost" href="https://payhip.com/b/YYYY" data-gumroad-overlay>Leader Pack</a>
+        </div>
+      </article>
+
+      <!-- FREE GIFT -->
+      <article class="card gift">
+        <span class="pill">🎁 Our free gift to you</span>
+        <h3>Kickstart PDF — Free Download</h3>
+        <p>Short, high-impact lesson you can use personally or with your men’s group.</p>
+        <ul class="list">
+          <li>Instant download</li>
+          <li>Printable PDF</li>
+          <li>Group discussion prompts</li>
+        </ul>
+        <div class="cta-row">
+          <!-- This opens Payhip modal for the free product -->
+          <a class="btn primary" href="https://payhip.com/b/ZZZZ" data-gumroad-overlay>Get the Free PDF</a>
+          <a class="btn ghost" href="https://shop.thewrkshop.com/" target="_blank" rel="noopener">Visit Full Store</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Payhip modal script (enables overlay for links like payhip.com/b/XXXX) -->
+  <script src="https://payhip.com/js/payhip.js"></script>
+
+  <!-- Your site script (header injection, brand fill, etc.) -->
+  <script src="/script.js"></script>
+
+  <script>
+    // Mark nav item active after header inject
+    document.addEventListener('DOMContentLoaded', () => {
+      const link = document.querySelector('a[href="/products.html"]');
+      if (link) link.classList.add('active');
+    });
+  </script>
+</body>
+</html>
