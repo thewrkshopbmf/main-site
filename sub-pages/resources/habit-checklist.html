@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TheWrkShop — Habit Checklist</title>
+  <meta name="description" content="A simple weekly rhythm—faith, family, work.">
+  <style>
+    :root{
+      --bg:#f7f7f9;
+      --card:#ffffff;
+      --ink:#1c1c21;
+      --muted:#6a6f7a;
+      --brand:#5c4b8a;     /* subtle purple tie-in */
+      --brand-2:#b79cff;   /* accent */
+      --ring: rgba(92,75,138,.25);
+      --border:#e8e8ef;
+      --check:#2f855a;
+    }
+    /* Page shell */
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
+    }
+    .wrap{
+      max-width:1000px;
+      margin:0 auto;
+      padding:28px 16px 64px;
+    }
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+    .title{
+      display:flex; gap:12px; align-items:center;
+    }
+    .badge{
+      font-weight:700;
+      font-size:13px;
+      letter-spacing:.06em;
+      color:#fff;
+      background:linear-gradient(135deg, var(--brand), var(--brand-2));
+      padding:6px 10px;
+      border-radius:999px;
+    }
+    h1{
+      font-size:clamp(26px, 4vw, 36px);
+      line-height:1.15;
+      margin:6px 0 4px;
+    }
+    .sub{
+      color:var(--muted);
+      margin:0 0 6px;
+    }
+    /* Controls */
+    .controls{
+      display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .btn{
+      appearance:none; border:1px solid var(--border);
+      background:#fff; color:var(--ink);
+      padding:10px 14px; border-radius:12px;
+      font-weight:600; cursor:pointer;
+      box-shadow:0 1px 0 rgba(0,0,0,.04);
+      transition:transform .04s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .btn:hover{ box-shadow:0 6px 16px rgba(0,0,0,.08); }
+    .btn:active{ transform:translateY(1px); }
+    .btn.primary{
+      color:#fff; border-color:transparent;
+      background:linear-gradient(135deg, var(--brand), var(--brand-2));
+    }
+    /* Grid */
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+      margin-top:18px;
+    }
+    @media (min-width:860px){
+      .grid{ grid-template-columns:repeat(3,1fr); }
+    }
+    /* Cards */
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 8px 28px rgba(20,20,40,.06);
+    }
+    .card h2{
+      font-size:18px; margin:0 0 10px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .card h2 .dot{
+      width:10px; height:10px; border-radius:50%;
+      background:var(--brand);
+      box-shadow:0 0 0 4px var(--ring);
+    }
+    /* Checklist items */
+    .item{
+      display:flex; align-items:flex-start; gap:10px;
+      padding:10px 10px; border-radius:12px;
+      transition:background .15s ease;
+    }
+    .item:hover{ background:#fafafe; }
+    .item + .item{ margin-top:6px; }
+    input[type="checkbox"]{
+      width:20px; height:20px; margin-top:2px;
+      accent-color:var(--check);
+      cursor:pointer;
+    }
+    label{
+      cursor:pointer; font-weight:600;
+    }
+    .hint{
+      display:block; font-size:13px; color:var(--muted); margin-top:2px;
+    }
+    /* Footer note */
+    .note{
+      margin-top:22px; color:var(--muted); font-size:14px;
+      text-align:center;
+    }
+    /* Print styles */
+    @media print{
+      .controls, .badge{ display:none !important; }
+      body{ background:#fff; }
+      .wrap{ padding:0; }
+      .card{ break-inside:avoid; box-shadow:none; }
+      a[href]:after{ content:""; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="badge">THEWRKSHOP</div>
+        <h1>✅ Habit Checklist</h1>
+        <p class="sub">A simple weekly rhythm — <strong>Faith</strong>, <strong>Family</strong>, <strong>Work</strong>.</p>
+      </div>
+      <div class="controls">
+        <button class="btn primary" id="printBtn">Print / Save as PDF</button>
+        <button class="btn" id="resetBtn" title="Clear all checkboxes">Reset</button>
+      </div>
+    </header>
+
+    <section class="grid" id="grid">
+      <!-- Faith -->
+      <article class="card">
+        <h2><span class="dot"></span>Faith</h2>
+
+        <div class="item">
+          <input id="faith-1" type="checkbox">
+          <div>
+            <label for="faith-1">Read & reflect on Scripture</label>
+            <span class="hint">Open the Word daily; note one truth to carry.</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <input id="faith-2" type="checkbox">
+          <div>
+            <label for="faith-2">Pray with intent</label>
+            <span class="hint">Name thanks, needs, and next step in obedience.</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <input id="faith-3" type="checkbox">
+          <div>
+            <label for="faith-3">Encourage someone</label>
+            <span class="hint">Send one word of Scripture-anchored encouragement.</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Family -->
+      <article class="card">
+        <h2><span class="dot"></span>Family</h2>
+
+        <div class="item">
+          <input id="fam-1" type="checkbox">
+          <div>
+            <label for="fam-1">Undistracted time together</label>
+            <span class="hint">Phone down; be fully present with loved ones.</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <input id="fam-2" type="checkbox">
+          <div>
+            <label for="fam-2">Speak gratitude & blessing</label>
+            <span class="hint">Affirm identity, effort, and growth you see.</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <input id="fam-3" type="checkbox">
+          <div>
+            <label for="fam-3">Serve in one small way</label>
+            <span class="hint">A simple act that lifts someone’s load.</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Work -->
+      <article class="card">
+        <h2><span class="dot"></span>Work</h2>
+
+        <div class="item">
+          <input id="work-1" type="checkbox">
+          <div>
+            <label for="work-1">Start with clear priorities</label>
+            <span class="hint">Define the top three outcomes for the week.</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <input id="work-2" type="checkbox">
+          <div>
+            <label for="work-2">Do excellent work with integrity</label>
+            <span class="hint">Choose honesty, diligence, and stewardship.</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <input id="work-3" type="checkbox">
+          <div>
+            <label for="work-3">End-of-day reset</label>
+            <span class="hint">Review, capture next steps, close loops.</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="note">Tip: progress is saved in your browser so you can return to it during the week.</p>
+  </div>
+
+  <script>
+    (function(){
+      const KEY_PREFIX = "tws-habit-";
+      const boxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+
+      // Restore saved state
+      boxes.forEach(cb => {
+        const saved = localStorage.getItem(KEY_PREFIX + cb.id);
+        if(saved !== null) cb.checked = saved === "1";
+        cb.addEventListener('change', () => {
+          localStorage.setItem(KEY_PREFIX + cb.id, cb.checked ? "1" : "0");
+        });
+      });
+
+      // Reset
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        if(!confirm("Clear all checkmarks?")) return;
+        boxes.forEach(cb => {
+          cb.checked = false;
+          localStorage.removeItem(KEY_PREFIX + cb.id);
+        });
+      });
+
+      // Print / Save as PDF
+      document.getElementById('printBtn').addEventListener('click', () => window.print());
+    })();
+  </script>
+</body>
+</html>
