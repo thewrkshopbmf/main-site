@@ -7,11 +7,16 @@
     "firebase": "^12.2.1",
     "firebase-admin": "^12.0.0"
   },
+  "devDependencies": {
+    "vite": "^7.1.5"
+  },
   "scripts": {
     "build:daily": "node scripts/build-daily.js",
     "build:blog": "node scripts/build-blog.js",
     "build:podcasts": "node scripts/build-podcasts.js",
-    "build:all": "npm run build:daily && npm run build:blog && npm run build:podcasts",
-    "send:devotional": "netlify functions:invoke send-devotional"
+    "build:web": "vite build",
+    "build:all": "npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:web",
+    "send:devotional": "netlify functions:invoke send-devotional",
+    "dev:web": "vite"
   }
 }
