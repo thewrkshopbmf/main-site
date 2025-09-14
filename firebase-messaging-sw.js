@@ -1,5 +1,10 @@
 /* global importScripts, firebase */
-// The messaging SW still uses the compat build (this is Firebase's recommended path)
+
+// Make the new SW activate and control pages without extra reloads
+self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+
+// The messaging SW still uses the compat build (Firebase’s recommended path)
 importScripts("https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.12.3/firebase-messaging-compat.js");
 
