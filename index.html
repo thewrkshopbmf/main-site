@@ -247,8 +247,8 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
       controls?.remove();
     } else {
       // Wire the buttons + analytics
-      import('/scripts/push-ui.js').then(({ wirePushControls }) => wirePushControls());
-      import('/scripts/analytics-hook.js').then(({ logPushClickIfPresent }) => logPushClickIfPresent());
+      import('/scripts/firebase/push-ui.js').then(({ wirePushControls }) => wirePushControls());
+      import('/scripts/firebase/analytics-hook.js').then(({ logPushClickIfPresent }) => logPushClickIfPresent());
 
       // Show iOS hint only on iPhone/iPad
       const ua = navigator.userAgent || '';

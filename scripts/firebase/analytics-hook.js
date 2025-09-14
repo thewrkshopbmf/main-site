@@ -1,4 +1,4 @@
-import { analytics } from "./firebase";
+import { analytics } from "./firebase.js";
 import { logEvent } from "firebase/analytics";
 
 // If a user arrives via notification link "...?src=push", log an event
