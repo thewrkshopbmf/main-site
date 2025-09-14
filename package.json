@@ -3,12 +3,15 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "fast-xml-parser": "^4.4.1"
+    "fast-xml-parser": "^4.4.1",
+    "firebase": "^12.2.1",
+    "firebase-admin": "^12.0.0"
   },
   "scripts": {
     "build:daily": "node scripts/build-daily.js",
     "build:blog": "node scripts/build-blog.js",
     "build:podcasts": "node scripts/build-podcasts.js",
-    "build:all": "npm run build:daily && npm run build:blog && npm run build:podcasts"
+    "build:all": "npm run build:daily && npm run build:blog && npm run build:podcasts",
+    "send:devotional": "netlify functions:invoke send-devotional"
   }
 }

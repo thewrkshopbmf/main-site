@@ -45,12 +45,12 @@
 
   <!-- Home Feature Row (Daily + side cards) -->
   <section class="home-feature container" id="daily" aria-label="Today at TheWrkShop">
-    <!-- Daily Feature: Hidden Gem + Verse (snippet only) -->
     <article class="daily-feature">
       <div class="df-head">
         <span class="badge">Hidden Gem</span>
         <time class="df-date" datetime="2025-08-22">Aug 22</time>
       </div>
+
       <h3 class="df-title">First Things First</h3>
       <p class="df-teaser">
         The quieter you are before God, the clearer your next step gets. Start with the One who orders the rest…
@@ -61,8 +61,33 @@
         <span class="verse-snippet">“Seek first the kingdom of God…”</span>
       </div>
 
-      <a class="cta df-cta" href="daily.html">Read Today’s Devotional →</a>
+      <div class="df-actions" style="margin-top:1rem;">
+        <a class="df-cta" href="daily.html" style="display:inline-block;margin-bottom:.75rem;">
+          Read Today’s Devotional →
+        </a>
+
+        <!-- Push controls -->
+        <div id="push-controls" style="display:flex;flex-direction:column;gap:.5rem;align-items:flex-start;">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+            <button id="btn-sub"
+                    style="background:#4b6cb7;color:white;border:none;padding:.5rem .9rem;border-radius:.5rem;cursor:pointer;">
+              Enable Daily Notifications
+            </button>
+            <button id="btn-unsub"
+                    style="background:#aaa;color:white;border:none;padding:.5rem .9rem;border-radius:.5rem;cursor:pointer;display:none;">
+              Turn Off Notifications
+            </button>
+          </div>
+          <span id="push-status" style="font-size:.9rem;opacity:.85;"></span>
+
+          <!-- iOS hint -->
+          <small style="font-size:.8rem;opacity:.7;">
+            On iPhone: add TheWrkShop to your Home Screen to enable notifications.
+          </small>
+        </div>
+      </div>
     </article>
+  </section>
 
     <!-- Side stack: Latest Podcast & Blog (compact) -->
     <div class="side-stack">
@@ -229,5 +254,16 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
 
   <!-- Single source of truth for all client JS -->
   <script src="/script.js"></script>
+  <!-- Module loader -->
+<!-- Load the push logic only if the browser supports it -->
+<script type="module">
+  const controls = document.getElementById('push-controls');
+  if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+    controls.style.display = 'none';
+  } else {
+    import('/scripts/push-ui.js').then(({ wirePushControls }) => wirePushControls());
+    import('/scripts/analytics-hook.js').then(({ logPushClickIfPresent }) => logPushClickIfPresent());
+  }
+</script>
 </body>
 </html>

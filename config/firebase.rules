@@ -1,0 +1,13 @@
+// Starter rules for anonymous token writes
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /push_subscribers/{token} {
+      // Allow public clients to create/update a token doc (anonymous allowed)
+      allow write: if request.resource.data.keys().hasOnly(['enabled','timezone','createdAt','disabledAt'])
+                   && (request.method == 'create' || request.method == 'update');
+      // No reads from public web
+      allow read: if false;
+    }
+  }
+}
