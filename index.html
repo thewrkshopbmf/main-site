@@ -61,35 +61,20 @@
         <span class="verse-snippet">“Seek first the kingdom of God…”</span>
       </div>
 
-      <div class="df-actions" style="margin-top:1rem;">
-        <a class="df-cta" href="daily.html" style="display:inline-block;margin-bottom:.75rem;">
-          Read Today’s Devotional →
-        </a>
+      <!-- Seamless CTA row with push controls -->
+      <div class="df-actions df-actions--with-push">
+        <a class="df-cta" href="daily.html">Read Today’s Devotional →</a>
 
-        <!-- Push controls -->
-        <div id="push-controls" style="display:flex;flex-direction:column;gap:.5rem;align-items:flex-start;">
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-            <button id="btn-sub"
-                    style="background:#4b6cb7;color:white;border:none;padding:.5rem .9rem;border-radius:.5rem;cursor:pointer;">
-              Enable Daily Notifications
-            </button>
-            <button id="btn-unsub"
-                    style="background:#aaa;color:white;border:none;padding:.5rem .9rem;border-radius:.5rem;cursor:pointer;display:none;">
-              Turn Off Notifications
-            </button>
-          </div>
-          <span id="push-status" style="font-size:.9rem;opacity:.85;"></span>
-
-          <!-- iOS hint -->
-          <small style="font-size:.8rem;opacity:.7;">
-            On iPhone: add TheWrkShop to your Home Screen to enable notifications.
-          </small>
+        <div id="push-controls" class="df-push-cta" aria-live="polite">
+          <button id="btn-sub"   class="pill-btn">Enable Daily Notifications</button>
+          <button id="btn-unsub" class="pill-btn pill-btn--muted" style="display:none;">Turn Off</button>
+          <span id="push-status" class="subtext" aria-atomic="true"></span>
+          <small class="ios-hint">On iPhone: Add TheWrkShop to your Home Screen to enable notifications.</small>
         </div>
       </div>
     </article>
-  </section>
 
-    <!-- Side stack: Latest Podcast & Blog (compact) -->
+    <!-- ✅ Side stack is now inside the same section -->
     <div class="side-stack">
       <article class="mini-card" id="latestPodcastCard">
         <h4>Latest Podcast</h4>
@@ -254,16 +239,23 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
 
   <!-- Single source of truth for all client JS -->
   <script src="/script.js"></script>
-  <!-- Module loader -->
-<!-- Load the push logic only if the browser supports it -->
-<script type="module">
-  const controls = document.getElementById('push-controls');
-  if (!('Notification' in window) || !('serviceWorker' in navigator)) {
-    controls.style.display = 'none';
-  } else {
-    import('/scripts/push-ui.js').then(({ wirePushControls }) => wirePushControls());
-    import('/scripts/analytics-hook.js').then(({ logPushClickIfPresent }) => logPushClickIfPresent());
-  }
-</script>
+
+  <!-- Load the push logic only if the browser supports it -->
+  <script type="module">
+    const controls = document.getElementById('push-controls');
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+      controls?.remove();
+    } else {
+      // Wire the buttons + analytics
+      import('/scripts/push-ui.js').then(({ wirePushControls }) => wirePushControls());
+      import('/scripts/analytics-hook.js').then(({ logPushClickIfPresent }) => logPushClickIfPresent());
+
+      // Show iOS hint only on iPhone/iPad
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPhone|iPad|iPod/.test(ua);
+      const hint = document.querySelector('.ios-hint');
+      if (!isIOS && hint) hint.style.display = 'none';
+    }
+  </script>
 </body>
 </html>
