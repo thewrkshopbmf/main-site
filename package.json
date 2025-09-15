@@ -10,7 +10,6 @@
   "devDependencies": {
     "vite": "^7.1.5"
   },
-  
   "scripts": {
     "build:daily": "node scripts/build-daily.js",
     "build:blog": "node scripts/build-blog.js",
