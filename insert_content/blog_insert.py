@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-blog_insert.py (auto-fix + diagnostics)
+blog_insert.py (date-only validation + diagnostics)
 
-- Same relative paths/layout as daily_insert.py.
-- Cleans titles before comparison (tolerant to punctuation, curly quotes, apostrophes).
+- Validates ONLY that the header date matches the JSON "date".
+- Keeps requiring a "title" field (for downstream use) but DOES NOT compare it to header.
+- Auto-fixes common body_html issues (unquoted lines, unescaped quotes) and logs "Info: Fixed:".
 - Skips overwrite if the target filename already exists; logs an Exists: line.
 - Final summary: "Given N files, created M files"
-- Detailed JSON error diagnostics with an inline excerpt + caret pointer.
-- NEW: Auto-fixes common body_html issues (unquoted lines, unescaped quotes) and logs "Fixed:".
 
 Input formats accepted in ./insert_content/input files:
   NEW (preferred): |<header>|{ ...valid JSON... }
@@ -144,7 +143,6 @@ def split_header(header: str) -> Tuple[str, str]:
     Extract (date, header_title_human) from header like:
       '2025-09-20_wheres-your-light-leading-you'
     Everything after the first underscore is the title slug (dashes/underscores allowed).
-    Convert separators to spaces for comparison with JSON "title".
     """
     if "_" not in header:
         raise ValueError("Header must contain an underscore separating date and title-slug.")
@@ -154,13 +152,7 @@ def split_header(header: str) -> Tuple[str, str]:
 
 def normalize_title(s: Optional[str]) -> str:
     """
-    Tolerant title normalization:
-    - Unicode NFKD + strip diacritics
-    - Curly quotes -> ASCII
-    - REMOVE apostrophes (’ and ') so “Who’s” -> “Whos”
-    - Hyphens/underscores -> spaces
-    - Other punctuation -> spaces
-    - Lowercase & collapse whitespace
+    Retained for potential future use; not used in validation now.
     """
     if not s:
         return ""
@@ -232,7 +224,6 @@ def attempt_fix_body_html(raw_json: str) -> Tuple[str, bool, List[str]]:
                 s = s[:-1].rstrip()
             # ensure it's a JSON string (quote + escape)
             if len(s) >= 2 and s[0] == '"' and s[-1] == '"':
-                # looks quoted—keep as-is
                 items.append(s)
             else:
                 s = s.replace("\\", "\\\\").replace('"', '\\"')
@@ -250,7 +241,7 @@ def validate_and_merge(header: str, json_str: str) -> Tuple[dict, str, List[str]
     Validate JSON and cross-check header vs JSON:
     - Must be an object with at least "date" and "title"
     - Header date must equal JSON date
-    - Header title (normalized from slug) must match JSON title (normalized)
+    - Title is NOT compared to header (only required to exist)
     On parse failure, attempts an auto-fix for body_html then retries.
     Returns (data, error_message_or_empty, notes)
     """
@@ -294,21 +285,14 @@ def validate_and_merge(header: str, json_str: str) -> Tuple[dict, str, List[str]
         return {}, f"Missing required field(s): {', '.join(missing)}", notes
 
     try:
-        header_date, header_title = split_header(header)
+        header_date, _header_title = split_header(header)
     except ValueError as e:
         return {}, f"Bad header format: {e}", notes
 
     if data.get("date") != header_date:
         return {}, f'Date mismatch: header "{header_date}" vs JSON "{data.get("date")}"', notes
 
-    ht = normalize_title(header_title)
-    jt = normalize_title(data.get("title"))
-    if ht != jt:
-        return {}, (
-            f'Title mismatch: header "{header_title}" vs JSON "{data.get("title")}" '
-            f'(normalized: "{ht}" vs "{jt}")'
-        ), notes
-
+    # NOTE: No title comparison against the header; we just require it exists.
     return data, "", notes
 
 # ---------- Main ----------

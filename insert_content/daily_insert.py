@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-daily_insert.py (updated with summary)
+daily_insert.py (updated to ignore title matching)
 
-- Cleans titles before comparison (handles apostrophes vs. ASCII and punctuation).
+- Validates ONLY that the header date matches the JSON "date".
+- No title normalization/comparison; title is still required but not checked against header.
 - Skips overwrite if the target filename already exists; logs an Exists: line.
 - Final summary: "Given N files, created M files"
 
@@ -145,19 +146,15 @@ def split_header(header: str) -> Tuple[str, str, str]:
 # ---------- Normalization / filenames ----------
 def normalize_title(s: Optional[str]) -> str:
     """
-    Tolerant title normalization for comparisons.
+    Kept for potential future use; not used for validation now.
     """
     if not s:
         return ""
     s = unicodedata.normalize("NFKD", s)
     s = "".join(ch for ch in s if not unicodedata.combining(ch))
-    # unify punctuation
     s = s.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
-    # remove apostrophes entirely
     s = s.replace("'", "")
-    # hyphens/underscores to spaces
     s = s.replace("-", " ").replace("_", " ")
-    # other punctuation -> space
     s = re.sub(r"[^a-zA-Z0-9\s]", " ", s)
     s = s.lower()
     s = re.sub(r"\s+", " ", s).strip()
@@ -171,6 +168,10 @@ def safe_filename_from_header(header: str) -> str:
 
 # ---------- Validation ----------
 def validate_and_merge(header: str, json_str: str) -> Tuple[dict, str]:
+    """
+    Validates JSON and ensures that the header date equals data['date'].
+    Ignores any differences between header title tokens and JSON title.
+    """
     try:
         data = json.loads(json_str)
     except json.JSONDecodeError as e:
@@ -179,23 +180,20 @@ def validate_and_merge(header: str, json_str: str) -> Tuple[dict, str]:
     if not isinstance(data, dict):
         return {}, "Top-level JSON must be an object"
 
+    # Still require 'title' for downstream use, but we won't compare it to header
     missing = [k for k in ("date", "title") if k not in data]
     if missing:
         return {}, f"Missing required field(s): {', '.join(missing)}"
 
     try:
-        header_date, _verse, header_title = split_header(header)
+        header_date, _verse, _header_title = split_header(header)
     except ValueError as e:
         return {}, f"Bad header format: {e}"
 
     if data.get("date") != header_date:
         return {}, f'Date mismatch: header "{header_date}" vs JSON "{data.get("date")}"'
 
-    ht = normalize_title(header_title)
-    jt = normalize_title(data.get("title"))
-    if ht != jt:
-        return {}, f'Title mismatch: header "{header_title}" vs JSON "{data.get("title")}" (normalized: "{ht}" vs "{jt}")'
-
+    # No title check
     return data, ""
 
 # ---------- Main ----------
