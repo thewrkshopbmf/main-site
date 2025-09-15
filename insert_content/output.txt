@@ -1,4 +1,5 @@
-Exists: "2025-09-20_wheres-your-light-leading-you.json" — already present; date="2025-09-20", title="Where’s Your Light Leading You"
-Info: Fixed: auto-quoted and escaped body_html lines in "2025-10-04_the-fight-youre-in-was-rigged.json"
-Created: "2025-10-04_the-fight-youre-in-was-rigged.json"
-Given 2 files, created 1 files
+Created: "2025-09-18_Galatians_5-16_Stop_Feeding_the_Flesh.json"
+Error: Could not create "2025-09-19_2_Timothy_1-7_Fear_Is_a_Thief.json" — Title mismatch: header "Timothy 1:7 Fear Is a Thief" vs JSON "Fear Is a Thief" (normalized: "timothy 1 7 fear is a thief" vs "fear is a thief")
+Error: Could not create "2025-09-20_Proverbs_3-5-6_Quit_Playing_God.json" — Title mismatch: header "3:5-6 Quit Playing God" vs JSON "Quit Playing God" (normalized: "3 5 6 quit playing god" vs "quit playing god")
+Error: Could not create "2025-09-21_Genesis_1-27_Identity_Greater_Than_Image.json" — Title mismatch: header "1:27 Identity Greater Than Image" vs JSON "Identity > Image" (normalized: "1 27 identity greater than image" vs "identity image")
+Given 4 files, created 1 files
