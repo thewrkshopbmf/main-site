@@ -10,16 +10,13 @@
 </head>
 <body>
 
-  <!-- Header/Navbar (injected by /script.js) -->
   <div id="site-header"></div>
 
-  <!-- Hero Section -->
   <section class="hero">
     <div class="hero-overlay">
       <h1><span class="sitename"></span></h1>
       <p>Building Christian Men Of Purpose And Excellence.</p>
 
-      <!-- Subscription Box -->
       <form id="emailForm" class="subscribe-form">
         <input type="email" id="email" name="email" placeholder="Your Email - Our Newsletter" required />
         <button type="submit">Subscribe</button>
@@ -30,7 +27,6 @@
     </div>
   </section>
 
-  <!-- Quick Actions -->
   <section class="quick-actions" aria-label="Quick Actions">
     <a class="qa-pill" href="#daily" data-scroll="#daily">
       <span>📖</span> Today’s Verse
@@ -43,7 +39,6 @@
     </a>
   </section>
 
-  <!-- Home Feature Row (Daily + side cards) -->
   <section class="home-feature container" id="daily" aria-label="Today at TheWrkShop">
     <article class="daily-feature">
       <div class="df-head">
@@ -61,7 +56,6 @@
         <span class="verse-snippet">“Seek first the kingdom of God…”</span>
       </div>
 
-      <!-- Seamless CTA row with push controls -->
       <div class="df-actions df-actions--with-push">
         <a class="df-cta" href="daily.html">Read Today’s Devotional →</a>
 
@@ -74,7 +68,6 @@
       </div>
     </article>
 
-    <!-- ✅ Side stack is now inside the same section -->
     <div class="side-stack">
       <article class="mini-card" id="latestPodcastCard">
         <h4>Latest Podcast</h4>
@@ -90,7 +83,7 @@
     </div>
   </section>
 
-  <!-- About Us Section -->
+
   <section id="about" class="content-section about-section">
     <h2>About Us</h2>
     <div class="cards-container">
@@ -109,15 +102,12 @@
     </div>
   </section>
 
-  <!-- Our Podcast Section -->
   <section id="podcast" class="content-section podcast-section container">
     <div class="podcast-grid">
-      <!-- Vertical Image -->
       <div class="podcast-image">
         <img src="assets/images/Our_Podcast_looking_up.png" alt="Podcast illustration" />
       </div>
 
-      <!-- Podcast Text -->
       <div class="podcast-text">
         <h2>Our Podcast</h2>
         <p>
@@ -128,11 +118,9 @@
     </div>
   </section>
 
-  <!-- Blog Section (Dynamic) -->
   <section id="blog" class="content-section blog-list">
     <h2>From the Blog</h2>
 
-    <!-- Fallback cards (replaced if JSON loads) -->
     <div class="cards" id="blogCards">
       <article class="blog-card">
         <h3><a href="blog/seek-first.html">Seek First: One Focus That Rewires Everything</a></h3>
@@ -156,7 +144,6 @@
     <a class="cta" href="blog-archive.html">See all posts →</a>
   </section>
 
-  <!-- Resources Section -->
   <section id="resources" class="content-section resources">
     <h2>Resources</h2>
     <div class="filters" role="tablist" aria-label="Resource Filters">
@@ -169,8 +156,7 @@
     </div>
 
     <div class="resource-grid" id="resource-grid">
-      <!-- Example Resource Cards -->
-      <a class="resource-card" href="assets/pdfs/30-day-seek-first.pdf">
+      <a class="resource-card" href="sub-pages/resources/seek-first-plan.html">
         <div class="rc-top">📄</div>
         <div class="rc-body">
           <h3>30-Day Seek First Plan</h3>
@@ -186,7 +172,7 @@
         </div>
       </a>
 
-      <a class="resource-card" href="assets/pdfs/habit-checklist.pdf">
+      <a class="resource-card" href="sub-pages/resources/habit-checklist.html">
         <div class="rc-top">✅</div>
         <div class="rc-body">
           <h3>Habit Checklist</h3>
@@ -194,7 +180,7 @@
         </div>
       </a>
 
-      <a class="resource-card" href="resources.html">
+      <a class="resource-card" href="sub-pages/resources/starter-kit.html">
         <div class="rc-top">🧰</div>
         <div class="rc-body">
           <h3>Starter Kit</h3>
@@ -205,7 +191,7 @@
     <a class="cta" href="resources.html">See all resources →</a>
   </section>
 
-  <!-- Contact Us Section -->
+  
   <section id="contact" class="content-section contact-section">
     <h2>Contact Us</h2>
     <form action="https://formsubmit.co/f25468eae77a6323c66f6f8e7ff728be" method="POST">
@@ -213,23 +199,23 @@
       <input type="email" name="email" placeholder="Your Email" required />
       <textarea name="message" placeholder="Your Message" required></textarea>
 
-      <!-- Auto-reply message -->
+      
       <input type="hidden" name="_autoresponse" value="Hey there! 👋
 
 Thanks so much for reaching out to TheBldrShop — we’ve received your message and will get back to you soon.
 
 In the meantime, stay bold, stay faithful, and keep building with purpose.
 
-— TheBldrShop Team" />
+— TheWrkShop Team" />
 
-      <!-- FormSubmit formatting -->
+      
       <input type="hidden" name="_template" value="table" />
 
       <button type="submit">Send Message</button>
     </form>
   </section>
 
-  <!-- Footer -->
+  
   <footer>
     <div class="footer-content">
       <div class="footer-logo"><span class="sitename"></span></div>
@@ -237,7 +223,6 @@ In the meantime, stay bold, stay faithful, and keep building with purpose.
     </div>
   </footer>
 
-  <!-- Single source of truth for all client JS -->
   <script src="/script.js"></script>
   <script type="module" src="/assets/build/main.js"></script>
 </body>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>TheWrkShop — 30-Day “Seek First” Plan</title>
+  <meta name="description" content="A 30-day discipleship journey to seek first the Kingdom (Mt 6:33). Daily scripture, focus, prompt, and a simple action."/>
+  <style>
+    :root{
+      --bg:#f7f7f9; --surface:#ffffff; --ink:#1c1c21; --muted:#6a6f7a;
+      --brand:#5c4b8a; --brand2:#b79cff; --border:#e8e8ef; --ring:rgba(92,75,138,.20);
+      --accent:#2f855a;
+    }
+    html,body{background:var(--bg); color:var(--ink); margin:0; font:16px/1.55 system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial,sans-serif;}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 16px 64px;}
+    header{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:18px;}
+    .eyebrow{display:inline-block; font-size:12px; letter-spacing:.08em; font-weight:700; color:#fff; background:linear-gradient(135deg,var(--brand),var(--brand2)); padding:6px 10px; border-radius:999px;}
+    h1{font-size:clamp(26px,4vw,36px); line-height:1.15; margin:.4rem 0 .2rem;}
+    .sub{color:var(--muted); margin:0 0 .8rem;}
+    .controls{display:flex; flex-wrap:wrap; gap:10px;}
+    .btn{appearance:none; border:1px solid var(--border); background:#fff; color:var(--ink); padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer; box-shadow:0 1px 0 rgba(0,0,0,.04);}
+    .btn.primary{color:#fff; border-color:transparent; background:linear-gradient(135deg,var(--brand),var(--brand2));}
+    .grid{display:grid; grid-template-columns:1fr; gap:16px; margin-top:16px;}
+    @media (min-width:900px){ .grid{ grid-template-columns:2fr 1fr; } }
+    .card{background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:18px; box-shadow:0 8px 28px rgba(20,20,40,.06);}
+    .legend{display:grid; grid-template-columns:1fr 1fr; gap:10px; color:var(--muted); font-size:14px;}
+    @media (min-width:700px){ .legend{grid-template-columns:repeat(4,1fr);} }
+    /* Day list */
+    .days{display:grid; grid-template-columns:1fr; gap:10px;}
+    .day{border:1px solid var(--border); border-radius:14px; background:#fff;}
+    .head{display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border); background:linear-gradient(180deg,#fff, #fbfbff);}
+    .dot{width:10px; height:10px; border-radius:50%; background:var(--brand); box-shadow:0 0 0 4px var(--ring);}
+    .title{font-weight:800;}
+    .ref{margin-left:auto; color:var(--muted); font-size:13px;}
+    .body{padding:12px 14px;}
+    .row{margin:8px 0;}
+    .lbl{display:block; font-size:13px; color:var(--muted); margin-bottom:4px;}
+    .prompt{margin:0;}
+    .act{font-weight:700;}
+    .tick{display:flex; align-items:center; gap:8px; margin-top:8px;}
+    input[type="checkbox"]{width:20px; height:20px; accent-color:var(--accent); cursor:pointer;}
+    /* Sidebar */
+    .side .card + .card{margin-top:12px;}
+    .kicker{font-weight:700;}
+    .verse{font-style:italic; color:var(--muted);}
+    .mini{font-size:13px; color:var(--muted);}
+    /* Print */
+    @media print{
+      .controls,.eyebrow{display:none!important;}
+      body{background:#fff;}
+      .wrap{padding:0;}
+      .card{box-shadow:none; break-inside:avoid;}
+      a[href]:after{content:"";}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <span class="eyebrow">THEWRKSHOP</span>
+        <h1>30-Day “Seek First” Plan</h1>
+        <p class="sub">A daily journey to put the Kingdom first (Matthew 6:33). Read, reflect, respond — one small step each day.</p>
+        <div class="legend card">
+          <div><strong>Read</strong>: Daily scripture</div>
+          <div><strong>Focus</strong>: Theme for the day</div>
+          <div><strong>Prompt</strong>: One question</div>
+          <div><strong>Action</strong>: A small, concrete step</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn primary" id="printBtn">Print / Save PDF</button>
+        <button class="btn" id="resetBtn">Reset Progress</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Main: 30 Days -->
+      <main class="card">
+        <div class="days" id="days">
+          <!-- Days will be injected by JS -->
+        </div>
+      </main>
+
+      <!-- Sidebar -->
+      <aside class="side">
+        <section class="card">
+          <div class="kicker">How to Use</div>
+          <p class="mini">Each day: <strong>Read</strong> the passage, <strong>Focus</strong> your heart, answer the <strong>Prompt</strong>, take the <strong>Action</strong>. Check “Done” to save progress locally.</p>
+        </section>
+        <section class="card">
+          <div class="kicker">Weekly Rhythm</div>
+          <p class="mini">End of each week, share one testimony and one challenge with a friend or group. Pray short, specific prayers.</p>
+        </section>
+        <section class="card">
+          <div class="kicker">Prayer to Begin</div>
+          <p class="verse">“Father, today I seek Your Kingdom first. Align my heart, reorder my desires, and lead my steps. Amen.”</p>
+        </section>
+        <section class="card">
+          <div class="kicker">Anchor Verse</div>
+          <p class="verse">“But seek first the kingdom of God and his righteousness, and all these things will be added to you.” — Matthew 6:33</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const data = [
+        // Week 1 — Seek God Personally
+        {d:1,  ref:"Mt 6:33",       focus:"Priority", prompt:"What competes with God’s first place in my life?", action:"Name one competing priority and fast from it today."},
+        {d:2,  ref:"Ps 63:1–8",     focus:"Hunger",   prompt:"Where do I feel spiritually dry or distracted?", action:"Begin and end the day with 5 minutes of quiet prayer."},
+        {d:3,  ref:"Mk 1:35",       focus:"Time",     prompt:"When can I meet God consistently?", action:"Block 15 minutes tomorrow morning for Scripture & prayer."},
+        {d:4,  ref:"Ps 119:105",    focus:"Light",    prompt:"What step is God illuminating right now?", action:"Write that step and share it with an accountability partner."},
+        {d:5,  ref:"Phil 3:7–14",   focus:"Aim",      prompt:"What do I need to ‘count as loss’ to know Christ more?", action:"Remove one non-essential from today’s schedule."},
+        {d:6,  ref:"Jn 15:1–8",     focus:"Abide",    prompt:"What pulls me off the Vine most often?", action:"Pause at midday: 2 minutes of silence + ‘Abide in me, Lord.’"},
+        {d:7,  ref:"Ps 27:4",       focus:"One Thing",prompt:"What is my ‘one thing’ this week?", action:"Write a one-sentence ‘seek first’ statement for Week 2."},
+        // Week 2 — Heart Alignment
+        {d:8,  ref:"Prov 4:23",     focus:"Guard",    prompt:"What inputs shape my heart daily?", action:"Prune one unhelpful input; replace with a Psalm today."},
+        {d:9,  ref:"Rom 12:1–2",    focus:"Renewal",  prompt:"Where do I need a new mind pattern?", action:"Memorize Rom 12:2a; repeat it 3× today."},
+        {d:10, ref:"Mt 5:1–12",     focus:"Beatitudes",prompt:"Which beatitude challenges me most?", action:"Practice that posture in one conversation today."},
+        {d:11, ref:"Gal 5:22–25",   focus:"Fruit",    prompt:"Which fruit needs cultivation?", action:"Choose one fruit; name one behavior that nurtures it today."},
+        {d:12, ref:"Ps 139:23–24",  focus:"Search",   prompt:"What hidden way needs to be surrendered?", action:"Invite a trusted friend to speak truth into that area."},
+        {d:13, ref:"Heb 12:1–3",    focus:"Endurance",prompt:"What sin/weight slows me down?", action:"Confess it to God; choose one tiny replacement habit."},
+        {d:14, ref:"Eph 3:14–21",   focus:"Depth",    prompt:"How can I root deeper in love?", action:"Pray this passage over yourself and one other person."},
+        // Week 3 — Kingdom in Everyday Life
+        {d:15, ref:"Col 3:17",      focus:"Whole-Life Worship", prompt:"Where can I do ordinary work unto Jesus today?", action:"Offer one task explicitly to Him before you start it."},
+        {d:16, ref:"Mt 5:13–16",    focus:"Witness",  prompt:"Where is God inviting me to shine quietly?", action:"Do one unseen good work; give God the credit in prayer."},
+        {d:17, ref:"Mic 6:8",       focus:"Justice & Mercy", prompt:"Who needs mercy from me?", action:"Act justly in a small practical way (message, gift, help)."},
+        {d:18, ref:"Phil 2:1–11",   focus:"Humility", prompt:"Where am I grasping for status?", action:"Choose the low place in one decision today."},
+        {d:19, ref:"1 Thess 5:16–18",focus:"Rejoice/Pray/Thanks", prompt:"How can I practice gratitude rhythmically?", action:"Write 3 thank-yous (to God or people)."},
+        {d:20, ref:"Jas 1:22–25",   focus:"Obedience",prompt:"What teaching have I heard but not done?", action:"Take one concrete step before the day ends."},
+        {d:21, ref:"Col 4:2–6",     focus:"Open Doors",prompt:"Who is God placing on my path?", action:"Pray for one name; initiate a simple conversation."},
+        // Week 4 — Mission & Community
+        {d:22, ref:"Acts 2:42–47",  focus:"Fellowship",prompt:"How can I devote myself to the body?", action:"Invite or encourage someone to gather this week."},
+        {d:23, ref:"Jn 13:34–35",   focus:"Love",     prompt:"What does sacrificial love look like today?", action:"Serve one person in a way that costs you something."},
+        {d:24, ref:"Mt 28:18–20",   focus:"Go",       prompt:"Who could I disciple one step further?", action:"Share a verse or tool (e.g., 7-Lens Lamp Check)."},
+        {d:25, ref:"2 Cor 9:6–11",  focus:"Generosity",prompt:"Where can I sow bountifully?", action:"Give generously (time/treasure/talent) in secret."},
+        {d:26, ref:"1 Pet 3:15–16", focus:"Answer with Hope", prompt:"How can I be ready with gentleness?", action:"Draft a 60-second testimony; practice it once."},
+        {d:27, ref:"Eph 4:1–6",     focus:"Unity",    prompt:"Where do I need to pursue peace?", action:"Make one reconciling call/text today."},
+        {d:28, ref:"Heb 10:24–25",  focus:"Spur On",  prompt:"Who can I encourage toward love and good works?", action:"Send a note of specific encouragement."},
+        // Finish — Recommit & Send
+        {d:29, ref:"Ps 37:3–7",     focus:"Trust & Wait", prompt:"Where must I trust God’s timing?", action:"Surrender that timeline in prayer; wait quietly 5 minutes."},
+        {d:30, ref:"Mt 6:9–13",     focus:"Lord’s Prayer", prompt:"How will I keep seeking first after day 30?", action:"Write a ‘Rule of Life’ (3 lines) for the next 30 days."}
+      ];
+
+      const container = document.getElementById('days');
+      const KEY = "tws-seekfirst-done-";
+      data.forEach(({d,ref,focus,prompt,action})=>{
+        const wrap = document.createElement('section');
+        wrap.className = 'day';
+        wrap.innerHTML = `
+          <div class="head">
+            <span class="dot"></span>
+            <div class="title">Day ${d}: ${focus}</div>
+            <div class="ref">${ref}</div>
+          </div>
+          <div class="body">
+            <div class="row">
+              <span class="lbl">Prompt</span>
+              <p class="prompt">${prompt}</p>
+            </div>
+            <div class="row">
+              <span class="lbl">Action</span>
+              <p class="act">${action}</p>
+            </div>
+            <div class="tick">
+              <input id="done-${d}" type="checkbox"/>
+              <label for="done-${d}">Done</label>
+            </div>
+          </div>`;
+        container.appendChild(wrap);
+      });
+
+      // Restore & persist progress
+      const boxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+      boxes.forEach(cb=>{
+        const saved = localStorage.getItem(KEY + cb.id);
+        if(saved !== null) cb.checked = saved === "1";
+        cb.addEventListener('change',()=> localStorage.setItem(KEY + cb.id, cb.checked ? "1" : "0"));
+      });
+
+      // Buttons
+      document.getElementById('printBtn').addEventListener('click',()=>window.print());
+      document.getElementById('resetBtn').addEventListener('click',()=>{
+        if(!confirm("Clear all progress for the 30-Day plan?")) return;
+        boxes.forEach(cb=>{ cb.checked=false; localStorage.removeItem(KEY + cb.id); });
+      });
+    })();
+  </script>
+</body>
+</html>
