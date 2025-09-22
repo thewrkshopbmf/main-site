@@ -1,10 +1,2 @@
-Duplicate: "2025-10-02_Genesis_22-14_The_God_Who_Provides.json" — verse_ref="Genesis 22:14" matches existing title edges (front="the god who", back="god who provides")
-Duplicate: "2025-10-03_1_Timothy_6-10_Don’t_Chase_Riches.json" — verse_ref="1 Timothy 6:10" matches existing title edges (front="don t chase", back="t chase riches")
-Duplicate: "2025-10-04_Matthew_6-6_Silent_Battles,_Loud_Prayers.json" — verse_ref="Matthew 6:6" matches existing title edges (front="silent battles loud", back="battles loud prayers")
-Duplicate: "2025-10-05_Psalm_119-105_God’s_Word_My_Words.json" — verse_ref="Psalm 119:105" matches existing title edges (front="god s word", back="word my words")
-Duplicate: "2025-10-06_2_Corinthians_12-8-9_When_God_Says_No.json" — verse_ref="2 Corinthians 12:8-9" matches existing title edges (front="when god says", back="god says no")
-Duplicate: "2025-10-07_1_Thessalonians_5-18_Gratitude_Shifts_Atmosphere.json" — verse_ref="1 Thessalonians 5:18" matches existing title edges (front="gratitude shifts atmosphere", back="gratitude shifts atmosphere")
-Duplicate: "2025-10-08_Psalm_46-1_God_Is_My_Refuge.json" — verse_ref="Psalm 46:1" matches existing title edges (front="god is my", back="is my refuge")
-Duplicate: "2025-10-09_Proverbs_18-21_Speak_Life.json" — verse_ref="Proverbs 18:21" matches existing title edges (front="speak life", back="speak life")
-Duplicate: "2025-10-10_Exodus_20-8-10_Rest_Is_Warfare.json" — verse_ref="Exodus 20:8-10" matches existing title edges (front="rest is warfare", back="rest is warfare")
-Given 9 files, created 0 files
+Exists: "2025-10-11_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update.json" — already present; date="2025-10-11", title="Rewrite Your Defaults: Stop Hitting “Remind Me Later” on God’s Update"
+Given 1 files, created 0 files

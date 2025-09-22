@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-blog_insert.py (date-only validation + diagnostics)
+blog_insert.py (with duplicate check by verse_ref + title edges)
 
 - Validates ONLY that the header date matches the JSON "date".
 - Keeps requiring a "title" field (for downstream use) but DOES NOT compare it to header.
 - Auto-fixes common body_html issues (unquoted lines, unescaped quotes) and logs "Info: Fixed:".
 - Skips overwrite if the target filename already exists; logs an Exists: line.
+- NEW: Skips creation if an entry with the SAME scripture (verse_ref) AND matching
+       first/last N words of the JSON title already exists (on disk or earlier in this batch).
+       Logs as Duplicate: ...
 - Final summary: "Given N files, created M files"
 
 Input formats accepted in ./insert_content/input files:
@@ -23,7 +26,11 @@ import re
 import json
 import unicodedata
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict, Set
+
+# ---------- Tunables ----------
+FRONT_N = 3   # number of words from the start of the title to compare
+BACK_N  = 3   # number of words from the end of the title to compare
 
 # ---------- Paths (relative to this script) ----------
 SCRIPT_PATH = Path(__file__).resolve()
@@ -150,21 +157,33 @@ def split_header(header: str) -> Tuple[str, str]:
     human_title = slug_part.replace("_", " ").replace("-", " ").strip()
     return date, human_title
 
-def normalize_title(s: Optional[str]) -> str:
-    """
-    Retained for potential future use; not used in validation now.
-    """
-    if not s:
-        return ""
-    s = unicodedata.normalize("NFKD", s)
+_WORD_RE = re.compile(r"[A-Za-z0-9]+")
+
+def normalize_text_basic(s: str) -> str:
+    """Lowercase, strip accents and unify quotes/dashes."""
+    s = unicodedata.normalize("NFKD", s or "")
     s = "".join(ch for ch in s if not unicodedata.combining(ch))
     s = s.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
-    s = s.replace("'", "")
-    s = s.replace("-", " ").replace("_", " ")
-    s = re.sub(r"[^a-zA-Z0-9\s]", " ", s)
-    s = s.lower()
-    s = re.sub(r"\s+", " ", s).strip()
+    s = s.replace("–", "-").replace("—", "-").replace("·", " ")
+    return s.lower().strip()
+
+def verse_key(s: Optional[str]) -> str:
+    """Compact the verse ref for matching (e.g., '2 corinthians 5:7')."""
+    if not s:
+        return ""
+    s = normalize_text_basic(s)
+    s = s.replace(".", " ")
+    s = re.sub(r"\s+", " ", s)
     return s
+
+def title_edges(title: str, n_front: int = FRONT_N, n_back: int = BACK_N) -> Tuple[str, str]:
+    s = normalize_text_basic(title or "")
+    tokens = _WORD_RE.findall(s)
+    if not tokens:
+        return "", ""
+    front = " ".join(tokens[:max(0, n_front)]) if n_front > 0 else ""
+    back  = " ".join(tokens[-max(0, n_back):]) if n_back > 0 else ""
+    return front, back
 
 def safe_filename_from_header(header: str) -> str:
     """
@@ -295,6 +314,36 @@ def validate_and_merge(header: str, json_str: str) -> Tuple[dict, str, List[str]
     # NOTE: No title comparison against the header; we just require it exists.
     return data, "", notes
 
+# ---------- Duplicate index ----------
+def build_existing_index() -> Dict[str, Set[Tuple[str, str]]]:
+    """
+    Scan BLOG_DIR for existing entries and index by:
+      verse_key -> set of (front_edge, back_edge)
+    Only indexes files that have both 'title' and 'verse_ref'.
+    """
+    index: Dict[str, Set[Tuple[str, str]]] = {}
+    if not BLOG_DIR.exists():
+        return index
+
+    for p in BLOG_DIR.glob("*.json"):
+        try:
+            obj = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if not isinstance(obj, dict):
+            continue
+
+        vref = obj.get("verse_ref") or ""
+        ttl  = obj.get("title") or ""
+        if not vref or not ttl:
+            continue
+
+        key = verse_key(vref)
+        front, back = title_edges(ttl)
+        if key and (front or back):
+            index.setdefault(key, set()).add((front, back))
+    return index
+
 # ---------- Main ----------
 def ensure_dirs():
     BLOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -324,6 +373,11 @@ def main():
             print("\n".join(report_lines))
         return
 
+    # Load existing duplicates index from disk
+    dup_index = build_existing_index()
+    # Track duplicates within this batch
+    batch_seen: Dict[str, Set[Tuple[str, str]]] = {}
+
     for header, json_body in entries:
         filename = safe_filename_from_header(header)
         target_path = BLOG_DIR / filename
@@ -343,12 +397,38 @@ def main():
             )
             continue
 
+        # ------- Duplicate check by verse_ref + title edges -------
+        # Prefer JSON verse_ref (blogs should include it); if absent, skip duplicate check gracefully.
+        vref_raw = (data.get("verse_ref") or "").strip()
+        vkey = verse_key(vref_raw)
+        front, back = title_edges(data.get("title", ""))
+
+        is_duplicate = False
+        if vkey:
+            if (front, back) in dup_index.get(vkey, set()):
+                is_duplicate = True
+            elif (front, back) in batch_seen.get(vkey, set()):
+                is_duplicate = True
+
+        if is_duplicate:
+            report_lines.append(
+                f'Duplicate: "{filename}" — verse_ref="{vref_raw}" matches existing title edges '
+                f'(front="{front}", back="{back}")'
+            )
+            continue
+
+        # Write the file
         try:
             with target_path.open("w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
                 f.write("\n")
             report_lines.append(f'Created: "{filename}"')
             created_count += 1
+
+            # Update indices after successful create
+            if vkey:
+                dup_index.setdefault(vkey, set()).add((front, back))
+                batch_seen.setdefault(vkey, set()).add((front, back))
         except Exception as e:
             report_lines.append(f'Error: Failed to write "{filename}" — {e}')
 
