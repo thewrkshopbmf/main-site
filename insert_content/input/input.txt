@@ -1,374 +1,153 @@
-*|2025-09-18_2 Corinthians 5:7_Faith Isn’t a Feeling|{
-  "date": "2025-09-18",
-  "title": "Faith Isn’t a Feeling",
-  "verse_ref": "2 Corinthians 5:7",
-  "verse_text": "For we live by faith, not by sight.",
-  "insight": [
-    "Feelings are waves. Faith is the anchor.",
-    "Faith is strongest when it walks forward without a spotlight."
-  ],
-  "one_minute_win": "Whisper: \"God, I trust You\" several times today when doubt hits.",
-  "declaration": "I walk by faith, not by mood.",
-  "related_devotionals": [
-    "Joshua 1:9 Devotional - Courage Over Comfort",
-    "Psalm 27:14 Devotional - Waiting Without Wasting"
-  ],
-  "tags": ["daily devotional","2 Corinthians 5:7 meaning","faith over feelings","Christian encouragement"]
-}*
-|2025-09-19_Psalm 119:37_Scroll or Soul?|{
-  "date": "2025-09-19",
-  "title": "Scroll or Soul?",
-  "verse_ref": "Psalm 119:37",
-  "verse_text": "Turn my eyes from worthless things; preserve my life according to your word.",
-  "insight": [
-    "Our world fights for attention, and every scroll shapes your soul.",
-    "Every scroll is a seed; over time it grows into confidence or chaos."
-  ],
-  "one_minute_win": "Replace one 5-minute scroll break with one 5-minute Scripture break.",
-  "declaration": "My soul deserves better than endless scrolls.",
-  "related_devotionals": [
-    "Proverbs 4:23 Devotional - Guard Your Gate",
-    "2 Corinthians 10:5 Devotional - Battle of the Mind"
-  ],
-  "tags": ["daily devotional","Psalm 119:37 meaning","Christian habits","overcoming distraction"]
-}*
-|2025-09-20_Joshua 1:9_Comfort Zones Kill Calling|{
-  "date": "2025-09-20",
-  "title": "Comfort Zones Kill Calling",
-  "verse_ref": "Joshua 1:9",
-  "verse_text": "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",
-  "insight": [
-    "Growth never lives in comfort.",
-    "Courage isn’t the absence of fear; it’s moving forward despite it."
-  ],
-  "one_minute_win": "Do one small thing today that scares you but grows you.",
-  "declaration": "I was made for courage, not comfort.",
-  "related_devotionals": [
-    "Exodus 4:2 Devotional - What’s in Your Hand?",
-    "James 1:3 Devotional - The Weight Room"
-  ],
-  "tags": ["daily devotional","Joshua 1:9 meaning","courage in the Bible","faith and risk"]
-}*
-|2025-09-21_Psalm 27:14_Microwave Prayers|{
-  "date": "2025-09-21",
-  "title": "Microwave Prayers",
-  "verse_ref": "Psalm 27:14",
-  "verse_text": "Wait for the Lord; be strong and take heart and wait for the Lord.",
-  "insight": [
-    "God is not Amazon Prime; prayer is not a vending machine.",
-    "Waiting strengthens faith muscles we wouldn’t build any other way."
-  ],
-  "one_minute_win": "Instead of asking, spend 1 minute today just saying: \"Thank You, Lord.\"",
-  "declaration": "Patience is my strength, not my weakness.",
-  "related_devotionals": [
-    "Isaiah 40:31 Devotional - Strength in the Waiting",
-    "James 1:3 Devotional - The Weight Room"
-  ],
-  "tags": ["daily devotional","Psalm 27:14 meaning","waiting on God","patience and faith"]
-}*
-|2025-09-22_Proverbs 4:23_Guard Your Gate|{
-  "date": "2025-09-22",
-  "title": "Guard Your Gate",
-  "verse_ref": "Proverbs 4:23",
-  "verse_text": "Above all else, guard your heart, for everything you do flows from it.",
-  "insight": [
-    "Your eyes and ears are gates.",
-    "What enters will eventually shape what flows out."
-  ],
-  "one_minute_win": "Mute one account, show, or voice that pollutes your heart.",
-  "declaration": "I guard my gates because my heart is worth it.",
-  "related_devotionals": [
-    "Proverbs 13:3 Devotional - Guarding the Mouth",
-    "Psalm 119:37 Devotional - Scroll or Soul?"
-  ],
-  "tags": ["daily devotional","Proverbs 4:23 meaning","guarding the heart","Christian purity"]
-}*
-|2025-09-23_2 Corinthians 10:5_The Battle of the Mind|{
-  "date": "2025-09-23",
-  "title": "The Battle of the Mind",
-  "verse_ref": "2 Corinthians 10:5",
-  "verse_text": "We take captive every thought to make it obedient to Christ.",
-  "insight": [
-    "Thoughts left unchecked turn into chains.",
-    "Taking them captive breaks the enemy’s grip before it tightens."
-  ],
-  "one_minute_win": "Write down one recurring lie, then cross it out and replace it with truth.",
-  "declaration": "My mind belongs to Christ, not lies.",
-  "related_devotionals": [
-    "John 8:44 Devotional - The Lie Detector",
-    "Philippians 4:8 Devotional - Think on These Things"
-  ],
-  "tags": ["daily devotional","2 Corinthians 10:5 meaning","battle of the mind","overcoming lies"]
-}*
-|2025-09-24_Ecclesiastes 4:12_Brotherhood Beats Isolation|{
-  "date": "2025-09-24",
-  "title": "Brotherhood Beats Isolation",
-  "verse_ref": "Ecclesiastes 4:12",
-  "verse_text": "Though one may be overpowered, two can defend themselves. A cord of three strands is not quickly broken.",
-  "insight": [
-    "Isolation is easy but dangerous.",
-    "Brotherhood builds resilience, accountability, and courage."
-  ],
-  "one_minute_win": "Send one brother a text: \"I’ve got your back.\"",
-  "declaration": "I don’t fight alone. I fight with brothers.",
-  "related_devotionals": [
-    "Proverbs 27:17 Devotional - Iron Sharpens Iron",
-    "Hebrews 10:25 Devotional - Don’t Neglect Gathering"
-  ],
-  "tags": ["daily devotional","Ecclesiastes 4:12 meaning","Christian brotherhood","accountability"]
-}*
-|2025-09-25_Exodus 4:2_What’s in Your Hand?|{
-  "date": "2025-09-25",
-  "title": "What’s in Your Hand?",
-  "verse_ref": "Exodus 4:2",
-  "verse_text": "Then the Lord said to him, \"What is that in your hand?\"",
-  "insight": [
-    "God multiplies what you already carry.",
-    "Don’t underestimate the everyday tools He placed in your hands."
-  ],
-  "one_minute_win": "Name one skill or resource you have and dedicate it to God today.",
-  "declaration": "God can use what’s already in my hand.",
-  "related_devotionals": [
-    "Matthew 14:17 Devotional - Five Loaves and Two Fish",
-    "1 Samuel 17:40 Devotional - David’s Sling"
-  ],
-  "tags": ["daily devotional","Exodus 4:2 meaning","God uses what you have","Christian purpose"]
-}*
-|2025-09-26_Romans 6:6_Stop Negotiating with Sin|{
-  "date": "2025-09-26",
-  "title": "Stop Negotiating with Sin",
-  "verse_ref": "Romans 6:6",
-  "verse_text": "For we know that our old self was crucified with him so that the body ruled by sin might be done away with.",
-  "insight": [
-    "Sin is not something to manage; it’s something to crucify.",
-    "You don’t negotiate with a snake—you cut off its head."
-  ],
-  "one_minute_win": "Confess one hidden sin to God, no filters.",
-  "declaration": "The old me is dead. Christ lives in me.",
-  "related_devotionals": [
-    "2 Corinthians 5:17 Devotional - New Creation Life",
-    "Colossians 3:5 Devotional - Put to Death What Belongs to Earthly Nature"
-  ],
-  "tags": ["daily devotional","Romans 6:6 meaning","crucifying the flesh","victory over sin"]
-}*
-|2025-09-27_Isaiah 41:10_Doubt Whispers, God Roars|{
-  "date": "2025-09-27",
-  "title": "Doubt Whispers, God Roars",
-  "verse_ref": "Isaiah 41:10",
-  "verse_text": "Do not fear, for I am with you; do not be dismayed, for I am your God.",
-  "insight": [
-    "Doubt speaks in whispers. God speaks in promises.",
-    "Choose which voice you’ll amplify today."
-  ],
-  "one_minute_win": "Write down one fear and place it under the heading: \"But God says…\"",
-  "declaration": "God’s voice is louder than doubt.",
-  "related_devotionals": [
-    "John 10:10 Devotional - Life to the Full",
-    "Philippians 4:6 Devotional - Be Anxious for Nothing"
-  ],
-  "tags": ["daily devotional","Isaiah 41:10 meaning","overcoming fear","God’s promises"]
-}*
-|2025-09-28_James 1:3_The Weight Room|{
-  "date": "2025-09-28",
-  "title": "The Weight Room",
-  "verse_ref": "James 1:3",
-  "verse_text": "Because you know that the testing of your faith produces perseverance.",
-  "insight": [
-    "Resistance builds strength.",
-    "Every struggle is a workout for your soul."
-  ],
-  "one_minute_win": "Reframe one struggle today as a workout for your soul.",
-  "declaration": "Every test is building my strength in Christ.",
-  "related_devotionals": [
-    "Romans 5:3 Devotional - Rejoicing in Suffering",
-    "Hebrews 12:11 Devotional - Discipline Produces Fruit"
-  ],
-  "tags": ["daily devotional","James 1:3 meaning","perseverance in trials","faith training"]
-}*
-|2025-09-29_Philippians 3:13_Stop Looking Back|{
-  "date": "2025-09-29",
-  "title": "Stop Looking Back",
-  "verse_ref": "Philippians 3:13",
-  "verse_text": "Forgetting what is behind and straining toward what is ahead.",
-  "insight": [
-    "The past is a reference point, not a residence.",
-    "Don’t let yesterday rob today."
-  ],
-  "one_minute_win": "Write one regret on paper. Rip it up.",
-  "declaration": "My past does not own my future.",
-  "related_devotionals": [
-    "Isaiah 43:18 Devotional - Forget the Former Things",
-    "Luke 9:62 Devotional - Don’t Look Back"
-  ],
-  "tags": ["daily devotional","Philippians 3:13 meaning","moving forward in faith","overcoming regret"]
-}*
-|2025-09-30_John 8:44_The Lie Detector|{
-  "date": "2025-09-30",
-  "title": "The Lie Detector",
-  "verse_ref": "John 8:44",
-  "verse_text": "When he lies, he speaks his native language, for he is a liar and the father of lies.",
-  "insight": [
-    "Lies are Satan’s native language.",
-    "If a thought steals, kills, or destroys, it’s not from God."
-  ],
-  "one_minute_win": "Test one negative thought today against John 10:10.",
-  "declaration": "I reject lies. I embrace life.",
-  "related_devotionals": [
-    "Genesis 3:1 Devotional - Did God Really Say?",
-    "2 Corinthians 10:5 Devotional - Battle of the Mind"
-  ],
-  "tags": ["daily devotional","John 8:44 meaning","enemy lies","spiritual warfare"]
-}*
-|2025-10-01_Proverbs 13:22_Legacy Beats Lust|{
-  "date": "2025-10-01",
-  "title": "Legacy Beats Lust",
-  "verse_ref": "Proverbs 13:22",
-  "verse_text": "A good man leaves an inheritance for his children’s children.",
-  "insight": [
-    "Lust promises quick reward and long regret.",
-    "Legacy builds slow but leaves eternal impact."
-  ],
-  "one_minute_win": "Name one thing today that builds legacy, not lust—and do it.",
-  "declaration": "I’m a legacy builder, not a moment chaser.",
-  "related_devotionals": [
-    "Ephesians 5:25 Devotional - Love Like Christ",
-    "Psalm 127:3 Devotional - Children Are a Heritage"
-  ],
-  "tags": ["daily devotional","Proverbs 13:22 meaning","building legacy","overcoming lust"]
-}*
-|2025-10-02_2 Corinthians 12:9_Weakness Is Strength|{
+*|2025-10-02_Genesis 22:14_The_God_Who_Provides|{
   "date": "2025-10-02",
-  "title": "Weakness Is Strength",
-  "verse_ref": "2 Corinthians 12:9",
-  "verse_text": "My grace is sufficient for you, for my power is made perfect in weakness.",
+  "title": "The God Who Provides",
+  "verse_ref": "Genesis 22:14",
+  "verse_text": "So Abraham called that place The Lord Will Provide.",
   "insight": [
-    "Your weakness is not a liability; it’s the stage for God’s strength.",
-    "Stop hiding it; start handing it over."
+    "When Abraham thought he had nothing left, God revealed Himself as Jehovah Jireh.",
+    "God’s provision rarely looks early, but it’s never late."
   ],
-  "one_minute_win": "Tell God one weakness you’ve been ashamed of, and invite His strength into it.",
-  "declaration": "My weakness is the canvas for God’s power.",
+  "one_minute_win": "Pray this: “God, I trust You to provide what I cannot.”",
+  "declaration": "Jehovah Jireh sees me and provides for me.",
   "related_devotionals": [
-    "Isaiah 40:29 Devotional - Strength for the Weary",
-    "Philippians 4:13 Devotional - I Can Do All Things"
+    "Philippians 4:19 Devotional - God Supplies All Needs",
+    "Matthew 6:26 Devotional - Birds and Provision"
   ],
-  "tags": ["daily devotional","2 Corinthians 12:9 meaning","God’s strength in weakness","grace"]
+  "tags": ["daily devotional","Genesis 22:14 meaning","Jehovah Jireh","God’s provision"]
 }*
-|2025-10-03_2 Corinthians 12:9_Weakness Is Strength (Duplicate)|{
+|2025-10-03_1 Timothy 6:10_Don’t_Chase_Riches|{
   "date": "2025-10-03",
-  "title": "Weakness Is Strength",
-  "verse_ref": "2 Corinthians 12:9",
-  "verse_text": "My grace is sufficient for you, for my power is made perfect in weakness.",
+  "title": "Don’t Chase Riches",
+  "verse_ref": "1 Timothy 6:10",
+  "verse_text": "For the love of money is a root of all kinds of evil.",
   "insight": [
-    "Your weakness is not a liability; it’s the stage for God’s strength.",
-    "Stop hiding it; start handing it over."
+    "Money is a tool, not a god.",
+    "Money itself isn’t evil, but when money becomes master, it destroys."
   ],
-  "one_minute_win": "Tell God one weakness you’ve been ashamed of, and invite His strength into it.",
-  "declaration": "My weakness is the canvas for God’s power.",
+  "one_minute_win": "List one area where money controls you - and pray to release it.",
+  "declaration": "I use money. Money doesn’t use me.",
   "related_devotionals": [
-    "Isaiah 40:29 Devotional - Strength for the Weary",
-    "Philippians 4:13 Devotional - I Can Do All Things"
+    "Matthew 6:24 Devotional - You Cannot Serve Both God and Money",
+    "Proverbs 30:8 Devotional - Give Me Neither Poverty nor Riches"
   ],
-  "tags": ["daily devotional","2 Corinthians 12:9 meaning","God’s strength in weakness","grace"]
+  "tags": ["daily devotional","1 Timothy 6:10 meaning","love of money","contentment"]
 }*
-|2025-10-04_Matthew 6:33_Who’s on the Throne?|{
+|2025-10-04_Matthew 6:6_Silent_Battles,_Loud_Prayers|{
   "date": "2025-10-04",
-  "title": "Who’s on the Throne?",
-  "verse_ref": "Matthew 6:33",
-  "verse_text": "But seek first his kingdom and his righteousness, and all these things will be given to you as well.",
+  "title": "Silent Battles, Loud Prayers",
+  "verse_ref": "Matthew 6:6",
+  "verse_text": "When you pray, go into your room, close the door and pray to your Father, who is unseen.",
   "insight": [
-    "If God is not first, He’s last.",
-    "The throne of your life doesn’t have room for two."
+    "The battles no one sees are won in prayers no one hears.",
+    "Private prayer fuels public strength."
   ],
-  "one_minute_win": "Pray aloud: \"King Jesus, take the throne of my heart today.\"",
-  "declaration": "God’s kingdom comes first; everything else follows.",
+  "one_minute_win": "Pray alone for 1 minute today, no distractions.",
+  "declaration": "My private prayers fuel my public battles.",
   "related_devotionals": [
-    "Joshua 24:15 Devotional - As for Me and My House",
-    "Colossians 3:2 Devotional - Set Your Mind on Things Above"
+    "Luke 5:16 Devotional - Jesus Withdrew to Pray",
+    "Philippians 4:6 Devotional - Do Not Be Anxious"
   ],
-  "tags": ["daily devotional","Matthew 6:33 meaning","seeking God first","kingdom priorities"]
+  "tags": ["daily devotional","Matthew 6:6 meaning","secret prayer","intimacy with God"]
 }*
-|2025-10-05_Romans 8:28_Don’t Waste the Pain|{
+|2025-10-05_Psalm 119:105_God’s_Word_>_My_Words|{
   "date": "2025-10-05",
-  "title": "Don’t Waste the Pain",
-  "verse_ref": "Romans 8:28",
-  "verse_text": "And we know that in all things God works for the good of those who love him.",
+  "title": "God’s Word > My Words",
+  "verse_ref": "Psalm 119:105",
+  "verse_text": "Your word is a lamp to my feet, a light on my path.",
   "insight": [
-    "Pain is unavoidable; waste is optional.",
-    "What breaks you today may build someone else tomorrow."
+    "Our words are temporary. God’s Word is eternal.",
+    "When life feels dark, Scripture is the flashlight that never dies."
   ],
-  "one_minute_win": "Write down one past pain and ask: \"How has God used this for good?\"",
-  "declaration": "My pain is not wasted—it’s woven.",
+  "one_minute_win": "Read one verse out loud today and carry it with you.",
+  "declaration": "God’s Word lights my way.",
   "related_devotionals": [
-    "Genesis 50:20 Devotional - Meant for Evil, Used for Good",
-    "James 1:2 Devotional - Count It All Joy"
+    "Isaiah 55:11 Devotional - God’s Word Will Not Return Empty",
+    "Matthew 4:4 Devotional - Man Shall Not Live on Bread Alone"
   ],
-  "tags": ["daily devotional","Romans 8:28 meaning","God’s purpose in pain","hope"]
+  "tags": ["daily devotional","Psalm 119:105 meaning","power of Scripture","God’s Word"]
 }*
-|2025-10-06_Galatians 5:16_Stop Feeding the Flesh|{
+|2025-10-06_2 Corinthians 12:8-9_When_God_Says_No|{
   "date": "2025-10-06",
-  "title": "Stop Feeding the Flesh",
-  "verse_ref": "Galatians 5:16",
-  "verse_text": "So I say, walk by the Spirit, and you will not gratify the desires of the flesh.",
+  "title": "When God Says No",
+  "verse_ref": "2 Corinthians 12:8-9",
+  "verse_text": "Three times I pleaded with the Lord…. But he said to me, ‘My grace is sufficient for you.’",
   "insight": [
-    "What you feed grows.",
-    "Your spirit is only as strong as your diet: Spirit in, Spirit out."
+    "Sometimes God’s “no” is His protection.",
+    "God’s no is never rejection - it’s redirection."
   ],
-  "one_minute_win": "Skip one indulgence today (snack, screen, gossip) and use that time to pray.",
-  "declaration": "I feed my spirit, not my flesh.",
+  "one_minute_win": "Thank God for one “no” that protected you.",
+  "declaration": "Every no makes room for a better yes.",
   "related_devotionals": [
-    "Romans 13:14 Devotional - Clothe Yourself with Christ",
-    "Colossians 3:5 Devotional - Put to Death Earthly Desires"
+    "Romans 8:28 Devotional - All Things Work Together",
+    "Isaiah 55:8 Devotional - My Ways Are Higher"
   ],
-  "tags": ["daily devotional","Galatians 5:16 meaning","walking in the Spirit","overcoming flesh"]
+  "tags": ["daily devotional","2 Corinthians 12:9 meaning","God’s grace","unanswered prayers"]
 }*
-|2025-10-07_2 Timothy 1:7_Fear Is a Thief|{
+|2025-10-07_1 Thessalonians 5:18_Gratitude_Shifts_Atmosphere|{
   "date": "2025-10-07",
-  "title": "Fear Is a Thief",
-  "verse_ref": "2 Timothy 1:7",
-  "verse_text": "For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.",
+  "title": "Gratitude Shifts Atmosphere",
+  "verse_ref": "1 Thessalonians 5:18",
+  "verse_text": "Give thanks in all circumstances; for this is God’s will for you in Christ Jesus.",
   "insight": [
-    "Fear steals peace, confidence, and destiny.",
-    "Fear takes. Faith gives. Choose your source."
+    "Complaints drain. Gratitude shifts.",
+    "Gratitude doesn’t change your circumstance; it changes you in it."
   ],
-  "one_minute_win": "Say aloud: \"Fear doesn’t own me. God does.\"",
-  "declaration": "I live in power, love, and self-control—not fear.",
+  "one_minute_win": "Write down three things you’re grateful for today.",
+  "declaration": "Gratitude rewires my perspective.",
   "related_devotionals": [
-    "Isaiah 41:10 Devotional - Do Not Fear",
-    "Joshua 1:9 Devotional - Be Strong and Courageous"
+    "Philippians 4:6 Devotional - Pray with Thanksgiving",
+    "Psalm 100:4 Devotional - Enter His Gates with Thanksgiving"
   ],
-  "tags": ["daily devotional","2 Timothy 1:7 meaning","overcoming fear","faith and courage"]
+  "tags": ["daily devotional","1 Thessalonians 5:18 meaning","gratitude","thanksgiving"]
 }*
-|2025-10-08_Proverbs 3:5-6_Quit Playing God|{
+|2025-10-08_Psalm 46:1_God_Is_My_Refuge|{
   "date": "2025-10-08",
-  "title": "Quit Playing God",
-  "verse_ref": "Proverbs 3:5-6",
-  "verse_text": "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.",
+  "title": "God Is My Refuge",
+  "verse_ref": "Psalm 46:1",
+  "verse_text": "God is our refuge and strength, an ever-present help in trouble.",
   "insight": [
-    "Control feels safe, but it’s an illusion.",
-    "Trying to play God only exhausts you; trusting Him frees you."
+    "Storms reveal your shelter.",
+    "When life shakes, God stands unshaken."
   ],
-  "one_minute_win": "Release one decision today by praying: \"God, I submit this to You.\"",
-  "declaration": "I trust God’s wisdom over my own control.",
+  "one_minute_win": "Pause and say: “God, You are my refuge right now.”",
+  "declaration": "My safety is in God, not circumstance.",
   "related_devotionals": [
-    "Isaiah 55:8 Devotional - My Thoughts Are Higher",
-    "Matthew 11:28 Devotional - Rest for the Weary"
+    "Proverbs 18:10 Devotional - The Name of the Lord Is a Strong Tower",
+    "Isaiah 41:10 Devotional - Do Not Fear"
   ],
-  "tags": ["daily devotional","Proverbs 3:5-6 meaning","trust in God","surrender vs control"]
+  "tags": ["daily devotional","Psalm 46:1 meaning","God our refuge","God’s strength"]
 }*
-|2025-10-09_Genesis 1:27_Identity > Image|{
+|2025-10-09_Proverbs 18:21_Speak_Life|{
   "date": "2025-10-09",
-  "title": "Identity > Image",
-  "verse_ref": "Genesis 1:27",
-  "verse_text": "So God created mankind in his own image, in the image of God he created them; male and female he created them.",
+  "title": "Speak Life",
+  "verse_ref": "Proverbs 18:21",
+  "verse_text": "The tongue has the power of life and death, and those who love it will eat its fruit.",
   "insight": [
-    "The world sells image; God gives identity.",
-    "Image fades, identity remains—don’t confuse the filter with the foundation."
+    "Your words are weapons. They carry the power of life and death.",
+    "Every word plants seeds. Speak life and harvest blessing."
   ],
-  "one_minute_win": "Look in the mirror and say: \"I am God’s image-bearer.\"",
-  "declaration": "My worth is in God’s image, not man’s opinion.",
+  "one_minute_win": "Say one life-giving word to someone today.",
+  "declaration": "I speak life, not death.",
   "related_devotionals": [
-    "Ephesians 2:10 Devotional - God’s Masterpiece",
-    "Psalm 139:14 Devotional - Fearfully and Wonderfully Made"
+    "James 3:10 Devotional - Out of the Same Mouth",
+    "Ephesians 4:29 Devotional - Build Up with Words"
   ],
-  "tags": ["daily devotional","Genesis 1:27 meaning","Christian identity","image of God"]
+  "tags": ["daily devotional","Proverbs 18:21 meaning","power of words","speaking life"]
+}*
+|2025-10-10_Exodus 20:8-10_Rest_Is_Warfare|{
+  "date": "2025-10-10",
+  "title": "Rest Is Warfare",
+  "verse_ref": "Exodus 20:8-10",
+  "verse_text": "Remember the Sabbath day by keeping it holy…. On it you shall not do any work.",
+  "insight": [
+    "Rest is not laziness; it’s obedience.",
+    "Rest isn’t escape - it’s resistance against a world that worships busyness."
+  ],
+  "one_minute_win": "Unplug for 30 minutes today - no screens, just God.",
+  "declaration": "Rest is my weapon, not my weakness.",
+  "related_devotionals": [
+    "Matthew 11:28 Devotional - Rest for the Weary",
+    "Psalm 23:2 Devotional - He Makes Me Lie Down"
+  ],
+  "tags": ["daily devotional","Exodus 20:8 meaning","Sabbath rest","Christian rhythm"]
 }*
