@@ -1,71 +1,374 @@
-*|2025-09-18_Galatians 5:16_Stop_Feeding_the_Flesh|{ 
-  "date": "2025-09-18", 
-  "title": "Stop Feeding the Flesh", 
-  "verse_ref": "Galatians 5:16", 
-  "verse_text": "So I say, walk by the Spirit, and you will not gratify the desires of the flesh.", 
-  "insight": [ 
-    "What you feed grows. Galatians 5:16 tells us that walking by the Spirit means starving the flesh.", 
-    "Your spirit is only as strong as your diet. Junk in, junk out. Spirit in, Spirit out." 
-  ], 
-  "one_minute_win": "Skip one indulgence today (snack, screen, gossip) and use that time to pray.", 
-  "declaration": "I feed my spirit, not my flesh.", 
-  "related_devotionals": [ 
-    "Romans 13:14 Devotional - Clothe Yourself with Christ", 
-    "Colossians 3:5 Devotional - Put to Death Earthly Desires" 
-  ], 
-  "tags": ["daily devotional", "Galatians 5:16 meaning", "walking in the Spirit", "overcoming flesh"] 
+*|2025-09-18_2 Corinthians 5:7_Faith Isn’t a Feeling|{
+  "date": "2025-09-18",
+  "title": "Faith Isn’t a Feeling",
+  "verse_ref": "2 Corinthians 5:7",
+  "verse_text": "For we live by faith, not by sight.",
+  "insight": [
+    "Feelings are waves. Faith is the anchor.",
+    "Faith is strongest when it walks forward without a spotlight."
+  ],
+  "one_minute_win": "Whisper: \"God, I trust You\" several times today when doubt hits.",
+  "declaration": "I walk by faith, not by mood.",
+  "related_devotionals": [
+    "Joshua 1:9 Devotional - Courage Over Comfort",
+    "Psalm 27:14 Devotional - Waiting Without Wasting"
+  ],
+  "tags": ["daily devotional","2 Corinthians 5:7 meaning","faith over feelings","Christian encouragement"]
 }*
-
-*|2025-09-19_2_Timothy_1:7_Fear_Is_a_Thief|{ 
-  "date": "2025-09-19", 
-  "title": "Fear Is a Thief", 
-  "verse_ref": "2 Timothy 1:7", 
-  "verse_text": "For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.", 
-  "insight": [ 
-    "Fear steals peace, confidence, and destiny. 2 Timothy 1:7 reminds us that God gave us courage, not fear.", 
-    "Fear takes. Faith gives. Choose your source." 
-  ], 
-  "one_minute_win": "Say aloud: “Fear doesn’t own me. God does.”", 
-  "declaration": "I live in power, love, and self-control - not fear.", 
-  "related_devotionals": [ 
-    "Isaiah 41:10 Devotional - Do Not Fear", 
-    "Joshua 1:9 Devotional - Be Strong and Courageous" 
-  ], 
-  "tags": ["daily devotional", "2 Timothy 1:7 meaning", "overcoming fear", "faith and courage"] 
+|2025-09-19_Psalm 119:37_Scroll or Soul?|{
+  "date": "2025-09-19",
+  "title": "Scroll or Soul?",
+  "verse_ref": "Psalm 119:37",
+  "verse_text": "Turn my eyes from worthless things; preserve my life according to your word.",
+  "insight": [
+    "Our world fights for attention, and every scroll shapes your soul.",
+    "Every scroll is a seed; over time it grows into confidence or chaos."
+  ],
+  "one_minute_win": "Replace one 5-minute scroll break with one 5-minute Scripture break.",
+  "declaration": "My soul deserves better than endless scrolls.",
+  "related_devotionals": [
+    "Proverbs 4:23 Devotional - Guard Your Gate",
+    "2 Corinthians 10:5 Devotional - Battle of the Mind"
+  ],
+  "tags": ["daily devotional","Psalm 119:37 meaning","Christian habits","overcoming distraction"]
 }*
-
-*|2025-09-20_Proverbs_3:5-6_Quit_Playing_God|{ 
-  "date": "2025-09-20", 
-  "title": "Quit Playing God", 
-  "verse_ref": "Proverbs 3:5-6", 
-  "verse_text": "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.", 
-  "insight": [ 
-    "Control feels safe, but it’s an illusion. Proverbs 3:5-6 calls us to trust God instead of leaning on our own understanding.", 
-    "Trying to play God only exhausts you. Trusting Him frees you." 
-  ], 
-  "one_minute_win": "Release one decision today by praying: “God, I submit this to You.”", 
-  "declaration": "I trust God’s wisdom over my own control.", 
-  "related_devotionals": [ 
-    "Isaiah 55:8 Devotional - My Thoughts Are Higher", 
-    "Matthew 11:28 Devotional - Rest for the Weary" 
-  ], 
-  "tags": ["daily devotional", "Proverbs 3:5-6 meaning", "trust in God", "surrender vs control"] 
+|2025-09-20_Joshua 1:9_Comfort Zones Kill Calling|{
+  "date": "2025-09-20",
+  "title": "Comfort Zones Kill Calling",
+  "verse_ref": "Joshua 1:9",
+  "verse_text": "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",
+  "insight": [
+    "Growth never lives in comfort.",
+    "Courage isn’t the absence of fear; it’s moving forward despite it."
+  ],
+  "one_minute_win": "Do one small thing today that scares you but grows you.",
+  "declaration": "I was made for courage, not comfort.",
+  "related_devotionals": [
+    "Exodus 4:2 Devotional - What’s in Your Hand?",
+    "James 1:3 Devotional - The Weight Room"
+  ],
+  "tags": ["daily devotional","Joshua 1:9 meaning","courage in the Bible","faith and risk"]
 }*
-
-*|2025-09-21_Genesis_1:27_Identity_Greater_Than_Image|{ 
-  "date": "2025-09-21", 
-  "title": "Identity > Image", 
-  "verse_ref": "Genesis 1:27", 
-  "verse_text": "So God created mankind in his own image, in the image of God he created them; male and female he created them.", 
-  "insight": [ 
-    "The world sells image. God gives identity. Genesis 1:27 roots us in His design, not culture’s filters.", 
-    "Image fades. Identity remains. Don’t confuse the filter with the foundation." 
-  ], 
-  "one_minute_win": "Look in the mirror and say: “I am God’s image-bearer.”", 
-  "declaration": "My worth is in God’s image, not man’s opinion.", 
-  "related_devotionals": [ 
-    "Ephesians 2:10 Devotional - God’s Masterpiece", 
-    "Psalm 139:14 Devotional - Fearfully and Wonderfully Made" 
-  ], 
-  "tags": ["daily devotional", "Genesis 1:27 meaning", "Christian identity", "image of God"] 
+|2025-09-21_Psalm 27:14_Microwave Prayers|{
+  "date": "2025-09-21",
+  "title": "Microwave Prayers",
+  "verse_ref": "Psalm 27:14",
+  "verse_text": "Wait for the Lord; be strong and take heart and wait for the Lord.",
+  "insight": [
+    "God is not Amazon Prime; prayer is not a vending machine.",
+    "Waiting strengthens faith muscles we wouldn’t build any other way."
+  ],
+  "one_minute_win": "Instead of asking, spend 1 minute today just saying: \"Thank You, Lord.\"",
+  "declaration": "Patience is my strength, not my weakness.",
+  "related_devotionals": [
+    "Isaiah 40:31 Devotional - Strength in the Waiting",
+    "James 1:3 Devotional - The Weight Room"
+  ],
+  "tags": ["daily devotional","Psalm 27:14 meaning","waiting on God","patience and faith"]
+}*
+|2025-09-22_Proverbs 4:23_Guard Your Gate|{
+  "date": "2025-09-22",
+  "title": "Guard Your Gate",
+  "verse_ref": "Proverbs 4:23",
+  "verse_text": "Above all else, guard your heart, for everything you do flows from it.",
+  "insight": [
+    "Your eyes and ears are gates.",
+    "What enters will eventually shape what flows out."
+  ],
+  "one_minute_win": "Mute one account, show, or voice that pollutes your heart.",
+  "declaration": "I guard my gates because my heart is worth it.",
+  "related_devotionals": [
+    "Proverbs 13:3 Devotional - Guarding the Mouth",
+    "Psalm 119:37 Devotional - Scroll or Soul?"
+  ],
+  "tags": ["daily devotional","Proverbs 4:23 meaning","guarding the heart","Christian purity"]
+}*
+|2025-09-23_2 Corinthians 10:5_The Battle of the Mind|{
+  "date": "2025-09-23",
+  "title": "The Battle of the Mind",
+  "verse_ref": "2 Corinthians 10:5",
+  "verse_text": "We take captive every thought to make it obedient to Christ.",
+  "insight": [
+    "Thoughts left unchecked turn into chains.",
+    "Taking them captive breaks the enemy’s grip before it tightens."
+  ],
+  "one_minute_win": "Write down one recurring lie, then cross it out and replace it with truth.",
+  "declaration": "My mind belongs to Christ, not lies.",
+  "related_devotionals": [
+    "John 8:44 Devotional - The Lie Detector",
+    "Philippians 4:8 Devotional - Think on These Things"
+  ],
+  "tags": ["daily devotional","2 Corinthians 10:5 meaning","battle of the mind","overcoming lies"]
+}*
+|2025-09-24_Ecclesiastes 4:12_Brotherhood Beats Isolation|{
+  "date": "2025-09-24",
+  "title": "Brotherhood Beats Isolation",
+  "verse_ref": "Ecclesiastes 4:12",
+  "verse_text": "Though one may be overpowered, two can defend themselves. A cord of three strands is not quickly broken.",
+  "insight": [
+    "Isolation is easy but dangerous.",
+    "Brotherhood builds resilience, accountability, and courage."
+  ],
+  "one_minute_win": "Send one brother a text: \"I’ve got your back.\"",
+  "declaration": "I don’t fight alone. I fight with brothers.",
+  "related_devotionals": [
+    "Proverbs 27:17 Devotional - Iron Sharpens Iron",
+    "Hebrews 10:25 Devotional - Don’t Neglect Gathering"
+  ],
+  "tags": ["daily devotional","Ecclesiastes 4:12 meaning","Christian brotherhood","accountability"]
+}*
+|2025-09-25_Exodus 4:2_What’s in Your Hand?|{
+  "date": "2025-09-25",
+  "title": "What’s in Your Hand?",
+  "verse_ref": "Exodus 4:2",
+  "verse_text": "Then the Lord said to him, \"What is that in your hand?\"",
+  "insight": [
+    "God multiplies what you already carry.",
+    "Don’t underestimate the everyday tools He placed in your hands."
+  ],
+  "one_minute_win": "Name one skill or resource you have and dedicate it to God today.",
+  "declaration": "God can use what’s already in my hand.",
+  "related_devotionals": [
+    "Matthew 14:17 Devotional - Five Loaves and Two Fish",
+    "1 Samuel 17:40 Devotional - David’s Sling"
+  ],
+  "tags": ["daily devotional","Exodus 4:2 meaning","God uses what you have","Christian purpose"]
+}*
+|2025-09-26_Romans 6:6_Stop Negotiating with Sin|{
+  "date": "2025-09-26",
+  "title": "Stop Negotiating with Sin",
+  "verse_ref": "Romans 6:6",
+  "verse_text": "For we know that our old self was crucified with him so that the body ruled by sin might be done away with.",
+  "insight": [
+    "Sin is not something to manage; it’s something to crucify.",
+    "You don’t negotiate with a snake—you cut off its head."
+  ],
+  "one_minute_win": "Confess one hidden sin to God, no filters.",
+  "declaration": "The old me is dead. Christ lives in me.",
+  "related_devotionals": [
+    "2 Corinthians 5:17 Devotional - New Creation Life",
+    "Colossians 3:5 Devotional - Put to Death What Belongs to Earthly Nature"
+  ],
+  "tags": ["daily devotional","Romans 6:6 meaning","crucifying the flesh","victory over sin"]
+}*
+|2025-09-27_Isaiah 41:10_Doubt Whispers, God Roars|{
+  "date": "2025-09-27",
+  "title": "Doubt Whispers, God Roars",
+  "verse_ref": "Isaiah 41:10",
+  "verse_text": "Do not fear, for I am with you; do not be dismayed, for I am your God.",
+  "insight": [
+    "Doubt speaks in whispers. God speaks in promises.",
+    "Choose which voice you’ll amplify today."
+  ],
+  "one_minute_win": "Write down one fear and place it under the heading: \"But God says…\"",
+  "declaration": "God’s voice is louder than doubt.",
+  "related_devotionals": [
+    "John 10:10 Devotional - Life to the Full",
+    "Philippians 4:6 Devotional - Be Anxious for Nothing"
+  ],
+  "tags": ["daily devotional","Isaiah 41:10 meaning","overcoming fear","God’s promises"]
+}*
+|2025-09-28_James 1:3_The Weight Room|{
+  "date": "2025-09-28",
+  "title": "The Weight Room",
+  "verse_ref": "James 1:3",
+  "verse_text": "Because you know that the testing of your faith produces perseverance.",
+  "insight": [
+    "Resistance builds strength.",
+    "Every struggle is a workout for your soul."
+  ],
+  "one_minute_win": "Reframe one struggle today as a workout for your soul.",
+  "declaration": "Every test is building my strength in Christ.",
+  "related_devotionals": [
+    "Romans 5:3 Devotional - Rejoicing in Suffering",
+    "Hebrews 12:11 Devotional - Discipline Produces Fruit"
+  ],
+  "tags": ["daily devotional","James 1:3 meaning","perseverance in trials","faith training"]
+}*
+|2025-09-29_Philippians 3:13_Stop Looking Back|{
+  "date": "2025-09-29",
+  "title": "Stop Looking Back",
+  "verse_ref": "Philippians 3:13",
+  "verse_text": "Forgetting what is behind and straining toward what is ahead.",
+  "insight": [
+    "The past is a reference point, not a residence.",
+    "Don’t let yesterday rob today."
+  ],
+  "one_minute_win": "Write one regret on paper. Rip it up.",
+  "declaration": "My past does not own my future.",
+  "related_devotionals": [
+    "Isaiah 43:18 Devotional - Forget the Former Things",
+    "Luke 9:62 Devotional - Don’t Look Back"
+  ],
+  "tags": ["daily devotional","Philippians 3:13 meaning","moving forward in faith","overcoming regret"]
+}*
+|2025-09-30_John 8:44_The Lie Detector|{
+  "date": "2025-09-30",
+  "title": "The Lie Detector",
+  "verse_ref": "John 8:44",
+  "verse_text": "When he lies, he speaks his native language, for he is a liar and the father of lies.",
+  "insight": [
+    "Lies are Satan’s native language.",
+    "If a thought steals, kills, or destroys, it’s not from God."
+  ],
+  "one_minute_win": "Test one negative thought today against John 10:10.",
+  "declaration": "I reject lies. I embrace life.",
+  "related_devotionals": [
+    "Genesis 3:1 Devotional - Did God Really Say?",
+    "2 Corinthians 10:5 Devotional - Battle of the Mind"
+  ],
+  "tags": ["daily devotional","John 8:44 meaning","enemy lies","spiritual warfare"]
+}*
+|2025-10-01_Proverbs 13:22_Legacy Beats Lust|{
+  "date": "2025-10-01",
+  "title": "Legacy Beats Lust",
+  "verse_ref": "Proverbs 13:22",
+  "verse_text": "A good man leaves an inheritance for his children’s children.",
+  "insight": [
+    "Lust promises quick reward and long regret.",
+    "Legacy builds slow but leaves eternal impact."
+  ],
+  "one_minute_win": "Name one thing today that builds legacy, not lust—and do it.",
+  "declaration": "I’m a legacy builder, not a moment chaser.",
+  "related_devotionals": [
+    "Ephesians 5:25 Devotional - Love Like Christ",
+    "Psalm 127:3 Devotional - Children Are a Heritage"
+  ],
+  "tags": ["daily devotional","Proverbs 13:22 meaning","building legacy","overcoming lust"]
+}*
+|2025-10-02_2 Corinthians 12:9_Weakness Is Strength|{
+  "date": "2025-10-02",
+  "title": "Weakness Is Strength",
+  "verse_ref": "2 Corinthians 12:9",
+  "verse_text": "My grace is sufficient for you, for my power is made perfect in weakness.",
+  "insight": [
+    "Your weakness is not a liability; it’s the stage for God’s strength.",
+    "Stop hiding it; start handing it over."
+  ],
+  "one_minute_win": "Tell God one weakness you’ve been ashamed of, and invite His strength into it.",
+  "declaration": "My weakness is the canvas for God’s power.",
+  "related_devotionals": [
+    "Isaiah 40:29 Devotional - Strength for the Weary",
+    "Philippians 4:13 Devotional - I Can Do All Things"
+  ],
+  "tags": ["daily devotional","2 Corinthians 12:9 meaning","God’s strength in weakness","grace"]
+}*
+|2025-10-03_2 Corinthians 12:9_Weakness Is Strength (Duplicate)|{
+  "date": "2025-10-03",
+  "title": "Weakness Is Strength",
+  "verse_ref": "2 Corinthians 12:9",
+  "verse_text": "My grace is sufficient for you, for my power is made perfect in weakness.",
+  "insight": [
+    "Your weakness is not a liability; it’s the stage for God’s strength.",
+    "Stop hiding it; start handing it over."
+  ],
+  "one_minute_win": "Tell God one weakness you’ve been ashamed of, and invite His strength into it.",
+  "declaration": "My weakness is the canvas for God’s power.",
+  "related_devotionals": [
+    "Isaiah 40:29 Devotional - Strength for the Weary",
+    "Philippians 4:13 Devotional - I Can Do All Things"
+  ],
+  "tags": ["daily devotional","2 Corinthians 12:9 meaning","God’s strength in weakness","grace"]
+}*
+|2025-10-04_Matthew 6:33_Who’s on the Throne?|{
+  "date": "2025-10-04",
+  "title": "Who’s on the Throne?",
+  "verse_ref": "Matthew 6:33",
+  "verse_text": "But seek first his kingdom and his righteousness, and all these things will be given to you as well.",
+  "insight": [
+    "If God is not first, He’s last.",
+    "The throne of your life doesn’t have room for two."
+  ],
+  "one_minute_win": "Pray aloud: \"King Jesus, take the throne of my heart today.\"",
+  "declaration": "God’s kingdom comes first; everything else follows.",
+  "related_devotionals": [
+    "Joshua 24:15 Devotional - As for Me and My House",
+    "Colossians 3:2 Devotional - Set Your Mind on Things Above"
+  ],
+  "tags": ["daily devotional","Matthew 6:33 meaning","seeking God first","kingdom priorities"]
+}*
+|2025-10-05_Romans 8:28_Don’t Waste the Pain|{
+  "date": "2025-10-05",
+  "title": "Don’t Waste the Pain",
+  "verse_ref": "Romans 8:28",
+  "verse_text": "And we know that in all things God works for the good of those who love him.",
+  "insight": [
+    "Pain is unavoidable; waste is optional.",
+    "What breaks you today may build someone else tomorrow."
+  ],
+  "one_minute_win": "Write down one past pain and ask: \"How has God used this for good?\"",
+  "declaration": "My pain is not wasted—it’s woven.",
+  "related_devotionals": [
+    "Genesis 50:20 Devotional - Meant for Evil, Used for Good",
+    "James 1:2 Devotional - Count It All Joy"
+  ],
+  "tags": ["daily devotional","Romans 8:28 meaning","God’s purpose in pain","hope"]
+}*
+|2025-10-06_Galatians 5:16_Stop Feeding the Flesh|{
+  "date": "2025-10-06",
+  "title": "Stop Feeding the Flesh",
+  "verse_ref": "Galatians 5:16",
+  "verse_text": "So I say, walk by the Spirit, and you will not gratify the desires of the flesh.",
+  "insight": [
+    "What you feed grows.",
+    "Your spirit is only as strong as your diet: Spirit in, Spirit out."
+  ],
+  "one_minute_win": "Skip one indulgence today (snack, screen, gossip) and use that time to pray.",
+  "declaration": "I feed my spirit, not my flesh.",
+  "related_devotionals": [
+    "Romans 13:14 Devotional - Clothe Yourself with Christ",
+    "Colossians 3:5 Devotional - Put to Death Earthly Desires"
+  ],
+  "tags": ["daily devotional","Galatians 5:16 meaning","walking in the Spirit","overcoming flesh"]
+}*
+|2025-10-07_2 Timothy 1:7_Fear Is a Thief|{
+  "date": "2025-10-07",
+  "title": "Fear Is a Thief",
+  "verse_ref": "2 Timothy 1:7",
+  "verse_text": "For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.",
+  "insight": [
+    "Fear steals peace, confidence, and destiny.",
+    "Fear takes. Faith gives. Choose your source."
+  ],
+  "one_minute_win": "Say aloud: \"Fear doesn’t own me. God does.\"",
+  "declaration": "I live in power, love, and self-control—not fear.",
+  "related_devotionals": [
+    "Isaiah 41:10 Devotional - Do Not Fear",
+    "Joshua 1:9 Devotional - Be Strong and Courageous"
+  ],
+  "tags": ["daily devotional","2 Timothy 1:7 meaning","overcoming fear","faith and courage"]
+}*
+|2025-10-08_Proverbs 3:5-6_Quit Playing God|{
+  "date": "2025-10-08",
+  "title": "Quit Playing God",
+  "verse_ref": "Proverbs 3:5-6",
+  "verse_text": "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.",
+  "insight": [
+    "Control feels safe, but it’s an illusion.",
+    "Trying to play God only exhausts you; trusting Him frees you."
+  ],
+  "one_minute_win": "Release one decision today by praying: \"God, I submit this to You.\"",
+  "declaration": "I trust God’s wisdom over my own control.",
+  "related_devotionals": [
+    "Isaiah 55:8 Devotional - My Thoughts Are Higher",
+    "Matthew 11:28 Devotional - Rest for the Weary"
+  ],
+  "tags": ["daily devotional","Proverbs 3:5-6 meaning","trust in God","surrender vs control"]
+}*
+|2025-10-09_Genesis 1:27_Identity > Image|{
+  "date": "2025-10-09",
+  "title": "Identity > Image",
+  "verse_ref": "Genesis 1:27",
+  "verse_text": "So God created mankind in his own image, in the image of God he created them; male and female he created them.",
+  "insight": [
+    "The world sells image; God gives identity.",
+    "Image fades, identity remains—don’t confuse the filter with the foundation."
+  ],
+  "one_minute_win": "Look in the mirror and say: \"I am God’s image-bearer.\"",
+  "declaration": "My worth is in God’s image, not man’s opinion.",
+  "related_devotionals": [
+    "Ephesians 2:10 Devotional - God’s Masterpiece",
+    "Psalm 139:14 Devotional - Fearfully and Wonderfully Made"
+  ],
+  "tags": ["daily devotional","Genesis 1:27 meaning","Christian identity","image of God"]
 }*

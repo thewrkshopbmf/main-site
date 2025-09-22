@@ -1,5 +1,13 @@
-Created: "2025-09-18_Galatians_5-16_Stop_Feeding_the_Flesh.json"
-Error: Could not create "2025-09-19_2_Timothy_1-7_Fear_Is_a_Thief.json" — Title mismatch: header "Timothy 1:7 Fear Is a Thief" vs JSON "Fear Is a Thief" (normalized: "timothy 1 7 fear is a thief" vs "fear is a thief")
-Error: Could not create "2025-09-20_Proverbs_3-5-6_Quit_Playing_God.json" — Title mismatch: header "3:5-6 Quit Playing God" vs JSON "Quit Playing God" (normalized: "3 5 6 quit playing god" vs "quit playing god")
-Error: Could not create "2025-09-21_Genesis_1-27_Identity_Greater_Than_Image.json" — Title mismatch: header "1:27 Identity Greater Than Image" vs JSON "Identity > Image" (normalized: "1 27 identity greater than image" vs "identity image")
-Given 4 files, created 1 files
+Created: "2025-09-18_2_Timothy_1-7_Fear_Is_a_Thief.json"
+Created: "2025-09-19_Proverbs_3-5-6_Quit_Playing_God.json"
+Created: "2025-09-20_Genesis_1-27_Identity_Image.json"
+Created: "2025-09-21_Genesis_22-14_The_God_Who_Provides.json"
+Created: "2025-09-22_1_Timothy_6-10_Don’t_Chase_Riches.json"
+Created: "2025-09-23_Matthew_6-6_Silent_Battles,_Loud_Prayers.json"
+Created: "2025-09-24_Psalm_119-105_God’s_Word_My_Words.json"
+Created: "2025-09-25_2_Corinthians_12-8-9_When_God_Says_No.json"
+Created: "2025-09-26_1_Thessalonians_5-18_Gratitude_Shifts_Atmosphere.json"
+Created: "2025-09-27_Psalm_46-1_God_Is_My_Refuge.json"
+Created: "2025-09-28_Proverbs_18-21_Speak_Life.json"
+Created: "2025-09-29_Exodus_20-8-10_Rest_Is_Warfare.json"
+Given 12 files, created 12 files
