@@ -12,6 +12,15 @@ body {
   color: #333;
 }
 
+:root{
+  /* Header theme tokens (defaults = brown theme) */
+  --header-bg: #3e2c23;
+  --header-text: #f4f1ee;
+  --header-link: #f4f1ee;
+  --header-link-hover: #d4b49c;
+}
+
+
 /* Navbar */
 .navbar {
   display: flex;
@@ -342,6 +351,7 @@ footer {
 }
 
 /* ========== Responsive Fixes for Mobile Devices ========== */
+/* ========== Responsive Fixes for Mobile Devices ========== */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: row;
@@ -353,6 +363,7 @@ footer {
 
   .navbar .logo {
     font-size: 1.5rem;
+    color: var(--header-text);
   }
 
   .hamburger {
@@ -360,7 +371,7 @@ footer {
     font-size: 2rem;
     background: none;
     border: none;
-    color: #f4f1ee;
+    color: var(--header-text);
     cursor: pointer;
     z-index: 1001;
   }
@@ -368,7 +379,7 @@ footer {
   .nav-links {
     flex-direction: column;
     width: 100%;
-    background-color: #3e2c23;
+    background-color: var(--header-bg);
     border-radius: 6px;
     overflow: hidden;
     max-height: 0;
@@ -377,13 +388,25 @@ footer {
     margin-top: 1rem;
   }
 
-  .nav-links.show {
+  /* Support either class name */
+  .nav-links.show,
+  .nav-links.open {
     max-height: 300px;
     padding: 1rem;
   }
 
   .nav-links li {
     margin: 0.5rem 0;
+  }
+
+  .nav-links a {
+    color: var(--header-link);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  .nav-links a:hover {
+    color: var(--header-link-hover);
   }
 
   .hero-overlay {
