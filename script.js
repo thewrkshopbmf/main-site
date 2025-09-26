@@ -33,12 +33,29 @@ async function injectHTML(selector, url) {
 document.addEventListener("DOMContentLoaded", function () {
   // Hamburger menu rebinder
   function rebindNavToggle() {
-    const hamburger = document.getElementById('hamburger');
-    const navLinks  = document.getElementById('nav-links');
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
     if (hamburger && navLinks) {
-      hamburger.onclick = () => navLinks.classList.toggle('open');
+      hamburger.type = "button";
+      hamburger.setAttribute('aria-expanded', 'false');
+
+      hamburger.onclick = () => {
+        const willOpen = !navLinks.classList.contains('show');
+        navLinks.classList.toggle('show', willOpen);
+        hamburger.setAttribute('aria-expanded', String(willOpen));
+      };
+
+      // optional: close when a nav link is tapped
+      navLinks.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+          navLinks.classList.remove('show');
+          hamburger.setAttribute('aria-expanded', 'false');
+        }
+      });
     }
   }
+
+
 
   rebindNavToggle();
 
@@ -79,7 +96,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const needsHeader = document.getElementById('site-header');
   if (needsHeader) {
     injectHTML('#site-header', '/pages/details/header.html').then(() => {
-      // Fill brand after injection + rebind nav
+      // Confirm we actually injected something
+      if (!needsHeader.innerHTML.trim()) {
+        console.warn('Header did not inject (doctype/html detected or 404).');
+      }
       document.querySelectorAll(".sitename").forEach(el => (el.textContent = siteName));
       rebindNavToggle();
     });
