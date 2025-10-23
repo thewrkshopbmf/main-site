@@ -308,3 +308,75 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 })();
+// ===== Text-to-Speech (TTS) for Daily Devotionals =====
+function speakText(element) {
+  if (!('speechSynthesis' in window)) {
+    alert('Your browser does not support Text-to-Speech.');
+    return;
+  }
+
+  const text = element.innerText.trim();
+  if (!text) return;
+
+  // Cancel any ongoing speech before starting new one
+  window.speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-US';
+  utter.rate = 0.93;
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+  utter.text = text.replace(/([.!?])\s+/g, '$1. ');
+  window.speechSynthesis.speak(utter);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  let isPaused = false;
+
+  // Individual Daily page button
+  const listenDailyBtn = document.getElementById('listenDailyBtn');
+  if (listenDailyBtn) {
+    listenDailyBtn.addEventListener('click', () => {
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        isPaused = true;
+        listenDailyBtn.textContent = "⏸️ Paused — Click to Resume";
+      } else if (isPaused) {
+        window.speechSynthesis.resume();
+        isPaused = false;
+        listenDailyBtn.textContent = "🔊 Listening…";
+      } else {
+        listenDailyBtn.textContent = "🔊 Listening…";
+        const content = document.querySelector('.daily-feature, .daily-article');
+        if (content) speakText(content);
+      }
+    });
+  }
+
+  // Home page button
+  const listenHomeBtn = document.getElementById('listenHomeBtn');
+  if (listenHomeBtn) {
+    listenHomeBtn.addEventListener('click', () => {
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        isPaused = true;
+        listenHomeBtn.textContent = "⏸️ Paused — Click to Resume";
+      } else if (isPaused) {
+        window.speechSynthesis.resume();
+        isPaused = false;
+        listenHomeBtn.textContent = "🔊 Listening…";
+      } else {
+        listenHomeBtn.textContent = "🔊 Listening…";
+        const content = document.querySelector('.daily-feature');
+        if (content) speakText(content);
+      }
+    });
+  }
+
+  // Reset button labels when done speaking
+  window.speechSynthesis.addEventListener('end', () => {
+    if (listenDailyBtn) listenDailyBtn.textContent = "🔊 Listen";
+    if (listenHomeBtn) listenHomeBtn.textContent = "🔊 Listen to Today’s Devotional";
+    isPaused = false;
+  });
+});

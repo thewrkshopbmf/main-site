@@ -653,3 +653,27 @@ footer {
 /* Status + iOS hint are low-key and don’t dominate */
 .subtext { font-size: .9rem; opacity: .85; }
 .ios-hint { font-size: .8rem; opacity: .65; }
+
+.listen-btn {
+  background-color: #3e2c23;
+  color: #f4f1ee;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.1s ease;
+}
+
+.listen-btn:hover {
+  background-color: #5b3a29;
+  transform: translateY(-1px);
+}
+
+body.products-theme .listen-btn {
+  background-color: #12243a;
+  color: #e9eef6;
+}
+body.products-theme .listen-btn:hover {
+  background-color: #1d355c;
+}
