@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Admin</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <meta name="description" content="Admin dashboard for TheWrkShop."/>
+
+  <style>
+    .admin-page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.22), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(62,44,35,0.05)),
+        #d89d61;
+      padding: 2.5rem 1rem 3rem;
+    }
+
+    .admin-shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .admin-hero {
+      background: linear-gradient(145deg, #5f493d 0%, #3e2c23 100%);
+      color: #f4f1ee;
+      border-radius: 24px;
+      padding: 2rem 1.6rem;
+      box-shadow:
+        0 18px 50px rgba(62,44,35,.16),
+        0 4px 14px rgba(0,0,0,.08);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .admin-eyebrow {
+      display: inline-block;
+      width: fit-content;
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .42rem .75rem;
+      border: 1px solid rgba(244,241,238,.22);
+      border-radius: 999px;
+      margin-bottom: .9rem;
+      background: rgba(255,255,255,.07);
+    }
+
+    .admin-hero h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05;
+      margin: 0 0 .65rem;
+      letter-spacing: -.02em;
+    }
+
+    .admin-hero p {
+      margin: 0;
+      color: rgba(244,241,238,.92);
+      max-width: 52rem;
+      line-height: 1.65;
+    }
+
+    .admin-gate {
+      background: #f4f1ee;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+      padding: 1.3rem;
+    }
+
+    .admin-gate-card {
+      background: linear-gradient(180deg, #f8f4f1 0%, #efe7e1 100%);
+      border: 1px solid rgba(62,44,35,.08);
+      border-radius: 18px;
+      padding: 1.3rem 1.2rem;
+      color: #5d4a40;
+    }
+
+    .admin-gate-card h2 {
+      margin: 0 0 .4rem;
+      color: #3e2c23;
+      font-size: 1.35rem;
+    }
+
+    .admin-gate-card p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .admin-gate-card.is-denied {
+      background: linear-gradient(180deg, #f4ece6 0%, #eaded5 100%);
+    }
+
+    .admin-gate-meta {
+      margin-top: .8rem;
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-inline-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .75rem .95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform .15s ease, background-color .15s ease;
+    }
+
+    .admin-inline-btn.primary {
+      background: linear-gradient(180deg, #5c4539 0%, #3e2c23 100%);
+      color: #f4f1ee;
+    }
+
+    .admin-inline-btn.secondary {
+      background: #eadfd5;
+      color: #3e2c23;
+      border: 1px solid rgba(62,44,35,.10);
+    }
+
+    .admin-inline-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .admin-sidebar,
+    .admin-panel,
+    .admin-card {
+      background: #f4f1ee;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    }
+
+    .admin-sidebar {
+      padding: 1.1rem;
+      position: sticky;
+      top: 100px;
+    }
+
+    .admin-sidebar h2 {
+      font-size: 1rem;
+      color: #3e2c23;
+      margin: 0 0 .8rem;
+    }
+
+    .admin-nav {
+      display: grid;
+      gap: .55rem;
+    }
+
+    .admin-nav a,
+    .admin-nav button {
+      appearance: none;
+      width: 100%;
+      text-align: left;
+      background: #eadfd5;
+      color: #3e2c23;
+      border: 1px solid rgba(62,44,35,.08);
+      border-radius: 12px;
+      padding: .85rem .95rem;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .15s ease, background-color .15s ease;
+    }
+
+    .admin-nav a:hover,
+    .admin-nav button:hover {
+      transform: translateY(-1px);
+      background: #e4d6ca;
+    }
+
+    .admin-main {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .admin-panel {
+      padding: 1.3rem;
+    }
+
+    .admin-panel h2 {
+      margin: 0 0 .4rem;
+      color: #3e2c23;
+      font-size: 1.5rem;
+    }
+
+    .admin-panel p {
+      margin: 0;
+      color: #6b5b53;
+      line-height: 1.6;
+    }
+
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .admin-card {
+      padding: 1.15rem;
+    }
+
+    .admin-card .label {
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #6b5b53;
+      margin-bottom: .4rem;
+      font-weight: 700;
+    }
+
+    .admin-card .value {
+      font-size: 2rem;
+      line-height: 1;
+      color: #3e2c23;
+      font-weight: 800;
+      margin-bottom: .45rem;
+    }
+
+    .admin-card .meta {
+      color: #6b5b53;
+      font-size: .95rem;
+      line-height: 1.5;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .admin-section-card {
+      background: #f4f1ee;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 18px;
+      padding: 1.2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    }
+
+    .admin-section-card h3 {
+      margin: 0 0 .45rem;
+      color: #3e2c23;
+      font-size: 1.18rem;
+    }
+
+    .admin-section-card p {
+      margin: 0 0 1rem;
+      color: #6b5b53;
+      line-height: 1.6;
+    }
+
+    .placeholder-list {
+      display: grid;
+      gap: .7rem;
+    }
+
+    .placeholder-item {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.07);
+      border-radius: 12px;
+      padding: .9rem 1rem;
+      color: #3e2c23;
+    }
+
+    .placeholder-item strong {
+      display: block;
+      margin-bottom: .2rem;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: .7rem;
+      flex-wrap: wrap;
+      margin-top: .8rem;
+    }
+
+    .admin-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .85rem 1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform .15s ease, background-color .15s ease;
+    }
+
+    .admin-btn.primary {
+      background: linear-gradient(180deg, #5c4539 0%, #3e2c23 100%);
+      color: #f4f1ee;
+    }
+
+    .admin-btn.secondary {
+      background: #eadfd5;
+      color: #3e2c23;
+      border: 1px solid rgba(62,44,35,.10);
+    }
+
+    .admin-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .admin-note {
+      background: #efe7e1;
+      border: 1px solid rgba(62,44,35,.08);
+      color: #5d4a40;
+      border-radius: 14px;
+      padding: .95rem 1rem;
+      line-height: 1.55;
+    }
+
+    [data-admin-protected] {
+      display: none;
+    }
+
+    [data-admin-protected].is-visible {
+      display: grid;
+    }
+
+    @media (max-width: 980px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-sidebar {
+        position: static;
+      }
+
+      .admin-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="admin-page">
+    <div class="admin-shell">
+      <section class="admin-hero">
+        <span class="admin-eyebrow">TheWrkShop Admin</span>
+        <h1>Admin Dashboard</h1>
+        <p>
+          This is the control center for future protected tools, member accounts, contact records, and internal resources.
+        </p>
+      </section>
+
+      <section class="admin-gate">
+        <div class="admin-gate-card" id="adminGateCard">
+          <h2 id="adminGateTitle">Verifying access...</h2>
+          <p id="adminGateText">Checking your session and admin role before loading secure content.</p>
+          <div class="admin-gate-meta" id="adminGateActions" style="display:none;">
+            <a class="admin-inline-btn primary" href="login.html">Go to Login</a>
+            <a class="admin-inline-btn secondary" href="resources.html">Back to Resources</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-layout" data-admin-protected id="adminProtectedLayout">
+        <aside class="admin-sidebar">
+          <h2>Admin Sections</h2>
+          <nav class="admin-nav">
+            <a href="#overview">Overview</a>
+            <a href="#members">Members</a>
+            <a href="#contacts">Contacts</a>
+            <a href="#resources">Resources</a>
+            <a href="#activity">Activity</a>
+            <button type="button" id="logoutBtn">Log Out</button>
+          </nav>
+        </aside>
+
+        <div class="admin-main">
+          <section class="admin-panel" id="overview">
+            <h2>Overview</h2>
+            <p id="adminWelcomeText">
+              Admin access confirmed.
+            </p>
+          </section>
+
+          <section class="admin-stats">
+            <div class="admin-card">
+              <div class="label">Members</div>
+              <div class="value">0</div>
+              <div class="meta">Future live count from your users table.</div>
+            </div>
+
+            <div class="admin-card">
+              <div class="label">Contacts</div>
+              <div class="value">0</div>
+              <div class="meta">Future secure contact records from Supabase.</div>
+            </div>
+
+            <div class="admin-card">
+              <div class="label">Pending</div>
+              <div class="value">0</div>
+              <div class="meta">Membership requests or review items.</div>
+            </div>
+          </section>
+
+          <section class="admin-grid">
+            <div class="admin-section-card" id="members">
+              <h3>Members</h3>
+              <p>Manage user roles, member access, and future approvals.</p>
+              <div class="placeholder-list">
+                <div class="placeholder-item">
+                  <strong>No member data yet</strong>
+                  This section can later show member name, email, role, status, and created date.
+                </div>
+              </div>
+              <div class="admin-actions">
+                <a class="admin-btn primary" href="#">Add Member</a>
+                <a class="admin-btn secondary" href="#">View All Members</a>
+              </div>
+            </div>
+
+            <div class="admin-section-card" id="contacts">
+              <h3>Contacts</h3>
+              <p>Store and review secure contact information outside the public repo.</p>
+              <div class="placeholder-list">
+                <div class="placeholder-item">
+                  <strong>No contacts loaded</strong>
+                  This section can later display contact submissions, notes, active flags, and tags.
+                </div>
+              </div>
+              <div class="admin-actions">
+                <a class="admin-btn primary" href="#">Import Contacts</a>
+                <a class="admin-btn secondary" href="#">Export Data</a>
+              </div>
+            </div>
+
+            <div class="admin-section-card" id="resources">
+              <h3>Protected Resources</h3>
+              <p>Future admin tools for controlling what members can access.</p>
+              <div class="placeholder-list">
+                <div class="placeholder-item">
+                  <strong>Resource controls coming later</strong>
+                  Add uploads, private links, gated tools, or member-only downloads here.
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-section-card" id="activity">
+              <h3>Recent Activity</h3>
+              <p>A future place for login activity, submissions, or moderation notes.</p>
+              <div class="placeholder-list">
+                <div class="placeholder-item">
+                  <strong>No recent activity</strong>
+                  Later you can load simple records like sign-ins, requests, and content changes.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="admin-note">
+            This page shell is public, but the real data should only be loaded after the session and admin role are verified.
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script type="module">
+    import { supabase } from './scripts/supabase/supabaseClient.js';
+
+    const gateCard = document.getElementById('adminGateCard');
+    const gateTitle = document.getElementById('adminGateTitle');
+    const gateText = document.getElementById('adminGateText');
+    const gateActions = document.getElementById('adminGateActions');
+    const protectedLayout = document.getElementById('adminProtectedLayout');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const welcomeText = document.getElementById('adminWelcomeText');
+
+    function showProtected() {
+      protectedLayout.classList.add('is-visible');
+    }
+
+    function showDenied(title, text) {
+      gateCard.classList.add('is-denied');
+      gateTitle.textContent = title;
+      gateText.textContent = text;
+      gateActions.style.display = 'flex';
+    }
+
+    async function checkAdminAccess() {
+      try {
+        gateTitle.textContent = 'Verifying access...';
+        gateText.textContent = 'Checking your session before loading content.';
+
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+
+        const user = userData?.user;
+        if (!user) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role, email')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        if (!profile || profile.role !== 'admin') {
+          showDenied(
+            'Access denied',
+            'Your account is signed in, but it does not have admin access for this page.'
+          );
+          return;
+        }
+
+        gateTitle.textContent = 'Access confirmed';
+        gateText.textContent = `Signed in as admin: ${profile.email}`;
+        welcomeText.textContent = `Admin access confirmed for ${profile.email}.`;
+        showProtected();
+      } catch (err) {
+        showDenied(
+          'Could not verify access',
+          err.message || 'There was a problem checking your admin session.'
+        );
+      }
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        window.location.href = 'login.html';
+      });
+    }
+
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        window.location.href = 'login.html';
+      }
+    });
+
+    checkAdminAccess();
+  </script>
+</body>
+</html>

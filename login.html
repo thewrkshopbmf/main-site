@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Login</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <meta name="description" content="Log in to access member resources and admin tools on TheWrkShop."/>
+
+  <style>
+    .login-page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.26), transparent 36%),
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(62,44,35,0.04)),
+        #d89d61;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+    }
+
+    .login-shell {
+      width: 100%;
+      max-width: 1120px;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      background: #f4f1ee;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid rgba(62,44,35,.10);
+      box-shadow:
+        0 18px 50px rgba(62,44,35,.16),
+        0 4px 14px rgba(0,0,0,.08);
+    }
+
+    .login-brand {
+      position: relative;
+      background:
+        linear-gradient(160deg, #6d5447 0%, #4e3a30 55%, #3e2c23 100%);
+      color: #f4f1ee;
+      padding: 3.25rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      isolation: isolate;
+    }
+
+    .login-brand::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(244,241,238,.17), transparent 28%),
+        radial-gradient(circle at 82% 78%, rgba(212,180,156,.16), transparent 24%);
+      z-index: -1;
+    }
+
+    .login-brand .eyebrow {
+      display: inline-block;
+      width: fit-content;
+      font-size: .8rem;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      padding: .42rem .78rem;
+      border: 1px solid rgba(244,241,238,.22);
+      border-radius: 999px;
+      margin-bottom: 1.1rem;
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(2px);
+    }
+
+    .login-brand h1 {
+      font-size: clamp(2.1rem, 4vw, 3.3rem);
+      line-height: 1.04;
+      margin: 0 0 1rem;
+      max-width: 11.5ch;
+      letter-spacing: -.02em;
+    }
+
+    .login-brand p {
+      margin: 0 0 1.35rem;
+      color: rgba(244,241,238,.92);
+      max-width: 34rem;
+      line-height: 1.68;
+      font-size: 1.02rem;
+    }
+
+    .brand-points {
+      display: grid;
+      gap: .8rem;
+      margin-top: 1rem;
+      max-width: 34rem;
+    }
+
+    .brand-point {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding: .95rem 1rem;
+      color: rgba(244,241,238,.96);
+      line-height: 1.5;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .login-panel {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.45)),
+        #f4f1ee;
+      padding: 2.6rem 2.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .login-kicker {
+      display: inline-block;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #6b5b53;
+      margin-bottom: .5rem;
+    }
+
+    .login-card h2 {
+      margin: 0 0 .55rem;
+      color: #3e2c23;
+      font-size: 2rem;
+      line-height: 1.08;
+      letter-spacing: -.02em;
+    }
+
+    .login-card .subtext {
+      color: #6b5b53;
+      margin: 0 0 1.6rem;
+      line-height: 1.6;
+      font-size: .98rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 700;
+      color: #3e2c23;
+      margin-bottom: .45rem;
+      font-size: .94rem;
+    }
+
+    .form-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: .95rem 1rem;
+      border-radius: 14px;
+      border: 1px solid rgba(62,44,35,.14);
+      background: rgba(255,255,255,.92);
+      color: #2b211c;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+      font-size: 1rem;
+    }
+
+    .form-input::placeholder {
+      color: #9b877b;
+    }
+
+    .form-input:focus {
+      border-color: #8d6e5b;
+      box-shadow: 0 0 0 4px rgba(141,110,91,.14);
+      background: #fff;
+    }
+
+    .login-actions {
+      display: grid;
+      gap: .8rem;
+      margin-top: 1.2rem;
+    }
+
+    .login-btn,
+    .secondary-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: .98rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, opacity .18s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      font-size: .98rem;
+    }
+
+    .login-btn {
+      background: linear-gradient(180deg, #5c4539 0%, #3e2c23 100%);
+      color: #f4f1ee;
+      box-shadow: 0 12px 28px rgba(62,44,35,.16);
+    }
+
+    .login-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(62,44,35,.20);
+    }
+
+    .login-btn:disabled {
+      opacity: .7;
+      cursor: wait;
+    }
+
+    .secondary-btn {
+      background: #eadfd5;
+      color: #3e2c23;
+      border: 1px solid rgba(62,44,35,.10);
+    }
+
+    .secondary-btn:hover {
+      transform: translateY(-1px);
+      background: #e5d8cd;
+    }
+
+    .login-note {
+      margin-top: 1rem;
+      background: #efe7e1;
+      border: 1px solid rgba(62,44,35,.08);
+      color: #5d4a40;
+      border-radius: 14px;
+      padding: .9rem 1rem;
+      font-size: .92rem;
+      line-height: 1.5;
+    }
+
+    .login-note.is-loading {
+      background: #e9ded4;
+    }
+
+    .login-meta {
+      margin-top: 1rem;
+      font-size: .92rem;
+      color: #6b5b53;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .login-meta a {
+      color: #3e2c23;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .login-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .login-brand {
+        padding: 2.2rem 1.5rem;
+      }
+
+      .login-brand h1 {
+        max-width: none;
+      }
+
+      .login-panel {
+        padding: 2rem 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="login-page">
+    <section class="login-shell">
+      <div class="login-brand">
+        <span class="eyebrow">TheWrkShop Members</span>
+        <h1>Steady tools for men who want to build well.</h1>
+        <p>
+          Log in to access member resources, private tools, saved progress, and future community features.
+        </p>
+
+        <div class="brand-points">
+          <div class="brand-point">Scripture-centered resources that stay close at hand.</div>
+          <div class="brand-point">Practical systems for faith, family, work, and consistency.</div>
+          <div class="brand-point">A cleaner place to keep what matters in reach.</div>
+        </div>
+      </div>
+
+      <div class="login-panel">
+        <div class="login-card">
+          <span class="login-kicker">Member Access</span>
+          <h2>Welcome back.</h2>
+          <p class="subtext">
+            Sign in to continue to your member tools and resources.
+          </p>
+
+          <form id="loginForm">
+            <div class="form-group">
+              <label class="form-label" for="email">Email</label>
+              <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="password">Password</label>
+              <input class="form-input" type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="login-actions">
+              <button type="submit" class="login-btn" id="loginBtn">Log In</button>
+              <a class="secondary-btn" href="resources.html">Back to Resources</a>
+            </div>
+          </form>
+
+          <div class="login-note" id="loginMessage">
+            Sign in to continue.
+          </div>
+
+          <p class="login-meta">
+            Need access later? <a href="request-membership.html">Request membership</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script type="module">
+    import { supabase } from './scripts/supabase/supabaseClient.js';
+
+    const form = document.getElementById('loginForm');
+    const msg = document.getElementById('loginMessage');
+    const btn = document.getElementById('loginBtn');
+
+    function setMessage(text, loading = false) {
+      msg.textContent = text;
+      msg.classList.toggle('is-loading', loading);
+    }
+
+    async function getRole(userId) {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+
+      if (error) throw error;
+      return data?.role || 'member';
+    }
+
+    async function redirectForUser(user) {
+      const role = await getRole(user.id);
+      if (role === 'admin') {
+        window.location.href = 'admin.html';
+      } else {
+        window.location.href = 'resources.html';
+      }
+    }
+
+    (async function autoRedirectIfAlreadySignedIn() {
+      try {
+        setMessage('Checking your session...', true);
+
+        const { data, error } = await supabase.auth.getUser();
+        if (error) throw error;
+
+        const user = data?.user;
+        if (!user) {
+          setMessage('Sign in to continue.');
+          return;
+        }
+
+        setMessage('Session found. Redirecting...', true);
+        await redirectForUser(user);
+      } catch (err) {
+        setMessage('Sign in to continue.');
+      }
+    })();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      btn.disabled = true;
+      setMessage('Signing you in...', true);
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        const user = data?.user;
+        if (!user) throw new Error('No user returned from sign-in.');
+
+        setMessage('Login successful. Redirecting...', true);
+        await redirectForUser(user);
+      } catch (err) {
+        setMessage(err.message || 'Login failed.');
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

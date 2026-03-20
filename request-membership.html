@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Request Membership</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <meta name="description" content="Request membership for TheWrkShop."/>
+
+  <style>
+    .request-page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.22), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(62,44,35,0.05)),
+        #d89d61;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .request-card {
+      width: 100%;
+      max-width: 760px;
+      background: #f4f1ee;
+      border-radius: 24px;
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow:
+        0 18px 50px rgba(62,44,35,.16),
+        0 4px 14px rgba(0,0,0,.08);
+      padding: 2.2rem 1.6rem;
+      text-align: center;
+    }
+
+    .request-eyebrow {
+      display: inline-block;
+      font-size: .8rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #6b5b53;
+      margin-bottom: .7rem;
+      font-weight: 700;
+    }
+
+    .request-card h1 {
+      color: #3e2c23;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.06;
+      margin: 0 0 .8rem;
+      letter-spacing: -.02em;
+    }
+
+    .request-card p {
+      color: #6b5b53;
+      line-height: 1.7;
+      max-width: 42rem;
+      margin: 0 auto 1rem;
+    }
+
+    .request-note {
+      margin: 1.3rem auto 0;
+      max-width: 38rem;
+      background: #efe7e1;
+      border: 1px solid rgba(62,44,35,.08);
+      color: #5d4a40;
+      border-radius: 14px;
+      padding: 1rem;
+      line-height: 1.55;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: .8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.4rem;
+    }
+
+    .request-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .9rem 1.1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform .15s ease, background-color .15s ease;
+    }
+
+    .request-btn.primary {
+      background: linear-gradient(180deg, #5c4539 0%, #3e2c23 100%);
+      color: #f4f1ee;
+    }
+
+    .request-btn.secondary {
+      background: #eadfd5;
+      color: #3e2c23;
+      border: 1px solid rgba(62,44,35,.10);
+    }
+
+    .request-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main class="request-page">
+    <section class="request-card">
+      <span class="request-eyebrow">TheWrkShop Members</span>
+      <h1>Request Membership</h1>
+      <p>
+        This page is currently under construction.
+      </p>
+      <p>
+        Membership requests and approvals will be added here later as the private member area continues to take shape.
+      </p>
+
+      <div class="request-note">
+        For now, this is just a placeholder page while the member system is being built. If you would like to show your support please contact us throught our contact portal in the top right.
+      </div>
+
+      <div class="request-actions">
+        <a class="request-btn primary" href="login.html">Back to Login</a>
+        <a class="request-btn secondary" href="resources.html">Back to Resources</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
