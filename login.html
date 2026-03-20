@@ -186,7 +186,8 @@
     }
 
     .login-btn,
-    .secondary-btn {
+    .secondary-btn,
+    .textish-btn {
       width: 100%;
       border: none;
       border-radius: 14px;
@@ -213,7 +214,8 @@
       box-shadow: 0 16px 32px rgba(62,44,35,.20);
     }
 
-    .login-btn:disabled {
+    .login-btn:disabled,
+    .textish-btn:disabled {
       opacity: .7;
       cursor: wait;
     }
@@ -227,6 +229,19 @@
     .secondary-btn:hover {
       transform: translateY(-1px);
       background: #e5d8cd;
+    }
+
+    .textish-btn {
+      background: transparent;
+      color: #3e2c23;
+      border: 1px dashed rgba(62,44,35,.18);
+      padding: .82rem 1rem;
+      font-weight: 600;
+    }
+
+    .textish-btn:hover {
+      background: rgba(62,44,35,.04);
+      transform: translateY(-1px);
     }
 
     .login-note {
@@ -317,6 +332,7 @@
 
             <div class="login-actions">
               <button type="submit" class="login-btn" id="loginBtn">Log In</button>
+              <button type="button" class="textish-btn" id="resendBtn">Resend verification email</button>
               <a class="secondary-btn" href="resources.html">Back to Resources</a>
             </div>
           </form>
@@ -347,6 +363,7 @@
     const form = document.getElementById('loginForm');
     const msg = document.getElementById('loginMessage');
     const btn = document.getElementById('loginBtn');
+    const resendBtn = document.getElementById('resendBtn');
 
     function setMessage(text, loading = false) {
       msg.textContent = text;
@@ -388,7 +405,7 @@
 
         setMessage('Session found. Redirecting...', true);
         await redirectForUser(user);
-      } catch (err) {
+      } catch {
         setMessage('Sign in to continue.');
       }
     })();
@@ -400,6 +417,7 @@
       const password = document.getElementById('password').value;
 
       btn.disabled = true;
+      resendBtn.disabled = true;
       setMessage('Signing you in...', true);
 
       try {
@@ -416,7 +434,39 @@
         setMessage('Login successful. Redirecting...', true);
         await redirectForUser(user);
       } catch (err) {
-        setMessage(err.message || 'Login failed.');
+        setMessage(
+          'Login failed. Check your email and password. If you recently created your account, you may still need to verify your email before signing in.'
+        );
+        btn.disabled = false;
+        resendBtn.disabled = false;
+      }
+    });
+
+    resendBtn.addEventListener('click', async () => {
+      const email = document.getElementById('email').value.trim();
+
+      if (!email) {
+        setMessage('Enter your email first, then click resend verification email.');
+        return;
+      }
+
+      resendBtn.disabled = true;
+      btn.disabled = true;
+      setMessage('Sending verification email...', true);
+
+      try {
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email
+        });
+
+        if (error) throw error;
+
+        setMessage('Verification email sent. Check your inbox and spam folder.');
+      } catch (err) {
+        setMessage(err.message || 'Could not resend verification email.');
+      } finally {
+        resendBtn.disabled = false;
         btn.disabled = false;
       }
     });
