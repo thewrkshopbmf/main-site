@@ -7,14 +7,13 @@ const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER;
 const GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME;
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 
-function jsonResponse(statusCode, body) {
-  return {
-    statusCode,
+function jsonResponse(status, body) {
+  return new Response(JSON.stringify(body), {
+    status,
     headers: {
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  };
+    }
+  });
 }
 
 function requireEnv(name, value) {
@@ -152,8 +151,8 @@ async function verifyAdminFromBearer(authHeader) {
   return { user, profile };
 }
 
-async function githubGetFile(path) {
-  const url = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${path}?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
+async function githubGetFile(filePath) {
+  const url = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${filePath}?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
 
   const res = await fetch(url, {
     headers: {
@@ -163,32 +162,36 @@ async function githubGetFile(path) {
   });
 
   if (res.status === 404) return null;
+
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`GitHub read failed for ${path}: ${text}`);
+    throw new Error(`GitHub read failed for ${filePath}: ${text}`);
   }
 
   return await res.json();
 }
 
-async function githubCreateFile(path, contentObj, commitMessage) {
+async function githubCreateFile(filePath, contentObj, commitMessage) {
   requireEnv('GITHUB_TOKEN', GITHUB_TOKEN);
   requireEnv('GITHUB_REPO_OWNER', GITHUB_REPO_OWNER);
   requireEnv('GITHUB_REPO_NAME', GITHUB_REPO_NAME);
 
-  const existing = await githubGetFile(path);
+  const existing = await githubGetFile(filePath);
   if (existing) {
     return {
       ok: false,
-      path,
+      path: filePath,
       reason: 'exists',
-      message: `Skipped ${path} because it already exists.`
+      message: `Skipped ${filePath} because it already exists.`
     };
   }
 
-  const content = Buffer.from(`${JSON.stringify(contentObj, null, 2)}\n`, 'utf8').toString('base64');
+  const content = Buffer.from(
+    `${JSON.stringify(contentObj, null, 2)}\n`,
+    'utf8'
+  ).toString('base64');
 
-  const url = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${path}`;
+  const url = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${filePath}`;
 
   const res = await fetch(url, {
     method: 'PUT',
@@ -206,13 +209,13 @@ async function githubCreateFile(path, contentObj, commitMessage) {
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`GitHub write failed for ${path}: ${text}`);
+    throw new Error(`GitHub write failed for ${filePath}: ${text}`);
   }
 
   return {
     ok: true,
-    path,
-    message: `Created ${path} successfully.`
+    path: filePath,
+    message: `Created ${filePath} successfully.`
   };
 }
 
@@ -248,17 +251,26 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
   };
 }
 
-export default async (req) => {
-  if (req.httpMethod !== 'POST') {
+export default async (request, context) => {
+  if (request.method !== 'POST') {
     return jsonResponse(405, { ok: false, error: 'Method not allowed.' });
   }
 
   try {
     const { user, profile } = await verifyAdminFromBearer(
-      req.headers.authorization || req.headers.Authorization
+      request.headers.get('authorization')
     );
 
-    const body = JSON.parse(req.body || '{}');
+    let body = {};
+    try {
+      body = await request.json();
+    } catch {
+      return jsonResponse(400, {
+        ok: false,
+        error: 'Request body must be valid JSON.'
+      });
+    }
+
     const {
       mode,
       label,
@@ -305,9 +317,9 @@ export default async (req) => {
         }
 
         const filename = dailyFilename(entry);
-        const path = `content/daily/${filename}`;
+        const filePath = `content/daily/${filename}`;
         const result = await githubCreateFile(
-          path,
+          filePath,
           entry,
           `Add daily content: ${entry.date} ${entry.title}`
         );
@@ -334,9 +346,9 @@ export default async (req) => {
         }
 
         const filename = blogFilename(entry);
-        const path = `content/blog/${filename}`;
+        const filePath = `content/blog/${filename}`;
         const result = await githubCreateFile(
-          path,
+          filePath,
           entry,
           `Add blog content: ${entry.date} ${entry.title}`
         );
@@ -386,7 +398,8 @@ export default async (req) => {
   } catch (err) {
     return jsonResponse(500, {
       ok: false,
-      error: err.message || 'Unexpected error.'
+      error: err.message || 'Unexpected error.',
+      details: err.stack || null
     });
   }
 };
