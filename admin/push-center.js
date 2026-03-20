@@ -68,6 +68,85 @@ function safeJsonParse(text) {
   }
 }
 
+function formatOutputBlock(title, lines = []) {
+  return [title, ...lines].join('\n');
+}
+
+async function parseResponseSafely(response) {
+  const contentType = response.headers.get('content-type') || '';
+  const statusLine = `HTTP ${response.status} ${response.statusText || ''}`.trim();
+
+  let rawText = '';
+  try {
+    rawText = await response.text();
+  } catch (err) {
+    return {
+      ok: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      statusLine,
+      contentType,
+      rawText: '',
+      json: null,
+      parseError: err.message || 'Could not read response body.'
+    };
+  }
+
+  let json = null;
+  if (rawText) {
+    try {
+      json = JSON.parse(rawText);
+    } catch {
+      json = null;
+    }
+  }
+
+  return {
+    ok: response.ok,
+    status: response.status,
+    statusText: response.statusText,
+    statusLine,
+    contentType,
+    rawText,
+    json,
+    parseError: null
+  };
+}
+
+function buildReadableErrorFromResponse(parsed) {
+  const lines = [parsed.statusLine];
+
+  if (parsed.contentType) {
+    lines.push(`Content-Type: ${parsed.contentType}`);
+  }
+
+  if (parsed.json) {
+    if (parsed.json.error) lines.push(`Error: ${parsed.json.error}`);
+    if (parsed.json.message) lines.push(`Message: ${parsed.json.message}`);
+    if (parsed.json.details) lines.push(`Details: ${parsed.json.details}`);
+    if (parsed.json.hint) lines.push(`Hint: ${parsed.json.hint}`);
+
+    const extraKeys = Object.keys(parsed.json).filter(
+      (k) => !['error', 'message', 'details', 'hint'].includes(k)
+    );
+    if (extraKeys.length) {
+      lines.push('');
+      lines.push('Extra response data:');
+      lines.push(JSON.stringify(parsed.json, null, 2));
+    }
+  } else if (parsed.rawText) {
+    lines.push('');
+    lines.push('Raw response body:');
+    lines.push(parsed.rawText);
+  } else if (parsed.parseError) {
+    lines.push(`Response read error: ${parsed.parseError}`);
+  } else {
+    lines.push('No response body returned.');
+  }
+
+  return lines.join('\n');
+}
+
 async function readUploadedFiles() {
   const files = Array.from(pushJsonFile.files || []);
   if (!files.length) return [];
@@ -426,12 +505,16 @@ function armConfirm() {
 async function confirmPush() {
   const analysis = await runAnalysis();
   if (!analysis.ok) {
-    outputLog.textContent = 'Fix analysis issues before confirming.';
+    outputLog.textContent = formatOutputBlock('Push blocked by analysis.', [
+      'Fix the issues shown in Bulk Analysis before confirming.'
+    ]);
     return;
   }
 
   if (!armed) {
-    outputLog.textContent = 'You must arm confirmation first.';
+    outputLog.textContent = formatOutputBlock('Push not armed.', [
+      'Click "Arm Confirm" and wait for the countdown to finish.'
+    ]);
     return;
   }
 
@@ -441,15 +524,32 @@ async function confirmPush() {
   previewBtn.disabled = true;
   if (refreshRealPreviewBtn) refreshRealPreviewBtn.disabled = true;
 
-  outputLog.textContent = 'Submitting push request...';
+  outputLog.textContent = formatOutputBlock('Submitting push request...', [
+    `Mode: ${analysis.payload.mode}`,
+    `Actions: ${Object.entries(analysis.payload.actions).filter(([, v]) => v).map(([k]) => k).join(', ') || 'none'}`,
+    `Entries: ${analysis.entries.length}`
+  ]);
 
   try {
-    const { data: sessionData } = await supabase.auth.getSession();
-    const accessToken = sessionData?.session?.access_token;
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
 
+    if (sessionError) {
+      throw new Error(`Could not read auth session: ${sessionError.message || 'Unknown session error.'}`);
+    }
+
+    const accessToken = sessionData?.session?.access_token;
     if (!accessToken) {
       throw new Error('No active session token found.');
     }
+
+    const requestBody = {
+      mode: analysis.payload.mode,
+      label: analysis.payload.label,
+      subject: analysis.payload.subject,
+      body: analysis.payload.body,
+      actions: analysis.payload.actions,
+      entries: analysis.entries.map((e) => e.data)
+    };
 
     const response = await fetch('/.netlify/functions/push-dispatch', {
       method: 'POST',
@@ -457,26 +557,37 @@ async function confirmPush() {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      body: JSON.stringify({
-        mode: analysis.payload.mode,
-        label: analysis.payload.label,
-        subject: analysis.payload.subject,
-        body: analysis.payload.body,
-        actions: analysis.payload.actions,
-        entries: analysis.entries.map((e) => e.data)
-      })
+      body: JSON.stringify(requestBody)
     });
 
-    const result = await response.json().catch(() => ({}));
+    const parsed = await parseResponseSafely(response);
 
-    if (!response.ok) {
-      throw new Error(result.error || 'Push request failed.');
+    if (!parsed.ok) {
+      outputLog.textContent = formatOutputBlock('Push failed.', [
+        buildReadableErrorFromResponse(parsed)
+      ]);
+      throw new Error(
+        parsed.json?.error ||
+        parsed.json?.message ||
+        parsed.rawText ||
+        `Push request failed with status ${parsed.status}.`
+      );
     }
 
-    outputLog.textContent = JSON.stringify(result, null, 2);
+    const successJson = parsed.json || {};
+    outputLog.textContent = formatOutputBlock('Push completed successfully.', [
+      `HTTP ${parsed.status} ${parsed.statusText || ''}`.trim(),
+      parsed.rawText ? '' : 'No response body returned.',
+      parsed.rawText ? JSON.stringify(successJson, null, 2) : ''
+    ].filter(Boolean));
+
     disarmConfirm('Push request completed. Re-arm confirmation before sending another one.');
   } catch (err) {
-    outputLog.textContent = err.message || 'Push request failed.';
+    if (!String(outputLog.textContent || '').startsWith('Push failed.')) {
+      outputLog.textContent = formatOutputBlock('Push failed.', [
+        err.message || 'Unknown error.'
+      ]);
+    }
     disarmConfirm('Push failed. Re-arm confirmation before trying again.');
   } finally {
     armConfirmBtn.disabled = false;
@@ -495,7 +606,9 @@ refreshRealPreviewBtn?.addEventListener('click', async () => {
   try {
     await runPreview();
   } catch (err) {
-    outputLog.textContent = err.message || 'Could not refresh preview.';
+    outputLog.textContent = formatOutputBlock('Could not refresh preview.', [
+      err.message || 'Unknown preview refresh error.'
+    ]);
   }
 });
 
