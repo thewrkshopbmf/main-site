@@ -32,7 +32,9 @@ const MAX_RECENT_CONTACTS = 30;
 
 function togglePanel(panelToShow) {
   [singleContactPanel, bulkImportPanel].forEach(panel => {
-    panel.hidden = panel !== panelToShow;
+    if (panel) {
+      panel.hidden = panel !== panelToShow;
+    }
   });
 }
 
@@ -197,7 +199,7 @@ async function loadRecentContacts() {
 
   recentContactsMessage.textContent = 'Loading recent contacts...';
   if (recentContactsActions) recentContactsActions.style.display = 'none';
-  recentContactsList.innerHTML = '';
+  if (recentContactsList) recentContactsList.innerHTML = '';
 
   try {
     const { data, error } = await supabase
@@ -227,7 +229,7 @@ async function loadRecentContacts() {
       recentContactsActions.style.display = 'flex';
     }
   } catch (err) {
-    recentContactsList.innerHTML = '';
+    if (recentContactsList) recentContactsList.innerHTML = '';
     recentContactsMessage.textContent = err.message || 'Could not load recent contacts.';
   }
 }
@@ -289,10 +291,12 @@ async function readBulkCsvSource() {
   if (bulkCsvFile?.files?.[0]) {
     return await bulkCsvFile.files[0].text();
   }
-  return bulkCsvText.value.trim();
+  return bulkCsvText?.value.trim() || '';
 }
 
 function renderBulkPreview(rows, results = null) {
+  if (!bulkPreview) return;
+
   bulkPreview.innerHTML = '';
 
   if (!rows.length) return;
@@ -323,24 +327,26 @@ function renderBulkPreview(rows, results = null) {
 singleContactForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  if (!saveSingleContactBtn || !singleContactMessage) return;
+
   saveSingleContactBtn.disabled = true;
   singleContactMessage.textContent = 'Saving contact...';
 
   try {
     const row = buildContactRow({
-      full_name: document.getElementById('contact_full_name').value,
-      email: document.getElementById('contact_email').value,
-      phone_e164: document.getElementById('contact_phone').value,
-      source_code: document.getElementById('contact_source_code').value,
-      preferred_contact_code: document.getElementById('contact_preferred_contact_code').value,
-      active: document.getElementById('contact_active').checked,
-      paid_user: document.getElementById('contact_paid_user').checked,
-      birth_month: document.getElementById('contact_birth_month').value,
-      birth_day: document.getElementById('contact_birth_day').value,
-      email_consent: document.getElementById('contact_email_consent').checked,
-      sms_consent: document.getElementById('contact_sms_consent').checked,
-      consent_source_code: document.getElementById('contact_consent_source_code').value,
-      notes: document.getElementById('contact_notes').value
+      full_name: document.getElementById('contact_full_name')?.value,
+      email: document.getElementById('contact_email')?.value,
+      phone_e164: document.getElementById('contact_phone')?.value,
+      source_code: document.getElementById('contact_source_code')?.value,
+      preferred_contact_code: document.getElementById('contact_preferred_contact_code')?.value,
+      active: document.getElementById('contact_active')?.checked,
+      paid_user: document.getElementById('contact_paid_user')?.checked,
+      birth_month: document.getElementById('contact_birth_month')?.value,
+      birth_day: document.getElementById('contact_birth_day')?.value,
+      email_consent: document.getElementById('contact_email_consent')?.checked,
+      sms_consent: document.getElementById('contact_sms_consent')?.checked,
+      consent_source_code: document.getElementById('contact_consent_source_code')?.value,
+      notes: document.getElementById('contact_notes')?.value
     });
 
     const errors = validateContactRow(row);
@@ -372,7 +378,7 @@ previewBulkImportBtn?.addEventListener('click', async () => {
   try {
     const csvText = await readBulkCsvSource();
     if (!csvText) {
-      bulkImportMessage.textContent = 'Add a CSV file or paste CSV text first.';
+      if (bulkImportMessage) bulkImportMessage.textContent = 'Add a CSV file or paste CSV text first.';
       return;
     }
 
@@ -387,23 +393,28 @@ previewBulkImportBtn?.addEventListener('click', async () => {
     const validCount = results.filter(r => r.ok).length;
     const invalidCount = results.length - validCount;
 
-    bulkImportMessage.textContent = `Preview ready: ${validCount} valid, ${invalidCount} invalid.`;
+    if (bulkImportMessage) {
+      bulkImportMessage.textContent = `Preview ready: ${validCount} valid, ${invalidCount} invalid.`;
+    }
+
     renderBulkPreview(rows, results);
   } catch (err) {
-    bulkImportMessage.textContent = err.message || 'Could not preview CSV.';
+    if (bulkImportMessage) {
+      bulkImportMessage.textContent = err.message || 'Could not preview CSV.';
+    }
   }
 });
 
 runBulkImportBtn?.addEventListener('click', async () => {
   try {
     if (!parsedBulkRows.length) {
-      bulkImportMessage.textContent = 'Preview the CSV first before importing.';
+      if (bulkImportMessage) bulkImportMessage.textContent = 'Preview the CSV first before importing.';
       return;
     }
 
-    runBulkImportBtn.disabled = true;
-    previewBulkImportBtn.disabled = true;
-    bulkImportMessage.textContent = 'Importing rows...';
+    if (runBulkImportBtn) runBulkImportBtn.disabled = true;
+    if (previewBulkImportBtn) previewBulkImportBtn.disabled = true;
+    if (bulkImportMessage) bulkImportMessage.textContent = 'Importing rows...';
 
     let successCount = 0;
     let failCount = 0;
@@ -430,14 +441,19 @@ runBulkImportBtn?.addEventListener('click', async () => {
       }
     }
 
-    bulkImportMessage.textContent = `Import finished: ${successCount} inserted, ${failCount} failed.`;
+    if (bulkImportMessage) {
+      bulkImportMessage.textContent = `Import finished: ${successCount} inserted, ${failCount} failed.`;
+    }
+
     renderBulkPreview(parsedBulkRows, results);
     await loadRecentContacts();
   } catch (err) {
-    bulkImportMessage.textContent = err.message || 'Bulk import failed.';
+    if (bulkImportMessage) {
+      bulkImportMessage.textContent = err.message || 'Bulk import failed.';
+    }
   } finally {
-    runBulkImportBtn.disabled = false;
-    previewBulkImportBtn.disabled = false;
+    if (runBulkImportBtn) runBulkImportBtn.disabled = false;
+    if (previewBulkImportBtn) previewBulkImportBtn.disabled = false;
   }
 });
 

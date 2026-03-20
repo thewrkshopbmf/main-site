@@ -28,6 +28,7 @@
           <p id="adminGateText">Checking your session and admin role before loading secure content.</p>
           <div class="admin-gate-meta" id="adminGateActions" style="display:none;">
             <a class="admin-inline-btn primary" href="../login.html">Go to Login</a>
+            <button class="admin-inline-btn secondary" type="button" id="gateLogoutBtn">Log Out</button>
             <a class="admin-inline-btn secondary" href="../resources.html">Back to Resources</a>
           </div>
         </div>
@@ -169,14 +170,14 @@
 
   <script type="module">
     import { supabase } from '../scripts/supabase/supabaseClient.js';
-    window.supabase = supabase;
-    
+
     const gateCard = document.getElementById('adminGateCard');
     const gateTitle = document.getElementById('adminGateTitle');
     const gateText = document.getElementById('adminGateText');
     const gateActions = document.getElementById('adminGateActions');
     const protectedLayout = document.getElementById('adminProtectedLayout');
     const logoutBtn = document.getElementById('logoutBtn');
+    const gateLogoutBtn = document.getElementById('gateLogoutBtn');
     const welcomeText = document.getElementById('adminWelcomeText');
 
     function showProtected() {
@@ -190,10 +191,28 @@
       gateActions.style.display = 'flex';
     }
 
+    async function performLogout() {
+      try {
+        await supabase.auth.signOut();
+      } catch (err) {
+        console.error('Logout failed:', err);
+      } finally {
+        window.location.href = '../login.html';
+      }
+    }
+
     async function checkAdminAccess() {
       try {
         gateTitle.textContent = 'Verifying access...';
         gateText.textContent = 'Checking your session before loading content.';
+
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) throw sessionError;
+
+        if (!sessionData?.session) {
+          window.location.href = '../login.html';
+          return;
+        }
 
         const { data: userData, error: userError } = await supabase.auth.getUser();
         if (userError) throw userError;
@@ -237,10 +256,11 @@
     }
 
     if (logoutBtn) {
-      logoutBtn.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        window.location.href = '../login.html';
-      });
+      logoutBtn.addEventListener('click', performLogout);
+    }
+
+    if (gateLogoutBtn) {
+      gateLogoutBtn.addEventListener('click', performLogout);
     }
 
     supabase.auth.onAuthStateChange((event) => {
