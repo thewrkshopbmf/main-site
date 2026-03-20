@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -12,7 +10,9 @@ const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 function jsonResponse(statusCode, body) {
   return {
     statusCode,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(body)
   };
 }
@@ -59,6 +59,70 @@ function validateBlog(entry) {
   return required.filter((k) => !(k in entry));
 }
 
+async function supabaseAuthGetUser(jwt) {
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+    method: 'GET',
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${jwt}`
+    }
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Invalid session: ${text}`);
+  }
+
+  return await res.json();
+}
+
+async function supabaseServiceSelect(table, query) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`, {
+    method: 'GET',
+    headers: {
+      apikey: SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      Accept: 'application/json'
+    }
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Supabase select failed on ${table}: ${text}`);
+  }
+
+  return await res.json();
+}
+
+async function supabaseServiceInsert(table, rows, returnRepresentation = false) {
+  const headers = {
+    apikey: SUPABASE_SERVICE_ROLE_KEY,
+    Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+    'Content-Type': 'application/json'
+  };
+
+  if (returnRepresentation) {
+    headers.Prefer = 'return=representation';
+  }
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(rows)
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Supabase insert failed on ${table}: ${text}`);
+  }
+
+  if (returnRepresentation) {
+    return await res.json();
+  }
+
+  return null;
+}
+
 async function verifyAdminFromBearer(authHeader) {
   requireEnv('SUPABASE_URL', SUPABASE_URL);
   requireEnv('SUPABASE_ANON_KEY', SUPABASE_ANON_KEY);
@@ -73,41 +137,28 @@ async function verifyAdminFromBearer(authHeader) {
     throw new Error('Missing bearer token.');
   }
 
-  const anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: { persistSession: false }
-  });
+  const user = await supabaseAuthGetUser(jwt);
 
-  const serviceClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-    auth: { persistSession: false }
-  });
+  const profiles = await supabaseServiceSelect(
+    'profiles',
+    `select=role,email&id=eq.${encodeURIComponent(user.id)}&limit=1`
+  );
 
-  const { data: userData, error: userError } = await anonClient.auth.getUser(jwt);
-  if (userError || !userData?.user) {
-    throw new Error('Invalid session.');
-  }
-
-  const user = userData.user;
-
-  const { data: profile, error: profileError } = await serviceClient
-    .from('profiles')
-    .select('role, email')
-    .eq('id', user.id)
-    .single();
-
-  if (profileError || !profile || profile.role !== 'admin') {
+  const profile = profiles[0];
+  if (!profile || profile.role !== 'admin') {
     throw new Error('Admin access required.');
   }
 
-  return { user, profile, serviceClient };
+  return { user, profile };
 }
 
 async function githubGetFile(path) {
-  const url = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
+  const url = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${path}?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
 
   const res = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${GITHUB_TOKEN}`,
-      'Accept': 'application/vnd.github+json'
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Accept: 'application/vnd.github+json'
     }
   });
 
@@ -130,19 +181,20 @@ async function githubCreateFile(path, contentObj, commitMessage) {
     return {
       ok: false,
       path,
-      reason: 'exists'
+      reason: 'exists',
+      message: `Skipped ${path} because it already exists.`
     };
   }
 
   const content = Buffer.from(`${JSON.stringify(contentObj, null, 2)}\n`, 'utf8').toString('base64');
 
-  const url = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${encodeURIComponent(path)}`;
+  const url = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${path}`;
 
   const res = await fetch(url, {
     method: 'PUT',
     headers: {
-      'Authorization': `Bearer ${GITHUB_TOKEN}`,
-      'Accept': 'application/vnd.github+json',
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Accept: 'application/vnd.github+json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -159,83 +211,50 @@ async function githubCreateFile(path, contentObj, commitMessage) {
 
   return {
     ok: true,
-    path
+    path,
+    message: `Created ${path} successfully.`
   };
 }
 
-async function queueOutboundJobs(serviceClient, adminUserId, payload, contacts) {
-  // Assumes you create a push_jobs table later.
-  // This function gracefully returns a summary if the table does not exist yet.
-  const rows = [];
+async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
+  const eligible = contacts.filter((c) => c.phone_e164 && c.sms_consent === true);
 
-  if (payload.actions.sendEmail) {
-    for (const contact of contacts.filter((c) => c.email && c.email_consent === true)) {
-      rows.push({
-        channel: 'email',
-        recipient_contact_id: contact.id,
-        recipient_email: contact.email,
-        recipient_phone: null,
-        subject: payload.subject,
-        body: payload.body,
-        status: 'queued',
-        created_by: adminUserId,
-        meta_json: {
-          source: 'push-center',
-          mode: payload.mode
-        }
-      });
-    }
-  }
-
-  if (payload.actions.sendSms) {
-    for (const contact of contacts.filter((c) => c.phone_e164 && c.sms_consent === true)) {
-      rows.push({
-        channel: 'sms',
-        recipient_contact_id: contact.id,
-        recipient_email: null,
-        recipient_phone: contact.phone_e164,
-        subject: payload.subject,
-        body: payload.body,
-        status: 'queued',
-        created_by: adminUserId,
-        meta_json: {
-          source: 'push-center',
-          mode: payload.mode,
-          delivery_adapter: 'imessage'
-        }
-      });
-    }
-  }
-
-  if (!rows.length) {
+  if (!eligible.length) {
     return {
       queued: 0,
-      detail: 'No eligible contact recipients found for selected send actions.'
+      detail: 'No SMS jobs were queued because no contacts had both a phone number and SMS consent.'
     };
   }
 
-  const { error } = await serviceClient.from('push_jobs').insert(rows);
+  const rows = eligible.map((contact) => ({
+    channel: 'sms',
+    subject: subject || null,
+    body: body || '',
+    created_by: adminUserId,
+    payload_json: {
+      recipient_contact_id: contact.id,
+      recipient_phone: contact.phone_e164,
+      source: 'push-center',
+      mode,
+      delivery_adapter: 'imessage'
+    }
+  }));
 
-  if (error) {
-    return {
-      queued: 0,
-      detail: `push_jobs insert skipped/failed: ${error.message}`
-    };
-  }
+  await supabaseServiceInsert('push_queue', rows);
 
   return {
     queued: rows.length,
-    detail: 'Queued successfully.'
+    detail: `Queued ${rows.length} SMS job(s) successfully for the Mac Mini worker.`
   };
 }
 
 export default async (req) => {
   if (req.httpMethod !== 'POST') {
-    return jsonResponse(405, { error: 'Method not allowed.' });
+    return jsonResponse(405, { ok: false, error: 'Method not allowed.' });
   }
 
   try {
-    const { user, profile, serviceClient } = await verifyAdminFromBearer(
+    const { user, profile } = await verifyAdminFromBearer(
       req.headers.authorization || req.headers.Authorization
     );
 
@@ -250,11 +269,17 @@ export default async (req) => {
     } = body;
 
     if (!actions || typeof actions !== 'object') {
-      return jsonResponse(400, { error: 'Missing actions.' });
+      return jsonResponse(400, {
+        ok: false,
+        error: 'Missing actions.'
+      });
     }
 
     if (!Array.isArray(entries) || !entries.length) {
-      return jsonResponse(400, { error: 'No entries provided.' });
+      return jsonResponse(400, {
+        ok: false,
+        error: 'No entries provided.'
+      });
     }
 
     const responseLog = {
@@ -262,17 +287,19 @@ export default async (req) => {
       mode: mode || 'single',
       label: label || null,
       website_updates: [],
-      outbound: null
+      outbound: []
     };
 
     if (actions.updateDaily) {
       for (const entry of entries) {
         const missing = validateDaily(entry);
+
         if (missing.length) {
           responseLog.website_updates.push({
             type: 'daily',
             ok: false,
-            reason: `missing fields: ${missing.join(', ')}`
+            reason: `missing fields: ${missing.join(', ')}`,
+            message: `Daily entry skipped because it is missing: ${missing.join(', ')}.`
           });
           continue;
         }
@@ -295,11 +322,13 @@ export default async (req) => {
     if (actions.updateBlog) {
       for (const entry of entries) {
         const missing = validateBlog(entry);
+
         if (missing.length) {
           responseLog.website_updates.push({
             type: 'blog',
             ok: false,
-            reason: `missing fields: ${missing.join(', ')}`
+            reason: `missing fields: ${missing.join(', ')}`,
+            message: `Blog entry skipped because it is missing: ${missing.join(', ')}.`
           });
           continue;
         }
@@ -319,26 +348,34 @@ export default async (req) => {
       }
     }
 
-    if (actions.sendEmail || actions.sendSms) {
-      const { data: contacts, error: contactsError } = await serviceClient
-        .from('contacts')
-        .select('id, email, phone_e164, email_consent, sms_consent');
-
-      if (contactsError) {
-        throw new Error(`Could not load contacts: ${contactsError.message}`);
-      }
-
-      responseLog.outbound = await queueOutboundJobs(
-        serviceClient,
-        user.id,
-        {
-          mode: mode || 'single',
-          subject: subject || null,
-          body: messageBody || null,
-          actions
-        },
-        contacts || []
+    if (actions.sendSms) {
+      const contacts = await supabaseServiceSelect(
+        'contacts',
+        'select=id,phone_e164,sms_consent'
       );
+
+      const smsResult = await queueSmsJobs(
+        user.id,
+        subject || null,
+        messageBody || '',
+        contacts || [],
+        mode || 'single'
+      );
+
+      responseLog.outbound.push({
+        type: 'sms',
+        ok: true,
+        ...smsResult
+      });
+    }
+
+    if (actions.sendEmail) {
+      responseLog.outbound.push({
+        type: 'email',
+        ok: false,
+        detail: 'Email sending is not configured yet.',
+        queued: 0
+      });
     }
 
     return jsonResponse(200, {

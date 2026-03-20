@@ -1,4 +1,8 @@
 import { supabase } from '../scripts/supabase/supabaseClient.js';
+import {
+  buildBlogPreviewHTML,
+  buildDailyPreviewHTML
+} from '../scripts/shared/render-content.js';
 
 const entryModeInputs = document.querySelectorAll('input[name="entryMode"]');
 const pushSubject = document.getElementById('pushSubject');
@@ -22,8 +26,15 @@ const previewBox = document.getElementById('previewBox');
 const bulkAnalysisBox = document.getElementById('bulkAnalysisBox');
 const outputLog = document.getElementById('outputLog');
 
+const realPreviewFrame = document.getElementById('realPreviewFrame');
+const refreshRealPreviewBtn = document.getElementById('refreshRealPreviewBtn');
+const previewTypeBadge = document.getElementById('previewTypeBadge');
+const previewStatusText = document.getElementById('previewStatusText');
+
 let armed = false;
 let armTimer = null;
+let blogTemplateCache = '';
+let dailyTemplateCache = '';
 
 function currentMode() {
   const checked = Array.from(entryModeInputs).find((i) => i.checked);
@@ -37,19 +48,6 @@ function selectedActions() {
     sendEmail: actionEmail.checked,
     sendSms: actionSms.checked
   };
-}
-
-function slugify(str) {
-  return (str || '')
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/['"]/g, '')
-    .replace(/[^A-Za-z0-9\s:–—-]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/[:–—]/g, '-')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
 }
 
 function formatDateHuman(iso) {
@@ -205,6 +203,89 @@ function analyzeDateRanges(entries) {
   return `More than two ranges were detected. This could be an error. Please double check.\nFirst date: ${formatDateHuman(ranges[0][0])}\nLast date: ${formatDateHuman(ranges[ranges.length - 1][1])}`;
 }
 
+async function loadTemplateText(path) {
+  const res = await fetch(path, { cache: 'no-store' });
+  if (!res.ok) {
+    throw new Error(`Could not load template: ${path}`);
+  }
+  return await res.text();
+}
+
+async function ensureTemplatesLoaded() {
+  if (!blogTemplateCache) {
+    blogTemplateCache = await loadTemplateText('../templates/blog.html');
+  }
+  if (!dailyTemplateCache) {
+    dailyTemplateCache = await loadTemplateText('../templates/daily.html');
+  }
+}
+
+function stripScriptsFromDocument(html) {
+  if (!html) return '';
+  return String(html).replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
+}
+
+function pickPreviewType(payload) {
+  if (payload.actions.updateBlog && !payload.actions.updateDaily) return 'blog';
+  if (payload.actions.updateDaily && !payload.actions.updateBlog) return 'daily';
+
+  const first = payload.structured?.[0]?.parsed?.value;
+  if (first && !Array.isArray(first) && typeof first === 'object') {
+    if ('verse_ref' in first || 'verse_text' in first) return 'daily';
+    if ('body_html' in first || 'category' in first || 'excerpt' in first) return 'blog';
+  }
+
+  return payload.actions.updateBlog ? 'blog' : 'daily';
+}
+
+async function renderRealPreview(payload = null, entries = null) {
+  if (!realPreviewFrame) return;
+
+  if (!payload || !entries) {
+    payload = await collectPayload();
+    ({ entries } = normalizeEntriesFromPayload(payload));
+  }
+
+  if (!entries.length) {
+    previewTypeBadge.textContent = 'Real Preview';
+    previewStatusText.textContent = 'No entry available to render.';
+    realPreviewFrame.srcdoc = `
+      <div style="padding:16px;font-family:sans-serif;color:#6b5b53;">
+        No structured entry available for preview.
+      </div>
+    `;
+    return;
+  }
+
+  await ensureTemplatesLoaded();
+
+  const entry = entries[0].data;
+  const previewType = pickPreviewType(payload);
+
+  let html = '';
+
+  if (previewType === 'blog') {
+    html = buildBlogPreviewHTML({
+      template: blogTemplateCache,
+      entry,
+      prevHref: '#',
+      nextHref: '#'
+    });
+    previewTypeBadge.textContent = 'Blog Preview';
+  } else {
+    html = buildDailyPreviewHTML({
+      template: dailyTemplateCache,
+      entry,
+      prevHref: '#',
+      nextHref: '#'
+    });
+    previewTypeBadge.textContent = 'Daily Preview';
+  }
+
+  previewStatusText.textContent = `${entry.title || 'Untitled'}${entry.date ? ` • ${entry.date}` : ''}`;
+  realPreviewFrame.srcdoc = stripScriptsFromDocument(html);
+}
+
 async function runAnalysis() {
   const payload = await collectPayload();
   const actions = payload.actions;
@@ -224,11 +305,11 @@ async function runAnalysis() {
   }
 
   if (payload.mode === 'bulk') {
-    report.push(`Mode: bulk`);
+    report.push('Mode: bulk');
     report.push(`Entries detected: ${entries.length}`);
     report.push(analyzeDateRanges(entries));
   } else {
-    report.push(`Mode: single`);
+    report.push('Mode: single');
     report.push(`Entries detected: ${entries.length}`);
   }
 
@@ -300,6 +381,17 @@ async function runPreview() {
   }
 
   previewBox.textContent = lines.join('\n');
+
+  try {
+    await renderRealPreview(payload, entries);
+  } catch (err) {
+    previewStatusText.textContent = 'Preview failed.';
+    realPreviewFrame.srcdoc = `
+      <div style="padding:16px;font-family:sans-serif;color:#6b5b53;">
+        <strong>Preview error:</strong> ${err.message || 'Could not render preview.'}
+      </div>
+    `;
+  }
 }
 
 function disarmConfirm(message = 'Confirmation is locked until you arm it. Then a 3-second countdown will begin.') {
@@ -347,6 +439,7 @@ async function confirmPush() {
   armConfirmBtn.disabled = true;
   analyzeBtn.disabled = true;
   previewBtn.disabled = true;
+  if (refreshRealPreviewBtn) refreshRealPreviewBtn.disabled = true;
 
   outputLog.textContent = 'Submitting push request...';
 
@@ -389,6 +482,7 @@ async function confirmPush() {
     armConfirmBtn.disabled = false;
     analyzeBtn.disabled = false;
     previewBtn.disabled = false;
+    if (refreshRealPreviewBtn) refreshRealPreviewBtn.disabled = false;
   }
 }
 
@@ -396,6 +490,14 @@ analyzeBtn?.addEventListener('click', runAnalysis);
 previewBtn?.addEventListener('click', runPreview);
 armConfirmBtn?.addEventListener('click', armConfirm);
 confirmBtn?.addEventListener('click', confirmPush);
+
+refreshRealPreviewBtn?.addEventListener('click', async () => {
+  try {
+    await runPreview();
+  } catch (err) {
+    outputLog.textContent = err.message || 'Could not refresh preview.';
+  }
+});
 
 entryModeInputs.forEach((input) => {
   input.addEventListener('change', () => {

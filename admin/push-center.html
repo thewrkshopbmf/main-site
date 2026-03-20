@@ -28,6 +28,7 @@
           <p id="pushGateText">Checking your session and admin role before loading push tools.</p>
           <div class="push-gate-meta" id="pushGateActions" style="display:none;">
             <a class="push-inline-btn primary" href="../login.html">Go to Login</a>
+            <button class="push-inline-btn secondary" type="button" id="pushGateLogoutBtn">Log Out</button>
             <a class="push-inline-btn secondary" href="../resources.html">Back to Resources</a>
           </div>
         </div>
@@ -111,7 +112,25 @@
           <section class="push-card" id="preview">
             <h2>Preview</h2>
             <p>Review what will be sent or inserted before confirming.</p>
+
             <div class="preview-box" id="previewBox">No preview yet.</div>
+
+            <div class="real-preview-shell">
+              <div class="real-preview-toolbar">
+                <div class="real-preview-meta">
+                  <span class="real-preview-badge" id="previewTypeBadge">Real Preview</span>
+                  <span id="previewStatusText">No rendered entry yet.</span>
+                </div>
+                <button class="push-btn secondary" type="button" id="refreshRealPreviewBtn">Refresh Real Preview</button>
+              </div>
+
+              <iframe
+                id="realPreviewFrame"
+                class="real-preview-frame"
+                sandbox=""
+                referrerpolicy="no-referrer">
+              </iframe>
+            </div>
           </section>
 
           <section class="push-card" id="bulk">
@@ -149,6 +168,7 @@
     const gateActions = document.getElementById('pushGateActions');
     const protectedLayout = document.getElementById('pushProtectedLayout');
     const logoutBtn = document.getElementById('pushLogoutBtn');
+    const gateLogoutBtn = document.getElementById('pushGateLogoutBtn');
 
     function showProtected() {
       protectedLayout.classList.add('is-visible');
@@ -161,10 +181,28 @@
       gateActions.style.display = 'flex';
     }
 
+    async function performLogout() {
+      try {
+        await supabase.auth.signOut();
+      } catch (err) {
+        console.error('Logout failed:', err);
+      } finally {
+        window.location.href = '../login.html';
+      }
+    }
+
     async function checkAdminAccess() {
       try {
         gateTitle.textContent = 'Verifying access...';
         gateText.textContent = 'Checking your session and admin role before loading push tools.';
+
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) throw sessionError;
+
+        if (!sessionData?.session) {
+          window.location.href = '../login.html';
+          return;
+        }
 
         const { data: userData, error: userError } = await supabase.auth.getUser();
         if (userError) throw userError;
@@ -207,10 +245,11 @@
     }
 
     if (logoutBtn) {
-      logoutBtn.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        window.location.href = '../login.html';
-      });
+      logoutBtn.addEventListener('click', performLogout);
+    }
+
+    if (gateLogoutBtn) {
+      gateLogoutBtn.addEventListener('click', performLogout);
     }
 
     supabase.auth.onAuthStateChange((event) => {

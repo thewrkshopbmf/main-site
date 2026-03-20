@@ -1,0 +1,49 @@
+/* admin/preview-frame.css */
+
+.real-preview-shell {
+  margin-top: 1rem;
+  background: #f4f1ee;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+}
+
+.real-preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+  padding: .9rem 1rem;
+  background: #3e2c23;
+  color: #f4f1ee;
+}
+
+.real-preview-toolbar .meta {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.real-preview-badge {
+  display: inline-block;
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.14);
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.real-preview-frame {
+  width: 100%;
+  height: 900px;
+  border: 0;
+  background: white;
+}
+
+.real-preview-empty {
+  padding: 1rem;
+  color: #6b5b53;
+  background: #fff;
+}
