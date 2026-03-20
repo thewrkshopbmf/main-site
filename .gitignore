@@ -14,7 +14,7 @@ Thumbs.db
 .env.*.local
 
 # Netlify local stuff
-.netlify/state.json
+.netlify/
 
 # Build outputs (generated each build)
 /daily/
