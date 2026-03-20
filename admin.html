@@ -75,158 +75,173 @@
           </section>
 
           <section class="admin-grid">
-            <div class="admin-section-card" id="contacts">
-              <h3>Add Contacts</h3>
-              <p>Add one contact manually or import multiple contacts by CSV.</p>
-
-              <div class="admin-actions">
-                <button class="admin-btn primary" type="button" id="showSingleContactBtn">Add One Contact</button>
-                <button class="admin-btn secondary" type="button" id="showBulkImportBtn">Bulk Import CSV</button>
-              </div>
-
-              <div class="contact-tool-panels">
-                <section class="contact-tool-panel" id="singleContactPanel" hidden>
-                  <h4>Single Contact</h4>
-
-                  <form id="singleContactForm" class="contact-form-grid">
-                    <div class="form-group">
-                      <label class="form-label" for="contact_full_name">Full Name</label>
-                      <input class="form-input" id="contact_full_name" type="text" />
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="contact_email">Email</label>
-                      <input class="form-input" id="contact_email" type="email" />
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="contact_phone">Phone (E.164)</label>
-                      <input class="form-input" id="contact_phone" type="text" placeholder="+13125551234" />
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="contact_source_code">Source Code</label>
-                      <input class="form-input" id="contact_source_code" type="number" min="1" max="5" />
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="contact_preferred_contact_code">Preferred Contact Code</label>
-                      <input class="form-input" id="contact_preferred_contact_code" type="number" min="1" max="4" />
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="contact_birth_month">Birth Month</label>
-                      <input class="form-input" id="contact_birth_month" type="number" min="1" max="12" />
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="contact_birth_day">Birth Day</label>
-                      <input class="form-input" id="contact_birth_day" type="number" min="1" max="31" />
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="contact_consent_source_code">Consent Source Code</label>
-                      <input class="form-input" id="contact_consent_source_code" type="number" min="1" max="4" />
-                    </div>
-
-                    <div class="form-group checkbox-group">
-                      <label><input type="checkbox" id="contact_active" /> Active</label>
-                    </div>
-
-                    <div class="form-group checkbox-group">
-                      <label><input type="checkbox" id="contact_paid_user" /> Paid User</label>
-                    </div>
-
-                    <div class="form-group checkbox-group">
-                      <label><input type="checkbox" id="contact_email_consent" /> Email Consent</label>
-                    </div>
-
-                    <div class="form-group checkbox-group">
-                      <label><input type="checkbox" id="contact_sms_consent" /> SMS Consent</label>
-                    </div>
-
-                    <div class="form-group full-width">
-                      <label class="form-label" for="contact_notes">Notes</label>
-                      <textarea class="form-input" id="contact_notes" rows="4"></textarea>
-                    </div>
-
-                    <div class="form-group full-width">
-                      <button class="admin-btn primary" type="submit" id="saveSingleContactBtn">Save Contact</button>
-                    </div>
-                  </form>
-
-                  <div class="admin-note" id="singleContactMessage">Fill in the fields you want. Blank optional fields will be saved as null.</div>
-                </section>
-
-                <section class="contact-tool-panel" id="bulkImportPanel" hidden>
-                  <h4>Bulk Import CSV</h4>
-                  <p class="tool-help">
-                    Use the exact header row shown below. Blank values become null.
-                  </p>
-
-                  <div class="csv-template">
-                    <code>full_name,email,phone_e164,source_code,preferred_contact_code,active,paid_user,birth_month,birth_day,email_consent,sms_consent,consent_source_code,notes</code>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label" for="bulkCsvFile">Upload CSV File</label>
-                    <input class="form-input" id="bulkCsvFile" type="file" accept=".csv,text/csv" />
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label" for="bulkCsvText">Or Paste CSV</label>
-                    <textarea class="form-input" id="bulkCsvText" rows="10" placeholder="Paste CSV content here..."></textarea>
-                  </div>
-
-                  <div class="admin-actions">
-                    <button class="admin-btn primary" type="button" id="previewBulkImportBtn">Preview Import</button>
-                    <button class="admin-btn secondary" type="button" id="runBulkImportBtn">Run Import</button>
-                  </div>
-
-                  <div class="admin-note" id="bulkImportMessage">No file loaded yet.</div>
-                  <div class="bulk-preview" id="bulkPreview"></div>
-                </section>
-              </div>
+            <div class="admin-section-card" id="members">
+                <h3>Members</h3>
+                <p>Manage user roles, member access, and future approvals.</p>
+                <div class="placeholder-list">
+                <div class="placeholder-item">
+                    <strong>No member data yet</strong>
+                    This section can later show member name, email, role, status, and created date.
+                </div>
+                </div>
+                <div class="admin-actions">
+                <a class="admin-btn primary" href="#">Add Member</a>
+                <a class="admin-btn secondary" href="#">View All Members</a>
+                </div>
             </div>
 
             <div class="admin-section-card" id="recentContactsCard">
-              <h3>Recent Contacts</h3>
-              <p>The newest contacts added to the system.</p>
+                <h3>Recent Contacts</h3>
+                <p>The newest contacts added to the system.</p>
 
-              <div class="admin-note" id="recentContactsMessage">
+                <div class="admin-note" id="recentContactsMessage">
                 Loading recent contacts...
-              </div>
+                </div>
 
-              <div class="recent-contacts-list" id="recentContactsList"></div>
+                <div class="recent-contacts-list" id="recentContactsList"></div>
 
-              <div class="admin-actions" id="recentContactsActions" style="display:none;">
+                <div class="admin-actions" id="recentContactsActions" style="display:none;">
                 <button class="admin-btn secondary" type="button" id="toggleRecentContactsBtn">See More</button>
                 <button class="admin-btn secondary" type="button" id="refreshRecentContactsBtn">Refresh</button>
-              </div>
+                </div>
+
+                <div class="recent-contacts-tools">
+                <h4>Manage Contacts</h4>
+                <p>Add one contact manually or import multiple contacts by CSV.</p>
+
+                <div class="admin-actions">
+                    <button class="admin-btn primary" type="button" id="showSingleContactBtn">Add One Contact</button>
+                    <button class="admin-btn secondary" type="button" id="showBulkImportBtn">Bulk Import CSV</button>
+                </div>
+
+                <div class="contact-tool-panels">
+                    <section class="contact-tool-panel" id="singleContactPanel" hidden>
+                    <h4>Single Contact</h4>
+
+                    <form id="singleContactForm" class="contact-form-grid">
+                        <div class="form-group">
+                        <label class="form-label" for="contact_full_name">Full Name</label>
+                        <input class="form-input" id="contact_full_name" type="text" />
+                        </div>
+
+                        <div class="form-group">
+                        <label class="form-label" for="contact_email">Email</label>
+                        <input class="form-input" id="contact_email" type="email" />
+                        </div>
+
+                        <div class="form-group">
+                        <label class="form-label" for="contact_phone">Phone (E.164)</label>
+                        <input class="form-input" id="contact_phone" type="text" placeholder="+13125551234" />
+                        </div>
+
+                        <div class="form-group">
+                        <label class="form-label" for="contact_source_code">Source Code</label>
+                        <input class="form-input" id="contact_source_code" type="number" min="1" max="5" />
+                        </div>
+
+                        <div class="form-group">
+                        <label class="form-label" for="contact_preferred_contact_code">Preferred Contact Code</label>
+                        <input class="form-input" id="contact_preferred_contact_code" type="number" min="1" max="4" />
+                        </div>
+
+                        <div class="form-group">
+                        <label class="form-label" for="contact_birth_month">Birth Month</label>
+                        <input class="form-input" id="contact_birth_month" type="number" min="1" max="12" />
+                        </div>
+
+                        <div class="form-group">
+                        <label class="form-label" for="contact_birth_day">Birth Day</label>
+                        <input class="form-input" id="contact_birth_day" type="number" min="1" max="31" />
+                        </div>
+
+                        <div class="form-group">
+                        <label class="form-label" for="contact_consent_source_code">Consent Source Code</label>
+                        <input class="form-input" id="contact_consent_source_code" type="number" min="1" max="4" />
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                        <label><input type="checkbox" id="contact_active" /> Active</label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                        <label><input type="checkbox" id="contact_paid_user" /> Paid User</label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                        <label><input type="checkbox" id="contact_email_consent" /> Email Consent</label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                        <label><input type="checkbox" id="contact_sms_consent" /> SMS Consent</label>
+                        </div>
+
+                        <div class="form-group full-width">
+                        <label class="form-label" for="contact_notes">Notes</label>
+                        <textarea class="form-input" id="contact_notes" rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                        <button class="admin-btn primary" type="submit" id="saveSingleContactBtn">Save Contact</button>
+                        </div>
+                    </form>
+
+                    <div class="admin-note" id="singleContactMessage">Fill in the fields you want. Blank optional fields will be saved as null.</div>
+                    </section>
+
+                    <section class="contact-tool-panel" id="bulkImportPanel" hidden>
+                    <h4>Bulk Import CSV</h4>
+                    <p class="tool-help">
+                        Use the exact header row shown below. Blank values become null.
+                    </p>
+
+                    <div class="csv-template">
+                        <code>full_name,email,phone_e164,source_code,preferred_contact_code,active,paid_user,birth_month,birth_day,email_consent,sms_consent,consent_source_code,notes</code>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="bulkCsvFile">Upload CSV File</label>
+                        <input class="form-input" id="bulkCsvFile" type="file" accept=".csv,text/csv" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="bulkCsvText">Or Paste CSV</label>
+                        <textarea class="form-input" id="bulkCsvText" rows="10" placeholder="Paste CSV content here..."></textarea>
+                    </div>
+
+                    <div class="admin-actions">
+                        <button class="admin-btn primary" type="button" id="previewBulkImportBtn">Preview Import</button>
+                        <button class="admin-btn secondary" type="button" id="runBulkImportBtn">Run Import</button>
+                    </div>
+
+                    <div class="admin-note" id="bulkImportMessage">No file loaded yet.</div>
+                    <div class="bulk-preview" id="bulkPreview"></div>
+                    </section>
+                </div>
+                </div>
             </div>
 
             <div class="admin-section-card" id="resources">
-              <h3>Protected Resources</h3>
-              <p>Future admin tools for controlling what members can access.</p>
-              <div class="placeholder-list">
+                <h3>Protected Resources</h3>
+                <p>Future admin tools for controlling what members can access.</p>
+                <div class="placeholder-list">
                 <div class="placeholder-item">
-                  <strong>Resource controls coming later</strong>
-                  Add uploads, private links, gated tools, or member-only downloads here.
+                    <strong>Resource controls coming later</strong>
+                    Add uploads, private links, gated tools, or member-only downloads here.
                 </div>
-              </div>
+                </div>
             </div>
 
             <div class="admin-section-card" id="activity">
-              <h3>Recent Activity</h3>
-              <p>A future place for login activity, submissions, or moderation notes.</p>
-              <div class="placeholder-list">
+                <h3>Recent Activity</h3>
+                <p>A future place for login activity, submissions, or moderation notes.</p>
+                <div class="placeholder-list">
                 <div class="placeholder-item">
-                  <strong>No recent activity</strong>
-                  Later you can load simple records like sign-ins, requests, and content changes.
+                    <strong>No recent activity</strong>
+                    Later you can load simple records like sign-ins, requests, and content changes.
                 </div>
-              </div>
+                </div>
             </div>
-          </section>
+            </section>
 
           <div class="admin-note">
             This page shell is public, but the real data should only be loaded after the session and admin role are verified. Do not expose a service-role key in browser code.
