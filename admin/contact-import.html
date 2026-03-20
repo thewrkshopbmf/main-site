@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Add Contacts</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="contact-import.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico">
+  <meta name="description" content="Admin contact import tools for TheWrkShop."/>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="import-page">
+    <div class="import-shell">
+      <section class="import-hero">
+        <span class="import-eyebrow">TheWrkShop Admin</span>
+        <h1>Add Contacts</h1>
+        <p>
+          Add one contact manually or import many at once. This page is admin-only and uses the same protected contact table as the dashboard.
+        </p>
+      </section>
+
+      <section class="import-gate">
+        <div class="import-gate-card" id="importGateCard">
+          <h2 id="importGateTitle">Verifying access...</h2>
+          <p id="importGateText">Checking your session and admin role before loading contact tools.</p>
+          <div class="import-gate-meta" id="importGateActions" style="display:none;">
+            <a class="import-inline-btn primary" href="../login.html">Go to Login</a>
+            <a class="import-inline-btn secondary" href="../resources.html">Back to Resources</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="import-layout" data-import-protected id="importProtectedLayout">
+        <aside class="import-sidebar">
+          <h2>Quick Links</h2>
+          <nav class="import-nav">
+            <a href="#legend">Code Key</a>
+            <a href="#single">Add One Contact</a>
+            <a href="#bulk">Bulk Import CSV</a>
+            <a href="admin.html">Back to Admin</a>
+            <button type="button" id="importLogoutBtn">Log Out</button>
+          </nav>
+        </aside>
+
+        <div class="import-main">
+          <section class="import-card" id="legend">
+            <h2>Code Key</h2>
+            <p>Use these values for the numeric fields in the form and CSV import.</p>
+
+            <div class="legend-grid">
+              <div class="legend-block">
+                <h3>source_code</h3>
+                <ul>
+                  <li><strong>1</strong> = website form</li>
+                  <li><strong>2</strong> = admin add</li>
+                  <li><strong>3</strong> = csv import</li>
+                  <li><strong>4</strong> = member signup</li>
+                  <li><strong>5</strong> = api</li>
+                </ul>
+              </div>
+
+              <div class="legend-block">
+                <h3>preferred_contact_code</h3>
+                <ul>
+                  <li><strong>1</strong> = email</li>
+                  <li><strong>2</strong> = sms</li>
+                  <li><strong>3</strong> = either</li>
+                  <li><strong>4</strong> = none</li>
+                </ul>
+              </div>
+
+              <div class="legend-block">
+                <h3>consent_source_code</h3>
+                <ul>
+                  <li><strong>1</strong> = website checkbox</li>
+                  <li><strong>2</strong> = admin recorded</li>
+                  <li><strong>3</strong> = imported</li>
+                  <li><strong>4</strong> = api</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="import-card" id="single">
+            <h2>Add One Contact</h2>
+            <p>Blank optional fields will be saved as null.</p>
+
+            <form id="singleContactForm" class="contact-form-grid">
+              <div class="form-group">
+                <label class="form-label" for="contact_full_name">Full Name</label>
+                <input class="form-input" id="contact_full_name" type="text" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact_email">Email</label>
+                <input class="form-input" id="contact_email" type="email" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact_phone">Phone (E.164)</label>
+                <input class="form-input" id="contact_phone" type="text" placeholder="+13125551234" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact_source_code">Source Code</label>
+                <input class="form-input" id="contact_source_code" type="number" min="1" max="5" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact_preferred_contact_code">Preferred Contact Code</label>
+                <input class="form-input" id="contact_preferred_contact_code" type="number" min="1" max="4" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact_birth_month">Birth Month</label>
+                <input class="form-input" id="contact_birth_month" type="number" min="1" max="12" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact_birth_day">Birth Day</label>
+                <input class="form-input" id="contact_birth_day" type="number" min="1" max="31" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact_consent_source_code">Consent Source Code</label>
+                <input class="form-input" id="contact_consent_source_code" type="number" min="1" max="4" />
+              </div>
+
+              <div class="form-group checkbox-group">
+                <label><input type="checkbox" id="contact_active" /> Active</label>
+              </div>
+
+              <div class="form-group checkbox-group">
+                <label><input type="checkbox" id="contact_paid_user" /> Paid User</label>
+              </div>
+
+              <div class="form-group checkbox-group">
+                <label><input type="checkbox" id="contact_email_consent" /> Email Consent</label>
+              </div>
+
+              <div class="form-group checkbox-group">
+                <label><input type="checkbox" id="contact_sms_consent" /> SMS Consent</label>
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label" for="contact_notes">Notes</label>
+                <textarea class="form-input" id="contact_notes" rows="4"></textarea>
+              </div>
+
+              <div class="form-group full-width">
+                <button class="import-btn primary" type="submit" id="saveSingleContactBtn">Save Contact</button>
+              </div>
+            </form>
+
+            <div class="import-note" id="singleContactMessage">Fill in the fields you want. Blank optional fields will be saved as null.</div>
+          </section>
+
+          <section class="import-card" id="bulk">
+            <h2>Bulk Import CSV</h2>
+            <p>Use the exact header row shown below. Blank values become null.</p>
+
+            <div class="csv-template">
+              <code>full_name,email,phone_e164,source_code,preferred_contact_code,active,paid_user,birth_month,birth_day,email_consent,sms_consent,consent_source_code,notes</code>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="bulkCsvFile">Upload CSV File</label>
+              <input class="form-input" id="bulkCsvFile" type="file" accept=".csv,text/csv" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="bulkCsvText">Or Paste CSV</label>
+              <textarea class="form-input" id="bulkCsvText" rows="10" placeholder="Paste CSV content here..."></textarea>
+            </div>
+
+            <div class="import-actions">
+              <button class="import-btn primary" type="button" id="previewBulkImportBtn">Preview Import</button>
+              <button class="import-btn secondary" type="button" id="runBulkImportBtn">Run Import</button>
+            </div>
+
+            <div class="import-note" id="bulkImportMessage">No file loaded yet.</div>
+            <div class="bulk-preview" id="bulkPreview"></div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+  <script type="module" src="contact-import.js"></script>
+
+  <script type="module">
+    import { supabase } from '../scripts/supabase/supabaseClient.js';
+
+    const gateCard = document.getElementById('importGateCard');
+    const gateTitle = document.getElementById('importGateTitle');
+    const gateText = document.getElementById('importGateText');
+    const gateActions = document.getElementById('importGateActions');
+    const protectedLayout = document.getElementById('importProtectedLayout');
+    const logoutBtn = document.getElementById('importLogoutBtn');
+
+    function showProtected() {
+      protectedLayout.classList.add('is-visible');
+    }
+
+    function showDenied(title, text) {
+      gateCard.classList.add('is-denied');
+      gateTitle.textContent = title;
+      gateText.textContent = text;
+      gateActions.style.display = 'flex';
+    }
+
+    async function checkAdminAccess() {
+      try {
+        gateTitle.textContent = 'Verifying access...';
+        gateText.textContent = 'Checking your session and admin role before loading contact tools.';
+
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+
+        const user = userData?.user;
+        if (!user) {
+          window.location.href = '../login.html';
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role, email')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        if (!profile || profile.role !== 'admin') {
+          showDenied(
+            'Access denied',
+            'Your account is signed in, but it does not have admin access for this page.'
+          );
+          return;
+        }
+
+        gateTitle.textContent = 'Access confirmed';
+        gateText.textContent = `Signed in as admin: ${profile.email}`;
+        showProtected();
+
+        if (window.contactImportPageInit) {
+          window.contactImportPageInit();
+        }
+      } catch (err) {
+        showDenied(
+          'Could not verify access',
+          err.message || 'There was a problem checking your admin session.'
+        );
+      }
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        window.location.href = '../login.html';
+      });
+    }
+
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        window.location.href = '../login.html';
+      }
+    });
+
+    checkAdminAccess();
+  </script>
+</body>
+</html>

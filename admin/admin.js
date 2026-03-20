@@ -1,4 +1,4 @@
-import { supabase } from './scripts/supabase/supabaseClient.js';
+import { supabase } from '../scripts/supabase/supabaseClient.js';
 
 const showSingleContactBtn = document.getElementById('showSingleContactBtn');
 const showBulkImportBtn = document.getElementById('showBulkImportBtn');

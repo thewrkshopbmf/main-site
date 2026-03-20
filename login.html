@@ -384,7 +384,7 @@
     async function redirectForUser(user) {
       const role = await getRole(user.id);
       if (role === 'admin') {
-        window.location.href = 'admin.html';
+        window.location.href = 'admin/admin.html';
       } else {
         window.location.href = 'resources.html';
       }
