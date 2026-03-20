@@ -21,3 +21,4 @@ Thumbs.db
 /blog/
 /data/*.json
 /_redirects
+scripts/supabase/supabaseConfig.js

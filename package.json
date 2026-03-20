@@ -14,11 +14,12 @@
     "vite": "^7.1.5"
   },
   "scripts": {
+    "build:supabase": "node scripts/supabase/build-supabase-config.mjs",
     "build:daily": "node scripts/build-daily.js",
     "build:blog": "node scripts/build-blog.js",
     "build:podcasts": "node scripts/build-podcasts.js",
     "build:web": "vite build",
-    "build:all": "npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:web",
+    "build:all": "npm run build:supabase && npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:web",
     "send:devotional": "netlify functions:invoke send-devotional",
     "dev:web": "vite"
   }
