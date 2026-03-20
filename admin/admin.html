@@ -40,6 +40,7 @@
             <a href="#overview">Overview</a>
             <a href="#members">Members</a>
             <a href="#recentContactsCard">Recent Contacts</a>
+            <a href="#pushCenterCard">Push Center</a>
             <a href="#resources">Resources</a>
             <a href="#activity">Activity</a>
             <button type="button" id="logoutBtn">Log Out</button>
@@ -115,6 +116,16 @@
               </div>
             </div>
 
+            <div class="admin-section-card" id="pushCenterCard">
+              <h3>Push Center</h3>
+              <p>
+                Prepare new daily entries, blogs, and outbound contact pushes from one secure place.
+              </p>
+              <div class="admin-actions">
+                <a class="admin-btn primary" href="push-center.html">Open Push Center</a>
+              </div>
+            </div>
+
             <div class="admin-section-card" id="resources">
               <h3>Protected Resources</h3>
               <p>Future admin tools for controlling what members can access.</p>
@@ -158,7 +169,8 @@
 
   <script type="module">
     import { supabase } from '../scripts/supabase/supabaseClient.js';
-
+    window.supabase = supabase;
+    
     const gateCard = document.getElementById('adminGateCard');
     const gateTitle = document.getElementById('adminGateTitle');
     const gateText = document.getElementById('adminGateText');

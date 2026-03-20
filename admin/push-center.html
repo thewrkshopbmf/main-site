@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Push Center</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="push-center.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico">
+  <meta name="description" content="Admin Push Center for dailies, blogs, email, and SMS."/>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="push-page">
+    <div class="push-shell">
+      <section class="push-hero">
+        <span class="push-eyebrow">TheWrkShop Admin</span>
+        <h1>Push Center</h1>
+        <p>
+          Build daily entries, blogs, email pushes, and SMS pushes from one secure place.
+        </p>
+      </section>
+
+      <section class="push-gate">
+        <div class="push-gate-card" id="pushGateCard">
+          <h2 id="pushGateTitle">Verifying access...</h2>
+          <p id="pushGateText">Checking your session and admin role before loading push tools.</p>
+          <div class="push-gate-meta" id="pushGateActions" style="display:none;">
+            <a class="push-inline-btn primary" href="../login.html">Go to Login</a>
+            <a class="push-inline-btn secondary" href="../resources.html">Back to Resources</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="push-layout" data-push-protected id="pushProtectedLayout">
+        <aside class="push-sidebar">
+          <h2>Push Tools</h2>
+          <nav class="push-nav">
+            <a href="#composer">Composer</a>
+            <a href="#preview">Preview</a>
+            <a href="#bulk">Bulk Analysis</a>
+            <a href="#output">Output</a>
+            <a href="admin.html">Back to Admin</a>
+            <button type="button" id="pushLogoutBtn">Log Out</button>
+          </nav>
+        </aside>
+
+        <div class="push-main">
+          <section class="push-card" id="composer">
+            <h2>Composer</h2>
+            <p>Paste JSON, upload JSON files, or write a subject/body for outbound messages.</p>
+
+            <div class="mode-row">
+              <label class="mode-pill">
+                <input type="radio" name="entryMode" value="single" checked />
+                <span>Single Entry</span>
+              </label>
+              <label class="mode-pill">
+                <input type="radio" name="entryMode" value="bulk" />
+                <span>Bulk Insert</span>
+              </label>
+            </div>
+
+            <div class="input-grid">
+              <div class="form-group">
+                <label class="form-label" for="pushSubject">Subject Line</label>
+                <input class="form-input" id="pushSubject" type="text" placeholder="Optional for website entries; used for email/message pushes" />
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label" for="pushBody">Body Paragraph / Notes</label>
+                <textarea class="form-input" id="pushBody" rows="5" placeholder="Optional body text for email/SMS or notes about this push..."></textarea>
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label" for="pushJsonInput">JSON Input</label>
+                <textarea class="form-input code-input" id="pushJsonInput" rows="14" placeholder='Paste a JSON object for a single entry, or a JSON array for bulk inserts...'></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="pushJsonFile">Upload JSON File(s)</label>
+                <input class="form-input" id="pushJsonFile" type="file" accept=".json,application/json" multiple />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="pushRawLabel">Optional Header Label</label>
+                <input class="form-input" id="pushRawLabel" type="text" placeholder="Example: 2025-09-18_2 Corinthians 5:7_Faith Isn’t a Feeling" />
+              </div>
+            </div>
+
+            <div class="actions-checklist">
+              <label><input type="checkbox" id="actionDaily" /> Update as new Daily</label>
+              <label><input type="checkbox" id="actionBlog" /> Update as new Blog</label>
+              <label><input type="checkbox" id="actionEmail" /> Send as email to contacts</label>
+              <label><input type="checkbox" id="actionSms" /> Send as SMS</label>
+            </div>
+
+            <div class="push-actions">
+              <button class="push-btn secondary" type="button" id="analyzeBtn">Analyze</button>
+              <button class="push-btn secondary" type="button" id="previewBtn">Preview</button>
+              <button class="push-btn warning" type="button" id="armConfirmBtn">Arm Confirm</button>
+              <button class="push-btn primary" type="button" id="confirmBtn" disabled>Confirm Push</button>
+            </div>
+
+            <div class="push-note" id="countdownMessage">
+              Confirmation is locked until you arm it. Then a 3-second countdown will begin.
+            </div>
+          </section>
+
+          <section class="push-card" id="preview">
+            <h2>Preview</h2>
+            <p>Review what will be sent or inserted before confirming.</p>
+            <div class="preview-box" id="previewBox">No preview yet.</div>
+          </section>
+
+          <section class="push-card" id="bulk">
+            <h2>Bulk Analysis</h2>
+            <p>Basic structure checks, date coverage, and a sample first entry preview.</p>
+            <div class="bulk-analysis" id="bulkAnalysisBox">No bulk analysis yet.</div>
+          </section>
+
+          <section class="push-card" id="output">
+            <h2>Output</h2>
+            <p>Status messages, counts, and completion details will appear here.</p>
+            <div class="output-log" id="outputLog">Waiting for action...</div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2026 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+  <script type="module" src="push-center.js"></script>
+
+  <script type="module">
+    import { supabase } from '../scripts/supabase/supabaseClient.js';
+
+    const gateCard = document.getElementById('pushGateCard');
+    const gateTitle = document.getElementById('pushGateTitle');
+    const gateText = document.getElementById('pushGateText');
+    const gateActions = document.getElementById('pushGateActions');
+    const protectedLayout = document.getElementById('pushProtectedLayout');
+    const logoutBtn = document.getElementById('pushLogoutBtn');
+
+    function showProtected() {
+      protectedLayout.classList.add('is-visible');
+    }
+
+    function showDenied(title, text) {
+      gateCard.classList.add('is-denied');
+      gateTitle.textContent = title;
+      gateText.textContent = text;
+      gateActions.style.display = 'flex';
+    }
+
+    async function checkAdminAccess() {
+      try {
+        gateTitle.textContent = 'Verifying access...';
+        gateText.textContent = 'Checking your session and admin role before loading push tools.';
+
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+
+        const user = userData?.user;
+        if (!user) {
+          window.location.href = '../login.html';
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role, email')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        if (!profile || profile.role !== 'admin') {
+          showDenied(
+            'Access denied',
+            'Your account is signed in, but it does not have admin access for this page.'
+          );
+          return;
+        }
+
+        gateTitle.textContent = 'Access confirmed';
+        gateText.textContent = `Signed in as admin: ${profile.email}`;
+        showProtected();
+
+        if (window.pushCenterInit) {
+          window.pushCenterInit();
+        }
+      } catch (err) {
+        showDenied(
+          'Could not verify access',
+          err.message || 'There was a problem checking your admin session.'
+        );
+      }
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        window.location.href = '../login.html';
+      });
+    }
+
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        window.location.href = '../login.html';
+      }
+    });
+
+    checkAdminAccess();
+  </script>
+</body>
+</html>

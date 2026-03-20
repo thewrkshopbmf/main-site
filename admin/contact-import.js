@@ -136,14 +136,22 @@ singleContactForm?.addEventListener('submit', async (e) => {
     }
 
     const { data, error } = await supabase
-      .from('contacts')
-      .insert([row])
-      .select('id, full_name, email, phone_e164')
-      .single();
+    .from('contacts')
+    .insert([row])
+    .select('id, full_name, email, phone_e164')
+    .single();
 
     if (error) throw error;
 
-    singleContactMessage.textContent = `Saved contact #${data.id}${data.full_name ? ` (${data.full_name})` : ''}.`;
+    const { count, error: countError } = await supabase
+    .from('contacts')
+    .select('*', { count: 'exact', head: true });
+
+    if (countError) throw countError;
+
+    singleContactMessage.textContent =
+    `Saved contact as member #${count}${data.full_name ? ` (${data.full_name})` : ''}.`;
+
     singleContactForm.reset();
   } catch (err) {
     singleContactMessage.textContent = err.message || 'Failed to save contact.';
