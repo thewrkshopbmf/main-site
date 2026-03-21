@@ -222,6 +222,18 @@ function buildTopLevelMessage(mode, entries, actions, responseLog) {
   return 'Push completed.';
 }
 
+function isSmsEligible(contact) {
+  if (!contact?.phone_e164) return false;
+  if (contact.sms_consent === true) return true;
+  return contact.sms_consented_at == null;
+}
+
+function isEmailEligible(contact) {
+  if (!contact?.email) return false;
+  if (contact.email_consent === true) return true;
+  return contact.email_consented_at == null;
+}
+
 async function supabaseAuthGetUser(jwt) {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
     method: 'GET',
@@ -385,7 +397,7 @@ async function githubCreateFile(filePath, contentObj, commitMessage) {
 
 async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
   const withPhone = contacts.filter((c) => c.phone_e164);
-  const eligible = withPhone.filter((c) => c.sms_consent !== false);
+  const eligible = withPhone.filter(isSmsEligible);
   const skipped = withPhone.length - eligible.length;
 
   if (!eligible.length) {
@@ -393,7 +405,7 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
       queued: 0,
       eligible: 0,
       skipped,
-      detail: 'No SMS jobs were queued because no contacts with phone numbers were eligible. Contacts with sms_consent = false were skipped.'
+      detail: 'No SMS jobs were queued because no contacts with phone numbers were eligible under the consent/timestamp rules.'
     };
   }
 
@@ -423,7 +435,7 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
 
 async function prepareEmailJobs(subject, body, contacts, mode) {
   const withEmail = contacts.filter((c) => c.email);
-  const eligible = withEmail.filter((c) => c.email_consent !== false);
+  const eligible = withEmail.filter(isEmailEligible);
   const skipped = withEmail.length - eligible.length;
 
   return {
@@ -558,7 +570,7 @@ export default async (request) => {
     if (actions.sendSms) {
       const contacts = await supabaseServiceSelect(
         'contacts',
-        'select=id,phone_e164,sms_consent'
+        'select=id,phone_e164,sms_consent,sms_consented_at'
       );
 
       const smsResult = await queueSmsJobs(
@@ -579,7 +591,7 @@ export default async (request) => {
     if (actions.sendEmail) {
       const contacts = await supabaseServiceSelect(
         'contacts',
-        'select=id,email,email_consent'
+        'select=id,email,email_consent,email_consented_at'
       );
 
       const emailResult = await prepareEmailJobs(
