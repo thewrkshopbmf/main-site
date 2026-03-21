@@ -58,6 +58,107 @@ function validateBlog(entry) {
   return required.filter((k) => !(k in entry));
 }
 
+function collectDateStats(entries) {
+  const dates = entries
+    .map((entry) => (entry && typeof entry.date === 'string' ? entry.date : null))
+    .filter((date) => /^\d{4}-\d{2}-\d{2}$/.test(date))
+    .sort();
+
+  if (!dates.length) {
+    return {
+      count: entries.length,
+      validDateCount: 0,
+      startDate: null,
+      endDate: null,
+      rangeText: 'no valid dates detected'
+    };
+  }
+
+  return {
+    count: entries.length,
+    validDateCount: dates.length,
+    startDate: dates[0],
+    endDate: dates[dates.length - 1],
+    rangeText:
+      dates[0] === dates[dates.length - 1]
+        ? dates[0]
+        : `${dates[0]} through ${dates[dates.length - 1]}`
+  };
+}
+
+function countCreatedFilesByType(responseLog) {
+  const counts = {
+    daily: 0,
+    blog: 0
+  };
+
+  for (const item of responseLog.website_updates || []) {
+    if (item?.ok === true && item?.type === 'daily') counts.daily += 1;
+    if (item?.ok === true && item?.type === 'blog') counts.blog += 1;
+  }
+
+  return counts;
+}
+
+function selectedWebsiteTypes(actions) {
+  const types = [];
+  if (actions?.updateDaily) types.push('daily');
+  if (actions?.updateBlog) types.push('blog');
+  return types;
+}
+
+function joinNatural(parts) {
+  if (!parts.length) return '';
+  if (parts.length === 1) return parts[0];
+  if (parts.length === 2) return `${parts[0]} + ${parts[1]}`;
+  return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
+}
+
+function buildCreatedBreakdown(actions, responseLog) {
+  const created = countCreatedFilesByType(responseLog);
+  const parts = [];
+
+  if (actions?.updateDaily) {
+    parts.push(`${created.daily} daily file(s) created`);
+  }
+
+  if (actions?.updateBlog) {
+    parts.push(`${created.blog} blog file(s) created`);
+  }
+
+  if (!parts.length) {
+    return 'No website files were created.';
+  }
+
+  return parts.join(' and ') + '.';
+}
+
+function buildTopLevelMessage(mode, entries, actions, responseLog) {
+  const stats = collectDateStats(entries);
+  const siteTypes = selectedWebsiteTypes(actions);
+  const siteTypeText = joinNatural(siteTypes) || 'website';
+
+  if ((mode || 'single') === 'bulk') {
+    if (stats.validDateCount > 0) {
+      return `Bulk ${siteTypeText} push completed for ${stats.count} submitted entr${stats.count === 1 ? 'y' : 'ies'} covering ${stats.rangeText}. ${buildCreatedBreakdown(actions, responseLog)}`;
+    }
+    return `Bulk ${siteTypeText} push completed for ${stats.count} submitted entr${stats.count === 1 ? 'y' : 'ies'}. ${buildCreatedBreakdown(actions, responseLog)}`;
+  }
+
+  if (entries.length === 1) {
+    const entry = entries[0] || {};
+    const labelParts = [];
+    if (entry.date) labelParts.push(entry.date);
+    if (entry.title) labelParts.push(entry.title);
+
+    if (labelParts.length) {
+      return `${siteTypeText.charAt(0).toUpperCase() + siteTypeText.slice(1)} push completed for ${labelParts.join(' — ')}. ${buildCreatedBreakdown(actions, responseLog)}`;
+    }
+  }
+
+  return `${siteTypeText.charAt(0).toUpperCase() + siteTypeText.slice(1)} push completed. ${buildCreatedBreakdown(actions, responseLog)}`;
+}
+
 async function supabaseAuthGetUser(jwt) {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
     method: 'GET',
@@ -251,7 +352,7 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
   };
 }
 
-export default async (request, context) => {
+export default async (request) => {
   if (request.method !== 'POST') {
     return jsonResponse(405, { ok: false, error: 'Method not allowed.' });
   }
@@ -390,9 +491,19 @@ export default async (request, context) => {
       });
     }
 
+    const createdCounts = countCreatedFilesByType(responseLog);
+
+    const summary = {
+      submitted_entries: entries.length,
+      ...collectDateStats(entries),
+      created_daily_file_count: createdCounts.daily,
+      created_blog_file_count: createdCounts.blog
+    };
+
     return jsonResponse(200, {
       ok: true,
-      message: 'Push dispatch completed.',
+      message: buildTopLevelMessage(mode, entries, actions, responseLog),
+      summary,
       result: responseLog
     });
   } catch (err) {
