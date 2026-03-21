@@ -50,6 +50,14 @@ function selectedActions() {
   };
 }
 
+function hasWebsiteActions(actions) {
+  return Boolean(actions.updateDaily || actions.updateBlog);
+}
+
+function hasOutboundActions(actions) {
+  return Boolean(actions.sendEmail || actions.sendSms);
+}
+
 function formatDateHuman(iso) {
   const d = new Date(`${iso}T00:00:00`);
   if (Number.isNaN(d.getTime())) return iso;
@@ -304,6 +312,15 @@ function stripScriptsFromDocument(html) {
   return String(html).replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
 }
 
+function escapeHtml(str) {
+  return String(str || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 function pickPreviewType(payload) {
   if (payload.actions.updateBlog && !payload.actions.updateDaily) return 'blog';
   if (payload.actions.updateDaily && !payload.actions.updateBlog) return 'daily';
@@ -317,12 +334,141 @@ function pickPreviewType(payload) {
   return payload.actions.updateBlog ? 'blog' : 'daily';
 }
 
+function buildOutboundPreviewHTML(payload) {
+  const channels = [];
+  if (payload.actions.sendSms) channels.push('SMS / iMessage');
+  if (payload.actions.sendEmail) channels.push('Email');
+
+  const subject = payload.subject || '(No subject)';
+  const body = payload.body || '(No message body)';
+  const label = payload.label || 'No header label';
+  const channelText = channels.length ? channels.join(' + ') : 'Outbound message';
+
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Outbound Preview</title>
+      <style>
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: #f7f3ef;
+          color: #2b211c;
+          padding: 24px;
+        }
+        .wrap {
+          max-width: 860px;
+          margin: 0 auto;
+        }
+        .hero {
+          background: linear-gradient(145deg, #5f493d 0%, #3e2c23 100%);
+          color: #f4f1ee;
+          border-radius: 20px;
+          padding: 20px 22px;
+          margin-bottom: 18px;
+        }
+        .eyebrow {
+          display: inline-block;
+          font-size: 12px;
+          letter-spacing: .12em;
+          text-transform: uppercase;
+          opacity: .9;
+          margin-bottom: 10px;
+        }
+        .card {
+          background: #fff;
+          border: 1px solid rgba(0,0,0,.08);
+          border-radius: 18px;
+          padding: 18px;
+          box-shadow: 0 6px 18px rgba(0,0,0,.06);
+          margin-bottom: 16px;
+        }
+        .meta {
+          color: #6b5b53;
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+        .label {
+          font-weight: 700;
+          color: #3e2c23;
+          margin-bottom: 6px;
+        }
+        .subject {
+          font-size: 22px;
+          font-weight: 700;
+          color: #3e2c23;
+          margin: 0 0 14px;
+        }
+        .body {
+          white-space: pre-wrap;
+          line-height: 1.65;
+          color: #2b211c;
+        }
+        .pill {
+          display: inline-block;
+          background: #eadfd5;
+          color: #3e2c23;
+          border-radius: 999px;
+          padding: 6px 10px;
+          font-size: 12px;
+          font-weight: 700;
+          margin-right: 8px;
+          margin-bottom: 8px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="wrap">
+        <div class="hero">
+          <div class="eyebrow">Outbound Preview</div>
+          <h1 style="margin:0;font-size:32px;">${escapeHtml(channelText)}</h1>
+        </div>
+
+        <div class="card">
+          <div class="meta">
+            <span class="pill">${escapeHtml(channelText)}</span>
+            <span class="pill">${escapeHtml(payload.mode || 'single')}</span>
+          </div>
+
+          <div class="label">Optional Header Label</div>
+          <div class="meta">${escapeHtml(label)}</div>
+
+          <div class="label">Subject Line</div>
+          <div class="subject">${escapeHtml(subject)}</div>
+
+          <div class="label">Message Body</div>
+          <div class="body">${escapeHtml(body)}</div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
 async function renderRealPreview(payload = null, entries = null) {
   if (!realPreviewFrame) return;
 
   if (!payload || !entries) {
     payload = await collectPayload();
     ({ entries } = normalizeEntriesFromPayload(payload));
+  }
+
+  const websiteRequested = hasWebsiteActions(payload.actions);
+  const outboundRequested = hasOutboundActions(payload.actions);
+
+  if (!websiteRequested && outboundRequested) {
+    previewTypeBadge.textContent = payload.actions.sendSms && payload.actions.sendEmail
+      ? 'SMS + Email Preview'
+      : payload.actions.sendSms
+        ? 'SMS Preview'
+        : 'Email Preview';
+
+    previewStatusText.textContent = payload.subject || payload.body || 'Outbound-only preview';
+    realPreviewFrame.srcdoc = buildOutboundPreviewHTML(payload);
+    return;
   }
 
   if (!entries.length) {
@@ -375,6 +521,28 @@ async function runAnalysis() {
     return { ok: false };
   }
 
+  const websiteRequested = hasWebsiteActions(actions);
+  const outboundRequested = hasOutboundActions(actions);
+
+  if (!websiteRequested && outboundRequested) {
+    const lines = [];
+    lines.push(`Mode: ${payload.mode}`);
+    lines.push('Outbound-only push detected.');
+    if (actions.sendSms) lines.push('SMS/iMessage delivery requested.');
+    if (actions.sendEmail) lines.push('Email delivery requested.');
+    lines.push(`Subject present: ${payload.subject ? 'yes' : 'no'}`);
+    lines.push(`Body present: ${payload.body ? 'yes' : 'no'}`);
+    lines.push('JSON is not required because no website update action is selected.');
+
+    bulkAnalysisBox.textContent = lines.join('\n');
+
+    return {
+      ok: true,
+      entries: [],
+      payload
+    };
+  }
+
   const { errors, entries } = normalizeEntriesFromPayload(payload);
 
   const report = [];
@@ -420,6 +588,12 @@ async function runAnalysis() {
     }
   }
 
+  if (outboundRequested) {
+    report.push('Outbound delivery requested alongside website update.');
+    report.push(`Subject present: ${payload.subject ? 'yes' : 'no'}`);
+    report.push(`Body present: ${payload.body ? 'yes' : 'no'}`);
+  }
+
   if (payload.mode === 'bulk' && entries.length) {
     report.push('');
     report.push('First entry sample:');
@@ -436,6 +610,10 @@ async function runAnalysis() {
 
 async function runPreview() {
   const payload = await collectPayload();
+  const actions = payload.actions;
+  const websiteRequested = hasWebsiteActions(actions);
+  const outboundRequested = hasOutboundActions(actions);
+
   const { errors, entries } = normalizeEntriesFromPayload(payload);
 
   const lines = [];
@@ -444,25 +622,33 @@ async function runPreview() {
   lines.push(`Subject: ${payload.subject || '(none)'}`);
   lines.push(`Body: ${payload.body || '(none)'}`);
 
-  if (errors.length) {
+  if (!websiteRequested && outboundRequested) {
     lines.push('');
-    lines.push('JSON errors:');
-    errors.forEach((e) => lines.push(`- ${e}`));
-  }
-
-  if (entries.length) {
-    lines.push('');
-    lines.push('Preview sample:');
-    lines.push(JSON.stringify(entries[0].data, null, 2));
+    lines.push('Outbound-only preview:');
+    lines.push(payload.actions.sendSms ? '- SMS/iMessage selected' : '- SMS/iMessage not selected');
+    lines.push(payload.actions.sendEmail ? '- Email selected' : '- Email not selected');
+    lines.push('- JSON not required for outbound-only mode.');
   } else {
-    lines.push('');
-    lines.push('No structured entries detected.');
+    if (errors.length) {
+      lines.push('');
+      lines.push('JSON errors:');
+      errors.forEach((e) => lines.push(`- ${e}`));
+    }
+
+    if (entries.length) {
+      lines.push('');
+      lines.push('Preview sample:');
+      lines.push(JSON.stringify(entries[0].data, null, 2));
+    } else {
+      lines.push('');
+      lines.push('No structured entries detected.');
+    }
   }
 
   previewBox.textContent = lines.join('\n');
 
   try {
-    await renderRealPreview(payload, entries);
+    await renderRealPreview(payload, websiteRequested ? entries : []);
   } catch (err) {
     previewStatusText.textContent = 'Preview failed.';
     realPreviewFrame.srcdoc = `

@@ -107,6 +107,13 @@ function selectedWebsiteTypes(actions) {
   return types;
 }
 
+function selectedOutboundTypes(actions) {
+  const types = [];
+  if (actions?.sendSms) types.push('sms');
+  if (actions?.sendEmail) types.push('email');
+  return types;
+}
+
 function joinNatural(parts) {
   if (!parts.length) return '';
   if (parts.length === 1) return parts[0];
@@ -133,30 +140,86 @@ function buildCreatedBreakdown(actions, responseLog) {
   return parts.join(' and ') + '.';
 }
 
+function buildOutboundBreakdown(responseLog) {
+  const outbound = responseLog.outbound || [];
+  if (!outbound.length) return 'No outbound jobs requested.';
+
+  const parts = outbound.map((item) => {
+    if (item.type === 'sms') {
+      return `SMS: ${item.queued || 0} queued, ${item.eligible || 0} eligible, ${item.skipped || 0} skipped`;
+    }
+    if (item.type === 'email') {
+      return `Email: ${item.queued || 0} queued, ${item.eligible || 0} eligible, ${item.skipped || 0} skipped`;
+    }
+    return `${item.type}: processed`;
+  });
+
+  return parts.join(' | ');
+}
+
 function buildTopLevelMessage(mode, entries, actions, responseLog) {
   const stats = collectDateStats(entries);
-  const siteTypes = selectedWebsiteTypes(actions);
-  const siteTypeText = joinNatural(siteTypes) || 'website';
+
+  const websiteTypes = selectedWebsiteTypes(actions);
+  const outboundTypes = selectedOutboundTypes(actions);
+
+  const websiteRequested = websiteTypes.length > 0;
+  const outboundRequested = outboundTypes.length > 0;
+
+  const websiteText = joinNatural(websiteTypes);
+  const outboundTextLabel = joinNatural(outboundTypes);
+  const outboundBreakdown = outboundRequested ? ` ${buildOutboundBreakdown(responseLog)}.` : '';
+  const createdBreakdown = websiteRequested ? ` ${buildCreatedBreakdown(actions, responseLog)}` : '';
 
   if ((mode || 'single') === 'bulk') {
-    if (stats.validDateCount > 0) {
-      return `Bulk ${siteTypeText} push completed for ${stats.count} submitted entr${stats.count === 1 ? 'y' : 'ies'} covering ${stats.rangeText}. ${buildCreatedBreakdown(actions, responseLog)}`;
+    if (websiteRequested && outboundRequested) {
+      if (stats.validDateCount > 0) {
+        return `Bulk ${websiteText} + ${outboundTextLabel} push completed for ${stats.count} submitted entries covering ${stats.rangeText}.${createdBreakdown}${outboundBreakdown}`;
+      }
+      return `Bulk ${websiteText} + ${outboundTextLabel} push completed for ${stats.count} submitted entries.${createdBreakdown}${outboundBreakdown}`;
     }
-    return `Bulk ${siteTypeText} push completed for ${stats.count} submitted entr${stats.count === 1 ? 'y' : 'ies'}. ${buildCreatedBreakdown(actions, responseLog)}`;
+
+    if (websiteRequested) {
+      if (stats.validDateCount > 0) {
+        return `Bulk ${websiteText} push completed for ${stats.count} submitted entries covering ${stats.rangeText}.${createdBreakdown}${outboundBreakdown}`;
+      }
+      return `Bulk ${websiteText} push completed for ${stats.count} submitted entries.${createdBreakdown}${outboundBreakdown}`;
+    }
+
+    if (outboundRequested) {
+      return `Bulk ${outboundTextLabel} push completed.${outboundBreakdown}`;
+    }
+
+    return 'Bulk push completed.';
   }
 
-  if (entries.length === 1) {
+  if (websiteRequested && entries.length === 1) {
     const entry = entries[0] || {};
     const labelParts = [];
     if (entry.date) labelParts.push(entry.date);
     if (entry.title) labelParts.push(entry.title);
 
     if (labelParts.length) {
-      return `${siteTypeText.charAt(0).toUpperCase() + siteTypeText.slice(1)} push completed for ${labelParts.join(' — ')}. ${buildCreatedBreakdown(actions, responseLog)}`;
+      if (outboundRequested) {
+        return `${websiteText.charAt(0).toUpperCase() + websiteText.slice(1)} + ${outboundTextLabel} push completed for ${labelParts.join(' — ')}.${createdBreakdown}${outboundBreakdown}`;
+      }
+      return `${websiteText.charAt(0).toUpperCase() + websiteText.slice(1)} push completed for ${labelParts.join(' — ')}.${createdBreakdown}${outboundBreakdown}`;
     }
   }
 
-  return `${siteTypeText.charAt(0).toUpperCase() + siteTypeText.slice(1)} push completed. ${buildCreatedBreakdown(actions, responseLog)}`;
+  if (websiteRequested && outboundRequested) {
+    return `${websiteText.charAt(0).toUpperCase() + websiteText.slice(1)} + ${outboundTextLabel} push completed.${createdBreakdown}${outboundBreakdown}`;
+  }
+
+  if (websiteRequested) {
+    return `${websiteText.charAt(0).toUpperCase() + websiteText.slice(1)} push completed.${createdBreakdown}${outboundBreakdown}`;
+  }
+
+  if (outboundRequested) {
+    return `${outboundTextLabel.charAt(0).toUpperCase() + outboundTextLabel.slice(1)} push completed.${outboundBreakdown}`;
+  }
+
+  return 'Push completed.';
 }
 
 async function supabaseAuthGetUser(jwt) {
@@ -321,12 +384,16 @@ async function githubCreateFile(filePath, contentObj, commitMessage) {
 }
 
 async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
-  const eligible = contacts.filter((c) => c.phone_e164 && c.sms_consent === true);
+  const withPhone = contacts.filter((c) => c.phone_e164);
+  const eligible = withPhone.filter((c) => c.sms_consent !== false);
+  const skipped = withPhone.length - eligible.length;
 
   if (!eligible.length) {
     return {
       queued: 0,
-      detail: 'No SMS jobs were queued because no contacts had both a phone number and SMS consent.'
+      eligible: 0,
+      skipped,
+      detail: 'No SMS jobs were queued because no contacts with phone numbers were eligible. Contacts with sms_consent = false were skipped.'
     };
   }
 
@@ -348,7 +415,22 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
 
   return {
     queued: rows.length,
+    eligible: eligible.length,
+    skipped,
     detail: `Queued ${rows.length} SMS job(s) successfully for the Mac Mini worker.`
+  };
+}
+
+async function prepareEmailJobs(subject, body, contacts, mode) {
+  const withEmail = contacts.filter((c) => c.email);
+  const eligible = withEmail.filter((c) => c.email_consent !== false);
+  const skipped = withEmail.length - eligible.length;
+
+  return {
+    queued: 0,
+    eligible: eligible.length,
+    skipped,
+    detail: 'Email sending is not configured yet.'
   };
 }
 
@@ -388,12 +470,24 @@ export default async (request) => {
       });
     }
 
-    if (!Array.isArray(entries) || !entries.length) {
+    const websiteRequested = Boolean(actions.updateDaily || actions.updateBlog);
+    const outboundRequested = Boolean(actions.sendSms || actions.sendEmail);
+
+    if (!websiteRequested && !outboundRequested) {
       return jsonResponse(400, {
         ok: false,
-        error: 'No entries provided.'
+        error: 'No actions selected.'
       });
     }
+
+    if (websiteRequested && (!Array.isArray(entries) || !entries.length)) {
+      return jsonResponse(400, {
+        ok: false,
+        error: 'Entries are required for daily/blog updates.'
+      });
+    }
+
+    const safeEntries = Array.isArray(entries) ? entries : [];
 
     const responseLog = {
       admin_email: profile.email,
@@ -404,7 +498,7 @@ export default async (request) => {
     };
 
     if (actions.updateDaily) {
-      for (const entry of entries) {
+      for (const entry of safeEntries) {
         const missing = validateDaily(entry);
 
         if (missing.length) {
@@ -433,7 +527,7 @@ export default async (request) => {
     }
 
     if (actions.updateBlog) {
-      for (const entry of entries) {
+      for (const entry of safeEntries) {
         const missing = validateBlog(entry);
 
         if (missing.length) {
@@ -483,26 +577,37 @@ export default async (request) => {
     }
 
     if (actions.sendEmail) {
+      const contacts = await supabaseServiceSelect(
+        'contacts',
+        'select=id,email,email_consent'
+      );
+
+      const emailResult = await prepareEmailJobs(
+        subject || null,
+        messageBody || '',
+        contacts || [],
+        mode || 'single'
+      );
+
       responseLog.outbound.push({
         type: 'email',
         ok: false,
-        detail: 'Email sending is not configured yet.',
-        queued: 0
+        ...emailResult
       });
     }
 
     const createdCounts = countCreatedFilesByType(responseLog);
 
     const summary = {
-      submitted_entries: entries.length,
-      ...collectDateStats(entries),
+      submitted_entries: safeEntries.length,
+      ...collectDateStats(safeEntries),
       created_daily_file_count: createdCounts.daily,
       created_blog_file_count: createdCounts.blog
     };
 
     return jsonResponse(200, {
       ok: true,
-      message: buildTopLevelMessage(mode, entries, actions, responseLog),
+      message: buildTopLevelMessage(mode, safeEntries, actions, responseLog),
       summary,
       result: responseLog
     });
