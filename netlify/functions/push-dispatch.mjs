@@ -87,10 +87,7 @@ function collectDateStats(entries) {
 }
 
 function countCreatedFilesByType(responseLog) {
-  const counts = {
-    daily: 0,
-    blog: 0
-  };
+  const counts = { daily: 0, blog: 0 };
 
   for (const item of responseLog.website_updates || []) {
     if (item?.ok === true && item?.type === 'daily') counts.daily += 1;
@@ -125,18 +122,10 @@ function buildCreatedBreakdown(actions, responseLog) {
   const created = countCreatedFilesByType(responseLog);
   const parts = [];
 
-  if (actions?.updateDaily) {
-    parts.push(`${created.daily} daily file(s) created`);
-  }
+  if (actions?.updateDaily) parts.push(`${created.daily} daily file(s) created`);
+  if (actions?.updateBlog) parts.push(`${created.blog} blog file(s) created`);
 
-  if (actions?.updateBlog) {
-    parts.push(`${created.blog} blog file(s) created`);
-  }
-
-  if (!parts.length) {
-    return 'No website files were created.';
-  }
-
+  if (!parts.length) return 'No website files were created.';
   return parts.join(' and ') + '.';
 }
 
@@ -395,6 +384,27 @@ async function githubCreateFile(filePath, contentObj, commitMessage) {
   };
 }
 
+async function createPushMessage(channel, adminUserId, subject, body, mode) {
+  const rows = await supabaseServiceInsert(
+    'push_messages',
+    [{
+      channel,
+      subject: subject || null,
+      body: body || '',
+      created_by: adminUserId,
+      source: 'push-center',
+      mode: mode || 'single'
+    }],
+    true
+  );
+
+  if (!rows || !rows.length) {
+    throw new Error(`Failed to create push_messages row for channel ${channel}.`);
+  }
+
+  return rows[0];
+}
+
 async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
   const withPhone = contacts.filter((c) => c.phone_e164);
   const eligible = withPhone.filter(isSmsEligible);
@@ -405,44 +415,63 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
       queued: 0,
       eligible: 0,
       skipped,
+      message_id: null,
       detail: 'No SMS jobs were queued because no contacts with phone numbers were eligible under the consent/timestamp rules.'
     };
   }
 
+  const messageRow = await createPushMessage('sms', adminUserId, subject, body, mode);
+
   const rows = eligible.map((contact) => ({
+    message_id: messageRow.id,
+    contact_id: contact.id,
     channel: 'sms',
-    subject: subject || null,
-    body: body || '',
-    created_by: adminUserId,
-    payload_json: {
-      recipient_contact_id: contact.id,
-      recipient_phone: contact.phone_e164,
-      source: 'push-center',
-      mode,
-      delivery_adapter: 'imessage'
-    }
+    recipient_phone: contact.phone_e164
   }));
 
-  await supabaseServiceInsert('push_queue', rows);
+  await supabaseServiceInsert('push_jobs', rows);
 
   return {
     queued: rows.length,
     eligible: eligible.length,
     skipped,
+    message_id: messageRow.id,
     detail: `Queued ${rows.length} SMS job(s) successfully for the Mac Mini worker.`
   };
 }
 
-async function prepareEmailJobs(subject, body, contacts, mode) {
+async function prepareEmailJobs(adminUserId, subject, body, contacts, mode) {
   const withEmail = contacts.filter((c) => c.email);
   const eligible = withEmail.filter(isEmailEligible);
   const skipped = withEmail.length - eligible.length;
 
+  if (!eligible.length) {
+    return {
+      queued: 0,
+      eligible: 0,
+      skipped,
+      message_id: null,
+      detail: 'No email jobs were prepared because no contacts with email addresses were eligible under the consent/timestamp rules.'
+    };
+  }
+
+  const messageRow = await createPushMessage('email', adminUserId, subject, body, mode);
+
+  const rows = eligible.map((contact) => ({
+    message_id: messageRow.id,
+    contact_id: contact.id,
+    channel: 'email',
+    recipient_email: contact.email
+  }));
+
+  await supabaseServiceInsert('push_jobs', rows);
+
   return {
-    queued: 0,
+    queued: rows.length,
     eligible: eligible.length,
     skipped,
-    detail: 'Email sending is not configured yet.'
+    message_id: messageRow.id,
+    detail: 'Email sending is not configured yet, but email jobs were created.'
   };
 }
 
@@ -595,6 +624,7 @@ export default async (request) => {
       );
 
       const emailResult = await prepareEmailJobs(
+        user.id,
         subject || null,
         messageBody || '',
         contacts || [],
