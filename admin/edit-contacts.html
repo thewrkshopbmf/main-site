@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Edit Contacts</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="edit-contacts.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico">
+  <meta name="description" content="Admin contact editing tools for TheWrkShop."/>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="contacts-edit-page">
+    <div class="contacts-edit-shell">
+
+      <section class="contacts-edit-hero">
+        <span class="contacts-edit-eyebrow">TheWrkShop Admin</span>
+        <h1>Edit Contacts</h1>
+        <p>
+          Review and safely edit the 100 most recent contacts. Editing is locked by default to reduce accidental changes.
+        </p>
+      </section>
+
+      <section class="contacts-edit-gate">
+        <div class="contacts-edit-gate-card" id="editGateCard">
+          <h2 id="editGateTitle">Verifying access...</h2>
+          <p id="editGateText">Checking your session and admin role before loading contact editor.</p>
+          <div class="contacts-edit-gate-meta" id="editGateActions" style="display:none;">
+            <a class="contacts-inline-btn primary" href="../login.html">Go to Login</a>
+            <a class="contacts-inline-btn secondary" href="../resources.html">Back to Resources</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="contacts-edit-layout" data-edit-protected id="editProtectedLayout">
+        <aside class="contacts-edit-sidebar">
+            <h2>Quick Links</h2>
+            <nav class="contacts-edit-nav">
+                <a href="#contactsPanel">Recent Contacts</a>
+                <a href="#editorPanel">Editor</a>
+                <a href="contact-import.html" class="quick-link-primary">+ Add Contacts</a>
+                <a href="admin.html">Back to Admin</a>
+                <button type="button" id="editRefreshBtn">Refresh List</button>
+                <button type="button" id="editLogoutBtn">Log Out</button>
+            </nav>
+
+            <div class="contacts-side-note">
+                <strong>Safe editing flow</strong>
+                <p>Select a contact, unlock editing, make changes, confirm save, then save.</p>
+            </div>
+        </aside>
+
+        <div class="contacts-edit-main">
+          <section class="contacts-card" id="contactsPanel">
+            <div class="contacts-card-head">
+              <div>
+                <h2>100 Most Recent Contacts</h2>
+                <p>Search by name, email, phone, or notes.</p>
+              </div>
+              <div class="contacts-list-tools">
+                <input
+                  type="text"
+                  id="contactSearchInput"
+                  class="contacts-input"
+                  placeholder="Search contacts..."
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <div class="contacts-toolbar">
+              <button type="button" class="contacts-chip is-active" data-filter="all">All</button>
+              <button type="button" class="contacts-chip" data-filter="active">Active</button>
+              <button type="button" class="contacts-chip" data-filter="inactive">Inactive</button>
+              <button type="button" class="contacts-chip" data-filter="paid">Paid</button>
+              <button type="button" class="contacts-chip" data-filter="consented">Consented</button>
+            </div>
+
+            <div class="contacts-summary" id="contactsSummary">
+              Loading recent contacts...
+            </div>
+
+            <div class="contacts-list" id="contactsList"></div>
+          </section>
+
+          <section class="contacts-card" id="editorPanel">
+            <div class="editor-head">
+              <div>
+                <h2>Contact Editor</h2>
+                <p id="editorSubtext">Choose a contact from the list to review details.</p>
+              </div>
+
+              <div class="editor-top-actions">
+                <span class="editor-status-pill is-locked" id="editorLockStatus">Locked</span>
+                <button type="button" class="contacts-btn secondary" id="unlockEditBtn" disabled>Unlock Editing</button>
+                <button type="button" class="contacts-btn ghost" id="cancelEditBtn" disabled>Cancel Changes</button>
+              </div>
+            </div>
+
+            <div class="editor-empty" id="editorEmptyState">
+              Select a contact to load their information here.
+            </div>
+
+            <form id="contactEditForm" class="editor-form" style="display:none;">
+              <div class="editor-meta-bar">
+                <div class="meta-box">
+                  <span class="meta-label">Contact ID</span>
+                  <span class="meta-value" id="metaContactId">—</span>
+                </div>
+                <div class="meta-box">
+                  <span class="meta-label">Created</span>
+                  <span class="meta-value" id="metaCreatedAt">—</span>
+                </div>
+                <div class="meta-box">
+                  <span class="meta-label">Last Updated</span>
+                  <span class="meta-value" id="metaUpdatedAt">—</span>
+                </div>
+              </div>
+
+              <div class="editor-warning" id="editorWarning">
+                Fields are read-only until you unlock editing.
+              </div>
+
+              <div class="editor-grid">
+                <div class="form-group">
+                  <label class="form-label" for="edit_full_name">Full Name</label>
+                  <input class="contacts-input edit-field" id="edit_full_name" type="text" disabled />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="edit_email">Email</label>
+                  <input class="contacts-input edit-field" id="edit_email" type="email" disabled />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="edit_phone_e164">Phone (E.164)</label>
+                  <input class="contacts-input edit-field" id="edit_phone_e164" type="text" placeholder="+13125551234" disabled />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="edit_source_code">Source Code</label>
+                  <input class="contacts-input edit-field" id="edit_source_code" type="number" min="1" max="5" disabled />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="edit_preferred_contact_code">Preferred Contact Code</label>
+                  <input class="contacts-input edit-field" id="edit_preferred_contact_code" type="number" min="1" max="4" disabled />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="edit_consent_source_code">Consent Source Code</label>
+                  <input class="contacts-input edit-field" id="edit_consent_source_code" type="number" min="1" max="4" disabled />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="edit_birth_month">Birth Month</label>
+                  <input class="contacts-input edit-field" id="edit_birth_month" type="number" min="1" max="12" disabled />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="edit_birth_day">Birth Day</label>
+                  <input class="contacts-input edit-field" id="edit_birth_day" type="number" min="1" max="31" disabled />
+                </div>
+
+                <div class="form-group checkbox-card">
+                  <label><input type="checkbox" class="edit-field" id="edit_active" disabled /> Active</label>
+                </div>
+
+                <div class="form-group checkbox-card">
+                  <label><input type="checkbox" class="edit-field" id="edit_paid_user" disabled /> Paid User</label>
+                </div>
+
+                <div class="form-group checkbox-card">
+                  <label><input type="checkbox" class="edit-field" id="edit_email_consent" disabled /> Email Consent</label>
+                </div>
+
+                <div class="form-group checkbox-card">
+                  <label><input type="checkbox" class="edit-field" id="edit_sms_consent" disabled /> SMS Consent</label>
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label" for="edit_notes">Notes</label>
+                  <textarea class="contacts-input edit-field" id="edit_notes" rows="5" disabled></textarea>
+                </div>
+              </div>
+
+              <div class="save-guard">
+                <label class="save-guard-check">
+                  <input type="checkbox" id="confirmSaveCheckbox" disabled />
+                  I reviewed these changes and want to save them.
+                </label>
+
+                <div class="save-guard-actions">
+                  <button type="submit" class="contacts-btn primary" id="saveContactBtn" disabled>Save Changes</button>
+                </div>
+              </div>
+
+              <div class="editor-message" id="editorMessage">
+                No changes yet.
+              </div>
+            </form>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2025 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+  <script type="module" src="edit-contacts.js"></script>
+
+  <script type="module">
+    import { supabase } from '../scripts/supabase/supabaseClient.js';
+
+    const gateCard = document.getElementById('editGateCard');
+    const gateTitle = document.getElementById('editGateTitle');
+    const gateText = document.getElementById('editGateText');
+    const gateActions = document.getElementById('editGateActions');
+    const protectedLayout = document.getElementById('editProtectedLayout');
+    const logoutBtn = document.getElementById('editLogoutBtn');
+
+    function showProtected() {
+      protectedLayout.classList.add('is-visible');
+    }
+
+    function showDenied(title, text) {
+      gateCard.classList.add('is-denied');
+      gateTitle.textContent = title;
+      gateText.textContent = text;
+      gateActions.style.display = 'flex';
+    }
+
+    async function checkAdminAccess() {
+      try {
+        gateTitle.textContent = 'Verifying access...';
+        gateText.textContent = 'Checking your session and admin role before loading contact editor.';
+
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+
+        const user = userData?.user;
+        if (!user) {
+          window.location.href = '../login.html';
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role, email')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        if (!profile || profile.role !== 'admin') {
+          showDenied(
+            'Access denied',
+            'Your account is signed in, but it does not have admin access for this page.'
+          );
+          return;
+        }
+
+        gateTitle.textContent = 'Access confirmed';
+        gateText.textContent = `Signed in as admin: ${profile.email}`;
+        showProtected();
+
+        if (window.contactEditPageInit) {
+          window.contactEditPageInit();
+        }
+      } catch (err) {
+        showDenied(
+          'Could not verify access',
+          err.message || 'There was a problem checking your admin session.'
+        );
+      }
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        window.location.href = '../login.html';
+      });
+    }
+
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        window.location.href = '../login.html';
+      }
+    });
+
+    checkAdminAccess();
+  </script>
+</body>
+</html>

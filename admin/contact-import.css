@@ -372,3 +372,12 @@
     grid-template-columns: 1fr;
   }
 }
+.import-nav a.quick-link-primary {
+  background: linear-gradient(180deg, #5c4539 0%, #3e2c23 100%);
+  color: #f4f1ee;
+  border-color: transparent;
+}
+
+.import-nav a.quick-link-primary:hover {
+  background: linear-gradient(180deg, #6a5043 0%, #4a352b 100%);
+}
