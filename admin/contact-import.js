@@ -19,23 +19,12 @@ function cleanText(value) {
   return v ? v : null;
 }
 
-function collapseWhitespace(value) {
-  return value.replace(/\s+/g, ' ').trim();
-}
-
 function cleanName(value) {
   const base = cleanText(value);
   if (!base) return null;
 
-  let v = base.normalize('NFKC');
-  v = collapseWhitespace(v);
-
-  v = v.replace(/\s*-\s*/g, '-');
-  v = v.replace(/\s*'\s*/g, "'");
-  v = v.replace(/\s*,\s*/g, ', ');
-  v = v.replace(/\s+\./g, '.');
-
-  return v || null;
+  // Keep the entered name intact aside from trimming outer whitespace.
+  return base.normalize('NFKC');
 }
 
 function cleanEmail(value) {
@@ -130,137 +119,294 @@ function normalizeHeaderName(header) {
     .trim();
 }
 
-const HEADER_ALIASES = {
-  full_name: [
-    'full name',
-    'fullname',
-    'name',
-    'contact name',
-    'customer name',
-    'person name',
-    'client name'
-  ],
-  first_name: [
-    'first name',
-    'firstname',
-    'given name',
-    'forename'
-  ],
-  last_name: [
-    'last name',
-    'lastname',
-    'surname',
-    'family name'
-  ],
-  email: [
-    'email',
-    'email address',
-    'e mail',
-    'mail',
-    'primary email',
-    'emailaddress'
-  ],
-  phone_e164: [
-    'phone',
-    'phone number',
-    'mobile',
-    'mobile number',
-    'cell',
-    'cell phone',
-    'telephone',
-    'tel',
-    'sms number',
-    'phone #',
-    'mobile #'
-  ],
-  phone_prefix: [
-    'phone prefix',
-    'country code',
-    'dial code',
-    'phone country code',
-    'mobile prefix'
-  ],
-  source_code: [
-    'source code',
-    'source',
-    'lead source',
-    'origin code'
-  ],
-  preferred_contact_code: [
-    'preferred contact code',
-    'preferred contact',
-    'contact preference',
-    'preferred method'
-  ],
-  active: [
-    'active',
-    'is active',
-    'enabled',
-    'status',
-    'status active'
-  ],
-  paid_user: [
-    'paid user',
-    'paid',
-    'subscriber',
-    'is paid',
-    'premium'
-  ],
-  birth_month: [
-    'birth month',
-    'birthday month',
-    'bmonth',
-    'dob month'
-  ],
-  birth_day: [
-    'birth day',
-    'birthday day',
-    'bday',
-    'dob day'
-  ],
-  email_consent: [
-    'email consent',
-    'email opt in',
-    'consent email',
-    'email permission',
-    'email allowed'
-  ],
-  sms_consent: [
-    'sms consent',
-    'text consent',
-    'mobile consent',
-    'sms opt in',
-    'text opt in',
-    'consent sms'
-  ],
-  consent_source_code: [
-    'consent source code',
-    'consent source',
-    'source of consent'
-  ],
-  notes: [
-    'notes',
-    'note',
-    'comments',
-    'comment',
-    'details',
-    'remarks'
-  ]
+const HEADER_RULES = {
+  full_name: {
+    exact: [
+      'full_name',
+      'full name',
+      'name'
+    ],
+    fallback: [
+      'contact name',
+      'customer name',
+      'client name',
+      'person name'
+    ],
+    banned: [
+      'first name',
+      'last name',
+      'phonetic first name',
+      'phonetic last name',
+      'nickname'
+    ]
+  },
+  first_name: {
+    exact: [
+      'first_name',
+      'first name',
+      'firstname',
+      'given name'
+    ],
+    fallback: [
+      'forename'
+    ],
+    banned: [
+      'phonetic first name'
+    ]
+  },
+  last_name: {
+    exact: [
+      'last_name',
+      'last name',
+      'lastname',
+      'surname'
+    ],
+    fallback: [
+      'family name'
+    ],
+    banned: [
+      'phonetic last name'
+    ]
+  },
+  email: {
+    exact: [
+      'email',
+      'email_address',
+      'email address'
+    ],
+    fallback: [
+      'primary email',
+      'e mail'
+    ],
+    banned: [
+      'email label',
+      'email label 1',
+      'email label 2',
+      'e-mail label',
+      'email type',
+      'alternate email label'
+    ]
+  },
+  phone_e164: {
+    exact: [
+      'phone_e164',
+      'phone',
+      'phone number',
+      'mobile',
+      'mobile number',
+      'cell',
+      'cell phone',
+      'telephone',
+      'tel'
+    ],
+    fallback: [
+      'sms number',
+      'phone #',
+      'mobile #',
+      'primary phone'
+    ],
+    banned: [
+      'phonetic first name',
+      'phonetic last name',
+      'phone label',
+      'phone label 1',
+      'phone label 2',
+      'phone type',
+      'mobile label',
+      'telephone label'
+    ]
+  },
+  phone_prefix: {
+    exact: [
+      'phone prefix',
+      'country code',
+      'dial code',
+      'phone country code'
+    ],
+    fallback: [
+      'mobile prefix'
+    ],
+    banned: [
+      'country'
+    ]
+  },
+  source_code: {
+    exact: [
+      'source_code',
+      'source code'
+    ],
+    fallback: [
+      'source',
+      'lead source',
+      'origin code'
+    ],
+    banned: []
+  },
+  preferred_contact_code: {
+    exact: [
+      'preferred_contact_code',
+      'preferred contact code'
+    ],
+    fallback: [
+      'preferred contact',
+      'contact preference',
+      'preferred method'
+    ],
+    banned: []
+  },
+  active: {
+    exact: [
+      'active',
+      'is active'
+    ],
+    fallback: [
+      'enabled',
+      'status active'
+    ],
+    banned: [
+      'activity',
+      'last active'
+    ]
+  },
+  paid_user: {
+    exact: [
+      'paid_user',
+      'paid user'
+    ],
+    fallback: [
+      'paid',
+      'subscriber',
+      'is paid',
+      'premium'
+    ],
+    banned: []
+  },
+  birth_month: {
+    exact: [
+      'birth_month',
+      'birth month'
+    ],
+    fallback: [
+      'birthday month',
+      'dob month'
+    ],
+    banned: []
+  },
+  birth_day: {
+    exact: [
+      'birth_day',
+      'birth day'
+    ],
+    fallback: [
+      'birthday day',
+      'dob day'
+    ],
+    banned: []
+  },
+  email_consent: {
+    exact: [
+      'email_consent',
+      'email consent'
+    ],
+    fallback: [
+      'email opt in',
+      'consent email',
+      'email permission',
+      'email allowed'
+    ],
+    banned: [
+      'email label',
+      'email label 1',
+      'email label 2'
+    ]
+  },
+  sms_consent: {
+    exact: [
+      'sms_consent',
+      'sms consent',
+      'text consent'
+    ],
+    fallback: [
+      'mobile consent',
+      'sms opt in',
+      'text opt in',
+      'consent sms'
+    ],
+    banned: [
+      'sms label',
+      'phone label',
+      'text label'
+    ]
+  },
+  consent_source_code: {
+    exact: [
+      'consent_source_code',
+      'consent source code'
+    ],
+    fallback: [
+      'consent source',
+      'source of consent'
+    ],
+    banned: []
+  },
+  notes: {
+    exact: [
+      'notes',
+      'note'
+    ],
+    fallback: [
+      'comments',
+      'comment',
+      'details',
+      'remarks'
+    ],
+    banned: []
+  }
 };
 
-function findMatchingHeader(normalizedHeaders, aliases) {
-  for (const alias of aliases) {
-    const wanted = normalizeHeaderName(alias);
-    const found = normalizedHeaders.find((h) => h.normalized === wanted);
-    if (found) return found.original;
+function normalizedSet(values) {
+  return values.map(normalizeHeaderName);
+}
+
+function containsBannedTerm(headerNormalized, bannedList) {
+  return normalizedSet(bannedList).some((bad) => bad && headerNormalized.includes(bad));
+}
+
+function findHeaderByPriority(normalizedHeaders, rule) {
+  const exact = normalizedSet(rule.exact || []);
+  const fallback = normalizedSet(rule.fallback || []);
+  const banned = rule.banned || [];
+
+  // Priority 1: exact normalized match only
+  for (const candidate of normalizedHeaders) {
+    if (containsBannedTerm(candidate.normalized, banned)) continue;
+    if (exact.includes(candidate.normalized)) {
+      return candidate.original;
+    }
   }
 
-  for (const alias of aliases) {
-    const wanted = normalizeHeaderName(alias);
-    const found = normalizedHeaders.find(
-      (h) => h.normalized.includes(wanted) || wanted.includes(h.normalized)
-    );
-    if (found) return found.original;
+  // Priority 2: exact alias contained as a whole phrase-ish match
+  for (const candidate of normalizedHeaders) {
+    if (containsBannedTerm(candidate.normalized, banned)) continue;
+    if (exact.some((alias) => alias && candidate.normalized.includes(alias))) {
+      return candidate.original;
+    }
+  }
+
+  // Priority 3: fallback exact normalized match
+  for (const candidate of normalizedHeaders) {
+    if (containsBannedTerm(candidate.normalized, banned)) continue;
+    if (fallback.includes(candidate.normalized)) {
+      return candidate.original;
+    }
+  }
+
+  // Priority 4: fallback contained match
+  for (const candidate of normalizedHeaders) {
+    if (containsBannedTerm(candidate.normalized, banned)) continue;
+    if (fallback.some((alias) => alias && candidate.normalized.includes(alias))) {
+      return candidate.original;
+    }
   }
 
   return null;
@@ -274,8 +420,8 @@ function detectCsvFieldMap(headers) {
 
   const fieldMap = {};
 
-  for (const [field, aliases] of Object.entries(HEADER_ALIASES)) {
-    fieldMap[field] = findMatchingHeader(normalizedHeaders, aliases);
+  for (const [field, rule] of Object.entries(HEADER_RULES)) {
+    fieldMap[field] = findHeaderByPriority(normalizedHeaders, rule);
   }
 
   return fieldMap;
@@ -289,7 +435,7 @@ function getRawValueByMappedHeader(raw, mappedHeader) {
 function joinNameParts(first, last) {
   const pieces = [cleanText(first), cleanText(last)].filter(Boolean);
   if (!pieces.length) return null;
-  return cleanName(pieces.join(' '));
+  return pieces.join(' ');
 }
 
 function remapCsvRow(raw, fieldMap) {
