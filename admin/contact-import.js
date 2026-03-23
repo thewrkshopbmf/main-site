@@ -18,6 +18,25 @@ function cleanText(value) {
   return v ? v : null;
 }
 
+function collapseWhitespace(value) {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function cleanName(value) {
+  const base = cleanText(value);
+  if (!base) return null;
+
+  let v = base.normalize('NFKC');
+  v = collapseWhitespace(v);
+
+  v = v.replace(/\s*-\s*/g, '-');
+  v = v.replace(/\s*'\s*/g, "'");
+  v = v.replace(/\s*,\s*/g, ', ');
+  v = v.replace(/\s+\./g, '.');
+
+  return v || null;
+}
+
 function cleanEmail(value) {
   const v = cleanText(value);
   return v ? v.toLowerCase() : null;
@@ -43,14 +62,61 @@ function isoNowOrNull(flag) {
   return flag === true ? new Date().toISOString() : null;
 }
 
+function normalizePhoneToE164(value) {
+  const raw = cleanText(value);
+  if (!raw) return null;
+
+  const v = raw.normalize('NFKC').trim();
+  const digits = v.replace(/\D/g, '');
+
+  if (!digits) return null;
+
+  if (digits.length === 10) {
+    return `+1${digits}`;
+  }
+
+  if (digits.length === 11 && digits.startsWith('1')) {
+    return `+${digits}`;
+  }
+
+  const hadLeadingPlus = /^\s*\+/.test(v);
+  if (hadLeadingPlus && digits.length >= 8 && digits.length <= 15) {
+    return `+${digits}`;
+  }
+
+  // For messy US-style input with extra junk, try to recover:
+  // 1XXXXXXXXXX anywhere -> use that
+  const match11 = digits.match(/1\d{10}/);
+  if (match11) {
+    return `+${match11[0]}`;
+  }
+
+  // Otherwise grab the last 10 digits as a US number
+  if (digits.length >= 10) {
+    return `+1${digits.slice(-10)}`;
+  }
+
+  return raw;
+}
+
+function isLikelyValidEmail(email) {
+  if (!email) return true;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function isLikelyValidPhoneE164(phone) {
+  if (!phone) return true;
+  return /^\+[1-9]\d{7,14}$/.test(phone);
+}
+
 function buildContactRow(raw) {
   const emailConsent = cleanBoolLoose(raw.email_consent);
   const smsConsent = cleanBoolLoose(raw.sms_consent);
 
   return {
-    full_name: cleanText(raw.full_name),
+    full_name: cleanName(raw.full_name),
     email: cleanEmail(raw.email),
-    phone_e164: cleanText(raw.phone_e164),
+    phone_e164: normalizePhoneToE164(raw.phone_e164),
 
     source_code: cleanInt(raw.source_code),
     preferred_contact_code: cleanInt(raw.preferred_contact_code),
@@ -82,6 +148,14 @@ function validateContactRow(row) {
     errors.push('Needs at least one identifier: full_name, email, or phone_e164.');
   }
 
+  if (row.email && !isLikelyValidEmail(row.email)) {
+    errors.push('email appears invalid.');
+  }
+
+  if (row.phone_e164 && !isLikelyValidPhoneE164(row.phone_e164)) {
+    errors.push('phone_e164 could not be normalized into a valid E.164 phone number.');
+  }
+
   if (row.birth_month !== null && (row.birth_month < 1 || row.birth_month > 12)) {
     errors.push('birth_month must be 1-12.');
   }
@@ -103,6 +177,28 @@ function validateContactRow(row) {
   }
 
   return errors;
+}
+
+function formatPreviewValue(value) {
+  return value === null || value === undefined || value === '' ? '—' : String(value);
+}
+
+function didValueChange(rawValue, cleanedValue) {
+  const raw = formatPreviewValue(rawValue);
+  const cleaned = formatPreviewValue(cleanedValue);
+  return raw !== cleaned;
+}
+
+function buildPreviewRecord(raw) {
+  const cleaned = buildContactRow(raw);
+  const errors = validateContactRow(cleaned);
+
+  return {
+    raw,
+    cleaned,
+    ok: errors.length === 0,
+    error: errors.join(' ')
+  };
 }
 
 singleContactForm?.addEventListener('submit', async (e) => {
@@ -136,21 +232,21 @@ singleContactForm?.addEventListener('submit', async (e) => {
     }
 
     const { data, error } = await supabase
-    .from('contacts')
-    .insert([row])
-    .select('id, full_name, email, phone_e164')
-    .single();
+      .from('contacts')
+      .insert([row])
+      .select('id, full_name, email, phone_e164')
+      .single();
 
     if (error) throw error;
 
     const { count, error: countError } = await supabase
-    .from('contacts')
-    .select('*', { count: 'exact', head: true });
+      .from('contacts')
+      .select('*', { count: 'exact', head: true });
 
     if (countError) throw countError;
 
     singleContactMessage.textContent =
-    `Saved contact as member #${count}${data.full_name ? ` (${data.full_name})` : ''}.`;
+      `Saved contact as member #${count}${data.full_name ? ` (${data.full_name})` : ''}.`;
 
     singleContactForm.reset();
   } catch (err) {
@@ -220,30 +316,52 @@ async function readBulkCsvSource() {
   return bulkCsvText.value.trim();
 }
 
-function renderBulkPreview(rows, results = null) {
+function createPreviewLine(label, rawValue, cleanedValue) {
+  const changed = didValueChange(rawValue, cleanedValue);
+  const line = document.createElement('div');
+  line.className = 'bulk-preview-line';
+  line.textContent = `${label}: ${formatPreviewValue(rawValue)} → ${formatPreviewValue(cleanedValue)}${changed ? ' (cleaned)' : ''}`;
+  return line;
+}
+
+function renderBulkPreview(records, mode = 'preview', importResults = []) {
   bulkPreview.innerHTML = '';
 
-  if (!rows.length) return;
+  if (!records.length) return;
 
-  rows.slice(0, 8).forEach((row, idx) => {
-    const div = document.createElement('div');
-    div.className = 'bulk-preview-item';
+  records.slice(0, 8).forEach((record, idx) => {
+    const item = document.createElement('div');
+    item.className = 'bulk-preview-item';
 
-    let text = `Row ${idx + 1}: `;
-    text += row.full_name || row.email || row.phone_e164 || 'Unnamed row';
+    const title = document.createElement('div');
+    title.className = 'bulk-preview-title';
 
-    if (results && results[idx]) {
-      text += results[idx].ok ? ' — ready/inserted' : ` — error: ${results[idx].error}`;
+    let titleText = `Row ${idx + 1}: `;
+    titleText += record.cleaned.full_name || record.cleaned.email || record.cleaned.phone_e164 || 'Unnamed row';
+
+    if (mode === 'preview') {
+      titleText += record.ok ? ' — ready' : ` — error: ${record.error}`;
+    } else if (mode === 'import') {
+      const result = importResults[idx];
+      if (result) {
+        titleText += result.ok ? ' — inserted' : ` — error: ${result.error}`;
+      }
     }
 
-    div.textContent = text;
-    bulkPreview.appendChild(div);
+    title.textContent = titleText;
+    item.appendChild(title);
+
+    item.appendChild(createPreviewLine('Name', record.raw.full_name, record.cleaned.full_name));
+    item.appendChild(createPreviewLine('Email', record.raw.email, record.cleaned.email));
+    item.appendChild(createPreviewLine('Phone', record.raw.phone_e164, record.cleaned.phone_e164));
+
+    bulkPreview.appendChild(item);
   });
 
-  if (rows.length > 8) {
+  if (records.length > 8) {
     const extra = document.createElement('div');
     extra.className = 'bulk-preview-item';
-    extra.textContent = `Plus ${rows.length - 8} more row(s).`;
+    extra.textContent = `Plus ${records.length - 8} more row(s).`;
     bulkPreview.appendChild(extra);
   }
 }
@@ -257,18 +375,15 @@ previewBulkImportBtn?.addEventListener('click', async () => {
     }
 
     const rawRows = parseCsv(csvText);
-    const rows = rawRows.map(buildContactRow);
-    const results = rows.map((row) => {
-      const errors = validateContactRow(row);
-      return errors.length ? { ok: false, error: errors.join(' ') } : { ok: true };
-    });
+    const records = rawRows.map(buildPreviewRecord);
 
-    parsedBulkRows = rows;
-    const validCount = results.filter((r) => r.ok).length;
-    const invalidCount = results.length - validCount;
+    parsedBulkRows = records;
+
+    const validCount = records.filter((r) => r.ok).length;
+    const invalidCount = records.length - validCount;
 
     bulkImportMessage.textContent = `Preview ready: ${validCount} valid, ${invalidCount} invalid.`;
-    renderBulkPreview(rows, results);
+    renderBulkPreview(records, 'preview');
   } catch (err) {
     bulkImportMessage.textContent = err.message || 'Could not preview CSV.';
   }
@@ -289,8 +404,10 @@ runBulkImportBtn?.addEventListener('click', async () => {
     let failCount = 0;
     const results = [];
 
-    for (const row of parsedBulkRows) {
+    for (const record of parsedBulkRows) {
+      const row = record.cleaned;
       const errors = validateContactRow(row);
+
       if (errors.length) {
         failCount++;
         results.push({ ok: false, error: errors.join(' ') });
@@ -311,7 +428,7 @@ runBulkImportBtn?.addEventListener('click', async () => {
     }
 
     bulkImportMessage.textContent = `Import finished: ${successCount} inserted, ${failCount} failed.`;
-    renderBulkPreview(parsedBulkRows, results);
+    renderBulkPreview(parsedBulkRows, 'import', results);
   } catch (err) {
     bulkImportMessage.textContent = err.message || 'Bulk import failed.';
   } finally {
