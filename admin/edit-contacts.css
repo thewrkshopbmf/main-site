@@ -171,6 +171,16 @@
   background: #e4d6ca;
 }
 
+.contacts-edit-nav a.quick-link-primary {
+  background: linear-gradient(180deg, #5c4539 0%, #3e2c23 100%);
+  color: #f4f1ee;
+  border-color: transparent;
+}
+
+.contacts-edit-nav a.quick-link-primary:hover {
+  background: linear-gradient(180deg, #6a5043 0%, #4a352b 100%);
+}
+
 .contacts-side-note {
   margin-top: 1rem;
   background: #efe7e1;
@@ -539,8 +549,17 @@
   border: 1px solid rgba(62,44,35,.10);
 }
 
+.contacts-btn.danger {
+  background: linear-gradient(180deg, #a94442 0%, #7f2f2d 100%);
+  color: #fff7f7;
+}
+
 .contacts-btn:hover {
   transform: translateY(-1px);
+}
+
+.contacts-btn.danger:hover {
+  background: linear-gradient(180deg, #b24d4b 0%, #8b3533 100%);
 }
 
 .contacts-btn:disabled {
@@ -591,14 +610,4 @@
   .editor-grid {
     grid-template-columns: 1fr;
   }
-}
-
-.contacts-edit-nav a.quick-link-primary {
-  background: linear-gradient(180deg, #5c4539 0%, #3e2c23 100%);
-  color: #f4f1ee;
-  border-color: transparent;
-}
-
-.contacts-edit-nav a.quick-link-primary:hover {
-  background: linear-gradient(180deg, #6a5043 0%, #4a352b 100%);
 }

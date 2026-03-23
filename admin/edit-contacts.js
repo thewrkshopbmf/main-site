@@ -8,6 +8,7 @@ const editRefreshBtn = document.getElementById('editRefreshBtn');
 const unlockEditBtn = document.getElementById('unlockEditBtn');
 const cancelEditBtn = document.getElementById('cancelEditBtn');
 const saveContactBtn = document.getElementById('saveContactBtn');
+const deleteContactBtn = document.getElementById('deleteContactBtn');
 const confirmSaveCheckbox = document.getElementById('confirmSaveCheckbox');
 const editorLockStatus = document.getElementById('editorLockStatus');
 const editorSubtext = document.getElementById('editorSubtext');
@@ -351,6 +352,7 @@ async function handleSelectContact(contactId) {
 
   unlockEditBtn.disabled = false;
   cancelEditBtn.disabled = false;
+  deleteContactBtn.disabled = false;
 
   setEditorLockedState(true);
   markDirty(false);
@@ -491,6 +493,7 @@ editRefreshBtn?.addEventListener('click', async () => {
   contactEditForm.style.display = 'none';
   unlockEditBtn.disabled = true;
   cancelEditBtn.disabled = true;
+  deleteContactBtn.disabled = true;
 
   await loadRecentContacts();
 });
@@ -575,6 +578,72 @@ contactEditForm?.addEventListener('submit', async (e) => {
   } catch (err) {
     editorMessage.textContent = err.message || 'Failed to save changes.';
     markDirty(true);
+  }
+});
+
+deleteContactBtn?.addEventListener('click', async () => {
+  if (!selectedContactId || !selectedContactOriginal) {
+    editorMessage.textContent = 'No contact selected.';
+    return;
+  }
+
+  const label =
+    selectedContactOriginal.full_name ||
+    selectedContactOriginal.email ||
+    selectedContactOriginal.phone_e164 ||
+    'this contact';
+
+  const firstConfirm = window.confirm(
+    `Delete ${label}? This cannot be undone.`
+  );
+  if (!firstConfirm) return;
+
+  const secondConfirm = window.prompt(
+    'Type DELETE to confirm permanent removal.'
+  );
+
+  if (secondConfirm !== 'DELETE') {
+    editorMessage.textContent = 'Delete cancelled.';
+    return;
+  }
+
+  deleteContactBtn.disabled = true;
+  saveContactBtn.disabled = true;
+  cancelEditBtn.disabled = true;
+  unlockEditBtn.disabled = true;
+  editorMessage.textContent = 'Deleting contact...';
+
+  try {
+    const { error } = await supabase
+      .from('contacts')
+      .delete()
+      .eq('id', selectedContactId);
+
+    if (error) throw error;
+
+    allContacts = allContacts.filter((item) => item.id !== selectedContactId);
+    filteredContacts = filteredContacts.filter((item) => item.id !== selectedContactId);
+
+    selectedContactId = null;
+    selectedContactOriginal = null;
+    isDirty = false;
+    isEditorUnlocked = false;
+
+    editorEmptyState.style.display = 'block';
+    contactEditForm.style.display = 'none';
+    editorSubtext.textContent = 'Choose a contact from the list to review details.';
+    editorMessage.textContent = 'Contact deleted successfully.';
+    unlockEditBtn.disabled = true;
+    cancelEditBtn.disabled = true;
+    deleteContactBtn.disabled = true;
+
+    applySearchAndFilter();
+  } catch (err) {
+    editorMessage.textContent = err.message || 'Failed to delete contact.';
+    deleteContactBtn.disabled = false;
+    cancelEditBtn.disabled = false;
+    unlockEditBtn.disabled = false;
+    markDirty(isDirty);
   }
 });
 

@@ -36,20 +36,20 @@
 
       <section class="contacts-edit-layout" data-edit-protected id="editProtectedLayout">
         <aside class="contacts-edit-sidebar">
-            <h2>Quick Links</h2>
-            <nav class="contacts-edit-nav">
-                <a href="#contactsPanel">Recent Contacts</a>
-                <a href="#editorPanel">Editor</a>
-                <a href="contact-import.html" class="quick-link-primary">+ Add Contacts</a>
-                <a href="admin.html">Back to Admin</a>
-                <button type="button" id="editRefreshBtn">Refresh List</button>
-                <button type="button" id="editLogoutBtn">Log Out</button>
-            </nav>
+          <h2>Quick Links</h2>
+          <nav class="contacts-edit-nav">
+            <a href="#contactsPanel">Recent Contacts</a>
+            <a href="#editorPanel">Editor</a>
+            <a href="add-contacts.html" class="quick-link-primary">+ Add Contacts</a>
+            <a href="admin.html">Back to Admin</a>
+            <button type="button" id="editRefreshBtn">Refresh List</button>
+            <button type="button" id="editLogoutBtn">Log Out</button>
+          </nav>
 
-            <div class="contacts-side-note">
-                <strong>Safe editing flow</strong>
-                <p>Select a contact, unlock editing, make changes, confirm save, then save.</p>
-            </div>
+          <div class="contacts-side-note">
+            <strong>Safe editing flow</strong>
+            <p>Select a contact, unlock editing, make changes, confirm save, then save.</p>
+          </div>
         </aside>
 
         <div class="contacts-edit-main">
@@ -193,6 +193,7 @@
                 </label>
 
                 <div class="save-guard-actions">
+                  <button type="button" class="contacts-btn danger" id="deleteContactBtn" disabled>Delete Contact</button>
                   <button type="submit" class="contacts-btn primary" id="saveContactBtn" disabled>Save Changes</button>
                 </div>
               </div>

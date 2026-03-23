@@ -61,6 +61,19 @@ function cleanBoolLoose(value) {
 function isoNowOrNull(flag) {
   return flag === true ? new Date().toISOString() : null;
 }
+function combinePhoneParts(prefix, phone) {
+  const cleanedPhone = cleanText(phone);
+  if (!cleanedPhone) return null;
+
+  const cleanedPrefix = cleanText(prefix) || '+1';
+
+  // If the user already typed a full international number, keep it.
+  if (/^\s*\+/.test(cleanedPhone)) {
+    return cleanedPhone;
+  }
+
+  return `${cleanedPrefix} ${cleanedPhone}`;
+}
 
 function normalizePhoneToE164(value) {
   const raw = cleanText(value);
@@ -443,3 +456,4 @@ runBulkImportBtn?.addEventListener('click', async () => {
 window.contactImportPageInit = function contactImportPageInit() {
   // Reserved for future page-level initialization
 };
+
