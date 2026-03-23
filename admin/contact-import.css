@@ -381,3 +381,32 @@
 .import-nav a.quick-link-primary:hover {
   background: linear-gradient(180deg, #6a5043 0%, #4a352b 100%);
 }
+
+.phone-input-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.phone-prefix-select {
+  min-width: 0;
+  font-weight: 600;
+}
+
+.phone-number-input {
+  min-width: 0;
+}
+
+.field-help-text {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #6b5b53;
+}
+
+@media (max-width: 640px) {
+  .phone-input-row {
+    grid-template-columns: 1fr;
+  }
+}

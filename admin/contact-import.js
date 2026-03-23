@@ -211,7 +211,10 @@ singleContactForm?.addEventListener('submit', async (e) => {
     const row = buildContactRow({
       full_name: document.getElementById('contact_full_name').value,
       email: document.getElementById('contact_email').value,
-      phone_e164: document.getElementById('contact_phone').value,
+      phone_e164: combinePhoneParts(
+        document.getElementById('contact_phone_prefix').value,
+        document.getElementById('contact_phone').value
+      ),
       source_code: document.getElementById('contact_source_code').value,
       preferred_contact_code: document.getElementById('contact_preferred_contact_code').value,
       active: document.getElementById('contact_active').checked,
