@@ -12,6 +12,7 @@ const bulkImportMessage = document.getElementById('bulkImportMessage');
 const bulkPreview = document.getElementById('bulkPreview');
 
 let parsedBulkRows = [];
+let lastDetectedFieldMap = null;
 
 function cleanText(value) {
   const v = typeof value === 'string' ? value.trim() : '';
@@ -136,7 +137,8 @@ const HEADER_ALIASES = {
     'name',
     'contact name',
     'customer name',
-    'person name'
+    'person name',
+    'client name'
   ],
   first_name: [
     'first name',
@@ -155,7 +157,8 @@ const HEADER_ALIASES = {
     'email address',
     'e mail',
     'mail',
-    'primary email'
+    'primary email',
+    'emailaddress'
   ],
   phone_e164: [
     'phone',
@@ -166,7 +169,9 @@ const HEADER_ALIASES = {
     'cell phone',
     'telephone',
     'tel',
-    'sms number'
+    'sms number',
+    'phone #',
+    'mobile #'
   ],
   phone_prefix: [
     'phone prefix',
@@ -191,6 +196,7 @@ const HEADER_ALIASES = {
     'active',
     'is active',
     'enabled',
+    'status',
     'status active'
   ],
   paid_user: [
@@ -248,6 +254,15 @@ function findMatchingHeader(normalizedHeaders, aliases) {
     const found = normalizedHeaders.find((h) => h.normalized === wanted);
     if (found) return found.original;
   }
+
+  for (const alias of aliases) {
+    const wanted = normalizeHeaderName(alias);
+    const found = normalizedHeaders.find(
+      (h) => h.normalized.includes(wanted) || wanted.includes(h.normalized)
+    );
+    if (found) return found.original;
+  }
+
   return null;
 }
 
@@ -294,12 +309,16 @@ function remapCsvRow(raw, fieldMap) {
 
     source_code: getRawValueByMappedHeader(raw, fieldMap.source_code),
     preferred_contact_code: getRawValueByMappedHeader(raw, fieldMap.preferred_contact_code),
+
     active: getRawValueByMappedHeader(raw, fieldMap.active),
     paid_user: getRawValueByMappedHeader(raw, fieldMap.paid_user),
+
     birth_month: getRawValueByMappedHeader(raw, fieldMap.birth_month),
     birth_day: getRawValueByMappedHeader(raw, fieldMap.birth_day),
+
     email_consent: getRawValueByMappedHeader(raw, fieldMap.email_consent),
     sms_consent: getRawValueByMappedHeader(raw, fieldMap.sms_consent),
+
     consent_source_code: getRawValueByMappedHeader(raw, fieldMap.consent_source_code),
     notes: getRawValueByMappedHeader(raw, fieldMap.notes)
   };
@@ -379,19 +398,25 @@ function formatPreviewValue(value) {
   return value === null || value === undefined || value === '' ? '—' : String(value);
 }
 
+function formatActiveValue(value) {
+  if (value === true) return 'Yes';
+  if (value === false) return 'No';
+  return '—';
+}
+
 function didValueChange(rawValue, cleanedValue) {
   const raw = formatPreviewValue(rawValue);
   const cleaned = formatPreviewValue(cleanedValue);
   return raw !== cleaned;
 }
 
-function buildPreviewRecord(raw, originalRaw = null) {
-  const cleaned = buildContactRow(raw);
+function buildPreviewRecord(mappedRaw, originalRaw = null) {
+  const cleaned = buildContactRow(mappedRaw);
   const errors = validateContactRow(cleaned);
 
   return {
-    raw,
-    originalRaw: originalRaw || raw,
+    raw: mappedRaw,
+    originalRaw: originalRaw || mappedRaw,
     cleaned,
     ok: errors.length === 0,
     error: errors.join(' ')
@@ -526,10 +551,15 @@ function createPreviewLine(label, rawValue, cleanedValue) {
   return line;
 }
 
+function createSimplePreviewLine(label, value) {
+  const line = document.createElement('div');
+  line.className = 'bulk-preview-line';
+  line.textContent = `${label}: ${value}`;
+  return line;
+}
+
 function renderBulkPreview(records, mode = 'preview', importResults = [], detectedFieldMap = null) {
   bulkPreview.innerHTML = '';
-
-  if (!records.length && !detectedFieldMap) return;
 
   if (detectedFieldMap) {
     const mappingBox = document.createElement('div');
@@ -540,19 +570,21 @@ function renderBulkPreview(records, mode = 'preview', importResults = [], detect
     title.textContent = 'Detected CSV column mapping';
     mappingBox.appendChild(title);
 
+    const nameMap = detectedFieldMap.full_name ||
+      [detectedFieldMap.first_name, detectedFieldMap.last_name].filter(Boolean).join(' + ') ||
+      '—';
+
     const mappedFields = [
-      ['Name', detectedFieldMap.full_name || [detectedFieldMap.first_name, detectedFieldMap.last_name].filter(Boolean).join(' + ') || '—'],
+      ['Name', nameMap],
       ['Email', detectedFieldMap.email || '—'],
       ['Phone', detectedFieldMap.phone_e164 || '—'],
       ['Phone Prefix', detectedFieldMap.phone_prefix || '—'],
+      ['Active', detectedFieldMap.active || '—'],
       ['Notes', detectedFieldMap.notes || '—']
     ];
 
     mappedFields.forEach(([label, value]) => {
-      const line = document.createElement('div');
-      line.className = 'bulk-preview-line';
-      line.textContent = `${label}: ${value}`;
-      mappingBox.appendChild(line);
+      mappingBox.appendChild(createSimplePreviewLine(label, value));
     });
 
     bulkPreview.appendChild(mappingBox);
@@ -560,7 +592,7 @@ function renderBulkPreview(records, mode = 'preview', importResults = [], detect
 
   if (!records.length) return;
 
-  records.slice(0, 8).forEach((record, idx) => {
+  records.slice(0, 12).forEach((record, idx) => {
     const item = document.createElement('div');
     item.className = 'bulk-preview-item';
 
@@ -585,14 +617,15 @@ function renderBulkPreview(records, mode = 'preview', importResults = [], detect
     item.appendChild(createPreviewLine('Name', record.raw.full_name, record.cleaned.full_name));
     item.appendChild(createPreviewLine('Email', record.raw.email, record.cleaned.email));
     item.appendChild(createPreviewLine('Phone', record.raw.phone_e164, record.cleaned.phone_e164));
+    item.appendChild(createPreviewLine('Active', formatActiveValue(record.raw.active), formatActiveValue(record.cleaned.active)));
 
     bulkPreview.appendChild(item);
   });
 
-  if (records.length > 8) {
+  if (records.length > 12) {
     const extra = document.createElement('div');
     extra.className = 'bulk-preview-item';
-    extra.textContent = `Plus ${records.length - 8} more row(s).`;
+    extra.textContent = `Plus ${records.length - 12} more row(s).`;
     bulkPreview.appendChild(extra);
   }
 }
@@ -612,6 +645,8 @@ previewBulkImportBtn?.addEventListener('click', async () => {
     }
 
     const fieldMap = detectCsvFieldMap(headers);
+    lastDetectedFieldMap = fieldMap;
+
     const mappedRows = rawRows.map((raw) => remapCsvRow(raw, fieldMap));
     const records = mappedRows.map((row, idx) => buildPreviewRecord(row, rawRows[idx]));
 
@@ -666,7 +701,7 @@ runBulkImportBtn?.addEventListener('click', async () => {
     }
 
     bulkImportMessage.textContent = `Import finished: ${successCount} inserted, ${failCount} failed.`;
-    renderBulkPreview(parsedBulkRows, 'import', results);
+    renderBulkPreview(parsedBulkRows, 'import', results, lastDetectedFieldMap);
   } catch (err) {
     bulkImportMessage.textContent = err.message || 'Bulk import failed.';
   } finally {

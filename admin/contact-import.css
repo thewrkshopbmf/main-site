@@ -410,3 +410,17 @@
     grid-template-columns: 1fr;
   }
 }
+
+.bulk-preview-title {
+  font-weight: 700;
+  margin-bottom: 0.45rem;
+  color: #3e2c23;
+}
+
+.bulk-preview-line {
+  font-size: 0.94rem;
+  line-height: 1.5;
+  color: #5f4d43;
+  margin-top: 0.2rem;
+  word-break: break-word;
+}
