@@ -22,8 +22,6 @@ function cleanText(value) {
 function cleanName(value) {
   const base = cleanText(value);
   if (!base) return null;
-
-  // Keep the entered name intact aside from trimming outer whitespace.
   return base.normalize('NFKC');
 }
 
@@ -87,9 +85,9 @@ function normalizePhoneToE164(value) {
     return `+${digits}`;
   }
 
-  const match11 = digits.match(/1\d{10}/);
-  if (match11) {
-    return `+${match11[0]}`;
+  const us11Anywhere = digits.match(/1\d{10}/);
+  if (us11Anywhere) {
+    return `+${us11Anywhere[0]}`;
   }
 
   if (digits.length >= 10) {
@@ -113,298 +111,172 @@ function normalizeHeaderName(header) {
   return String(header || '')
     .trim()
     .toLowerCase()
+    .replace(/[^\w\s]/g, ' ')
     .replace(/[_-]+/g, ' ')
-    .replace(/[^\w\s]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
+function headerTokens(header) {
+  return normalizeHeaderName(header).split(' ').filter(Boolean);
+}
+
 const HEADER_RULES = {
   full_name: {
-    exact: [
-      'full_name',
-      'full name',
-      'name'
-    ],
-    fallback: [
-      'contact name',
-      'customer name',
-      'client name',
-      'person name'
-    ],
-    banned: [
-      'first name',
-      'last name',
-      'phonetic first name',
-      'phonetic last name',
-      'nickname'
-    ]
+    exact: ['full_name', 'full name', 'name'],
+    startsWith: ['full name', 'contact name', 'customer name', 'client name', 'person name'],
+    contains: [],
+    banned: ['first name', 'last name', 'phonetic first name', 'phonetic last name', 'nickname']
   },
   first_name: {
-    exact: [
-      'first_name',
-      'first name',
-      'firstname',
-      'given name'
-    ],
-    fallback: [
-      'forename'
-    ],
-    banned: [
-      'phonetic first name'
-    ]
+    exact: ['first_name', 'first name', 'firstname', 'given name'],
+    startsWith: ['forename'],
+    contains: [],
+    banned: ['phonetic first name']
   },
   last_name: {
-    exact: [
-      'last_name',
-      'last name',
-      'lastname',
-      'surname'
-    ],
-    fallback: [
-      'family name'
-    ],
-    banned: [
-      'phonetic last name'
-    ]
+    exact: ['last_name', 'last name', 'lastname', 'surname'],
+    startsWith: ['family name'],
+    contains: [],
+    banned: ['phonetic last name']
   },
   email: {
-    exact: [
-      'email',
-      'email_address',
-      'email address'
-    ],
-    fallback: [
-      'primary email',
-      'e mail'
-    ],
-    banned: [
-      'email label',
-      'email label 1',
-      'email label 2',
-      'e-mail label',
-      'email type',
-      'alternate email label'
-    ]
+    exact: ['email', 'email_address', 'email address'],
+    startsWith: ['primary email'],
+    contains: [],
+    banned: ['email label', 'email type', 'alternate email', 'secondary email']
   },
   phone_e164: {
-    exact: [
-      'phone_e164',
-      'phone',
-      'phone number',
-      'mobile',
-      'mobile number',
-      'cell',
-      'cell phone',
-      'telephone',
-      'tel'
-    ],
-    fallback: [
-      'sms number',
-      'phone #',
-      'mobile #',
-      'primary phone'
-    ],
+    exact: ['phone_e164', 'phone', 'phone number', 'mobile', 'mobile number', 'cell', 'cell phone', 'telephone', 'tel'],
+    startsWith: ['primary phone', 'sms number'],
+    contains: [],
     banned: [
       'phonetic first name',
       'phonetic last name',
       'phone label',
-      'phone label 1',
-      'phone label 2',
       'phone type',
       'mobile label',
       'telephone label'
     ]
   },
   phone_prefix: {
-    exact: [
-      'phone prefix',
-      'country code',
-      'dial code',
-      'phone country code'
-    ],
-    fallback: [
-      'mobile prefix'
-    ],
-    banned: [
-      'country'
-    ]
+    exact: ['phone prefix', 'country code', 'dial code', 'phone country code'],
+    startsWith: ['mobile prefix'],
+    contains: [],
+    banned: ['country']
   },
   source_code: {
-    exact: [
-      'source_code',
-      'source code'
-    ],
-    fallback: [
-      'source',
-      'lead source',
-      'origin code'
-    ],
+    exact: ['source_code', 'source code'],
+    startsWith: ['lead source', 'origin code'],
+    contains: [],
     banned: []
   },
   preferred_contact_code: {
-    exact: [
-      'preferred_contact_code',
-      'preferred contact code'
-    ],
-    fallback: [
-      'preferred contact',
-      'contact preference',
-      'preferred method'
-    ],
+    exact: ['preferred_contact_code', 'preferred contact code'],
+    startsWith: ['preferred contact', 'contact preference', 'preferred method'],
+    contains: [],
     banned: []
   },
   active: {
-    exact: [
-      'active',
-      'is active'
-    ],
-    fallback: [
-      'enabled',
-      'status active'
-    ],
-    banned: [
-      'activity',
-      'last active'
-    ]
+    exact: ['active', 'is active'],
+    startsWith: ['status active', 'enabled'],
+    contains: [],
+    banned: ['activity', 'last active']
   },
   paid_user: {
-    exact: [
-      'paid_user',
-      'paid user'
-    ],
-    fallback: [
-      'paid',
-      'subscriber',
-      'is paid',
-      'premium'
-    ],
+    exact: ['paid_user', 'paid user'],
+    startsWith: ['subscriber', 'premium'],
+    contains: [],
     banned: []
   },
   birth_month: {
-    exact: [
-      'birth_month',
-      'birth month'
-    ],
-    fallback: [
-      'birthday month',
-      'dob month'
-    ],
+    exact: ['birth_month', 'birth month'],
+    startsWith: ['birthday month', 'dob month'],
+    contains: [],
     banned: []
   },
   birth_day: {
-    exact: [
-      'birth_day',
-      'birth day'
-    ],
-    fallback: [
-      'birthday day',
-      'dob day'
-    ],
+    exact: ['birth_day', 'birth day'],
+    startsWith: ['birthday day', 'dob day'],
+    contains: [],
     banned: []
   },
   email_consent: {
-    exact: [
-      'email_consent',
-      'email consent'
-    ],
-    fallback: [
-      'email opt in',
-      'consent email',
-      'email permission',
-      'email allowed'
-    ],
-    banned: [
-      'email label',
-      'email label 1',
-      'email label 2'
-    ]
+    exact: ['email_consent', 'email consent'],
+    startsWith: ['email opt in', 'consent email', 'email permission', 'email allowed'],
+    contains: [],
+    banned: ['email label']
   },
   sms_consent: {
-    exact: [
-      'sms_consent',
-      'sms consent',
-      'text consent'
-    ],
-    fallback: [
-      'mobile consent',
-      'sms opt in',
-      'text opt in',
-      'consent sms'
-    ],
-    banned: [
-      'sms label',
-      'phone label',
-      'text label'
-    ]
+    exact: ['sms_consent', 'sms consent', 'text consent'],
+    startsWith: ['mobile consent', 'sms opt in', 'text opt in', 'consent sms'],
+    contains: [],
+    banned: ['sms label', 'phone label', 'text label']
   },
   consent_source_code: {
-    exact: [
-      'consent_source_code',
-      'consent source code'
-    ],
-    fallback: [
-      'consent source',
-      'source of consent'
-    ],
+    exact: ['consent_source_code', 'consent source code'],
+    startsWith: ['consent source', 'source of consent'],
+    contains: [],
     banned: []
   },
   notes: {
-    exact: [
-      'notes',
-      'note'
-    ],
-    fallback: [
-      'comments',
-      'comment',
-      'details',
-      'remarks'
-    ],
+    exact: ['notes', 'note'],
+    startsWith: ['comments', 'comment', 'details', 'remarks'],
+    contains: [],
     banned: []
   }
 };
 
 function normalizedSet(values) {
-  return values.map(normalizeHeaderName);
+  return (values || []).map(normalizeHeaderName).filter(Boolean);
 }
 
 function containsBannedTerm(headerNormalized, bannedList) {
-  return normalizedSet(bannedList).some((bad) => bad && headerNormalized.includes(bad));
+  return normalizedSet(bannedList).some((bad) => headerNormalized.includes(bad));
+}
+
+function tokenSetMatch(candidateNormalized, targetNormalized) {
+  const a = headerTokens(candidateNormalized);
+  const b = headerTokens(targetNormalized);
+  if (!a.length || !b.length) return false;
+  if (a.length !== b.length) return false;
+  return a.every((token, idx) => token === b[idx]);
+}
+
+function startsWithPhrase(candidateNormalized, targetNormalized) {
+  return candidateNormalized === targetNormalized || candidateNormalized.startsWith(`${targetNormalized} `);
+}
+
+function containsWholePhrase(candidateNormalized, targetNormalized) {
+  if (candidateNormalized === targetNormalized) return true;
+  return candidateNormalized.includes(` ${targetNormalized} `) ||
+    candidateNormalized.startsWith(`${targetNormalized} `) ||
+    candidateNormalized.endsWith(` ${targetNormalized}`);
 }
 
 function findHeaderByPriority(normalizedHeaders, rule) {
-  const exact = normalizedSet(rule.exact || []);
-  const fallback = normalizedSet(rule.fallback || []);
+  const exact = normalizedSet(rule.exact);
+  const startsWith = normalizedSet(rule.startsWith);
+  const contains = normalizedSet(rule.contains);
   const banned = rule.banned || [];
 
-  // Priority 1: exact normalized match only
   for (const candidate of normalizedHeaders) {
     if (containsBannedTerm(candidate.normalized, banned)) continue;
-    if (exact.includes(candidate.normalized)) {
+    if (exact.some((alias) => tokenSetMatch(candidate.normalized, alias))) {
       return candidate.original;
     }
   }
 
-  // Priority 2: exact alias contained as a whole phrase-ish match
   for (const candidate of normalizedHeaders) {
     if (containsBannedTerm(candidate.normalized, banned)) continue;
-    if (exact.some((alias) => alias && candidate.normalized.includes(alias))) {
+    if (startsWith.some((alias) => startsWithPhrase(candidate.normalized, alias))) {
       return candidate.original;
     }
   }
 
-  // Priority 3: fallback exact normalized match
   for (const candidate of normalizedHeaders) {
     if (containsBannedTerm(candidate.normalized, banned)) continue;
-    if (fallback.includes(candidate.normalized)) {
-      return candidate.original;
-    }
-  }
-
-  // Priority 4: fallback contained match
-  for (const candidate of normalizedHeaders) {
-    if (containsBannedTerm(candidate.normalized, banned)) continue;
-    if (fallback.some((alias) => alias && candidate.normalized.includes(alias))) {
+    if (contains.some((alias) => containsWholePhrase(candidate.normalized, alias))) {
       return candidate.original;
     }
   }
@@ -556,13 +428,12 @@ function didValueChange(rawValue, cleanedValue) {
   return raw !== cleaned;
 }
 
-function buildPreviewRecord(mappedRaw, originalRaw = null) {
+function buildPreviewRecord(mappedRaw) {
   const cleaned = buildContactRow(mappedRaw);
   const errors = validateContactRow(cleaned);
 
   return {
     raw: mappedRaw,
-    originalRaw: originalRaw || mappedRaw,
     cleaned,
     ok: errors.length === 0,
     error: errors.join(' ')
@@ -598,7 +469,6 @@ singleContactForm?.addEventListener('submit', async (e) => {
     const errors = validateContactRow(row);
     if (errors.length) {
       singleContactMessage.textContent = `Could not save: ${errors.join(' ')}`;
-      saveSingleContactBtn.disabled = false;
       return;
     }
 
@@ -627,59 +497,70 @@ singleContactForm?.addEventListener('submit', async (e) => {
   }
 });
 
-function splitCsvLine(line) {
-  const result = [];
-  let current = '';
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let cell = '';
   let inQuotes = false;
 
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    const next = line[i + 1];
+  const normalized = String(text || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n');
+
+  for (let i = 0; i < normalized.length; i++) {
+    const ch = normalized[i];
+    const next = normalized[i + 1];
 
     if (ch === '"') {
       if (inQuotes && next === '"') {
-        current += '"';
+        cell += '"';
         i++;
       } else {
         inQuotes = !inQuotes;
       }
-    } else if (ch === ',' && !inQuotes) {
-      result.push(current);
-      current = '';
-    } else {
-      current += ch;
+      continue;
     }
+
+    if (ch === ',' && !inQuotes) {
+      row.push(cell.trim());
+      cell = '';
+      continue;
+    }
+
+    if (ch === '\n' && !inQuotes) {
+      row.push(cell.trim());
+      cell = '';
+
+      const hasAnyValue = row.some((v) => String(v).trim() !== '');
+      if (hasAnyValue) rows.push(row);
+
+      row = [];
+      continue;
+    }
+
+    cell += ch;
   }
 
-  result.push(current);
-  return result.map((v) => v.trim());
-}
+  if (cell.length > 0 || row.length > 0) {
+    row.push(cell.trim());
+    const hasAnyValue = row.some((v) => String(v).trim() !== '');
+    if (hasAnyValue) rows.push(row);
+  }
 
-function parseCsv(text) {
-  const lines = text
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n')
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  if (lines.length < 2) {
+  if (rows.length < 2) {
     return { headers: [], rows: [] };
   }
 
-  const headers = splitCsvLine(lines[0]);
-  const rows = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const values = splitCsvLine(lines[i]);
+  const headers = rows[0].map((header) => String(header || '').trim());
+  const dataRows = rows.slice(1).map((values) => {
     const obj = {};
     headers.forEach((header, idx) => {
       obj[header] = values[idx] ?? '';
     });
-    rows.push(obj);
-  }
+    return obj;
+  });
 
-  return { headers, rows };
+  return { headers, rows: dataRows };
 }
 
 async function readBulkCsvSource() {
@@ -738,7 +619,10 @@ function renderBulkPreview(records, mode = 'preview', importResults = [], detect
 
   if (!records.length) return;
 
-  records.slice(0, 12).forEach((record, idx) => {
+  const previewCount = Math.min(records.length, 12);
+
+  for (let idx = 0; idx < previewCount; idx++) {
+    const record = records[idx];
     const item = document.createElement('div');
     item.className = 'bulk-preview-item';
 
@@ -766,18 +650,22 @@ function renderBulkPreview(records, mode = 'preview', importResults = [], detect
     item.appendChild(createPreviewLine('Active', formatActiveValue(record.raw.active), formatActiveValue(record.cleaned.active)));
 
     bulkPreview.appendChild(item);
-  });
+  }
 
-  if (records.length > 12) {
+  if (records.length > previewCount) {
     const extra = document.createElement('div');
     extra.className = 'bulk-preview-item';
-    extra.textContent = `Plus ${records.length - 12} more row(s).`;
+    extra.textContent = `Plus ${records.length - previewCount} more row(s).`;
     bulkPreview.appendChild(extra);
   }
 }
 
 previewBulkImportBtn?.addEventListener('click', async () => {
   try {
+    parsedBulkRows = [];
+    lastDetectedFieldMap = null;
+    bulkPreview.innerHTML = '';
+
     const csvText = await readBulkCsvSource();
     if (!csvText) {
       bulkImportMessage.textContent = 'Add a CSV file or paste CSV text first.';
@@ -794,16 +682,18 @@ previewBulkImportBtn?.addEventListener('click', async () => {
     lastDetectedFieldMap = fieldMap;
 
     const mappedRows = rawRows.map((raw) => remapCsvRow(raw, fieldMap));
-    const records = mappedRows.map((row, idx) => buildPreviewRecord(row, rawRows[idx]));
+    const records = mappedRows.map((row) => buildPreviewRecord(row));
 
     parsedBulkRows = records;
 
     const validCount = records.filter((r) => r.ok).length;
     const invalidCount = records.length - validCount;
 
-    bulkImportMessage.textContent = `Preview ready: ${validCount} valid, ${invalidCount} invalid.`;
+    bulkImportMessage.textContent = `Preview ready: ${validCount} valid, ${invalidCount} invalid, ${records.length} total row(s).`;
     renderBulkPreview(records, 'preview', [], fieldMap);
   } catch (err) {
+    parsedBulkRows = [];
+    lastDetectedFieldMap = null;
     bulkImportMessage.textContent = err.message || 'Could not preview CSV.';
   }
 });
@@ -846,7 +736,7 @@ runBulkImportBtn?.addEventListener('click', async () => {
       }
     }
 
-    bulkImportMessage.textContent = `Import finished: ${successCount} inserted, ${failCount} failed.`;
+    bulkImportMessage.textContent = `Import finished: ${successCount} inserted, ${failCount} failed, ${parsedBulkRows.length} total row(s).`;
     renderBulkPreview(parsedBulkRows, 'import', results, lastDetectedFieldMap);
   } catch (err) {
     bulkImportMessage.textContent = err.message || 'Bulk import failed.';
