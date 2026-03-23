@@ -61,13 +61,13 @@ function cleanBoolLoose(value) {
 function isoNowOrNull(flag) {
   return flag === true ? new Date().toISOString() : null;
 }
+
 function combinePhoneParts(prefix, phone) {
   const cleanedPhone = cleanText(phone);
   if (!cleanedPhone) return null;
 
   const cleanedPrefix = cleanText(prefix) || '+1';
 
-  // If the user already typed a full international number, keep it.
   if (/^\s*\+/.test(cleanedPhone)) {
     return cleanedPhone;
   }
@@ -97,14 +97,11 @@ function normalizePhoneToE164(value) {
     return `+${digits}`;
   }
 
-  // For messy US-style input with extra junk, try to recover:
-  // 1XXXXXXXXXX anywhere -> use that
   const match11 = digits.match(/1\d{10}/);
   if (match11) {
     return `+${match11[0]}`;
   }
 
-  // Otherwise grab the last 10 digits as a US number
   if (digits.length >= 10) {
     return `+1${digits.slice(-10)}`;
   }
@@ -120,6 +117,192 @@ function isLikelyValidEmail(email) {
 function isLikelyValidPhoneE164(phone) {
   if (!phone) return true;
   return /^\+[1-9]\d{7,14}$/.test(phone);
+}
+
+function normalizeHeaderName(header) {
+  return String(header || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[_-]+/g, ' ')
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+const HEADER_ALIASES = {
+  full_name: [
+    'full name',
+    'fullname',
+    'name',
+    'contact name',
+    'customer name',
+    'person name'
+  ],
+  first_name: [
+    'first name',
+    'firstname',
+    'given name',
+    'forename'
+  ],
+  last_name: [
+    'last name',
+    'lastname',
+    'surname',
+    'family name'
+  ],
+  email: [
+    'email',
+    'email address',
+    'e mail',
+    'mail',
+    'primary email'
+  ],
+  phone_e164: [
+    'phone',
+    'phone number',
+    'mobile',
+    'mobile number',
+    'cell',
+    'cell phone',
+    'telephone',
+    'tel',
+    'sms number'
+  ],
+  phone_prefix: [
+    'phone prefix',
+    'country code',
+    'dial code',
+    'phone country code',
+    'mobile prefix'
+  ],
+  source_code: [
+    'source code',
+    'source',
+    'lead source',
+    'origin code'
+  ],
+  preferred_contact_code: [
+    'preferred contact code',
+    'preferred contact',
+    'contact preference',
+    'preferred method'
+  ],
+  active: [
+    'active',
+    'is active',
+    'enabled',
+    'status active'
+  ],
+  paid_user: [
+    'paid user',
+    'paid',
+    'subscriber',
+    'is paid',
+    'premium'
+  ],
+  birth_month: [
+    'birth month',
+    'birthday month',
+    'bmonth',
+    'dob month'
+  ],
+  birth_day: [
+    'birth day',
+    'birthday day',
+    'bday',
+    'dob day'
+  ],
+  email_consent: [
+    'email consent',
+    'email opt in',
+    'consent email',
+    'email permission',
+    'email allowed'
+  ],
+  sms_consent: [
+    'sms consent',
+    'text consent',
+    'mobile consent',
+    'sms opt in',
+    'text opt in',
+    'consent sms'
+  ],
+  consent_source_code: [
+    'consent source code',
+    'consent source',
+    'source of consent'
+  ],
+  notes: [
+    'notes',
+    'note',
+    'comments',
+    'comment',
+    'details',
+    'remarks'
+  ]
+};
+
+function findMatchingHeader(normalizedHeaders, aliases) {
+  for (const alias of aliases) {
+    const wanted = normalizeHeaderName(alias);
+    const found = normalizedHeaders.find((h) => h.normalized === wanted);
+    if (found) return found.original;
+  }
+  return null;
+}
+
+function detectCsvFieldMap(headers) {
+  const normalizedHeaders = headers.map((header) => ({
+    original: header,
+    normalized: normalizeHeaderName(header)
+  }));
+
+  const fieldMap = {};
+
+  for (const [field, aliases] of Object.entries(HEADER_ALIASES)) {
+    fieldMap[field] = findMatchingHeader(normalizedHeaders, aliases);
+  }
+
+  return fieldMap;
+}
+
+function getRawValueByMappedHeader(raw, mappedHeader) {
+  if (!mappedHeader) return null;
+  return raw[mappedHeader] ?? null;
+}
+
+function joinNameParts(first, last) {
+  const pieces = [cleanText(first), cleanText(last)].filter(Boolean);
+  if (!pieces.length) return null;
+  return cleanName(pieces.join(' '));
+}
+
+function remapCsvRow(raw, fieldMap) {
+  const explicitFullName = getRawValueByMappedHeader(raw, fieldMap.full_name);
+  const firstName = getRawValueByMappedHeader(raw, fieldMap.first_name);
+  const lastName = getRawValueByMappedHeader(raw, fieldMap.last_name);
+
+  const builtFullName = explicitFullName || joinNameParts(firstName, lastName);
+
+  const rawPhone = getRawValueByMappedHeader(raw, fieldMap.phone_e164);
+  const rawPhonePrefix = getRawValueByMappedHeader(raw, fieldMap.phone_prefix);
+
+  return {
+    full_name: builtFullName,
+    email: getRawValueByMappedHeader(raw, fieldMap.email),
+    phone_e164: rawPhonePrefix ? combinePhoneParts(rawPhonePrefix, rawPhone) : rawPhone,
+
+    source_code: getRawValueByMappedHeader(raw, fieldMap.source_code),
+    preferred_contact_code: getRawValueByMappedHeader(raw, fieldMap.preferred_contact_code),
+    active: getRawValueByMappedHeader(raw, fieldMap.active),
+    paid_user: getRawValueByMappedHeader(raw, fieldMap.paid_user),
+    birth_month: getRawValueByMappedHeader(raw, fieldMap.birth_month),
+    birth_day: getRawValueByMappedHeader(raw, fieldMap.birth_day),
+    email_consent: getRawValueByMappedHeader(raw, fieldMap.email_consent),
+    sms_consent: getRawValueByMappedHeader(raw, fieldMap.sms_consent),
+    consent_source_code: getRawValueByMappedHeader(raw, fieldMap.consent_source_code),
+    notes: getRawValueByMappedHeader(raw, fieldMap.notes)
+  };
 }
 
 function buildContactRow(raw) {
@@ -202,12 +385,13 @@ function didValueChange(rawValue, cleanedValue) {
   return raw !== cleaned;
 }
 
-function buildPreviewRecord(raw) {
+function buildPreviewRecord(raw, originalRaw = null) {
   const cleaned = buildContactRow(raw);
   const errors = validateContactRow(cleaned);
 
   return {
     raw,
+    originalRaw: originalRaw || raw,
     cleaned,
     ok: errors.length === 0,
     error: errors.join(' ')
@@ -308,7 +492,9 @@ function parseCsv(text) {
     .map((line) => line.trim())
     .filter(Boolean);
 
-  if (lines.length < 2) return [];
+  if (lines.length < 2) {
+    return { headers: [], rows: [] };
+  }
 
   const headers = splitCsvLine(lines[0]);
   const rows = [];
@@ -322,7 +508,7 @@ function parseCsv(text) {
     rows.push(obj);
   }
 
-  return rows;
+  return { headers, rows };
 }
 
 async function readBulkCsvSource() {
@@ -340,8 +526,37 @@ function createPreviewLine(label, rawValue, cleanedValue) {
   return line;
 }
 
-function renderBulkPreview(records, mode = 'preview', importResults = []) {
+function renderBulkPreview(records, mode = 'preview', importResults = [], detectedFieldMap = null) {
   bulkPreview.innerHTML = '';
+
+  if (!records.length && !detectedFieldMap) return;
+
+  if (detectedFieldMap) {
+    const mappingBox = document.createElement('div');
+    mappingBox.className = 'bulk-preview-item';
+
+    const title = document.createElement('div');
+    title.className = 'bulk-preview-title';
+    title.textContent = 'Detected CSV column mapping';
+    mappingBox.appendChild(title);
+
+    const mappedFields = [
+      ['Name', detectedFieldMap.full_name || [detectedFieldMap.first_name, detectedFieldMap.last_name].filter(Boolean).join(' + ') || '—'],
+      ['Email', detectedFieldMap.email || '—'],
+      ['Phone', detectedFieldMap.phone_e164 || '—'],
+      ['Phone Prefix', detectedFieldMap.phone_prefix || '—'],
+      ['Notes', detectedFieldMap.notes || '—']
+    ];
+
+    mappedFields.forEach(([label, value]) => {
+      const line = document.createElement('div');
+      line.className = 'bulk-preview-line';
+      line.textContent = `${label}: ${value}`;
+      mappingBox.appendChild(line);
+    });
+
+    bulkPreview.appendChild(mappingBox);
+  }
 
   if (!records.length) return;
 
@@ -390,8 +605,15 @@ previewBulkImportBtn?.addEventListener('click', async () => {
       return;
     }
 
-    const rawRows = parseCsv(csvText);
-    const records = rawRows.map(buildPreviewRecord);
+    const { headers, rows: rawRows } = parseCsv(csvText);
+    if (!headers.length || !rawRows.length) {
+      bulkImportMessage.textContent = 'Could not find usable CSV headers and rows.';
+      return;
+    }
+
+    const fieldMap = detectCsvFieldMap(headers);
+    const mappedRows = rawRows.map((raw) => remapCsvRow(raw, fieldMap));
+    const records = mappedRows.map((row, idx) => buildPreviewRecord(row, rawRows[idx]));
 
     parsedBulkRows = records;
 
@@ -399,7 +621,7 @@ previewBulkImportBtn?.addEventListener('click', async () => {
     const invalidCount = records.length - validCount;
 
     bulkImportMessage.textContent = `Preview ready: ${validCount} valid, ${invalidCount} invalid.`;
-    renderBulkPreview(records, 'preview');
+    renderBulkPreview(records, 'preview', [], fieldMap);
   } catch (err) {
     bulkImportMessage.textContent = err.message || 'Could not preview CSV.';
   }
@@ -456,4 +678,3 @@ runBulkImportBtn?.addEventListener('click', async () => {
 window.contactImportPageInit = function contactImportPageInit() {
   // Reserved for future page-level initialization
 };
-
