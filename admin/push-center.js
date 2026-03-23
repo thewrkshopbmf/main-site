@@ -10,6 +10,9 @@ const pushBody = document.getElementById('pushBody');
 const pushJsonInput = document.getElementById('pushJsonInput');
 const pushJsonFile = document.getElementById('pushJsonFile');
 const pushRawLabel = document.getElementById('pushRawLabel');
+const pushSendTiming = document.getElementById('pushSendTiming');
+const pushSendAt = document.getElementById('pushSendAt');
+const pushScheduleGroup = document.getElementById('pushScheduleGroup');
 
 const actionDaily = document.getElementById('actionDaily');
 const actionBlog = document.getElementById('actionBlog');
@@ -58,13 +61,29 @@ function hasOutboundActions(actions) {
   return Boolean(actions.sendEmail || actions.sendSms);
 }
 
+function updateScheduleVisibility() {
+  if (!pushScheduleGroup) return;
+  pushScheduleGroup.hidden = pushSendTiming?.value !== 'schedule';
+}
+
+function getSendAtIso() {
+  if (!pushSendTiming || pushSendTiming.value !== 'schedule') return null;
+  const raw = pushSendAt?.value?.trim();
+  if (!raw) return null;
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString();
+}
+
 function formatDateHuman(iso) {
-  const d = new Date(`${iso}T00:00:00`);
+  const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString(undefined, {
+  return d.toLocaleString(undefined, {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
   });
 }
 
@@ -199,6 +218,7 @@ async function collectPayload() {
     label,
     subject: pushSubject.value.trim() || null,
     body: pushBody.value.trim() || null,
+    send_at: getSendAtIso(),
     actions: selectedActions(),
     structured
   };
@@ -343,6 +363,9 @@ function buildOutboundPreviewHTML(payload) {
   const body = payload.body || '(No message body)';
   const label = payload.label || 'No header label';
   const channelText = channels.length ? channels.join(' + ') : 'Outbound message';
+  const sendTimingText = payload.send_at
+    ? `Scheduled for ${formatDateHuman(payload.send_at)}`
+    : 'Send as soon as possible';
 
   return `
     <!DOCTYPE html>
@@ -431,6 +454,7 @@ function buildOutboundPreviewHTML(payload) {
           <div class="meta">
             <span class="pill">${escapeHtml(channelText)}</span>
             <span class="pill">${escapeHtml(payload.mode || 'single')}</span>
+            <span class="pill">${escapeHtml(sendTimingText)}</span>
           </div>
 
           <div class="label">Optional Header Label</div>
@@ -466,7 +490,10 @@ async function renderRealPreview(payload = null, entries = null) {
         ? 'SMS Preview'
         : 'Email Preview';
 
-    previewStatusText.textContent = payload.subject || payload.body || 'Outbound-only preview';
+    previewStatusText.textContent = payload.send_at
+      ? `Scheduled for ${formatDateHuman(payload.send_at)}`
+      : (payload.subject || payload.body || 'Outbound-only preview');
+
     realPreviewFrame.srcdoc = buildOutboundPreviewHTML(payload);
     return;
   }
@@ -507,7 +534,7 @@ async function renderRealPreview(payload = null, entries = null) {
     previewTypeBadge.textContent = 'Daily Preview';
   }
 
-  previewStatusText.textContent = `${entry.title || 'Untitled'}${entry.date ? ` • ${entry.date}` : ''}`;
+  previewStatusText.textContent = `${entry.title || 'Untitled'}${entry.date ? ` • ${entry.date}` : ''}${payload.send_at ? ` • Scheduled ${formatDateHuman(payload.send_at)}` : ''}`;
   realPreviewFrame.srcdoc = stripScriptsFromDocument(html);
 }
 
@@ -521,12 +548,18 @@ async function runAnalysis() {
     return { ok: false };
   }
 
+  if (pushSendTiming?.value === 'schedule' && !payload.send_at) {
+    bulkAnalysisBox.textContent = 'Choose a valid scheduled date and time.';
+    return { ok: false };
+  }
+
   const websiteRequested = hasWebsiteActions(actions);
   const outboundRequested = hasOutboundActions(actions);
 
   if (!websiteRequested && outboundRequested) {
     const lines = [];
     lines.push(`Mode: ${payload.mode}`);
+    lines.push(`Timing: ${payload.send_at ? `scheduled for ${formatDateHuman(payload.send_at)}` : 'send now'}`);
     lines.push('Outbound-only push detected.');
     if (actions.sendSms) lines.push('SMS/iMessage delivery requested.');
     if (actions.sendEmail) lines.push('Email delivery requested.');
@@ -546,6 +579,8 @@ async function runAnalysis() {
   const { errors, entries } = normalizeEntriesFromPayload(payload);
 
   const report = [];
+  report.push(`Timing: ${payload.send_at ? `scheduled for ${formatDateHuman(payload.send_at)}` : 'send now'}`);
+
   if (errors.length) {
     report.push('JSON errors:');
     errors.forEach((e) => report.push(`- ${e}`));
@@ -619,6 +654,7 @@ async function runPreview() {
   const lines = [];
   lines.push(`Actions: ${Object.entries(payload.actions).filter(([, v]) => v).map(([k]) => k).join(', ') || 'none'}`);
   lines.push(`Mode: ${payload.mode}`);
+  lines.push(`Timing: ${payload.send_at ? `scheduled for ${formatDateHuman(payload.send_at)}` : 'send now'}`);
   lines.push(`Subject: ${payload.subject || '(none)'}`);
   lines.push(`Body: ${payload.body || '(none)'}`);
 
@@ -712,6 +748,7 @@ async function confirmPush() {
 
   outputLog.textContent = formatOutputBlock('Submitting push request...', [
     `Mode: ${analysis.payload.mode}`,
+    `Timing: ${analysis.payload.send_at ? `scheduled for ${formatDateHuman(analysis.payload.send_at)}` : 'send now'}`,
     `Actions: ${Object.entries(analysis.payload.actions).filter(([, v]) => v).map(([k]) => k).join(', ') || 'none'}`,
     `Entries: ${analysis.entries.length}`
   ]);
@@ -733,6 +770,7 @@ async function confirmPush() {
       label: analysis.payload.label,
       subject: analysis.payload.subject,
       body: analysis.payload.body,
+      send_at: analysis.payload.send_at,
       actions: analysis.payload.actions,
       entries: analysis.entries.map((e) => e.data)
     };
@@ -798,6 +836,15 @@ refreshRealPreviewBtn?.addEventListener('click', async () => {
   }
 });
 
+pushSendTiming?.addEventListener('change', () => {
+  updateScheduleVisibility();
+  disarmConfirm();
+});
+
+pushSendAt?.addEventListener('input', () => {
+  disarmConfirm();
+});
+
 entryModeInputs.forEach((input) => {
   input.addEventListener('change', () => {
     disarmConfirm();
@@ -821,5 +868,6 @@ pushJsonFile?.addEventListener('change', () => {
 });
 
 window.pushCenterInit = function pushCenterInit() {
+  updateScheduleVisibility();
   disarmConfirm();
 };

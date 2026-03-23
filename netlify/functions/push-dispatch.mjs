@@ -211,13 +211,24 @@ function buildTopLevelMessage(mode, entries, actions, responseLog) {
   return 'Push completed.';
 }
 
+function normalizeSendAt(sendAt) {
+  if (!sendAt) return new Date().toISOString();
+  const d = new Date(sendAt);
+  if (Number.isNaN(d.getTime())) {
+    throw new Error('Invalid send_at value.');
+  }
+  return d.toISOString();
+}
+
 function isSmsEligible(contact) {
+  if (contact?.active === false) return false;
   if (!contact?.phone_e164) return false;
   if (contact.sms_consent === true) return true;
   return contact.sms_consented_at == null;
 }
 
 function isEmailEligible(contact) {
+  if (contact?.active === false) return false;
   if (!contact?.email) return false;
   if (contact.email_consent === true) return true;
   return contact.email_consented_at == null;
@@ -405,7 +416,7 @@ async function createPushMessage(channel, adminUserId, subject, body, mode) {
   return rows[0];
 }
 
-async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
+async function queueSmsJobs(adminUserId, subject, body, contacts, mode, sendAtIso) {
   const withPhone = contacts.filter((c) => c.phone_e164);
   const eligible = withPhone.filter(isSmsEligible);
   const skipped = withPhone.length - eligible.length;
@@ -416,7 +427,7 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
       eligible: 0,
       skipped,
       message_id: null,
-      detail: 'No SMS jobs were queued because no contacts with phone numbers were eligible under the consent/timestamp rules.'
+      detail: 'No SMS jobs were queued because no active contacts with phone numbers were eligible under the consent/timestamp rules.'
     };
   }
 
@@ -426,7 +437,8 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
     message_id: messageRow.id,
     contact_id: contact.id,
     channel: 'sms',
-    recipient_phone: contact.phone_e164
+    recipient_phone: contact.phone_e164,
+    send_at: sendAtIso
   }));
 
   await supabaseServiceInsert('push_jobs', rows);
@@ -440,7 +452,7 @@ async function queueSmsJobs(adminUserId, subject, body, contacts, mode) {
   };
 }
 
-async function prepareEmailJobs(adminUserId, subject, body, contacts, mode) {
+async function prepareEmailJobs(adminUserId, subject, body, contacts, mode, sendAtIso) {
   const withEmail = contacts.filter((c) => c.email);
   const eligible = withEmail.filter(isEmailEligible);
   const skipped = withEmail.length - eligible.length;
@@ -451,7 +463,7 @@ async function prepareEmailJobs(adminUserId, subject, body, contacts, mode) {
       eligible: 0,
       skipped,
       message_id: null,
-      detail: 'No email jobs were prepared because no contacts with email addresses were eligible under the consent/timestamp rules.'
+      detail: 'No email jobs were prepared because no active contacts with email addresses were eligible under the consent/timestamp rules.'
     };
   }
 
@@ -461,7 +473,8 @@ async function prepareEmailJobs(adminUserId, subject, body, contacts, mode) {
     message_id: messageRow.id,
     contact_id: contact.id,
     channel: 'email',
-    recipient_email: contact.email
+    recipient_email: contact.email,
+    send_at: sendAtIso
   }));
 
   await supabaseServiceInsert('push_jobs', rows);
@@ -500,6 +513,7 @@ export default async (request) => {
       label,
       subject,
       body: messageBody,
+      send_at,
       actions,
       entries
     } = body;
@@ -528,12 +542,14 @@ export default async (request) => {
       });
     }
 
+    const sendAtIso = normalizeSendAt(send_at);
     const safeEntries = Array.isArray(entries) ? entries : [];
 
     const responseLog = {
       admin_email: profile.email,
       mode: mode || 'single',
       label: label || null,
+      send_at: sendAtIso,
       website_updates: [],
       outbound: []
     };
@@ -599,7 +615,7 @@ export default async (request) => {
     if (actions.sendSms) {
       const contacts = await supabaseServiceSelect(
         'contacts',
-        'select=id,phone_e164,sms_consent,sms_consented_at'
+        'select=id,active,phone_e164,sms_consent,sms_consented_at'
       );
 
       const smsResult = await queueSmsJobs(
@@ -607,7 +623,8 @@ export default async (request) => {
         subject || null,
         messageBody || '',
         contacts || [],
-        mode || 'single'
+        mode || 'single',
+        sendAtIso
       );
 
       responseLog.outbound.push({
@@ -620,7 +637,7 @@ export default async (request) => {
     if (actions.sendEmail) {
       const contacts = await supabaseServiceSelect(
         'contacts',
-        'select=id,email,email_consent,email_consented_at'
+        'select=id,active,email,email_consent,email_consented_at'
       );
 
       const emailResult = await prepareEmailJobs(
@@ -628,7 +645,8 @@ export default async (request) => {
         subject || null,
         messageBody || '',
         contacts || [],
-        mode || 'single'
+        mode || 'single',
+        sendAtIso
       );
 
       responseLog.outbound.push({
@@ -644,7 +662,8 @@ export default async (request) => {
       submitted_entries: safeEntries.length,
       ...collectDateStats(safeEntries),
       created_daily_file_count: createdCounts.daily,
-      created_blog_file_count: createdCounts.blog
+      created_blog_file_count: createdCounts.blog,
+      send_at: sendAtIso
     };
 
     return jsonResponse(200, {
