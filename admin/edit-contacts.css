@@ -611,3 +611,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+.contacts-list-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+#viewMoreContactsBtn {
+  min-width: 150px;
+}
