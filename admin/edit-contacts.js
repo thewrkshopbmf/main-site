@@ -24,6 +24,8 @@ const metaUpdatedAt = document.getElementById('metaUpdatedAt');
 const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
 const editFields = Array.from(document.querySelectorAll('.edit-field'));
 
+const viewMoreContactsBtn = document.getElementById('viewMoreContactsBtn');
+
 const fieldMap = {
   full_name: document.getElementById('edit_full_name'),
   email: document.getElementById('edit_email'),
@@ -47,6 +49,11 @@ let selectedContactId = null;
 let selectedContactOriginal = null;
 let isEditorUnlocked = false;
 let isDirty = false;
+const CONTACTS_PAGE_SIZE = 100;
+
+let totalContactsCount = 0;
+let loadedContactsCount = 0;
+let hasMoreContactsToLoad = false;
 
 function cleanText(value) {
   const v = typeof value === 'string' ? value.trim() : '';
@@ -138,43 +145,55 @@ function getStatusBadges(contact) {
 function renderContactsList() {
   contactsList.innerHTML = '';
 
-  contactsSummary.textContent = `${filteredContacts.length} contact(s) shown.`;
+  const shownCount = filteredContacts.length;
+  contactsSummary.textContent = `${shownCount} contact(s) shown. Total contacts in table: ${totalContactsCount}.`;
 
   if (!filteredContacts.length) {
     const empty = document.createElement('div');
     empty.className = 'contact-row-empty';
     empty.textContent = 'No contacts match your current search/filter.';
     contactsList.appendChild(empty);
-    return;
+  } else {
+    filteredContacts.forEach((contact) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'contact-row';
+      if (contact.id === selectedContactId) {
+        button.classList.add('is-selected');
+      }
+
+      button.innerHTML = `
+        <div class="contact-row-main">
+          <div class="contact-row-top">
+            <strong>${escapeHtml(contact.full_name || 'Unnamed Contact')}</strong>
+            <span class="contact-row-date">${escapeHtml(formatDateTime(contact.created_at))}</span>
+          </div>
+          <div class="contact-row-mid">
+            <span>${escapeHtml(contact.email || 'No email')}</span>
+            <span>${escapeHtml(contact.phone_e164 || 'No phone')}</span>
+          </div>
+          <div class="contact-row-bottom">
+            ${getStatusBadges(contact)}
+          </div>
+        </div>
+      `;
+
+      button.addEventListener('click', () => handleSelectContact(contact.id));
+      contactsList.appendChild(button);
+    });
   }
 
-  filteredContacts.forEach((contact) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'contact-row';
-    if (contact.id === selectedContactId) {
-      button.classList.add('is-selected');
+  if (viewMoreContactsBtn) {
+    const canLoadMore = hasMoreContactsToLoad && allContacts.length < totalContactsCount;
+    viewMoreContactsBtn.style.display = canLoadMore ? 'inline-flex' : 'none';
+    viewMoreContactsBtn.disabled = false;
+
+    if (canLoadMore) {
+      const remaining = Math.max(0, totalContactsCount - allContacts.length);
+      const nextLoadAmount = Math.min(CONTACTS_PAGE_SIZE, remaining);
+      viewMoreContactsBtn.textContent = `View more (${nextLoadAmount})`;
     }
-
-    button.innerHTML = `
-      <div class="contact-row-main">
-        <div class="contact-row-top">
-          <strong>${escapeHtml(contact.full_name || 'Unnamed Contact')}</strong>
-          <span class="contact-row-date">${escapeHtml(formatDateTime(contact.created_at))}</span>
-        </div>
-        <div class="contact-row-mid">
-          <span>${escapeHtml(contact.email || 'No email')}</span>
-          <span>${escapeHtml(contact.phone_e164 || 'No phone')}</span>
-        </div>
-        <div class="contact-row-bottom">
-          ${getStatusBadges(contact)}
-        </div>
-      </div>
-    `;
-
-    button.addEventListener('click', () => handleSelectContact(contact.id));
-    contactsList.appendChild(button);
-  });
+  }
 }
 
 function setEditorLockedState(locked) {
@@ -359,11 +378,29 @@ async function handleSelectContact(contactId) {
   renderContactsList();
 }
 
-async function loadRecentContacts() {
-  contactsSummary.textContent = 'Loading recent contacts...';
-  contactsList.innerHTML = '';
+async function loadContactsPage({ reset = false } = {}) {
+  if (reset) {
+    contactsSummary.textContent = 'Loading contacts...';
+    contactsList.innerHTML = '';
+    allContacts = [];
+    filteredContacts = [];
+    loadedContactsCount = 0;
+    hasMoreContactsToLoad = false;
+  }
 
   try {
+    if (reset) {
+      const { count, error: countError } = await supabase
+        .from('contacts')
+        .select('*', { count: 'exact', head: true });
+
+      if (countError) throw countError;
+      totalContactsCount = count ?? 0;
+    }
+
+    const from = loadedContactsCount;
+    const to = loadedContactsCount + CONTACTS_PAGE_SIZE - 1;
+
     const { data, error } = await supabase
       .from('contacts')
       .select(`
@@ -387,11 +424,21 @@ async function loadRecentContacts() {
         updated_at
       `)
       .order('created_at', { ascending: false })
-      .limit(100);
+      .range(from, to);
 
     if (error) throw error;
 
-    allContacts = Array.isArray(data) ? data : [];
+    const nextBatch = Array.isArray(data) ? data : [];
+
+    if (reset) {
+      allContacts = nextBatch;
+    } else {
+      allContacts = [...allContacts, ...nextBatch];
+    }
+
+    loadedContactsCount = allContacts.length;
+    hasMoreContactsToLoad = nextBatch.length === CONTACTS_PAGE_SIZE && loadedContactsCount < totalContactsCount;
+
     applySearchAndFilter();
 
     if (selectedContactId) {
@@ -405,9 +452,15 @@ async function loadRecentContacts() {
     }
   } catch (err) {
     contactsSummary.textContent = err.message || 'Could not load contacts.';
+    if (viewMoreContactsBtn) {
+      viewMoreContactsBtn.style.display = 'none';
+    }
   }
 }
 
+async function loadRecentContacts() {
+  await loadContactsPage({ reset: true });
+}
 function handleAnyFieldChange() {
   if (!selectedContactOriginal) return;
 
@@ -476,6 +529,15 @@ filterButtons.forEach((btn) => {
 editFields.forEach((field) => {
   const eventName = field.type === 'checkbox' ? 'change' : 'input';
   field.addEventListener(eventName, handleAnyFieldChange);
+});
+
+viewMoreContactsBtn?.addEventListener('click', async () => {
+  if (!hasMoreContactsToLoad) return;
+
+  viewMoreContactsBtn.disabled = true;
+  viewMoreContactsBtn.textContent = 'Loading...';
+
+  await loadContactsPage({ reset: false });
 });
 
 editRefreshBtn?.addEventListener('click', async () => {

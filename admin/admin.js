@@ -202,19 +202,29 @@ async function loadRecentContacts() {
   if (recentContactsList) recentContactsList.innerHTML = '';
 
   try {
-    const { data, error } = await supabase
-      .from('contacts')
-      .select('id, full_name, email, phone_e164, birth_month, birth_day, created_at')
-      .order('created_at', { ascending: false })
-      .limit(MAX_RECENT_CONTACTS);
+    const [
+      { count, error: countError },
+      { data, error: recentError }
+    ] = await Promise.all([
+      supabase
+        .from('contacts')
+        .select('*', { count: 'exact', head: true }),
 
-    if (error) throw error;
+      supabase
+        .from('contacts')
+        .select('id, full_name, email, phone_e164, birth_month, birth_day, created_at')
+        .order('created_at', { ascending: false })
+        .limit(MAX_RECENT_CONTACTS)
+    ]);
+
+    if (countError) throw countError;
+    if (recentError) throw recentError;
 
     recentContacts = data || [];
     showingAllRecentContacts = false;
 
     if (contactsCountValue) {
-      contactsCountValue.textContent = String(recentContacts.length);
+      contactsCountValue.textContent = String(count ?? 0);
     }
 
     if (!recentContacts.length) {
@@ -222,7 +232,10 @@ async function loadRecentContacts() {
       return;
     }
 
-    recentContactsMessage.textContent = `Showing ${Math.min(INITIAL_RECENT_CONTACTS_COUNT, recentContacts.length)} of ${recentContacts.length} recent contacts.`;
+    recentContactsMessage.textContent =
+      `Showing ${Math.min(INITIAL_RECENT_CONTACTS_COUNT, recentContacts.length)} of ${recentContacts.length} recent contacts. ` +
+      `Total contacts: ${count ?? 0}.`;
+
     renderRecentContacts();
 
     if (recentContactsActions) {
@@ -463,9 +476,10 @@ toggleRecentContactsBtn?.addEventListener('click', () => {
 
   if (recentContactsMessage) {
     if (showingAllRecentContacts) {
-      recentContactsMessage.textContent = `Showing all ${recentContacts.length} recent contacts.`;
+      recentContactsMessage.textContent = `Showing all ${recentContacts.length} loaded recent contacts. Total contacts: ${contactsCountValue?.textContent || 0}.`;
     } else {
-      recentContactsMessage.textContent = `Showing ${Math.min(INITIAL_RECENT_CONTACTS_COUNT, recentContacts.length)} of ${recentContacts.length} recent contacts.`;
+      recentContactsMessage.textContent =
+        `Showing ${Math.min(INITIAL_RECENT_CONTACTS_COUNT, recentContacts.length)} of ${recentContacts.length} loaded recent contacts. Total contacts: ${contactsCountValue?.textContent || 0}.`;
     }
   }
 });
