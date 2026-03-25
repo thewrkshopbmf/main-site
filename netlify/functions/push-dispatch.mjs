@@ -35,9 +35,57 @@ function slugify(str) {
     .replace(/-+/g, '-');
 }
 
+function getPrimaryScripture(entry) {
+  if (!entry || typeof entry !== 'object') return null;
+
+  if (typeof entry.verse_ref === 'string' && entry.verse_ref.trim()) {
+    return {
+      ref: entry.verse_ref.trim(),
+      text: typeof entry.verse_text === 'string' ? entry.verse_text : ''
+    };
+  }
+
+  if (Array.isArray(entry.scriptures) && entry.scriptures.length > 0) {
+    const first = entry.scriptures[0];
+    if (first && typeof first === 'object') {
+      return {
+        ref: typeof first.ref === 'string' ? first.ref.trim() : '',
+        text: typeof first.text === 'string' ? first.text : ''
+      };
+    }
+  }
+
+  return null;
+}
+
+function isOldDailyShape(entry) {
+  return Boolean(
+    entry &&
+    typeof entry === 'object' &&
+    typeof entry.date === 'string' &&
+    typeof entry.title === 'string' &&
+    typeof entry.verse_ref === 'string' &&
+    typeof entry.verse_text === 'string'
+  );
+}
+
+function isNewDailyShape(entry) {
+  return Boolean(
+    entry &&
+    typeof entry === 'object' &&
+    typeof entry.date === 'string' &&
+    typeof entry.title === 'string' &&
+    Array.isArray(entry.scriptures) &&
+    entry.scriptures.length > 0 &&
+    Array.isArray(entry.sections) &&
+    entry.sections.length > 0
+  );
+}
+
 function dailyFilename(entry) {
   const date = entry.date || 'unknown-date';
-  const verse = slugify(entry.verse_ref || 'unknown-scripture');
+  const primaryScripture = getPrimaryScripture(entry);
+  const verse = slugify(primaryScripture?.ref || 'unknown-scripture');
   const title = slugify(entry.title || 'untitled');
   return `${date}_${verse}_${title}.json`;
 }
@@ -49,8 +97,51 @@ function blogFilename(entry) {
 }
 
 function validateDaily(entry) {
-  const required = ['date', 'title', 'verse_ref', 'verse_text'];
-  return required.filter((k) => !(k in entry));
+  if (!entry || typeof entry !== 'object') {
+    return ['entry must be an object'];
+  }
+
+  if (isOldDailyShape(entry) || isNewDailyShape(entry)) {
+    return [];
+  }
+
+  const missing = [];
+
+  if (!('date' in entry) || !entry.date) missing.push('date');
+  if (!('title' in entry) || !entry.title) missing.push('title');
+
+  const hasOldVerse =
+    typeof entry.verse_ref === 'string' &&
+    entry.verse_ref.trim() &&
+    typeof entry.verse_text === 'string';
+
+  const hasNewScriptures =
+    Array.isArray(entry.scriptures) &&
+    entry.scriptures.length > 0 &&
+    entry.scriptures[0] &&
+    typeof entry.scriptures[0] === 'object' &&
+    typeof entry.scriptures[0].ref === 'string' &&
+    entry.scriptures[0].ref.trim() &&
+    typeof entry.scriptures[0].text === 'string';
+
+  const hasSections =
+    Array.isArray(entry.sections) &&
+    entry.sections.length > 0;
+
+  if (!hasOldVerse && !hasNewScriptures) {
+    missing.push('verse_ref+verse_text or scriptures[0].ref+scriptures[0].text');
+  }
+
+  if ('scriptures' in entry || 'sections' in entry) {
+    if (!Array.isArray(entry.scriptures) || !entry.scriptures.length) {
+      missing.push('scriptures');
+    }
+    if (!hasSections) {
+      missing.push('sections');
+    }
+  }
+
+  return missing;
 }
 
 function validateBlog(entry) {
