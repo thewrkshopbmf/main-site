@@ -1,0 +1,214 @@
+{
+  "date": "2026-03-22",
+  "title": "More Than Saved - Sent",
+  "scriptures": [
+    {
+      "ref": "Romans 6:4",
+      "text": "“We too may live a new life.”"
+    },
+    {
+      "ref": "Mark 10:45",
+      "text": "“The Son of Man did not come to be served, but to serve.”"
+    },
+    {
+      "ref": "John 20:21",
+      "text": "“As the Father has sent me, I am sending you.”"
+    }
+  ],
+  "sections": [
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You were not just rescued from something."
+        },
+        {
+          "type": "paragraph",
+          "text": "You were rescued for something."
+        },
+        {
+          "type": "paragraph",
+          "text": "You are not just forgiven."
+        },
+        {
+          "type": "paragraph",
+          "text": "You are sent."
+        }
+      ]
+    },
+    {
+      "key": "the_devotional",
+      "label": "The Devotional",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most men see salvation as the finish line."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "The end of sin.",
+            "The end of guilt."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "But in Scripture, salvation is a beginning."
+        },
+        {
+          "type": "paragraph",
+          "text": "God doesn’t just save you from your past, He sends you into purpose."
+        },
+        {
+          "type": "quote",
+          "text": "“We too may live a new life.” (Romans 6:4)"
+        },
+        {
+          "type": "paragraph",
+          "text": "That new life isn’t passive."
+        },
+        {
+          "type": "paragraph",
+          "text": "It’s lived on mission."
+        }
+      ]
+    },
+    {
+      "key": "the_shift",
+      "label": "The Shift",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Many men receive grace…. but never step into assignment."
+        },
+        {
+          "type": "paragraph",
+          "text": "They get saved, but never get sent."
+        },
+        {
+          "type": "paragraph",
+          "text": "And over time, faith becomes:"
+        },
+        {
+          "type": "bullet_list",
+          "items": [
+            "passive",
+            "stagnant",
+            "unclear"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Because unused calling creates internal confusion."
+        }
+      ]
+    },
+    {
+      "key": "jesus_set_the_pattern",
+      "label": "Jesus Set the Pattern",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "“The Son of Man did not come to be served, but to serve.” (Mark 10:45)"
+        },
+        {
+          "type": "quote",
+          "text": "“As the Father has sent me, I am sending you.” (John 20:21)"
+        },
+        {
+          "type": "paragraph",
+          "text": "This is not a suggestion."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is your identity."
+        }
+      ]
+    },
+    {
+      "key": "the_truth",
+      "label": "The Truth",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "If you don’t live on mission, you will default to living for yourself."
+        },
+        {
+          "type": "paragraph",
+          "text": "And self-centered living always leads to emptiness."
+        },
+        {
+          "type": "paragraph",
+          "text": "You weren’t made to consume."
+        },
+        {
+          "type": "paragraph",
+          "text": "You were made to contribute."
+        }
+      ]
+    },
+    {
+      "key": "reflection",
+      "label": "Reflection",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Where have I chosen comfort over calling?",
+            "Where am I consuming but not contributing?",
+            "What is God already putting in front of me to step into?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "declaration",
+      "label": "Declaration",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "I am not just saved, I am sent."
+        },
+        {
+          "type": "paragraph",
+          "text": "My life has purpose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Today, I choose calling over comfort."
+        }
+      ]
+    },
+    {
+      "key": "action_step",
+      "label": "Action Step",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Do one thing today that moves you from consumer to contributor."
+        },
+        {
+          "type": "paragraph",
+          "text": "Don’t overthink it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Just move."
+        }
+      ]
+    },
+    {
+      "key": "one_sentence_to_carry",
+      "label": "One Sentence to Carry",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "“I wasn’t just saved from something, I was sent into something.”"
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-03-22_romans-6-4_more-than-saved-sent|"
+}
