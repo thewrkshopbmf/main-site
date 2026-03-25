@@ -36,15 +36,69 @@ const previewStatusText = document.getElementById('previewStatusText');
 
 const loadPromptBtn = document.getElementById('loadPromptBtn');
 const copyPromptBtn = document.getElementById('copyPromptBtn');
-const conversionPromptText = document.getElementById('conversionPromptText');
 const promptStatus = document.getElementById('promptStatus');
 
 const ADMIN_PROMPT_KEY = 'daily_json_conversion';
+let storedConversionPrompt = '';
 
 let armed = false;
 let armTimer = null;
 let blogTemplateCache = '';
 let dailyTemplateCache = '';
+
+async function loadStoredConversionPrompt() {
+  if (!promptStatus) return;
+
+  promptStatus.textContent = 'Loading prompt from Supabase...';
+
+  try {
+    const { data, error } = await supabase
+      .from('admin_prompts')
+      .select('prompt_text, updated_at')
+      .eq('key', ADMIN_PROMPT_KEY)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      storedConversionPrompt = '';
+      promptStatus.textContent = 'No stored prompt was found for this key.';
+      return;
+    }
+
+    storedConversionPrompt = data.prompt_text || '';
+    promptStatus.textContent = data.updated_at
+      ? `Prompt loaded. Last updated ${formatDateHuman(data.updated_at)}.`
+      : 'Prompt loaded.';
+  } catch (err) {
+    storedConversionPrompt = '';
+    promptStatus.textContent = `Could not load prompt: ${err.message || 'Unknown error.'}`;
+  }
+}
+
+async function copyStoredConversionPrompt() {
+  if (!storedConversionPrompt.trim()) {
+    await loadStoredConversionPrompt();
+  }
+
+  if (!storedConversionPrompt.trim()) {
+    if (promptStatus) {
+      promptStatus.textContent = 'Nothing to copy. No prompt is currently loaded.';
+    }
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(storedConversionPrompt);
+    if (promptStatus) {
+      promptStatus.textContent = 'Prompt copied to clipboard.';
+    }
+  } catch (err) {
+    if (promptStatus) {
+      promptStatus.textContent = `Copy failed: ${err.message || 'Clipboard error.'}`;
+    }
+  }
+}
 
 function currentMode() {
   const checked = Array.from(entryModeInputs).find((i) => i.checked);
@@ -104,6 +158,86 @@ function safeJsonParse(text) {
 
 function formatOutputBlock(title, lines = []) {
   return [title, ...lines].join('\n');
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function flattenBlocksToHtml(blocks = []) {
+  return blocks.map((block) => {
+    if (!block || typeof block !== 'object') return '';
+
+    if (block.type === 'paragraph') {
+      return `<p>${escapeHtml(block.text || '')}</p>`;
+    }
+
+    if (block.type === 'callout') {
+      const prefix = escapeHtml(block.prefix || '');
+      const text = escapeHtml(block.text || '');
+      return `<p><strong>${prefix}</strong> ${text}</p>`;
+    }
+
+    if (block.type === 'quote') {
+      return `<blockquote>${escapeHtml(block.text || '')}</blockquote>`;
+    }
+
+    if (block.type === 'lines') {
+      const items = Array.isArray(block.items) ? block.items : [];
+      return items.map((item) => `<p>${escapeHtml(item)}</p>`).join('');
+    }
+
+    if (block.type === 'bullet_list') {
+      const items = Array.isArray(block.items) ? block.items : [];
+      return `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
+    }
+
+    if (block.type === 'numbered_list') {
+      const items = Array.isArray(block.items) ? block.items : [];
+      return `<ol>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ol>`;
+    }
+
+    return '';
+  }).join('\n');
+}
+
+function convertSectionedDailyToPreviewShape(entry) {
+  if (!entry || typeof entry !== 'object') return entry;
+
+  const alreadyOldShape =
+    ('verse_ref' in entry) ||
+    ('verse_text' in entry);
+
+  if (alreadyOldShape) return entry;
+
+  const firstScripture = Array.isArray(entry.scriptures) && entry.scriptures.length
+    ? entry.scriptures[0]
+    : null;
+
+  const sections = Array.isArray(entry.sections) ? entry.sections : [];
+
+  const htmlSections = sections.map((section) => {
+    const label = escapeHtml(section.label || '');
+    const blocksHtml = flattenBlocksToHtml(section.blocks || []);
+    return `
+      <section class="daily-section" data-section-key="${escapeHtml(section.key || '')}">
+        ${label ? `<h2>${label}</h2>` : ''}
+        ${blocksHtml}
+      </section>
+    `;
+  }).join('\n');
+
+  return {
+    ...entry,
+    verse_ref: firstScripture?.ref || '',
+    verse_text: firstScripture?.text || '',
+    body_html: htmlSections
+  };
 }
 
 async function parseResponseSafely(response) {
@@ -266,8 +400,27 @@ function normalizeEntriesFromPayload(payload) {
 }
 
 function validateEntryForDaily(entry) {
-  const required = ['date', 'title', 'verse_ref', 'verse_text'];
-  return required.filter((key) => !(key in entry));
+  const oldShapeOk =
+    entry &&
+    typeof entry === 'object' &&
+    entry.date &&
+    entry.title &&
+    entry.verse_ref &&
+    entry.verse_text;
+
+  const newShapeOk =
+    entry &&
+    typeof entry === 'object' &&
+    entry.date &&
+    entry.title &&
+    Array.isArray(entry.scriptures) &&
+    entry.scriptures.length > 0 &&
+    Array.isArray(entry.sections) &&
+    entry.sections.length > 0;
+
+  if (oldShapeOk || newShapeOk) return [];
+
+  return ['date/title plus either verse_ref+verse_text or scriptures+sections'];
 }
 
 function validateEntryForBlog(entry) {
@@ -339,22 +492,19 @@ function stripScriptsFromDocument(html) {
   return String(html).replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
 }
 
-function escapeHtml(str) {
-  return String(str || '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}
-
 function pickPreviewType(payload) {
   if (payload.actions.updateBlog && !payload.actions.updateDaily) return 'blog';
   if (payload.actions.updateDaily && !payload.actions.updateBlog) return 'daily';
 
   const first = payload.structured?.[0]?.parsed?.value;
   if (first && !Array.isArray(first) && typeof first === 'object') {
-    if ('verse_ref' in first || 'verse_text' in first) return 'daily';
+    if (
+      'verse_ref' in first ||
+      'verse_text' in first ||
+      'scriptures' in first ||
+      'sections' in first
+    ) return 'daily';
+
     if ('body_html' in first || 'category' in first || 'excerpt' in first) return 'blog';
   }
 
@@ -518,8 +668,12 @@ async function renderRealPreview(payload = null, entries = null) {
 
   await ensureTemplatesLoaded();
 
-  const entry = entries[0].data;
+  let entry = entries[0].data;
   const previewType = pickPreviewType(payload);
+
+  if (previewType === 'daily') {
+    entry = convertSectionedDailyToPreviewShape(entry);
+  }
 
   let html = '';
 
@@ -543,75 +697,6 @@ async function renderRealPreview(payload = null, entries = null) {
 
   previewStatusText.textContent = `${entry.title || 'Untitled'}${entry.date ? ` • ${entry.date}` : ''}${payload.send_at ? ` • Scheduled ${formatDateHuman(payload.send_at)}` : ''}`;
   realPreviewFrame.srcdoc = stripScriptsFromDocument(html);
-}
-
-async function loadStoredConversionPrompt() {
-  if (!conversionPromptText || !promptStatus) return;
-
-  promptStatus.textContent = 'Loading prompt from Supabase...';
-
-  try {
-    const { data, error } = await supabase
-      .from('admin_prompts')
-      .select('prompt_text, updated_at')
-      .eq('key', ADMIN_PROMPT_KEY)
-      .maybeSingle();
-
-    if (error) {
-      throw error;
-    }
-
-    if (!data) {
-      conversionPromptText.value = '';
-      promptStatus.textContent = 'No stored prompt was found for this key.';
-      return;
-    }
-
-    conversionPromptText.value = data.prompt_text || '';
-    promptStatus.textContent = data.updated_at
-      ? `Prompt loaded. Last updated ${formatDateHuman(data.updated_at)}.`
-      : 'Prompt loaded.';
-  } catch (err) {
-    conversionPromptText.value = '';
-    promptStatus.textContent = `Could not load prompt: ${err.message || 'Unknown error.'}`;
-  }
-}
-
-async function copyStoredConversionPrompt() {
-  const text = conversionPromptText?.value?.trim() || '';
-
-  if (!text) {
-    if (promptStatus) {
-      promptStatus.textContent = 'Nothing to copy yet. Load the prompt first.';
-    }
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(text);
-    if (promptStatus) {
-      promptStatus.textContent = 'Prompt copied to clipboard.';
-    }
-  } catch (err) {
-    try {
-      conversionPromptText.focus();
-      conversionPromptText.select();
-      conversionPromptText.setSelectionRange(0, conversionPromptText.value.length);
-      const copied = document.execCommand('copy');
-
-      if (!copied) {
-        throw new Error('Clipboard copy was not permitted.');
-      }
-
-      if (promptStatus) {
-        promptStatus.textContent = 'Prompt copied to clipboard.';
-      }
-    } catch (fallbackErr) {
-      if (promptStatus) {
-        promptStatus.textContent = `Copy failed: ${fallbackErr.message || 'Unknown clipboard error.'}`;
-      }
-    }
-  }
 }
 
 async function runAnalysis() {
