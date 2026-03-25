@@ -3,95 +3,137 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TheWrkShop — Daily</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
-  <meta name="description" content="Daily devotionals: scripture, insight, reflection, and a practical next step."/>
+  <title>TheWrkShop — {{TITLE}}</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico">
+  <meta name="description" content="{{TITLE}} — Daily devotional: scripture, reflection, and a practical next step."/>
   <style>
-    .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
-    .page-hero h1 { font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom:.4rem; }
-    .daily-wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
-    .daily-meta { display:flex; gap:.5rem; align-items:center; color:#6b5b53; margin-bottom: .75rem; flex-wrap:wrap; }
+    .page-hero {
+      background: #3e2c23;
+      color: #f4f1ee;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      margin-bottom: .4rem;
+    }
+
+    .daily-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .daily-meta {
+      display: flex;
+      gap: .5rem;
+      align-items: center;
+      color: #6b5b53;
+      margin-bottom: .75rem;
+      flex-wrap: wrap;
+    }
 
     .daily-card {
-      background:#f4f1ee;
-      color:#2b2b2b;
-      border:1px solid rgba(0,0,0,.08);
-      border-radius:14px;
-      padding:1.25rem;
-      box-shadow:0 2px 6px rgba(0,0,0,.07);
+      background: #f4f1ee;
+      color: #2b2b2b;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,.07);
     }
 
-    .daily-card h2 { color:#3e2c23; margin:.25rem 0 .35rem; }
+    .daily-card h2 {
+      color: #3e2c23;
+      margin: .25rem 0 .35rem;
+    }
 
     .verse-block {
-      margin:.75rem 0;
-      padding:.8rem 1rem;
-      border-left:4px solid #3e2c23;
-      background:#fff;
-      color:#2b2b2b;
+      margin: .75rem 0;
+      padding: .8rem 1rem;
+      border-left: 4px solid #3e2c23;
+      background: #fff;
+      color: #2b2b2b;
       border-radius: 8px;
+      line-height: 1.65;
     }
 
-    .daily-section { margin-top: 1rem; }
-    .daily-section h3 { color:#3e2c23; margin:1rem 0 .4rem; }
-    .daily-section p { margin:.55rem 0; line-height:1.65; }
+    .daily-section {
+      margin-top: 1rem;
+    }
+
+    .daily-section h3 {
+      color: #3e2c23;
+      margin: 1rem 0 .4rem;
+    }
+
+    .daily-section h2 {
+      color: #3e2c23;
+      margin: 1rem 0 .4rem;
+      font-size: 1.15rem;
+    }
+
+    .daily-section p {
+      margin: .55rem 0;
+      line-height: 1.65;
+    }
+
     .daily-section ul,
     .daily-section ol {
-      margin:.65rem 0 .65rem 1.2rem;
-      padding-left:1rem;
+      margin: .65rem 0 .65rem 1.2rem;
+      padding-left: 1rem;
     }
-    .daily-section li { margin:.4rem 0; }
 
-    .daily-callout {
-      font-weight:600;
-      color:#3e2c23;
+    .daily-section li {
+      margin: .4rem 0;
+      line-height: 1.6;
     }
 
     .action-step {
-      background:#fff;
-      border:1px dashed rgba(0,0,0,.18);
-      border-radius:10px;
-      padding:.9rem 1rem;
-      margin-top:.6rem;
-      line-height:1.6;
-      white-space:pre-line;
+      background: #fff;
+      border: 1px dashed rgba(0,0,0,.18);
+      border-radius: 10px;
+      padding: .9rem 1rem;
+      margin-top: .6rem;
+      line-height: 1.6;
+      white-space: pre-line;
     }
 
     .declaration-text {
-      font-weight:700;
-      color:#3e2c23;
-      line-height:1.65;
-      white-space:pre-line;
+      font-weight: 700;
+      color: #3e2c23;
+      line-height: 1.65;
+      white-space: pre-line;
     }
 
     .nav-archive {
-      display:flex;
-      justify-content:space-between;
-      gap:.5rem;
-      margin-top:1rem;
-      flex-wrap:wrap;
+      display: flex;
+      justify-content: space-between;
+      gap: .5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
     }
 
     .nav-archive a {
-      text-decoration:none;
-      color:#3e2c23;
-      font-weight:600;
+      text-decoration: none;
+      color: #3e2c23;
+      font-weight: 600;
     }
 
     .nav-archive a.is-disabled {
-      opacity:.5;
-      pointer-events:none;
+      opacity: .5;
+      pointer-events: none;
     }
 
     blockquote {
-      margin:.75rem 0;
-      padding:.85rem 1rem;
-      background:#fff;
-      border-left:4px solid #3e2c23;
-      border-radius:8px;
-      font-style:italic;
-      color:#3e2c23;
+      margin: .75rem 0;
+      padding: .85rem 1rem;
+      background: #fff;
+      border-left: 4px solid #3e2c23;
+      border-radius: 8px;
+      font-style: italic;
+      color: #3e2c23;
     }
   </style>
 </head>
@@ -107,354 +149,45 @@
     <article class="daily-card daily-article" id="dailyCard">
       <div class="daily-meta">
         <span class="badge">Hidden Gem</span>
-        <time id="dDate" datetime=""></time>
+        <time id="dDate" datetime="{{DATE}}">{{HUMAN_DATE}}</time>
         <button class="listen-btn" id="listenDailyBtn">🔊 Listen</button>
       </div>
 
-      <h2 id="dTitle">First Things First</h2>
+      <h2 id="dTitle">{{TITLE}}</h2>
 
       <div class="verse-block" id="dVerseBlock">
-        <div><strong id="dRef">Matthew 6:33</strong></div>
-        <div id="dVerse">But seek first the kingdom of God and His righteousness, and all these things will be added to you.</div>
+        <div id="dVerse">{{VERSE_TEXT}}</div>
       </div>
 
       <div id="dSections">
-        <section class="daily-section">
-          <h3>Insight</h3>
-          <p id="dFallbackInsight">
-            When you reorder your loves, your life follows. Give God the first word and the last word today.
-          </p>
-        </section>
+        {{INSIGHT_HTML}}
       </div>
 
       <section class="daily-section">
         <h3>Action Step</h3>
-        <div class="action-step" id="dActionStep">
-          Begin and end your day by praying this: “Lord, reorder my loves. Help me seek You first.”
-        </div>
+        <div class="action-step" id="dActionStep">{{ONE_MINUTE_WIN}}</div>
       </section>
 
       <section class="daily-section">
         <h3>Declaration</h3>
-        <p class="declaration-text" id="dDeclaration">I will seek God first today.</p>
+        <p class="declaration-text" id="dDeclaration">{{DECLARATION}}</p>
       </section>
 
       <div class="nav-archive">
-        <a href="#" id="prevDay" aria-disabled="true" class="is-disabled">← Previous</a>
-        <a href="daily-archive.html">See Archive →</a>
-        <a href="#" id="nextDay" aria-disabled="true" class="is-disabled">Next →</a>
+        <a href="{{PREV_HREF}}" id="prevDay">← Previous</a>
+        <a href="../daily-archive.html">See Archive →</a>
+        <a href="{{NEXT_HREF}}" id="nextDay">Next →</a>
       </div>
     </article>
   </main>
 
   <footer>
     <div class="footer-content">
-      <div class="footer-logo"><span class="sitename"></span></div>
-      <p>&copy; 2026 <span class="sitename"></span>. All rights reserved.</p>
+      <div class="footer-logo"><span class="sitename">TheWrkShop</span></div>
+      <p>&copy; 2026 <span class="sitename">TheWrkShop</span>. All rights reserved.</p>
     </div>
   </footer>
 
-  <script>
-    function cleanString(value) {
-      return typeof value === 'string' ? value.trim() : '';
-    }
-
-    function titleCaseFromKey(key = '') {
-      return String(key)
-        .replace(/[_-]+/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .replace(/\b\w/g, ch => ch.toUpperCase());
-    }
-
-    function normalizeStringArray(value) {
-      if (Array.isArray(value)) return value.map(v => cleanString(v)).filter(Boolean);
-      if (typeof value === 'string') {
-        return value.split(/\n{2,}/).map(v => cleanString(v)).filter(Boolean);
-      }
-      return [];
-    }
-
-    function normalizeScriptures(entry = {}) {
-      const scriptures = [];
-      if (Array.isArray(entry.scriptures)) {
-        entry.scriptures.forEach(s => {
-          if (!s || typeof s !== 'object') return;
-          const ref = cleanString(s.ref || s.verse_ref);
-          const text = cleanString(s.text || s.verse_text);
-          if (ref || text) scriptures.push({ ref, text });
-        });
-      }
-      if (!scriptures.length) {
-        const ref = cleanString(entry.verse_ref);
-        const text = cleanString(entry.verse_text);
-        if (ref || text) scriptures.push({ ref, text });
-      }
-      return scriptures;
-    }
-
-    function normalizeBlock(block) {
-      if (typeof block === 'string') {
-        const text = cleanString(block);
-        return text ? { type: 'paragraph', text } : null;
-      }
-      if (!block || typeof block !== 'object') return null;
-
-      const type = cleanString(block.type || 'paragraph').toLowerCase();
-
-      if (type === 'paragraph' || type === 'callout' || type === 'quote') {
-        const text = cleanString(block.text);
-        if (!text) return null;
-        return { type, text, prefix: cleanString(block.prefix || '👉') };
-      }
-
-      if (type === 'lines' || type === 'bullet_list' || type === 'numbered_list') {
-        const items = normalizeStringArray(block.items || block.text || block.content);
-        if (!items.length) return null;
-        return { type, items };
-      }
-
-      return null;
-    }
-
-    function normalizeSection(section) {
-      if (!section || typeof section !== 'object') return null;
-
-      const key = cleanString(section.key || '').toLowerCase();
-      const label = cleanString(section.label) || titleCaseFromKey(key || 'section');
-
-      let blocksSource = Array.isArray(section.blocks) ? section.blocks : null;
-
-      if (!blocksSource) {
-        if (section.items) {
-          const style = cleanString(section.style || 'bullet_list').toLowerCase();
-          const blockType = style === 'numbered_list' ? 'numbered_list' : 'bullet_list';
-          blocksSource = [{ type: blockType, items: section.items }];
-        } else if (section.content) {
-          if (Array.isArray(section.content)) {
-            blocksSource = section.content.map(text => ({ type: 'paragraph', text }));
-          } else {
-            blocksSource = [{ type: cleanString(section.style || 'paragraph'), text: section.content }];
-          }
-        } else if (section.text) {
-          blocksSource = [{ type: cleanString(section.style || 'paragraph'), text: section.text }];
-        } else {
-          blocksSource = [];
-        }
-      }
-
-      const blocks = blocksSource.map(normalizeBlock).filter(Boolean);
-      if (!blocks.length) return null;
-
-      return { key, label, blocks };
-    }
-
-    function legacySectionsFromEntry(entry = {}) {
-      const sections = [];
-
-      const insightParts = normalizeStringArray(entry.insight || entry.body || entry.gem_body);
-      if (insightParts.length) {
-        sections.push({
-          key: 'insight',
-          label: 'Insight',
-          blocks: insightParts.map(text => ({ type: 'paragraph', text }))
-        });
-      }
-
-      if (entry.reflection) {
-        sections.push({
-          key: 'reflection',
-          label: 'Reflection',
-          blocks: [{ type: 'bullet_list', items: normalizeStringArray(entry.reflection) }]
-        });
-      }
-
-      if (entry.one_minute_win || entry.action_step || entry.step) {
-        sections.push({
-          key: 'action_step',
-          label: 'Action Step',
-          blocks: normalizeStringArray(entry.one_minute_win || entry.action_step || entry.step)
-            .map(text => ({ type: 'paragraph', text }))
-        });
-      }
-
-      if (entry.declaration) {
-        sections.push({
-          key: 'declaration',
-          label: 'Declaration',
-          blocks: normalizeStringArray(entry.declaration).map(text => ({ type: 'paragraph', text }))
-        });
-      }
-
-      return sections;
-    }
-
-    function normalizeDailyEntry(entry = {}) {
-      const scriptures = normalizeScriptures(entry);
-      let sections = [];
-
-      if (Array.isArray(entry.sections) && entry.sections.length) {
-        sections = entry.sections.map(normalizeSection).filter(Boolean);
-      } else {
-        sections = legacySectionsFromEntry(entry);
-      }
-
-      return {
-        ...entry,
-        scriptures,
-        verse_ref: cleanString(entry.verse_ref || scriptures[0]?.ref || ''),
-        verse_text: cleanString(entry.verse_text || scriptures[0]?.text || ''),
-        sections
-      };
-    }
-
-    function sectionPlainText(section) {
-      if (!section?.blocks) return '';
-      return section.blocks.map(block => {
-        if (block.type === 'paragraph' || block.type === 'callout' || block.type === 'quote') {
-          return cleanString(block.text);
-        }
-        if (block.type === 'lines' || block.type === 'bullet_list' || block.type === 'numbered_list') {
-          return normalizeStringArray(block.items).join('\n');
-        }
-        return '';
-      }).filter(Boolean).join('\n');
-    }
-
-    function findSection(entry, keys) {
-      const wanted = new Set(keys.map(k => String(k).toLowerCase()));
-      return (entry.sections || []).find(section => wanted.has((section.key || '').toLowerCase())) || null;
-    }
-
-    function renderBlock(block) {
-      if (!block) return '';
-
-      if (block.type === 'paragraph') return `<p>${escapeHtml(block.text)}</p>`;
-      if (block.type === 'callout') {
-        const prefix = escapeHtml(block.prefix || '👉');
-        return `<p class="daily-callout"><span>${prefix}</span> ${escapeHtml(block.text)}</p>`;
-      }
-      if (block.type === 'quote') return `<blockquote>${escapeHtml(block.text)}</blockquote>`;
-      if (block.type === 'lines') return block.items.map(item => `<p>${escapeHtml(item)}</p>`).join('');
-      if (block.type === 'bullet_list') return `<ul>${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
-      if (block.type === 'numbered_list') return `<ol>${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ol>`;
-
-      return '';
-    }
-
-    function renderSection(section) {
-      const blocks = (section.blocks || []).map(renderBlock).join('');
-      return `
-        <section class="daily-section">
-          <h3>${escapeHtml(section.label || 'Section')}</h3>
-          ${blocks}
-        </section>
-      `;
-    }
-
-    function escapeHtml(value = '') {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    function humanDate(iso) {
-      const dt = new Date(iso + 'T00:00:00');
-      return dt.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
-    }
-
-    function setDisabledLink(el) {
-      if (!el) return;
-      el.href = '#';
-      el.setAttribute('aria-disabled', 'true');
-      el.classList.add('is-disabled');
-    }
-
-    document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
-
-    (async function(){
-      try{
-        const r = await fetch('/data/daily.json', { cache:'no-store' });
-        if (!r.ok) return;
-
-        const raw = await r.json();
-        const d = normalizeDailyEntry(raw);
-
-        if (d.date) {
-          const el = document.getElementById('dDate');
-          el.textContent = humanDate(d.date);
-          el.setAttribute('datetime', d.date);
-        }
-
-        if (d.title) document.getElementById('dTitle').textContent = d.title;
-
-        const verseBlock = document.getElementById('dVerseBlock');
-        const verseParts = d.scriptures.length ? d.scriptures : [{ ref: d.verse_ref, text: d.verse_text }];
-        verseBlock.innerHTML = verseParts.map(s => `
-          <div style="margin-bottom:${verseParts.length > 1 ? '.9rem' : '0'};">
-            ${s.ref ? `<div><strong>${escapeHtml(s.ref)}</strong></div>` : ''}
-            ${s.text ? `<div>${escapeHtml(s.text)}</div>` : ''}
-          </div>
-        `).join('');
-
-        const allSections = d.sections || [];
-        const mainSections = allSections.filter(section => !['action_step', 'one_minute_win', 'declaration'].includes((section.key || '').toLowerCase()));
-
-        if (mainSections.length) {
-          document.getElementById('dSections').innerHTML = mainSections.map(renderSection).join('');
-        }
-
-        const actionSection = findSection(d, ['action_step', 'one_minute_win']);
-        const declarationSection = findSection(d, ['declaration']);
-
-        if (actionSection) {
-          document.getElementById('dActionStep').textContent = sectionPlainText(actionSection);
-        } else if (d.one_minute_win || d.action_step || d.step) {
-          document.getElementById('dActionStep').textContent = d.one_minute_win || d.action_step || d.step;
-        }
-
-        if (declarationSection) {
-          document.getElementById('dDeclaration').textContent = sectionPlainText(declarationSection);
-        } else if (d.declaration) {
-          document.getElementById('dDeclaration').textContent = d.declaration;
-        }
-
-        try {
-          const ar = await fetch('/data/daily-archive.json', { cache:'no-store' });
-          if (ar.ok) {
-            const list = await ar.json();
-            if (Array.isArray(list)) {
-              const idx = list.findIndex(x => x.date === d.date);
-              const prev = idx >= 0 ? list[idx + 1] : null;
-              const next = idx > 0 ? list[idx - 1] : null;
-
-              const prevEl = document.getElementById('prevDay');
-              const nextEl = document.getElementById('nextDay');
-
-              if (prev?.href) {
-                prevEl.href = prev.href;
-                prevEl.removeAttribute('aria-disabled');
-                prevEl.classList.remove('is-disabled');
-              } else {
-                setDisabledLink(prevEl);
-              }
-
-              if (next?.href) {
-                nextEl.href = next.href;
-                nextEl.removeAttribute('aria-disabled');
-                nextEl.classList.remove('is-disabled');
-              } else {
-                setDisabledLink(nextEl);
-              }
-            }
-          }
-        } catch {}
-      } catch(e) {}
-    })();
-  </script>
-  <script src="/script.js"></script>
+  <script src="../script.js"></script>
 </body>
 </html>
