@@ -1,41 +1,55 @@
 #!/usr/bin/env python3
 """
-daily_insert.py (with duplicate check by verse_ref + title edges)
+daily_insert.py
 
-- Validates ONLY that the header date matches the JSON "date".
-- Skips overwrite if the target filename already exists; logs an Exists: line.
-- NEW: Skips creation if an entry with the SAME scripture (verse_ref) AND
-       matching first/last N words of the title already exists (on disk or
-       earlier in this batch). Logs as Duplicate: ...
-- Final summary: "Given N files, created M files"
+Supports both:
+1. Legacy daily JSON (verse_ref / verse_text / insight / declaration / one_minute_win)
+2. New flexible section-based daily JSON using:
+   - scriptures: [{ ref, text }]
+   - sections: [{ key, label, blocks: [...] }]
 
-Reads entries from ./insert_content/input:
+Input format:
   |<header>|{ ...valid JSON... }
-(legacy *|<header>|{...}* also accepted)
+or legacy:
+  *|<header>|{ ...valid JSON... }*
 
-Writes JSON files to ../content/daily/
-Logs to ./insert_content/output.txt
+Header format:
+  YYYY-MM-DD_VerseRef_Title_Tokens...
+
+Examples:
+  2026-03-24_ephesians-2-10_built-to-be-poured-out
+  2026-03-25_isaiah-58-10_built-to-build-others
+
+Behavior:
+- Validates ONLY that the header date matches JSON "date".
+- Does NOT require the JSON title to match the header title slug.
+- Auto-normalizes:
+    * one-minute_win -> one_minute_win
+    * scriptures -> verse_ref / verse_text fallback
+    * simple section forms into normalized blocks
+- Skips overwrite if filename already exists.
+- Skips near-duplicate creation based on verse_ref + title edges.
+- Final summary: "Given N files, created M files"
 """
 
 import re
 import json
 import unicodedata
 from pathlib import Path
-from typing import List, Tuple, Optional, Dict, Set
+from typing import List, Tuple, Optional, Dict, Set, Any
 
-# ---------- Tunables ----------
-FRONT_N = 3   # number of words from the start of the title to compare
-BACK_N  = 3   # number of words from the end of the title to compare
+FRONT_N = 3
+BACK_N = 3
 
-# ---------- Paths (relative to script) ----------
 SCRIPT_PATH = Path(__file__).resolve()
-BASE_DIR    = SCRIPT_PATH.parent
+BASE_DIR = SCRIPT_PATH.parent
 
-INPUT_DIR    = BASE_DIR / "input"
-OUTPUT_FILE  = BASE_DIR / "output.txt"
-DAILY_DIR    = BASE_DIR.parent / "content" / "daily"
+INPUT_DIR = BASE_DIR / "input"
+OUTPUT_FILE = BASE_DIR / "output.txt"
+DAILY_DIR = BASE_DIR.parent / "content" / "daily"
 
-# ---------- Core parsing ----------
+_WORD_RE = re.compile(r"[A-Za-z0-9]+")
+
 def read_all_input_text() -> str:
     INPUT_DIR.mkdir(parents=True, exist_ok=True)
     parts: List[str] = []
@@ -48,13 +62,6 @@ def read_all_input_text() -> str:
     return "\n\n".join(parts)
 
 def find_entries(blob: str) -> List[Tuple[str, str]]:
-    """
-    Parse entries of the form:
-      |<header>|{...balanced JSON...}
-    Also accepts legacy:
-      *|<header>|{...}*
-    Returns [(header, json_str), ...]
-    """
     entries: List[Tuple[str, str]] = []
     i = 0
     n = len(blob)
@@ -65,7 +72,6 @@ def find_entries(blob: str) -> List[Tuple[str, str]]:
         if i >= n:
             break
 
-        # optional leading '*'
         if blob[i] == '*':
             i += 1
             while i < n and blob[i].isspace():
@@ -78,12 +84,12 @@ def find_entries(blob: str) -> List[Tuple[str, str]]:
             i = nxt
             continue
 
-        # header start
         i += 1
         hdr_start = i
         hdr_end = blob.find('|', hdr_start)
         if hdr_end == -1:
             break
+
         header = blob[hdr_start:hdr_end].strip()
         i = hdr_end + 1
 
@@ -93,11 +99,11 @@ def find_entries(blob: str) -> List[Tuple[str, str]]:
             i = hdr_end + 1
             continue
 
-        # balanced-brace scan
         json_start = i
         depth = 0
         in_string = False
         escape = False
+
         while i < n:
             ch = blob[i]
             if in_string:
@@ -118,17 +124,18 @@ def find_entries(blob: str) -> List[Tuple[str, str]]:
                         i += 1
                         break
             i += 1
+
         if depth != 0:
             continue
 
         json_text = blob[json_start:i].strip()
 
-        # optional trailing '*' (legacy)
         j = i
         while j < n and blob[j].isspace():
             j += 1
-        if j < n and j >= 0 and blob[j] == '*':
+        if j < n and blob[j] == '*':
             j += 1
+
         i = j
 
         if header and json_text:
@@ -137,35 +144,28 @@ def find_entries(blob: str) -> List[Tuple[str, str]]:
     return entries
 
 def split_header(header: str) -> Tuple[str, str, str]:
-    """
-    Expect: YYYY-MM-DD_VerseRef_Title_Tokens...
-    Returns (date, verse_ref, human_title_from_header_tokens)
-    """
     parts = header.split("_")
     if len(parts) < 3:
         raise ValueError("Header must have at least 3 parts: date, verse_ref, title_slug")
     date = parts[0]
     verse_ref = parts[1]
-    header_title_human = " ".join(parts[2:]).strip()
-    return date, verse_ref, header_title_human
-
-# ---------- Normalization / helpers ----------
-_WORD_RE = re.compile(r"[A-Za-z0-9]+")
+    title_human = " ".join(parts[2:]).strip()
+    return date, verse_ref, title_human
 
 def normalize_text_basic(s: str) -> str:
-    """Lowercase, strip accents and unify quotes/dashes."""
     s = unicodedata.normalize("NFKD", s or "")
     s = "".join(ch for ch in s if not unicodedata.combining(ch))
     s = s.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
     s = s.replace("–", "-").replace("—", "-").replace("·", " ")
     return s.lower().strip()
 
+def clean_string(value: Any) -> str:
+    return value.strip() if isinstance(value, str) else ""
+
 def verse_key(s: Optional[str]) -> str:
-    """Compact the verse ref for matching (e.g., '2 corinthians 5:7')."""
     if not s:
         return ""
     s = normalize_text_basic(s)
-    # remove periods and extra spaces, collapse whitespace
     s = s.replace(".", " ")
     s = re.sub(r"\s+", " ", s)
     return s
@@ -176,7 +176,7 @@ def title_edges(title: str, n_front: int = FRONT_N, n_back: int = BACK_N) -> Tup
     if not tokens:
         return "", ""
     front = " ".join(tokens[:max(0, n_front)]) if n_front > 0 else ""
-    back  = " ".join(tokens[-max(0, n_back):]) if n_back > 0 else ""
+    back = " ".join(tokens[-max(0, n_back):]) if n_back > 0 else ""
     return front, back
 
 def safe_filename_from_header(header: str) -> str:
@@ -185,12 +185,132 @@ def safe_filename_from_header(header: str) -> str:
     base = re.sub(r'_+', "_", base)
     return f"{base}.json"
 
-# ---------- Validation ----------
+def title_case_from_key(key: str) -> str:
+    key = re.sub(r"[_-]+", " ", key or "").strip()
+    return " ".join(word.capitalize() for word in key.split()) if key else "Section"
+
+def normalize_string_array(value: Any) -> List[str]:
+    if isinstance(value, list):
+      return [clean_string(v) for v in value if clean_string(v)]
+
+    if isinstance(value, str):
+        return [part.strip() for part in re.split(r"\n\s*\n", value) if part.strip()]
+
+    return []
+
+def normalize_scriptures(data: dict) -> List[dict]:
+    out: List[dict] = []
+
+    if isinstance(data.get("scriptures"), list):
+        for item in data["scriptures"]:
+            if not isinstance(item, dict):
+                continue
+            ref = clean_string(item.get("ref") or item.get("verse_ref"))
+            text = clean_string(item.get("text") or item.get("verse_text"))
+            if ref or text:
+                out.append({"ref": ref, "text": text})
+
+    if not out:
+        ref = clean_string(data.get("verse_ref"))
+        text = clean_string(data.get("verse_text"))
+        if ref or text:
+            out.append({"ref": ref, "text": text})
+
+    return out
+
+def normalize_block(block: Any) -> Optional[dict]:
+    if isinstance(block, str):
+        text = clean_string(block)
+        return {"type": "paragraph", "text": text} if text else None
+
+    if not isinstance(block, dict):
+        return None
+
+    block_type = clean_string(block.get("type") or "paragraph").lower()
+
+    if block_type in ("paragraph", "callout", "quote"):
+        text = clean_string(block.get("text"))
+        if not text:
+            return None
+        out = {"type": block_type, "text": text}
+        prefix = clean_string(block.get("prefix"))
+        if prefix:
+            out["prefix"] = prefix
+        return out
+
+    if block_type in ("lines", "bullet_list", "numbered_list"):
+        items = normalize_string_array(block.get("items") or block.get("content") or block.get("text"))
+        if not items:
+            return None
+        return {"type": block_type, "items": items}
+
+    return None
+
+def normalize_section(section: Any) -> Optional[dict]:
+    if not isinstance(section, dict):
+        return None
+
+    key = clean_string(section.get("key")).lower()
+    label = clean_string(section.get("label")) or title_case_from_key(key or "section")
+
+    blocks_src = section.get("blocks")
+    if not isinstance(blocks_src, list):
+        if "items" in section:
+            style = clean_string(section.get("style") or "bullet_list").lower()
+            block_type = "numbered_list" if style == "numbered_list" else "bullet_list"
+            blocks_src = [{"type": block_type, "items": section.get("items")}]
+        elif "content" in section:
+            content = section.get("content")
+            if isinstance(content, list):
+                blocks_src = [{"type": "paragraph", "text": item} for item in content]
+            else:
+                blocks_src = [{"type": clean_string(section.get("style") or "paragraph"), "text": content}]
+        elif "text" in section:
+            blocks_src = [{"type": clean_string(section.get("style") or "paragraph"), "text": section.get("text")}]
+        else:
+            blocks_src = []
+
+    blocks = [normalize_block(b) for b in blocks_src]
+    blocks = [b for b in blocks if b]
+
+    if not blocks:
+        return None
+
+    return {
+        "key": key,
+        "label": label,
+        "blocks": blocks
+    }
+
+def normalize_entry_for_storage(data: dict, header: str) -> dict:
+    data = dict(data)
+
+    if "one-minute_win" in data and "one_minute_win" not in data:
+        data["one_minute_win"] = data["one-minute_win"]
+
+    scriptures = normalize_scriptures(data)
+    if scriptures:
+        data["scriptures"] = scriptures
+        if not clean_string(data.get("verse_ref")):
+            data["verse_ref"] = scriptures[0]["ref"]
+        if not clean_string(data.get("verse_text")):
+            data["verse_text"] = scriptures[0]["text"]
+
+    if isinstance(data.get("sections"), list):
+        sections = [normalize_section(s) for s in data["sections"]]
+        data["sections"] = [s for s in sections if s]
+
+    try:
+        _, header_verse_ref, _ = split_header(header)
+    except Exception:
+        header_verse_ref = ""
+
+    if not clean_string(data.get("verse_ref")) and header_verse_ref:
+        data["verse_ref"] = header_verse_ref
+
+    return data
+
 def validate_and_merge(header: str, json_str: str) -> Tuple[dict, str]:
-    """
-    Validates JSON and ensures that the header date equals data['date'].
-    Ignores any differences between header title tokens and JSON title.
-    """
     try:
         data = json.loads(json_str)
     except json.JSONDecodeError as e:
@@ -199,28 +319,69 @@ def validate_and_merge(header: str, json_str: str) -> Tuple[dict, str]:
     if not isinstance(data, dict):
         return {}, "Top-level JSON must be an object"
 
-    # Require 'date' and 'title' (title needed for duplicate checks)
     missing = [k for k in ("date", "title") if k not in data]
     if missing:
         return {}, f"Missing required field(s): {', '.join(missing)}"
 
     try:
-        header_date, _verse_from_header, _header_title = split_header(header)
+        header_date, _, _ = split_header(header)
     except ValueError as e:
         return {}, f"Bad header format: {e}"
 
     if data.get("date") != header_date:
         return {}, f'Date mismatch: header "{header_date}" vs JSON "{data.get("date")}"'
 
+    data = normalize_entry_for_storage(data, header)
+
+    has_legacy_content = any(
+        clean_string(data.get(k))
+        for k in (
+            "insight",
+            "body",
+            "declaration",
+            "one_minute_win",
+            "action_step",
+            "read_this_out_loud",
+            "shift",
+            "truth",
+            "jesus_set_the_pattern",
+            "one_sentence_to_carry"
+        )
+    )
+
+    has_sections = isinstance(data.get("sections"), list) and len(data["sections"]) > 0
+    has_scripture = clean_string(data.get("verse_ref")) or (
+        isinstance(data.get("scriptures"), list) and len(data["scriptures"]) > 0
+    )
+
+    if not has_scripture:
+        return {}, 'Missing scripture data. Provide "verse_ref"/"verse_text" or "scriptures".'
+
+    if not has_legacy_content and not has_sections:
+        return {}, 'Missing devotional content. Provide legacy fields or a "sections" array.'
+
     return data, ""
 
-# ---------- Duplicate index ----------
+def extract_primary_verse_ref(data: dict, header: str) -> str:
+    vref = clean_string(data.get("verse_ref"))
+    if vref:
+        return vref
+
+    scriptures = data.get("scriptures")
+    if isinstance(scriptures, list) and scriptures:
+        first = scriptures[0]
+        if isinstance(first, dict):
+            vref = clean_string(first.get("ref") or first.get("verse_ref"))
+            if vref:
+                return vref
+
+    try:
+        _, header_verse_ref, _ = split_header(header)
+        return clean_string(header_verse_ref)
+    except Exception:
+        return ""
+
 def build_existing_index() -> Dict[str, Set[Tuple[str, str]]]:
-    """
-    Scan DAILY_DIR for existing entries and index by:
-      verse_key -> set of (front_edge, back_edge)
-    Only indexes files that have both 'title' and 'verse_ref'.
-    """
     index: Dict[str, Set[Tuple[str, str]]] = {}
     if not DAILY_DIR.exists():
         return index
@@ -233,8 +394,8 @@ def build_existing_index() -> Dict[str, Set[Tuple[str, str]]]:
         if not isinstance(obj, dict):
             continue
 
-        vref = obj.get("verse_ref") or ""
-        ttl  = obj.get("title") or ""
+        vref = extract_primary_verse_ref(obj, p.stem)
+        ttl = obj.get("title") or ""
         if not vref or not ttl:
             continue
 
@@ -242,9 +403,9 @@ def build_existing_index() -> Dict[str, Set[Tuple[str, str]]]:
         front, back = title_edges(ttl)
         if key and (front or back):
             index.setdefault(key, set()).add((front, back))
+
     return index
 
-# ---------- Main ----------
 def ensure_dirs():
     DAILY_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -267,10 +428,7 @@ def main():
         OUTPUT_FILE.write_text("\n".join(report_lines) + "\n", encoding="utf-8")
         return
 
-    # Load existing duplicates index from disk
     dup_index = build_existing_index()
-
-    # Track duplicates within this batch (so we don't create two near-identical files)
     batch_seen: Dict[str, Set[Tuple[str, str]]] = {}
 
     for header, json_body in entries:
@@ -282,30 +440,20 @@ def main():
             report_lines.append(f'Error: Could not create "{filename}" — {err}')
             continue
 
-        # Quick exists check by filename
         if target_path.exists():
             report_lines.append(
                 f'Exists: "{filename}" — already present; date="{data.get("date")}", title="{data.get("title")}"'
             )
             continue
 
-        # ------- Duplicate check by verse_ref + title edges -------
-        # Prefer JSON verse_ref; if missing, fall back to verse from header.
-        try:
-            _hdr_date, hdr_verse_ref, _ = split_header(header)
-        except Exception:
-            hdr_verse_ref = ""
-
-        vref_raw = (data.get("verse_ref") or hdr_verse_ref or "").strip()
+        vref_raw = extract_primary_verse_ref(data, header)
         vkey = verse_key(vref_raw)
         front, back = title_edges(data.get("title", ""))
 
         is_duplicate = False
         if vkey:
-            # Check against on-disk index
             if (front, back) in dup_index.get(vkey, set()):
                 is_duplicate = True
-            # Check within-batch duplicates too
             elif (front, back) in batch_seen.get(vkey, set()):
                 is_duplicate = True
 
@@ -316,7 +464,6 @@ def main():
             )
             continue
 
-        # Write the file
         try:
             with target_path.open("w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
@@ -324,7 +471,6 @@ def main():
             report_lines.append(f'Created: "{filename}"')
             created_count += 1
 
-            # Update indices after successful create
             if vkey:
                 dup_index.setdefault(vkey, set()).add((front, back))
                 batch_seen.setdefault(vkey, set()).add((front, back))

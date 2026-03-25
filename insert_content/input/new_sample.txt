@@ -1,0 +1,33 @@
+{
+  "date": "2026-03-24",
+  "title": "Built to Be Poured Out",
+  "scriptures": [
+    {
+      "ref": "Ephesians 2:10",
+      "text": "For we are His workmanship, created in Christ Jesus for good works, which God prepared beforehand, that we should walk in them."
+    }
+  ],
+  "sections": [
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        { "type": "paragraph", "text": "You weren’t saved to sit." },
+        { "type": "paragraph", "text": "You were shaped to serve." }
+      ]
+    },
+    {
+      "key": "reflection",
+      "label": "Reflection",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Where am I holding back what God has already given me?",
+            "What gift, strength, or instinct have I been underusing?"
+          ]
+        }
+      ]
+    }
+  ]
+}

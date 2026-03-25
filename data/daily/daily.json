@@ -1,7 +1,42 @@
 {
   "date": "2025-08-22",
-  "verse_ref": "Matthew 6:33",
-  "verse_text": "But seek first the kingdom of God and his righteousness...",
   "title": "First Things First",
-  "insight": "When you reorder your loves, your life follows..."
+  "scriptures": [
+    {
+      "ref": "Matthew 6:33",
+      "text": "But seek first the kingdom of God and his righteousness..."
+    }
+  ],
+  "sections": [
+    {
+      "key": "insight",
+      "label": "Insight",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "When you reorder your loves, your life follows..."
+        }
+      ]
+    },
+    {
+      "key": "action_step",
+      "label": "Action Step",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Start your day by asking God to reorder your loves."
+        }
+      ]
+    },
+    {
+      "key": "declaration",
+      "label": "Declaration",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "I will seek God first today."
+        }
+      ]
+    }
+  ]
 }

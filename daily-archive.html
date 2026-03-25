@@ -6,7 +6,7 @@
   <title>TheWrkShop — Daily Archive</title>
   <link rel="stylesheet" href="style.css"/>
   <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
-  <meta name="description" content="Browse past Daily devotionals—Hidden Gem + Verse of the Day—by date."/>
+  <meta name="description" content="Browse past Daily devotionals by date, title, or scripture."/>
   <style>
     .archive-grid.preload { visibility: hidden; }
     .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
@@ -15,20 +15,54 @@
 
     .container { max-width:1100px; margin:0 auto; padding:0 1rem; }
 
-    .toolbar { display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; justify-content:center;
-      padding:1rem; background:rgba(0,0,0,.04); border-top:1px solid rgba(0,0,0,.06); border-bottom:1px solid rgba(0,0,0,.06); }
-    .search-input, .select { padding:.6rem .8rem; border-radius:10px; border:1px solid rgba(0,0,0,.2); }
+    .toolbar {
+      display:flex;
+      gap:.75rem;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      padding:1rem;
+      background:rgba(0,0,0,.04);
+      border-top:1px solid rgba(0,0,0,.06);
+      border-bottom:1px solid rgba(0,0,0,.06);
+    }
+
+    .search-input, .select {
+      padding:.6rem .8rem;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,.2);
+    }
+
     .search-input { width:280px; }
     .results-count { text-align:center; padding:.5rem; color:#3e2c23; font-weight:600; }
 
     .archive-grid { display:grid; gap:1rem; grid-template-columns:repeat(3, 1fr); }
+
     .archive-card {
-      background:#f4f1ee; color:#2b2b2b; border:1px solid rgba(0,0,0,.08);
-      border-radius:14px; padding:1rem; box-shadow:0 2px 6px rgba(0,0,0,.07);
-      display:flex; flex-direction:column; gap:.4rem; text-decoration:none;
+      background:#f4f1ee;
+      color:#2b2b2b;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:14px;
+      padding:1rem;
+      box-shadow:0 2px 6px rgba(0,0,0,.07);
+      display:flex;
+      flex-direction:column;
+      gap:.4rem;
+      text-decoration:none;
     }
+
     .archive-card:hover { transform: translateY(-2px); transition: transform .08s ease; }
-    .badge { display:inline-block; font-size:.8rem; font-weight:700; background:#3e2c23; color:#f4f1ee; padding:.15rem .55rem; border-radius:999px; }
+
+    .badge {
+      display:inline-block;
+      font-size:.8rem;
+      font-weight:700;
+      background:#3e2c23;
+      color:#f4f1ee;
+      padding:.15rem .55rem;
+      border-radius:999px;
+    }
+
     .ac-head { display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
     .ac-date { color:#6b5b53; font-size:.9rem; white-space:nowrap; }
     .ac-title { color:#3e2c23; margin:.2rem 0 0; font-size:1.05rem; }
@@ -36,7 +70,13 @@
     .empty { text-align:center; padding:2rem; color:#6b5b53; }
 
     .pager { display:flex; justify-content:center; gap:.5rem; padding:1rem 0; }
-    .pager button { border:1px solid rgba(0,0,0,.15); padding:.5rem .8rem; border-radius:8px; background:#fff; cursor:pointer; }
+    .pager button {
+      border:1px solid rgba(0,0,0,.15);
+      padding:.5rem .8rem;
+      border-radius:8px;
+      background:#fff;
+      cursor:pointer;
+    }
     .pager button[disabled] { opacity:.5; cursor:not-allowed; }
 
     @media (max-width: 1020px){ .archive-grid { grid-template-columns:repeat(2,1fr);} }
@@ -44,49 +84,46 @@
   </style>
 </head>
 <body>
-
-  <!-- Header/Navbar -->
   <div id="site-header"></div>
 
-  <!-- Page Hero -->
   <section class="page-hero">
     <h1>Daily Archive</h1>
-    <p>Find previous devotionals by date. Hidden Gem + Verse of the Day, ready when you are.</p>
+    <p>Find previous devotionals by date, title, or scripture.</p>
   </section>
 
-  <!-- Filters -->
   <section class="toolbar">
-    <select id="yearSel" class="select" aria-label="Filter by year">
-      <!-- filled by JS -->
-    </select>
+    <select id="yearSel" class="select" aria-label="Filter by year"></select>
     <select id="monthSel" class="select" aria-label="Filter by month">
       <option value="all">All Months</option>
-      <option value="01">January</option><option value="02">February</option><option value="03">March</option>
-      <option value="04">April</option><option value="05">May</option><option value="06">June</option>
-      <option value="07">July</option><option value="08">August</option><option value="09">September</option>
-      <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+      <option value="01">January</option>
+      <option value="02">February</option>
+      <option value="03">March</option>
+      <option value="04">April</option>
+      <option value="05">May</option>
+      <option value="06">June</option>
+      <option value="07">July</option>
+      <option value="08">August</option>
+      <option value="09">September</option>
+      <option value="10">October</option>
+      <option value="11">November</option>
+      <option value="12">December</option>
     </select>
     <input id="archSearch" class="search-input" type="search" placeholder="Search… (title, verse)"/>
   </section>
 
   <div class="results-count" id="resultsCount" aria-live="polite"></div>
 
-  <!-- Archive Grid -->
   <main class="content-section container">
-    <section class="archive-grid preload" id="archiveGrid" aria-label="Daily entries">
-      <!-- No fallback cards; filled entirely from /data/daily-archive.json -->
-    </section>
+    <section class="archive-grid preload" id="archiveGrid" aria-label="Daily entries"></section>
 
     <p class="empty" id="emptyMsg" style="display:none">No entries match your filters.</p>
 
-    <!-- Simple pager (client-side) -->
     <nav class="pager" aria-label="Pagination">
       <button id="prevPage" disabled>← Newer</button>
       <button id="nextPage" disabled>Older →</button>
     </nav>
   </main>
 
-  <!-- Footer -->
   <footer>
     <div class="footer-content">
       <div class="footer-logo"><span class="sitename"></span></div>
@@ -94,13 +131,9 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
   <script src="script.js"></script>
   <script>
-    // Branding + mobile nav safety
     document.querySelectorAll('.sitename').forEach(el => el.textContent = 'TheWrkShop');
-    const hb = document.getElementById('hamburger'); const nl = document.getElementById('nav-links');
-    if (hb && nl) hb.addEventListener('click',()=>nl.classList.toggle('open'));
 
     (function(){
       const grid = document.getElementById('archiveGrid');
@@ -112,16 +145,25 @@
       const prevBtn = document.getElementById('prevPage');
       const nextBtn = document.getElementById('nextPage');
 
-      let all = []; // no hardcoded fallbacks
+      let all = [];
       let view = [];
-      const PAGE = 12; // entries per page
+      const PAGE = 12;
       let page = 0;
+
+      function todayCentralISO(){
+        return new Intl.DateTimeFormat('en-CA', {
+          timeZone: 'America/Chicago',
+          year:'numeric',
+          month:'2-digit',
+          day:'2-digit'
+        }).format(new Date());
+      }
 
       function objToCard(o){
         const a = document.createElement('a');
         a.className = 'archive-card';
         a.href = o.href || '#';
-        a.setAttribute('data-date', o.date);
+        a.setAttribute('data-date', o.date || '');
         a.setAttribute('data-title', o.title || '');
         a.setAttribute('data-verse', o.verse || '');
 
@@ -140,30 +182,35 @@
       }
 
       function populateYearOptions(){
-        const years = Array.from(new Set(all.map(e => e.date.slice(0,4)))).sort((a,b)=>b.localeCompare(a));
-        // if no data yet, show current year so the control isn't empty
+        const years = Array.from(new Set(all.map(e => (e.date || '').slice(0,4)).filter(Boolean)))
+          .sort((a,b)=>b.localeCompare(a));
+
         if (!years.length) {
           const y = String(new Date().getFullYear());
           yrSel.innerHTML = `<option value="${y}">${y}</option>`;
           return;
         }
-        yrSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+
+        yrSel.innerHTML = `<option value="all">All Years</option>` +
+          years.map(y => `<option value="${y}">${y}</option>`).join('');
       }
 
       function apply(){
         const y = yrSel.value;
-        const m = moSel.value; // 'all' or '01'..'12'
-        const q = (search.value||'').trim().toLowerCase();
+        const m = moSel.value;
+        const q = (search.value || '').trim().toLowerCase();
 
-        let filtered = all;
-        if (y) filtered = filtered.filter(e => e.date.startsWith(y));
-        if (m !== 'all') filtered = filtered.filter(e => e.date.slice(5,7) === m);
-        if (q) filtered = filtered.filter(e =>
-          (e.title||'').toLowerCase().includes(q) ||
-          (e.verse||'').toLowerCase().includes(q)
-        );
+        let filtered = all.slice();
 
-        // newest first
+        if (y !== 'all') filtered = filtered.filter(e => (e.date || '').startsWith(y));
+        if (m !== 'all') filtered = filtered.filter(e => (e.date || '').slice(5,7) === m);
+        if (q) {
+          filtered = filtered.filter(e =>
+            (e.title || '').toLowerCase().includes(q) ||
+            (e.verse || '').toLowerCase().includes(q)
+          );
+        }
+
         filtered.sort((a,b) => b.date.localeCompare(a.date));
 
         view = filtered;
@@ -174,49 +221,55 @@
       function render(){
         grid.classList.remove('preload');
         grid.innerHTML = '';
+
         const start = page * PAGE;
         const chunk = view.slice(start, start + PAGE);
+
         chunk.forEach(o => grid.appendChild(objToCard(o)));
 
-        const shown = chunk.length;
-        empty.style.display = shown ? 'none' : '';
-        if (countEl) countEl.textContent = `${view.length} entr${view.length===1?'y':'ies'}`;
+        empty.style.display = chunk.length ? 'none' : '';
+        countEl.textContent = `${view.length} entr${view.length === 1 ? 'y' : 'ies'}`;
 
         prevBtn.disabled = page === 0;
         nextBtn.disabled = start + PAGE >= view.length;
       }
 
-      prevBtn.addEventListener('click', () => { if(page>0){ page--; render(); }});
-      nextBtn.addEventListener('click', () => { if((page+1)*PAGE < view.length){ page++; render(); }});
+      prevBtn.addEventListener('click', () => {
+        if (page > 0) {
+          page--;
+          render();
+        }
+      });
+
+      nextBtn.addEventListener('click', () => {
+        if ((page + 1) * PAGE < view.length) {
+          page++;
+          render();
+        }
+      });
 
       yrSel.addEventListener('change', apply);
       moSel.addEventListener('change', apply);
       search.addEventListener('input', apply);
 
-      // Load /data/daily-archive.json (new schema)
-      // Expected: [{ "date":"YYYY-MM-DD", "title":"...", "verse_ref":"...", "href":"/daily/Scripture_Title_Date.html" }]
       (async function loadJSON(){
         try{
           const r = await fetch('/data/daily-archive.json', { cache: 'no-store' });
-          if (!r.ok) { initEmpty(); return; }
+          if (!r.ok) return initEmpty();
+
           const list = await r.json();
-          if (!Array.isArray(list) || !list.length) { initEmpty(); return; }
+          if (!Array.isArray(list) || !list.length) return initEmpty();
 
-          all = list.map(x => ({
-            date: x.date,
-            title: x.title || '',
-            verse: x.verse_ref || '',
-            href: (x.href && x.href.startsWith('/')) ? x.href : ('/' + (x.href || '').replace(/^\/+/, ''))
-          }));
-          // Guard: hide future entries (America/Chicago)
-          (function(){
-          const fmt = new Intl.DateTimeFormat('en-CA', {
-              timeZone: 'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit'
-          });
-          const today = fmt.format(new Date()); // YYYY-MM-DD
-          all = all.filter(x => x.date && x.date <= today);
-          })();
+          const today = todayCentralISO();
 
+          all = list
+            .map(x => ({
+              date: x.date,
+              title: x.title || '',
+              verse: x.verse_ref || '',
+              href: (x.href && x.href.startsWith('/')) ? x.href : ('/' + (x.href || '').replace(/^\/+/, ''))
+            }))
+            .filter(x => x.date && x.date <= today);
 
           populateYearOptions();
           apply();
