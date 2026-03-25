@@ -34,7 +34,6 @@ const refreshRealPreviewBtn = document.getElementById('refreshRealPreviewBtn');
 const previewTypeBadge = document.getElementById('previewTypeBadge');
 const previewStatusText = document.getElementById('previewStatusText');
 
-const loadPromptBtn = document.getElementById('loadPromptBtn');
 const copyPromptBtn = document.getElementById('copyPromptBtn');
 const promptStatus = document.getElementById('promptStatus');
 
@@ -47,56 +46,40 @@ let blogTemplateCache = '';
 let dailyTemplateCache = '';
 
 async function loadStoredConversionPrompt() {
-  if (!promptStatus) return;
+  const { data, error } = await supabase
+    .from('admin_prompts')
+    .select('prompt_text, updated_at')
+    .eq('key', ADMIN_PROMPT_KEY)
+    .maybeSingle();
 
-  promptStatus.textContent = 'Loading prompt from Supabase...';
+  if (error) throw error;
 
-  try {
-    const { data, error } = await supabase
-      .from('admin_prompts')
-      .select('prompt_text, updated_at')
-      .eq('key', ADMIN_PROMPT_KEY)
-      .maybeSingle();
-
-    if (error) throw error;
-
-    if (!data) {
-      storedConversionPrompt = '';
-      promptStatus.textContent = 'No stored prompt was found for this key.';
-      return;
-    }
-
-    storedConversionPrompt = data.prompt_text || '';
-    promptStatus.textContent = data.updated_at
-      ? `Prompt loaded. Last updated ${formatDateHuman(data.updated_at)}.`
-      : 'Prompt loaded.';
-  } catch (err) {
+  if (!data) {
     storedConversionPrompt = '';
-    promptStatus.textContent = `Could not load prompt: ${err.message || 'Unknown error.'}`;
+    throw new Error('No stored prompt was found for this key.');
   }
+
+  storedConversionPrompt = data.prompt_text || '';
+  return data;
 }
 
 async function copyStoredConversionPrompt() {
-  if (!storedConversionPrompt.trim()) {
-    await loadStoredConversionPrompt();
-  }
+  if (!promptStatus) return;
 
-  if (!storedConversionPrompt.trim()) {
-    if (promptStatus) {
-      promptStatus.textContent = 'Nothing to copy. No prompt is currently loaded.';
-    }
-    return;
-  }
+  promptStatus.textContent = 'Loading latest prompt...';
 
   try {
+    await loadStoredConversionPrompt();
+
+    if (!storedConversionPrompt.trim()) {
+      promptStatus.textContent = 'Prompt is empty, so nothing was copied.';
+      return;
+    }
+
     await navigator.clipboard.writeText(storedConversionPrompt);
-    if (promptStatus) {
-      promptStatus.textContent = 'Prompt copied to clipboard.';
-    }
+    promptStatus.textContent = 'Prompt copied to clipboard.';
   } catch (err) {
-    if (promptStatus) {
-      promptStatus.textContent = `Copy failed: ${err.message || 'Clipboard error.'}`;
-    }
+    promptStatus.textContent = `Copy failed: ${err.message || 'Unknown error.'}`;
   }
 }
 
@@ -120,6 +103,12 @@ function hasWebsiteActions(actions) {
 
 function hasOutboundActions(actions) {
   return Boolean(actions.sendEmail || actions.sendSms);
+}
+
+function selectedActionNames(actions) {
+  return Object.entries(actions)
+    .filter(([, value]) => value)
+    .map(([name]) => name);
 }
 
 function updateScheduleVisibility() {
@@ -765,6 +754,21 @@ function buildOutboundPreviewHTML(payload) {
   `;
 }
 
+function renderWaitingPreview(message) {
+  if (!realPreviewFrame || !previewTypeBadge || !previewStatusText) return;
+
+  previewTypeBadge.textContent = 'Preview';
+  previewStatusText.textContent = message;
+  realPreviewFrame.srcdoc = `
+    <div style="padding:24px;font-family:Arial,sans-serif;color:#5d4a40;background:#f7f3ef;min-height:100vh;box-sizing:border-box;">
+      <div style="max-width:760px;margin:0 auto;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:20px;box-shadow:0 6px 18px rgba(0,0,0,.06);">
+        <h2 style="margin:0 0 10px;color:#3e2c23;">Waiting for preview</h2>
+        <p style="margin:0;line-height:1.6;">${escapeHtml(message)}</p>
+      </div>
+    </div>
+  `;
+}
+
 async function renderRealPreview(payload = null, entries = null) {
   if (!realPreviewFrame) return;
 
@@ -773,8 +777,15 @@ async function renderRealPreview(payload = null, entries = null) {
     ({ entries } = normalizeEntriesFromPayload(payload));
   }
 
-  const websiteRequested = hasWebsiteActions(payload.actions);
-  const outboundRequested = hasOutboundActions(payload.actions);
+  const actions = payload.actions;
+  const websiteRequested = hasWebsiteActions(actions);
+  const outboundRequested = hasOutboundActions(actions);
+  const selectedNames = selectedActionNames(actions);
+
+  if (!selectedNames.length) {
+    renderWaitingPreview('Nothing selected yet. Choose an option like Update Daily, Update Blog, Send Email, or Send SMS.');
+    return;
+  }
 
   if (!websiteRequested && outboundRequested) {
     previewTypeBadge.textContent = payload.actions.sendSms && payload.actions.sendEmail
@@ -785,20 +796,14 @@ async function renderRealPreview(payload = null, entries = null) {
 
     previewStatusText.textContent = payload.send_at
       ? `Scheduled for ${formatDateHuman(payload.send_at)}`
-      : (payload.subject || payload.body || 'Outbound-only preview');
+      : 'Outbound preview ready';
 
     realPreviewFrame.srcdoc = buildOutboundPreviewHTML(payload);
     return;
   }
 
   if (!entries.length) {
-    previewTypeBadge.textContent = 'Real Preview';
-    previewStatusText.textContent = 'No entry available to render.';
-    realPreviewFrame.srcdoc = `
-      <div style="padding:16px;font-family:sans-serif;color:#6b5b53;">
-        No structured entry available for preview.
-      </div>
-    `;
+    renderWaitingPreview('A website update is selected, but there is no valid JSON entry to preview yet.');
     return;
   }
 
@@ -841,7 +846,7 @@ async function runAnalysis() {
   const actionCount = Object.values(actions).filter(Boolean).length;
 
   if (actionCount === 0) {
-    bulkAnalysisBox.textContent = 'Choose at least one action first.';
+    bulkAnalysisBox.textContent = 'Nothing selected yet. Choose at least one action first.';
     return { ok: false };
   }
 
@@ -926,12 +931,6 @@ async function runAnalysis() {
     report.push(`Body present: ${payload.body ? 'yes' : 'no'}`);
   }
 
-  if (payload.mode === 'bulk' && entries.length) {
-    report.push('');
-    report.push('First entry sample:');
-    report.push(JSON.stringify(entries[0].data, null, 2));
-  }
-
   bulkAnalysisBox.textContent = report.join('\n');
   return {
     ok: !errors.length,
@@ -943,50 +942,36 @@ async function runAnalysis() {
 async function runPreview() {
   const payload = await collectPayload();
   const actions = payload.actions;
-  const websiteRequested = hasWebsiteActions(actions);
-  const outboundRequested = hasOutboundActions(actions);
+  const actionNames = selectedActionNames(actions);
 
-  const { errors, entries } = normalizeEntriesFromPayload(payload);
-
-  const lines = [];
-  lines.push(`Actions: ${Object.entries(payload.actions).filter(([, v]) => v).map(([k]) => k).join(', ') || 'none'}`);
-  lines.push(`Mode: ${payload.mode}`);
-  lines.push(`Timing: ${payload.send_at ? `scheduled for ${formatDateHuman(payload.send_at)}` : 'send now'}`);
-  lines.push(`Subject: ${payload.subject || '(none)'}`);
-  lines.push(`Body: ${payload.body || '(none)'}`);
-
-  if (!websiteRequested && outboundRequested) {
-    lines.push('');
-    lines.push('Outbound-only preview:');
-    lines.push(payload.actions.sendSms ? '- SMS/iMessage selected' : '- SMS/iMessage not selected');
-    lines.push(payload.actions.sendEmail ? '- Email selected' : '- Email not selected');
-    lines.push('- JSON not required for outbound-only mode.');
-  } else {
-    if (errors.length) {
-      lines.push('');
-      lines.push('JSON errors:');
-      errors.forEach((e) => lines.push(`- ${e}`));
-    }
-
-    if (entries.length) {
-      lines.push('');
-      lines.push('Preview sample:');
-      lines.push(JSON.stringify(entries[0].data, null, 2));
-    } else {
-      lines.push('');
-      lines.push('No structured entries detected.');
-    }
+  if (!actionNames.length) {
+    previewBox.textContent = 'Nothing selected yet. Choose at least one action to preview.';
+    renderWaitingPreview('Nothing selected yet. Choose an option like Update Daily, Update Blog, Send Email, or Send SMS.');
+    return;
   }
 
-  previewBox.textContent = lines.join('\n');
+  const websiteRequested = hasWebsiteActions(actions);
+  const outboundRequested = hasOutboundActions(actions);
+  const { errors, entries } = normalizeEntriesFromPayload(payload);
+
+  if (errors.length) {
+    previewBox.textContent = `Preview blocked by input errors:\n- ${errors.join('\n- ')}`;
+  } else if (websiteRequested && !entries.length) {
+    previewBox.textContent = 'A website update is selected, but there is no valid JSON entry to preview yet.';
+  } else if (!websiteRequested && outboundRequested) {
+    previewBox.textContent = 'Outbound preview ready.';
+  } else {
+    previewBox.textContent = 'Preview ready.';
+  }
 
   try {
     await renderRealPreview(payload, websiteRequested ? entries : []);
   } catch (err) {
+    previewBox.textContent = `Preview error: ${err.message || 'Could not render preview.'}`;
     previewStatusText.textContent = 'Preview failed.';
     realPreviewFrame.srcdoc = `
       <div style="padding:16px;font-family:sans-serif;color:#6b5b53;">
-        <strong>Preview error:</strong> ${err.message || 'Could not render preview.'}
+        <strong>Preview error:</strong> ${escapeHtml(err.message || 'Could not render preview.')}
       </div>
     `;
   }
@@ -1133,10 +1118,6 @@ refreshRealPreviewBtn?.addEventListener('click', async () => {
   }
 });
 
-loadPromptBtn?.addEventListener('click', async () => {
-  await loadStoredConversionPrompt();
-});
-
 copyPromptBtn?.addEventListener('click', async () => {
   await copyStoredConversionPrompt();
 });
@@ -1175,5 +1156,14 @@ pushJsonFile?.addEventListener('change', () => {
 window.pushCenterInit = async function pushCenterInit() {
   updateScheduleVisibility();
   disarmConfirm();
-  await loadStoredConversionPrompt();
+
+  if (promptStatus) {
+    promptStatus.textContent = 'Ready to copy prompt.';
+  }
+
+  renderWaitingPreview('Nothing selected yet. Choose an option like Update Daily, Update Blog, Send Email, or Send SMS.');
+
+  if (previewBox) {
+    previewBox.textContent = 'Nothing selected yet. Choose at least one action to preview.';
+  }
 };
