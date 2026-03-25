@@ -34,6 +34,13 @@ const refreshRealPreviewBtn = document.getElementById('refreshRealPreviewBtn');
 const previewTypeBadge = document.getElementById('previewTypeBadge');
 const previewStatusText = document.getElementById('previewStatusText');
 
+const loadPromptBtn = document.getElementById('loadPromptBtn');
+const copyPromptBtn = document.getElementById('copyPromptBtn');
+const conversionPromptText = document.getElementById('conversionPromptText');
+const promptStatus = document.getElementById('promptStatus');
+
+const ADMIN_PROMPT_KEY = 'daily_json_conversion';
+
 let armed = false;
 let armTimer = null;
 let blogTemplateCache = '';
@@ -538,6 +545,75 @@ async function renderRealPreview(payload = null, entries = null) {
   realPreviewFrame.srcdoc = stripScriptsFromDocument(html);
 }
 
+async function loadStoredConversionPrompt() {
+  if (!conversionPromptText || !promptStatus) return;
+
+  promptStatus.textContent = 'Loading prompt from Supabase...';
+
+  try {
+    const { data, error } = await supabase
+      .from('admin_prompts')
+      .select('prompt_text, updated_at')
+      .eq('key', ADMIN_PROMPT_KEY)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data) {
+      conversionPromptText.value = '';
+      promptStatus.textContent = 'No stored prompt was found for this key.';
+      return;
+    }
+
+    conversionPromptText.value = data.prompt_text || '';
+    promptStatus.textContent = data.updated_at
+      ? `Prompt loaded. Last updated ${formatDateHuman(data.updated_at)}.`
+      : 'Prompt loaded.';
+  } catch (err) {
+    conversionPromptText.value = '';
+    promptStatus.textContent = `Could not load prompt: ${err.message || 'Unknown error.'}`;
+  }
+}
+
+async function copyStoredConversionPrompt() {
+  const text = conversionPromptText?.value?.trim() || '';
+
+  if (!text) {
+    if (promptStatus) {
+      promptStatus.textContent = 'Nothing to copy yet. Load the prompt first.';
+    }
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(text);
+    if (promptStatus) {
+      promptStatus.textContent = 'Prompt copied to clipboard.';
+    }
+  } catch (err) {
+    try {
+      conversionPromptText.focus();
+      conversionPromptText.select();
+      conversionPromptText.setSelectionRange(0, conversionPromptText.value.length);
+      const copied = document.execCommand('copy');
+
+      if (!copied) {
+        throw new Error('Clipboard copy was not permitted.');
+      }
+
+      if (promptStatus) {
+        promptStatus.textContent = 'Prompt copied to clipboard.';
+      }
+    } catch (fallbackErr) {
+      if (promptStatus) {
+        promptStatus.textContent = `Copy failed: ${fallbackErr.message || 'Unknown clipboard error.'}`;
+      }
+    }
+  }
+}
+
 async function runAnalysis() {
   const payload = await collectPayload();
   const actions = payload.actions;
@@ -836,6 +912,14 @@ refreshRealPreviewBtn?.addEventListener('click', async () => {
   }
 });
 
+loadPromptBtn?.addEventListener('click', async () => {
+  await loadStoredConversionPrompt();
+});
+
+copyPromptBtn?.addEventListener('click', async () => {
+  await copyStoredConversionPrompt();
+});
+
 pushSendTiming?.addEventListener('change', () => {
   updateScheduleVisibility();
   disarmConfirm();
@@ -867,7 +951,8 @@ pushJsonFile?.addEventListener('change', () => {
   disarmConfirm();
 });
 
-window.pushCenterInit = function pushCenterInit() {
+window.pushCenterInit = async function pushCenterInit() {
   updateScheduleVisibility();
   disarmConfirm();
+  await loadStoredConversionPrompt();
 };

@@ -338,7 +338,8 @@ footer {
 
 .preview-box,
 .bulk-analysis,
-.output-log {
+.output-log,
+.prompt-status {
   background: #fff;
   border: 1px solid rgba(0,0,0,.07);
   border-radius: 14px;
@@ -346,6 +347,18 @@ footer {
   color: #3e2c23;
   white-space: pre-wrap;
   line-height: 1.55;
+}
+
+.prompt-toolbar {
+  display: flex;
+  gap: .7rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.prompt-textarea {
+  min-height: 360px;
+  resize: vertical;
 }
 
 .real-preview-shell {

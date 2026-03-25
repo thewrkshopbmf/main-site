@@ -38,6 +38,7 @@
         <aside class="push-sidebar">
           <h2>Push Tools</h2>
           <nav class="push-nav">
+            <a href="#conversionPrompt">Conversion Prompt</a>
             <a href="#composer">Composer</a>
             <a href="#preview">Preview</a>
             <a href="#bulk">Bulk Analysis</a>
@@ -48,6 +49,29 @@
         </aside>
 
         <div class="push-main">
+          <section class="push-card" id="conversionPrompt">
+            <h2>Conversion Prompt</h2>
+            <p>Load the saved ChatGPT conversion prompt from Supabase, then copy it to your clipboard.</p>
+
+            <div class="prompt-toolbar">
+              <button class="push-btn secondary" type="button" id="loadPromptBtn">Reload Prompt</button>
+              <button class="push-btn primary" type="button" id="copyPromptBtn">Copy Prompt to Clipboard</button>
+            </div>
+
+            <div class="prompt-status" id="promptStatus">Waiting to load prompt...</div>
+
+            <div class="form-group">
+              <label class="form-label" for="conversionPromptText">Stored Prompt</label>
+              <textarea
+                class="form-input code-input prompt-textarea"
+                id="conversionPromptText"
+                rows="18"
+                readonly
+                placeholder="No prompt loaded yet.">
+              </textarea>
+            </div>
+          </section>
+
           <section class="push-card" id="composer">
             <h2>Composer</h2>
             <p>Paste JSON, upload JSON files, or write a subject/body for outbound messages.</p>
