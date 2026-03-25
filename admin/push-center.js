@@ -149,11 +149,147 @@ function formatDateHuman(iso) {
 }
 
 function safeJsonParse(text) {
-  try {
-    return { ok: true, value: JSON.parse(text) };
-  } catch (err) {
-    return { ok: false, error: err.message || 'Invalid JSON.' };
+  const raw = String(text || '').trim();
+
+  if (!raw) {
+    return { ok: false, error: 'No JSON provided.' };
   }
+
+  const stripped = stripMarkdownCodeFences(raw);
+
+  try {
+    return { ok: true, value: JSON.parse(stripped) };
+  } catch {
+    // continue to wrapped block parsing
+  }
+
+  const wrapped = parseWrappedInsertBlocks(stripped);
+  if (wrapped.ok) {
+    return { ok: true, value: wrapped.value };
+  }
+
+  return { ok: false, error: wrapped.error || 'Invalid JSON.' };
+}
+
+function stripMarkdownCodeFences(text) {
+  const trimmed = text.trim();
+
+  const fenceMatch = trimmed.match(/^```[a-zA-Z0-9_-]*\n([\s\S]*?)\n```$/);
+  if (fenceMatch) {
+    return fenceMatch[1].trim();
+  }
+
+  return trimmed;
+}
+
+function parseWrappedInsertBlocks(text) {
+  const blocks = [];
+  const len = text.length;
+  let i = 0;
+
+  while (i < len) {
+    while (i < len && /\s/.test(text[i])) i++;
+    if (i >= len) break;
+
+    if (text[i] !== '|') {
+      return {
+        ok: false,
+        error: `Expected "|" at position ${i + 1}.`
+      };
+    }
+
+    const openIndex = text.indexOf('{', i);
+    if (openIndex === -1) {
+      return {
+        ok: false,
+        error: 'Could not find opening "{" for wrapped insert block.'
+      };
+    }
+
+    const header = text.slice(i + 1, openIndex).trim();
+    if (!header) {
+      return {
+        ok: false,
+        error: 'Wrapped insert block is missing its header.'
+      };
+    }
+
+    let depth = 0;
+    let inString = false;
+    let escaped = false;
+    let endIndex = -1;
+
+    for (let j = openIndex; j < len; j++) {
+      const ch = text[j];
+
+      if (inString) {
+        if (escaped) {
+          escaped = false;
+        } else if (ch === '\\') {
+          escaped = true;
+        } else if (ch === '"') {
+          inString = false;
+        }
+        continue;
+      }
+
+      if (ch === '"') {
+        inString = true;
+        continue;
+      }
+
+      if (ch === '{') depth++;
+      if (ch === '}') depth--;
+
+      if (depth === 0) {
+        endIndex = j;
+        break;
+      }
+    }
+
+    if (endIndex === -1) {
+      return {
+        ok: false,
+        error: `Could not find closing "}" for wrapped block starting with "${header}".`
+      };
+    }
+
+    const jsonText = text.slice(openIndex, endIndex + 1);
+
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonText);
+    } catch (err) {
+      return {
+        ok: false,
+        error: `Invalid JSON inside wrapped block "${header}": ${err.message}`
+      };
+    }
+
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return {
+        ok: false,
+        error: `Wrapped block "${header}" must contain a JSON object.`
+      };
+    }
+
+    parsed.__insert_block_header = header;
+    blocks.push(parsed);
+
+    i = endIndex + 1;
+  }
+
+  if (!blocks.length) {
+    return {
+      ok: false,
+      error: 'No valid wrapped insert blocks were found.'
+    };
+  }
+
+  return {
+    ok: true,
+    value: blocks.length === 1 ? blocks[0] : blocks
+  };
 }
 
 function formatOutputBlock(title, lines = []) {
