@@ -1,0 +1,420 @@
+{
+  "date": "2026-03-27",
+  "title": "Entrusted, Not Excused",
+  "scriptures": [
+    {
+      "ref": "Matthew 25:14-30",
+      "text": "The Parable of the Talents"
+    },
+    {
+      "ref": "Proverbs 6:6-8",
+      "text": "The Ant and diligence"
+    }
+  ],
+  "sections": [
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You don’t own it."
+        },
+        {
+          "type": "paragraph",
+          "text": "But you are responsible for it."
+        },
+        {
+          "type": "paragraph",
+          "text": "What you’ve been given matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "And what you do with it…. matters more."
+        },
+        {
+          "type": "paragraph",
+          "text": "God is not looking for perfection."
+        },
+        {
+          "type": "paragraph",
+          "text": "He’s looking for faithfulness."
+        }
+      ]
+    },
+    {
+      "key": "the_devotional",
+      "label": "The Devotional",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most men live like managers."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Maintain.",
+            "Protect.",
+            "Play it safe.",
+            "Do enough to avoid loss."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "But Jesus tells a different story."
+        },
+        {
+          "type": "paragraph",
+          "text": "A master entrusts his servants with resources."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not equally…."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "but intentionally."
+        },
+        {
+          "type": "paragraph",
+          "text": "And then he leaves."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "No micromanaging.",
+            "No daily check-ins.",
+            "No reminders.",
+            "Just responsibility."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Two servants take what they were given…."
+        },
+        {
+          "type": "paragraph",
+          "text": "and multiply it."
+        },
+        {
+          "type": "paragraph",
+          "text": "One buries it."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not out of rebellion…."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "but out of fear."
+        },
+        {
+          "type": "paragraph",
+          "text": "And that’s what makes it dangerous."
+        },
+        {
+          "type": "paragraph",
+          "text": "Because from the outside,"
+        },
+        {
+          "type": "paragraph",
+          "text": "he looks responsible."
+        },
+        {
+          "type": "paragraph",
+          "text": "But underneath,"
+        },
+        {
+          "type": "paragraph",
+          "text": "he’s disconnected from trust."
+        }
+      ]
+    },
+    {
+      "key": "the_shift",
+      "label": "The Shift",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Managers try not to lose."
+        },
+        {
+          "type": "paragraph",
+          "text": "Owners multiply."
+        },
+        {
+          "type": "paragraph",
+          "text": "Managers think:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“How do I protect what I have?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "Owners think:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“How do I grow what I’ve been given?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "And the difference isn’t skill…."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "It’s mindset."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "It’s identity."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "It’s trust."
+        },
+        {
+          "type": "paragraph",
+          "text": "Because buried potential doesn’t just stay neutral…."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "it creates drift"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "it creates doubt"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "it creates distance"
+        },
+        {
+          "type": "paragraph",
+          "text": "Unused calling always turns into internal tension."
+        }
+      ]
+    },
+    {
+      "key": "proverbs_reveals_the_pattern",
+      "label": "Proverbs Reveals the Pattern",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "“Go to the ant….” (Proverbs 6:6)"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "No overseer.",
+            "No accountability partner.",
+            "No one watching."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Yet it prepares."
+        },
+        {
+          "type": "paragraph",
+          "text": "It builds."
+        },
+        {
+          "type": "paragraph",
+          "text": "It stores."
+        },
+        {
+          "type": "paragraph",
+          "text": "Why?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Because ownership doesn’t need pressure."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "It’s internal."
+        }
+      ]
+    },
+    {
+      "key": "the_truth",
+      "label": "The Truth",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "God is not asking:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“How much were you given?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "He’s asking:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“What did you do with it?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "You don’t answer for someone else’s calling."
+        },
+        {
+          "type": "paragraph",
+          "text": "You answer for yours."
+        },
+        {
+          "type": "paragraph",
+          "text": "And doing nothing…."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "is not neutral."
+        },
+        {
+          "type": "paragraph",
+          "text": "It’s disobedience dressed as caution."
+        }
+      ]
+    },
+    {
+      "key": "jesus_is_calling_this_out",
+      "label": "Jesus Is Calling This Out",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "“Well done, good and faithful servant….”"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Not successful.",
+            "Not impressive."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Faithful."
+        },
+        {
+          "type": "paragraph",
+          "text": "Faithfulness is measured by movement."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Not perfection.",
+            "Not comparison."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Movement."
+        }
+      ]
+    },
+    {
+      "key": "reflection",
+      "label": "Reflection",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Where have I buried what God gave me?",
+            "Where am I playing it safe instead of stepping up?",
+            "What have I been entrusted with that I’ve treated casually?",
+            "Am I thinking like a manager…. or an owner?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "declaration",
+      "label": "Declaration",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "I am entrusted, not excused."
+        },
+        {
+          "type": "paragraph",
+          "text": "What God has given me, I will steward with intention."
+        },
+        {
+          "type": "paragraph",
+          "text": "I choose faithfulness over fear."
+        },
+        {
+          "type": "paragraph",
+          "text": "I will multiply what’s in my hands."
+        }
+      ]
+    },
+    {
+      "key": "action_step",
+      "label": "Action Step",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Take inventory today."
+        },
+        {
+          "type": "paragraph",
+          "text": "Write down 3 things God has entrusted to you:"
+        },
+        {
+          "type": "bullet_list",
+          "items": [
+            "time",
+            "relationships",
+            "skills",
+            "opportunities"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Then ask:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“What would it look like to multiply this?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "And act on one."
+        }
+      ]
+    },
+    {
+      "key": "one_sentence_to_carry",
+      "label": "One Sentence to Carry",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "“What I’ve been given isn’t mine to keep, it’s mine to multiply.” -TheWrkShop"
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-03-27_matthew-25-14-30_entrusted-not-excused|"
+}
