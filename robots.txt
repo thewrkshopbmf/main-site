@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thewrkshop.com/sitemap.xml

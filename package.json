@@ -19,7 +19,8 @@
     "build:blog": "node scripts/build-blog.js",
     "build:podcasts": "node scripts/build-podcasts.js",
     "build:web": "vite build",
-    "build:all": "npm run build:supabase && npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:web",
+    "build:sitemap": "node scripts/build-sitemap.js",
+    "build:all": "npm run build:supabase && npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:web && npm run build:sitemap",
     "send:devotional": "netlify functions:invoke send-devotional",
     "dev:web": "vite"
   }

@@ -1,7 +1,7 @@
 name: Daily Publish
 on:
   schedule:
-    - cron: "0 11 * * *"   # ~6:00 AM America/Chicago during CDT
+    - cron: "0 11 * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -18,8 +18,8 @@ jobs:
       - name: Install deps (if any)
         run: npm ci || true
 
-      - name: Build daily pages & data
-        run: npm run build:daily
+      - name: Build site
+        run: npm run build:all
 
       - name: Publish to Netlify (force prod publish)
         run: npx netlify-cli deploy --dir . --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN
