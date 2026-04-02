@@ -73,11 +73,21 @@ body {
 /* Hero Section */
 .hero {
   background: url('assets/images/WoodShopPhoto36.png') center / cover no-repeat;
-  height: 100vh;
+  min-height: 60vh;
+  max-height: 720px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 5rem 1rem;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 420px;
+    max-height: 560px;
+    padding: 4rem 1rem;
+  }
 }
 
 .hero-overlay {
@@ -85,6 +95,16 @@ body {
   padding: 3rem;
   text-align: center;
   color: white;
+  width: min(92%, 780px);
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .hero-overlay {
+    padding: 1.5rem 1rem;
+    width: min(94%, 640px);
+  }
 }
 
 .hero-overlay h1 {
