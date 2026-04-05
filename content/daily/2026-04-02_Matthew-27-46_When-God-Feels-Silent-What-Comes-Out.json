@@ -1,0 +1,166 @@
+{
+  "date": "2026-04-02",
+  "title": "When God Feels Silent…. What Comes Out?",
+  "scriptures": [
+    {
+      "ref": "Matthew 27:46",
+      "text": "My God, My God, why have You forsaken Me?"
+    },
+    {
+      "ref": "John 19:28",
+      "text": "I thirst."
+    }
+  ],
+  "sections": [
+    {
+      "key": "moment_on_the_cross",
+      "label": "Moment on the Cross",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "The sky has gone dark.",
+            "The crowd is still there….",
+            "but heaven feels quiet.",
+            "No answer.",
+            "No relief.",
+            "No rescue.",
+            "Just silence."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "What comes out of you when God doesn’t respond the way you hoped?"
+        }
+      ]
+    },
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Faith is not tested",
+            "when God feels close….",
+            "It’s tested",
+            "when He feels distant."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "devotional",
+      "label": "Devotional",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Jesus feels the weight of separation…. And instead of pretending He tells the truth."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "“My God…. why?”",
+            "“I thirst.”",
+            "No mask.",
+            "No performance.",
+            "No pretending."
+          ]
+        },
+        {
+          "type": "bullet_list",
+          "items": [
+            "Distract instead of deal",
+            "Numb instead of name",
+            "Perform instead of confess"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "But Jesus?",
+            "👉 He stays",
+            "👉 He speaks honestly",
+            "👉 He doesn’t disconnect"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "reflex_test",
+      "label": "Reflex Test",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "God feels distant",
+            "Prayers feel unanswered",
+            "Life doesn’t make sense"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "👉 Your instinct reveals your formation",
+            "Do you drift…. or stay?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "the_90_second_window",
+      "label": "The 90-Second Window",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "You have a window to choose truth over impulse."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Sit in it.",
+            "Don’t escape it."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "shadow_confession",
+      "label": "Shadow Confession",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "I drift when God feels silent."
+        }
+      ]
+    },
+    {
+      "key": "gem",
+      "label": "Gem",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "You can’t heal what you won’t acknowledge."
+        }
+      ]
+    },
+    {
+      "key": "invitation",
+      "label": "1 Invitation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tell God the truth tonight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not the polished version. The real one."
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-04-02_matthew-27-46_when-god-feels-silent-what-comes-out|"
+}
