@@ -697,3 +697,54 @@ body.products-theme .listen-btn {
 body.products-theme .listen-btn:hover {
   background-color: #1d355c;
 }
+.easter-banner {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  background: linear-gradient(90deg, #f4f1ee 0%, #efe7d3 50%, #f4f1ee 100%);
+  color: #3e2c23;
+  font-family: Georgia, serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 10px 16px;
+  border-top: 1px solid rgba(62, 44, 35, 0.08);
+  border-bottom: 1px solid rgba(62, 44, 35, 0.12);
+  overflow: hidden;
+  z-index: 20;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.easter-banner:hover {
+  background: linear-gradient(90deg, #f8f4ea 0%, #f2ead8 50%, #f8f4ea 100%);
+}
+
+.easter-banner__text {
+  position: relative;
+  z-index: 2;
+}
+
+.easter-banner__shine {
+  position: absolute;
+  top: 0;
+  left: -30%;
+  width: 30%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.55) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  animation: easterBannerShine 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes easterBannerShine {
+  0%   { left: -35%; }
+  55%  { left: 120%; }
+  100% { left: 120%; }
+}
