@@ -1,0 +1,238 @@
+{
+  "date": "2026-04-03",
+  "title": "When It’s Time to Let Go…. What Comes Out?",
+  "scriptures": [
+    {
+      "ref": "John 19:30",
+      "text": "It is finished."
+    },
+    {
+      "ref": "Luke 23:46",
+      "text": "Father, into Your hands I commit My spirit."
+    }
+  ],
+  "sections": [
+    {
+      "key": "moment_on_the_cross",
+      "label": "Moment on the Cross",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Your body is at its limit.",
+            "Every breath is slower now.",
+            "There’s nothing left to prove.",
+            "Nothing left to do."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Will you trust…. or will you hold on?"
+        }
+      ]
+    },
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Most men don’t struggle with effort….",
+            "They struggle with surrender."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "devotional",
+      "label": "Devotional",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Jesus doesn’t say:",
+            "“I hope I did enough.”",
+            "He says:",
+            "👉 Finished."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "The work is complete.",
+            "The debt is paid.",
+            "The mission is fulfilled."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "And then",
+            "👉 He releases everything.",
+            "“Into Your hands….”"
+          ]
+        },
+        {
+          "type": "bullet_list",
+          "items": [
+            "Keep striving",
+            "Keep proving",
+            "Keep controlling"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Because letting go feels like losing.",
+            "But Jesus shows us:",
+            "👉 Letting go is trust."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "reflex_test",
+      "label": "Reflex Test",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Out of control",
+            "Uncertain about outcomes",
+            "Pressure to prove something"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "👉 Do you tighten…. or trust?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "the_90_second_window",
+      "label": "The 90-Second Window",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In moments of pressure:"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Pause.",
+            "Because what you choose in seconds shapes who you become for years."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "shadow_confession",
+      "label": "Shadow Confession",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "I try to control more than I trust."
+        }
+      ]
+    },
+    {
+      "key": "gem",
+      "label": "Gem",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "You will never experience peace while trying to control what God already holds."
+        }
+      ]
+    },
+    {
+      "key": "good_friday_moment",
+      "label": "Good Friday Moment (Don’t Rush This)",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Father, forgive them….",
+            "Today you will be with me….",
+            "Behold your son….",
+            "My God, why have You forsaken Me….",
+            "I thirst….",
+            "It is finished….",
+            "Into Your hands…."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "👉 Every word spoken under pressure",
+            "👉 Every response aligned",
+            "👉 Every moment surrendered"
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "What would come out of me…. if I were on that cross?"
+        }
+      ]
+    },
+    {
+      "key": "which_man_are_you_becoming",
+      "label": "Which Man Are You Becoming?",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "The Reactor (emotion-led)",
+            "The Avoider (comfort-led)",
+            "The Performer (approval-led)",
+            "The Controller (fear-led)",
+            "The Surrendered Man (Spirit-led)"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "invitation",
+      "label": "1 Invitation",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Control",
+            "Fear",
+            "Pressure",
+            "Identity",
+            "Outcome"
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Father…. into Your hands…."
+        }
+      ]
+    },
+    {
+      "key": "final_line",
+      "label": "Final Line",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "You are not preparing for a future moment….",
+            "👉 You are rehearsing for it right now.",
+            "And the cross doesn’t just show you what Jesus did….",
+            "👉 It reveals what’s still being formed in you."
+          ]
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-04-03_john-19-30_when-its-time-to-let-go-what-comes-out|"
+}
