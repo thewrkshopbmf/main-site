@@ -169,11 +169,21 @@ function normalizePodcastArchiveItem(item) {
 
 async function fetchJson(url, options = {}) {
   const res = await fetch(url, { cache: 'no-store', ...options });
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`Failed to load ${url} (${res.status}) ${text}`);
+  const text = await res.text().catch(() => '');
+  let payload = null;
+  try {
+    payload = text ? JSON.parse(text) : null;
+  } catch {
+    payload = null;
   }
-  return res.json();
+
+  if (!res.ok) {
+    const serverError = payload?.error || text || res.statusText;
+    throw new Error(`Failed to load ${url} (${res.status}): ${serverError}`);
+  }
+
+  if (payload !== null) return payload;
+  throw new Error(`Failed to parse JSON from ${url}`);
 }
 
 async function maybeFetchJson(url, options = {}) {
@@ -190,6 +200,18 @@ async function getAccessToken() {
   const token = data?.session?.access_token;
   if (!token) throw new Error('No active session');
   return token;
+}
+
+function formatIndexNotice() {
+  if (state.listSourceMode === 'repo_index') {
+    const futureCount = state.allEntries.filter(x => x.type === 'daily' && x.isFuture).length;
+    if (state.indexStats) {
+      return `Loaded from repo source files. Repo scan found ${state.indexStats.total_entries} entries (${state.indexStats.daily_count} daily, ${state.indexStats.blog_count} blog, ${state.indexStats.podcast_count} podcast). Future dailies: ${futureCount}.`;
+    }
+    return `Loaded from repo source files. Future dailies found: ${futureCount}.`;
+  }
+
+  return 'Loaded from archive fallback only. Future source files may be missing until repo index works.';
 }
 
 async function loadAllEntriesFromRepoIndex() {
@@ -247,7 +269,7 @@ async function loadAllEntries() {
     console.warn('Repo index load failed, falling back to archives:', err);
     await loadAllEntriesFromArchivesFallback();
     if (els.editorNotice) {
-      els.editorNotice.textContent = `Repo index failed, so the editor is showing archive data only. Future source files will be missing until the function works. Error: ${err.message}`;
+      els.editorNotice.textContent = `Repo index failed, so the editor is showing archive data only. Future source files will be missing until the function works. Exact error: ${err.message}`;
     }
   }
 }
@@ -350,7 +372,7 @@ function renderCalendar() {
       if (entry) {
         selectEntry(entry).catch(err => {
           console.error('Select entry failed:', err);
-          els.editorNotice.textContent = `Could not open source for this entry: ${err.message}`;
+          els.editorNotice.textContent = `Could not open source for this entry. Exact error: ${err.message}`;
         });
       }
     });
@@ -409,7 +431,7 @@ function renderSearchResults() {
         if (entry) {
           selectEntry(entry).catch(err => {
             console.error('Select entry failed:', err);
-            els.editorNotice.textContent = `Could not open source for this entry: ${err.message}`;
+            els.editorNotice.textContent = `Could not open source for this entry. Exact error: ${err.message}`;
           });
         }
       });
@@ -665,9 +687,21 @@ async function apiLoadSource(entry) {
     }
   });
 
-  const payload = await res.json().catch(() => ({}));
+  const text = await res.text().catch(() => '');
+  let payload = null;
+  try {
+    payload = text ? JSON.parse(text) : null;
+  } catch {
+    payload = null;
+  }
+
   if (!res.ok) {
-    throw new Error(payload?.error || 'Failed to load source');
+    const exact = payload?.error || text || `HTTP ${res.status}`;
+    throw new Error(exact);
+  }
+
+  if (!payload) {
+    throw new Error('Source function returned non-JSON success response');
   }
 
   return payload;
@@ -696,9 +730,21 @@ async function apiPublish(entry, draft) {
     })
   });
 
-  const payload = await res.json().catch(() => ({}));
+  const text = await res.text().catch(() => '');
+  let payload = null;
+  try {
+    payload = text ? JSON.parse(text) : null;
+  } catch {
+    payload = null;
+  }
+
   if (!res.ok) {
-    throw new Error(payload?.error || 'Publish failed');
+    const exact = payload?.error || text || `HTTP ${res.status}`;
+    throw new Error(exact);
+  }
+
+  if (!payload) {
+    throw new Error('Publish function returned non-JSON success response');
   }
 
   return payload;
@@ -781,6 +827,7 @@ async function selectEntry(entry) {
     sourcePath = entry.filePath || '(live page fallback)';
     sourceJson = null;
     draft = await tryFetchLivePageDraft(entry);
+    els.editorNotice.textContent = `Source JSON fetch failed, so the editor loaded the live page instead. Exact source error: ${err.message}`;
   }
 
   state.selectedDraft = deepClone(draft);
@@ -792,9 +839,9 @@ async function selectEntry(entry) {
   renderEditor();
   syncPrevNextButtons();
 
-  els.editorNotice.textContent = usedFallback
-    ? 'Loaded from the live page because source JSON could not be fetched yet. Viewing/editing still works, but publish may fail until the source resolver is configured.'
-    : 'Source loaded. Make your edits, then publish.';
+  if (!usedFallback) {
+    els.editorNotice.textContent = 'Source loaded. Make your edits, then publish.';
+  }
 }
 
 function renderEditor() {
@@ -917,7 +964,7 @@ async function publishChanges() {
     els.editorNotice.textContent = `Published successfully. Commit: ${result?.commit_sha || 'created'}`;
   } catch (err) {
     console.error(err);
-    els.editorNotice.textContent = `Publish failed: ${err.message}`;
+    els.editorNotice.textContent = `Publish failed. Exact error: ${err.message}`;
   } finally {
     state.isPublishing = false;
     syncPrevNextButtons();
@@ -954,7 +1001,7 @@ function moveSelection(direction) {
 
   selectEntry(state.filteredEntries[nextIndex]).catch(err => {
     console.error('Move selection failed:', err);
-    els.editorNotice.textContent = `Could not open source for this entry: ${err.message}`;
+    els.editorNotice.textContent = `Could not open source for this entry. Exact error: ${err.message}`;
   });
 }
 
@@ -997,7 +1044,7 @@ function bindControls() {
   els.revertBtn.addEventListener('click', () => {
     reloadSource().catch(err => {
       console.error('Reload source failed:', err);
-      els.editorNotice.textContent = `Could not reload source: ${err.message}`;
+      els.editorNotice.textContent = `Could not reload source. Exact error: ${err.message}`;
     });
   });
   els.copyJsonBtn.addEventListener('click', copyJson);
@@ -1031,6 +1078,9 @@ window.pageEditorInit = async function pageEditorInit() {
     console.error('Content index load failed:', err);
     els.searchResults.innerHTML = `<div class="empty-state small">The editor could not load content data.</div>`;
     els.calendarGrid.innerHTML = `<div class="empty-state small">The calendar could not be loaded.</div>`;
+    if (els.editorNotice) {
+      els.editorNotice.textContent = `Content index load failed. Exact error: ${err.message}`;
+    }
     return;
   }
 
@@ -1050,16 +1100,7 @@ window.pageEditorInit = async function pageEditorInit() {
   renderYearMonthSelectors();
   renderSearchResults();
 
-  if (state.listSourceMode === 'repo_index') {
-    const futureCount = state.allEntries.filter(x => x.type === 'daily' && x.isFuture).length;
-    const statsText = state.indexStats
-      ? ` Repo scan found ${state.indexStats.total_entries} entries (${state.indexStats.daily_count} daily, ${state.indexStats.blog_count} blog, ${state.indexStats.podcast_count} podcast). Future dailies: ${futureCount}.`
-      : ` Repo scan is active. Future dailies found: ${futureCount}.`;
-
-    els.editorNotice.textContent = `Loaded from repo source files.${statsText}`;
-  } else {
-    els.editorNotice.textContent = 'Loaded from archive fallback only. Future source files may be missing until repo index works.';
-  }
+  els.editorNotice.textContent = formatIndexNotice();
 
   const firstDaily = state.allEntries
     .slice()
@@ -1071,7 +1112,7 @@ window.pageEditorInit = async function pageEditorInit() {
       await selectEntry(firstDaily);
     } catch (err) {
       console.error('Initial entry load failed:', err);
-      els.editorNotice.textContent = `Content index loaded, but the first source file could not be opened: ${err.message}`;
+      els.editorNotice.textContent = `Content index loaded, but the first source file could not be opened. Exact error: ${err.message}`;
       els.selectedEmptyState.hidden = false;
       els.editorWorkspace.hidden = true;
       els.selectedMetaText.textContent = 'Choose a page from the calendar or search results.';

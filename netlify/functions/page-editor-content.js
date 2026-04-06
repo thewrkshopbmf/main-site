@@ -91,7 +91,7 @@ async function requireAdmin(request) {
 
   const { data: userData, error: userError } = await supabase.auth.getUser(token);
   if (userError || !userData?.user) {
-    return { error: json({ ok: false, error: 'Invalid or expired session' }, 401) };
+    return { error: json({ ok: false, error: `Invalid or expired session: ${userError?.message || 'unknown auth error'}` }, 401) };
   }
 
   const user = userData.user;
@@ -102,7 +102,11 @@ async function requireAdmin(request) {
     .eq('id', user.id)
     .single();
 
-  if (profileError || !profile || profile.role !== 'admin') {
+  if (profileError) {
+    return { error: json({ ok: false, error: `Failed to load admin profile: ${profileError.message}` }, 403) };
+  }
+
+  if (!profile || profile.role !== 'admin') {
     return { error: json({ ok: false, error: 'Admin access required' }, 403) };
   }
 
@@ -144,11 +148,19 @@ async function getContentsByPath(path) {
   }
 
   const content = Buffer.from(data.content || '', 'base64').toString('utf8');
+
+  let parsed;
+  try {
+    parsed = JSON.parse(content);
+  } catch (err) {
+    throw new Error(`Invalid JSON in ${path}: ${err.message}`);
+  }
+
   return {
     path,
     sha: data.sha,
     content,
-    json: JSON.parse(content)
+    json: parsed
   };
 }
 
@@ -174,7 +186,11 @@ function scoreCandidate(path, type, date, slug, titleSlug) {
 
 async function resolveContentFile({ type, date, slug, title, filePath }) {
   if (filePath) {
-    return getContentsByPath(filePath);
+    try {
+      return await getContentsByPath(filePath);
+    } catch (err) {
+      throw new Error(`Direct file_path lookup failed for "${filePath}": ${err.message}`);
+    }
   }
 
   const tree = await getRepoTree();
@@ -191,7 +207,7 @@ async function resolveContentFile({ type, date, slug, title, filePath }) {
     .slice(0, 50);
 
   if (!candidates.length) {
-    throw new Error(`No candidate JSON files found for ${type} ${date} ${slug}`);
+    throw new Error(`No candidate JSON files found for type=${type}, date=${date}, slug=${slug}, title=${title || '(none)'}`);
   }
 
   for (const candidate of candidates) {
@@ -212,17 +228,9 @@ async function resolveContentFile({ type, date, slug, title, filePath }) {
     }
   }
 
-  throw new Error(`Could not resolve exact source JSON for ${type} ${date} ${slug}`);
-}
-
-function normalizeStringArray(value) {
-  if (Array.isArray(value)) {
-    return value.map(v => String(v || '').trim()).filter(Boolean);
-  }
-  if (typeof value === 'string') {
-    return value.split(/\n{2,}/).map(v => v.trim()).filter(Boolean);
-  }
-  return [];
+  throw new Error(
+    `Could not resolve exact source JSON for type=${type}, date=${date}, slug=${slug}, title=${title || '(none)'}. Top candidate count: ${candidates.length}`
+  );
 }
 
 function paragraphsToBlocks(content) {
@@ -472,11 +480,11 @@ function buildCommitMessage(type, date, title) {
 export default async (request) => {
   try {
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      return json({ ok: false, error: 'Missing Supabase function environment variables' }, 500);
+      return json({ ok: false, error: 'Missing Supabase function environment variables: SUPABASE_URL and/or SUPABASE_SERVICE_ROLE_KEY' }, 500);
     }
 
     if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
-      return json({ ok: false, error: 'Missing GitHub function environment variables' }, 500);
+      return json({ ok: false, error: 'Missing GitHub function environment variables: GITHUB_TOKEN, GITHUB_OWNER, and/or GITHUB_REPO' }, 500);
     }
 
     const auth = await requireAdmin(request);
@@ -504,7 +512,7 @@ export default async (request) => {
       const filePath = cleanString(url.searchParams.get('file_path'));
 
       if (!type || !isIsoDate(date) || !slug) {
-        return json({ ok: false, error: 'type, date, and slug are required' }, 400);
+        return json({ ok: false, error: `Invalid source lookup params. type=${type || '(missing)'} date=${date || '(missing)'} slug=${slug || '(missing)'}` }, 400);
       }
 
       const file = await resolveContentFile({ type, date, slug, title, filePath });
@@ -532,7 +540,10 @@ export default async (request) => {
       const sections = Array.isArray(payload.sections) ? payload.sections : null;
 
       if (!type || !isIsoDate(date) || !slug || !sections) {
-        return json({ ok: false, error: 'type, date, slug, and sections are required' }, 400);
+        return json({
+          ok: false,
+          error: `Invalid publish params. type=${type || '(missing)'} date=${date || '(missing)'} slug=${slug || '(missing)'} sections=${Array.isArray(sections) ? sections.length : '(invalid)'}`
+        }, 400);
       }
 
       const file = await resolveContentFile({ type, date, slug, title, filePath });
@@ -578,7 +589,7 @@ export default async (request) => {
       });
     }
 
-    return json({ ok: false, error: 'Method not allowed' }, 405);
+    return json({ ok: false, error: `Method not allowed: ${method}` }, 405);
   } catch (err) {
     return json({ ok: false, error: err?.message || 'Unexpected server error' }, 500);
   }
