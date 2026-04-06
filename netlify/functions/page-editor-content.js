@@ -4,8 +4,8 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const GITHUB_OWNER = process.env.GITHUB_OWNER;
-const GITHUB_REPO = process.env.GITHUB_REPO;
+const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER;
+const GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME;
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
@@ -124,7 +124,7 @@ async function getRepoTree() {
   }
 
   const data = await ghFetch(
-    `https://api.github.com/repos/${encodeURIComponent(GITHUB_OWNER)}/${encodeURIComponent(GITHUB_REPO)}/git/trees/${encodeURIComponent(GITHUB_BRANCH)}?recursive=1`
+    `https://api.github.com/repos/${encodeURIComponent(GITHUB_REPO_OWNER)}/${encodeURIComponent(GITHUB_REPO_NAME)}/git/trees/${encodeURIComponent(GITHUB_BRANCH)}?recursive=1`
   );
 
   const tree = Array.isArray(data.tree) ? data.tree : [];
@@ -140,7 +140,7 @@ async function getRepoTree() {
 
 async function getContentsByPath(path) {
   const data = await ghFetch(
-    `https://api.github.com/repos/${encodeURIComponent(GITHUB_OWNER)}/${encodeURIComponent(GITHUB_REPO)}/contents/${ghPath(path)}?ref=${encodeURIComponent(GITHUB_BRANCH)}`
+    `https://api.github.com/repos/${encodeURIComponent(GITHUB_REPO_OWNER)}/${encodeURIComponent(GITHUB_REPO_NAME)}/contents/${ghPath(path)}?ref=${encodeURIComponent(GITHUB_BRANCH)}`
   );
 
   if (!data || Array.isArray(data) || data.type !== 'file') {
@@ -483,8 +483,8 @@ export default async (request) => {
       return json({ ok: false, error: 'Missing Supabase function environment variables: SUPABASE_URL and/or SUPABASE_SERVICE_ROLE_KEY' }, 500);
     }
 
-    if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
-      return json({ ok: false, error: 'Missing GitHub function environment variables: GITHUB_TOKEN, GITHUB_OWNER, and/or GITHUB_REPO' }, 500);
+    if (!GITHUB_TOKEN || !GITHUB_REPO_OWNER || !GITHUB_REPO_NAME) {
+      return json({ ok: false, error: 'Missing GitHub function environment variables: GITHUB_TOKEN, GITHUB_REPO_OWNER, and/or GITHUB_REPO_NAME' }, 500);
     }
 
     const auth = await requireAdmin(request);
@@ -558,7 +558,7 @@ export default async (request) => {
       const content = JSON.stringify(updatedJson, null, 2) + '\n';
 
       const commit = await ghFetch(
-        `https://api.github.com/repos/${encodeURIComponent(GITHUB_OWNER)}/${encodeURIComponent(GITHUB_REPO)}/contents/${ghPath(file.path)}`,
+        `https://api.github.com/repos/${encodeURIComponent(GITHUB_REPO_OWNER)}/${encodeURIComponent(GITHUB_REPO_NAME)}/contents/${ghPath(file.path)}`,
         {
           method: 'PUT',
           headers: {
