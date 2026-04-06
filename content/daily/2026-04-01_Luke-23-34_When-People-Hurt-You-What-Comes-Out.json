@@ -1,0 +1,187 @@
+{
+  "date": "2026-04-01",
+  "title": "When People Hurt You…. What Comes Out?",
+  "scriptures": [
+    {
+      "ref": "Luke 23:34",
+      "text": "Father, forgive them, for they know not what they do."
+    },
+    {
+      "ref": "Luke 23:43",
+      "text": "Truly, I say to you, today you will be with me in paradise."
+    },
+    {
+      "ref": "John 19:26-27",
+      "text": "Woman, behold your son…. behold your mother."
+    }
+  ],
+  "sections": [
+    {
+      "key": "moment_on_the_cross",
+      "label": "Moment on the Cross",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "The crowd is loud.",
+            "Mocking. Laughing.",
+            "Your body is shaking from pain.",
+            "Every breath costs you something.",
+            "And the people below you?",
+            "They’re the ones who put you here."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "What would come out of you?"
+        }
+      ]
+    },
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "You don’t reveal Christ",
+            "by how you act when respected….",
+            "You reveal Him",
+            "by how you respond when wronged."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "devotional",
+      "label": "Devotional",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Mocked",
+            "Betrayed",
+            "Abandoned",
+            "Crucified"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "And what comes out?"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "👉 Forgiveness",
+            "👉 Compassion",
+            "👉 Responsibility"
+          ]
+        },
+        {
+          "type": "bullet_list",
+          "items": [
+            "When hurt → harden",
+            "When offended → replay",
+            "When overwhelmed → withdraw"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "But Jesus?",
+            "He leans in.",
+            "Forgives those who hurt Him",
+            "Saves someone next to Him",
+            "Takes responsibility for His mother",
+            "While dying."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "reflex_test",
+      "label": "Reflex Test",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Disrespects you",
+            "Overlooks you",
+            "Frustrates you"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "👉 Your first reaction = your current formation",
+            "👉 Your second response = your chosen formation"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "the_90_second_window",
+      "label": "The 90-Second Window",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most emotional reactions peak in 90 seconds."
+        },
+        {
+          "type": "paragraph",
+          "text": "You don’t need to win the whole day."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Just win the next 90 seconds."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Pause.",
+            "Breathe.",
+            "Choose."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "shadow_confession",
+      "label": "Shadow Confession",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "I don’t forgive as fast as I think I do."
+        }
+      ]
+    },
+    {
+      "key": "gem",
+      "label": "Gem",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "If you’re still holding it…. it’s still holding you."
+        }
+      ]
+    },
+    {
+      "key": "invitation",
+      "label": "1 Invitation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Release one offense tonight."
+        },
+        {
+          "type": "paragraph",
+          "text": "Not because they deserve it…. Because you refuse to stay bound to it."
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-04-01_luke-23-34_when-people-hurt-you-what-comes-out|"
+}
