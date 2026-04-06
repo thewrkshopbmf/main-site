@@ -253,10 +253,13 @@ function escapeHtml(value = '') {
     .replace(/'/g, '&#39;');
 }
 
-function dailyHrefFromEntry(entry) {
-  return entry?.date && entry?.title && entry?.verse_ref
-    ? `/daily/${scriptureSlug(entry.verse_ref)}_${slugify(entry.title)}_${entry.date}.html`
-    : '#';
+function todayCentralISO() {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(new Date());
 }
 
 function scriptureSlug(ref = '') {
@@ -270,6 +273,12 @@ function scriptureSlug(ref = '') {
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
     .toLowerCase();
+}
+
+function dailyHrefFromEntry(entry) {
+  return entry?.date && entry?.title && (entry?.verse_ref || entry?.scriptures?.[0]?.ref)
+    ? `/daily/${scriptureSlug(entry.verse_ref || entry.scriptures[0].ref)}_${slugify(entry.title)}_${entry.date}.html`
+    : '#';
 }
 
 function blogHrefFromPath(path) {
@@ -321,7 +330,7 @@ function buildIndexEntryFromSource(type, path, data) {
       title,
       date,
       slug,
-      verse_ref: cleanString(data?.verse_ref),
+      verse_ref: cleanString(data?.verse_ref || data?.scriptures?.[0]?.ref || ''),
       href: dailyHrefFromEntry(data),
       file_path: path,
       is_future: date > todayCentralISO()
@@ -356,40 +365,57 @@ function buildIndexEntryFromSource(type, path, data) {
 async function buildEditorIndex() {
   const tree = await getRepoTree();
 
-  const dailyFiles = tree
-    .filter(node => node.type === 'blob' && node.path.toLowerCase().startsWith('content/daily/') && node.path.toLowerCase().endsWith('.json'))
-    .map(node => ({ type: 'daily', path: node.path }));
-
-  const blogFiles = tree
-    .filter(node => node.type === 'blob' && (
-      node.path.toLowerCase().startsWith('content/blog/') ||
-      node.path.toLowerCase().startsWith('content/blogs/')
-    ) && node.path.toLowerCase().endsWith('.json'))
-    .map(node => ({ type: 'blog', path: node.path }));
-
-  const podcastFiles = tree
-    .filter(node => node.type === 'blob' && (
-      node.path.toLowerCase().startsWith('content/podcast/') ||
-      node.path.toLowerCase().startsWith('content/podcasts/')
-    ) && node.path.toLowerCase().endsWith('.json'))
-    .map(node => ({ type: 'podcast', path: node.path }));
-
-  const files = [...dailyFiles, ...blogFiles, ...podcastFiles];
+  const candidateFiles = tree
+    .filter(node => node.type === 'blob' && node.path.toLowerCase().endsWith('.json'))
+    .filter(node => {
+      const lower = node.path.toLowerCase();
+      return (
+        lower.startsWith('content/daily/') ||
+        lower.startsWith('content/blog/') ||
+        lower.startsWith('content/blogs/') ||
+        lower.startsWith('content/podcast/') ||
+        lower.startsWith('content/podcasts/')
+      );
+    })
+    .map(node => {
+      const lower = node.path.toLowerCase();
+      let type = 'daily';
+      if (lower.startsWith('content/blog/') || lower.startsWith('content/blogs/')) type = 'blog';
+      if (lower.startsWith('content/podcast/') || lower.startsWith('content/podcasts/')) type = 'podcast';
+      return { type, path: node.path };
+    });
 
   const entries = [];
+  let dailyCount = 0;
+  let blogCount = 0;
+  let podcastCount = 0;
 
-  for (const file of files) {
+  for (const file of candidateFiles) {
     try {
       const loaded = await getContentsByPath(file.path);
       const entry = buildIndexEntryFromSource(file.type, file.path, loaded.json);
-      if (entry) entries.push(entry);
+      if (entry) {
+        entries.push(entry);
+        if (file.type === 'daily') dailyCount += 1;
+        if (file.type === 'blog') blogCount += 1;
+        if (file.type === 'podcast') podcastCount += 1;
+      }
     } catch {
       // ignore bad files
     }
   }
 
   entries.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title));
-  return entries;
+
+  return {
+    entries,
+    stats: {
+      total_entries: entries.length,
+      daily_count: dailyCount,
+      blog_count: blogCount,
+      podcast_count: podcastCount
+    }
+  };
 }
 
 function applyDailySections(source, editedTitle, sections) {
@@ -459,10 +485,11 @@ export default async (request) => {
       const mode = cleanString(url.searchParams.get('mode'));
 
       if (mode === 'index') {
-        const entries = await buildEditorIndex();
+        const { entries, stats } = await buildEditorIndex();
         return json({
           ok: true,
-          entries
+          entries,
+          stats
         });
       }
 

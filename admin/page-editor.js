@@ -12,7 +12,9 @@ const state = {
   selectedRawSource: null,
   history: [],
   historyIndex: -1,
-  isPublishing: false
+  isPublishing: false,
+  listSourceMode: 'unknown',
+  indexStats: null
 };
 
 const els = {};
@@ -167,7 +169,10 @@ function normalizePodcastArchiveItem(item) {
 
 async function fetchJson(url, options = {}) {
   const res = await fetch(url, { cache: 'no-store', ...options });
-  if (!res.ok) throw new Error(`Failed to load ${url}`);
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`Failed to load ${url} (${res.status}) ${text}`);
+  }
   return res.json();
 }
 
@@ -203,6 +208,8 @@ async function loadAllEntriesFromRepoIndex() {
     .sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title));
 
   state.filteredEntries = state.allEntries.slice();
+  state.listSourceMode = 'repo_index';
+  state.indexStats = payload?.stats || null;
 }
 
 async function loadAllEntriesFromArchivesFallback() {
@@ -229,6 +236,8 @@ async function loadAllEntriesFromArchivesFallback() {
     .sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title));
 
   state.filteredEntries = state.allEntries.slice();
+  state.listSourceMode = 'archive_fallback';
+  state.indexStats = null;
 }
 
 async function loadAllEntries() {
@@ -237,6 +246,9 @@ async function loadAllEntries() {
   } catch (err) {
     console.warn('Repo index load failed, falling back to archives:', err);
     await loadAllEntriesFromArchivesFallback();
+    if (els.editorNotice) {
+      els.editorNotice.textContent = `Repo index failed, so the editor is showing archive data only. Future source files will be missing until the function works. Error: ${err.message}`;
+    }
   }
 }
 
@@ -1004,7 +1016,7 @@ window.pageEditorInit = async function pageEditorInit() {
   try {
     await loadAllEntries();
   } catch (err) {
-    console.error('Archive/repo index load failed:', err);
+    console.error('Content index load failed:', err);
     els.searchResults.innerHTML = `<div class="empty-state small">The editor could not load content data.</div>`;
     els.calendarGrid.innerHTML = `<div class="empty-state small">The calendar could not be loaded.</div>`;
     return;
@@ -1025,6 +1037,17 @@ window.pageEditorInit = async function pageEditorInit() {
 
   renderYearMonthSelectors();
   renderSearchResults();
+
+  if (state.listSourceMode === 'repo_index') {
+    const futureCount = state.allEntries.filter(x => x.type === 'daily' && x.isFuture).length;
+    const statsText = state.indexStats
+      ? ` Repo scan found ${state.indexStats.total_entries} entries (${state.indexStats.daily_count} daily, ${state.indexStats.blog_count} blog, ${state.indexStats.podcast_count} podcast). Future dailies: ${futureCount}.`
+      : ` Repo scan is active. Future dailies found: ${futureCount}.`;
+
+    els.editorNotice.textContent = `Loaded from repo source files.${statsText}`;
+  } else {
+    els.editorNotice.textContent = 'Loaded from archive fallback only. Future source files may be missing until repo index works.';
+  }
 
   const firstDaily = state.allEntries
     .slice()
