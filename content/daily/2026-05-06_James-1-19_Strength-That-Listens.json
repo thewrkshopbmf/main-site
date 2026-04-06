@@ -1,0 +1,206 @@
+{
+  "date": "2026-05-06",
+  "title": "Strength That Listens",
+  "scriptures": [
+    {
+      "ref": "James 1:19",
+      "text": "Wherefore, my beloved brethren, let every man be swift to hear, slow to speak, slow to wrath:"
+    }
+  ],
+  "sections": [
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Quick words are not always strong words."
+        },
+        {
+          "type": "paragraph",
+          "text": "Real strength is steady enough to listen."
+        },
+        {
+          "type": "paragraph",
+          "text": "I do not need to rush to prove myself."
+        },
+        {
+          "type": "paragraph",
+          "text": "I can slow down and hear clearly."
+        }
+      ]
+    },
+    {
+      "key": "the_devotional",
+      "label": "The Devotional",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "There is a kind of power that only knows how to press forward."
+        },
+        {
+          "type": "paragraph",
+          "text": "It speaks fast."
+        },
+        {
+          "type": "paragraph",
+          "text": "Assumes quickly."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reacts before it understands."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scripture points us toward a different kind of strength."
+        },
+        {
+          "type": "paragraph",
+          "text": "One that is grounded enough to hear first."
+        },
+        {
+          "type": "paragraph",
+          "text": "Listening is not weakness."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is often the discipline that keeps truth from turning into noise."
+        },
+        {
+          "type": "paragraph",
+          "text": "When a person slows down long enough to hear, they make room for wisdom, patience, and mercy."
+        }
+      ]
+    },
+    {
+      "key": "the_shift",
+      "label": "The Shift",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Many conflicts are fueled less by evil and more by speed."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Fast assumptions.",
+            "Fast responses.",
+            "Fast anger."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "James gives a better rhythm."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Swift to hear.",
+            "Slow to speak.",
+            "Slow to wrath."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Wisdom often enters where hurry leaves."
+        }
+      ]
+    },
+    {
+      "key": "jesus_set_the_pattern",
+      "label": "Jesus Set the Pattern",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Jesus was never controlled by urgency."
+        },
+        {
+          "type": "paragraph",
+          "text": "He could hear people fully."
+        },
+        {
+          "type": "paragraph",
+          "text": "He asked questions."
+        },
+        {
+          "type": "paragraph",
+          "text": "He answered with clarity, not panic."
+        },
+        {
+          "type": "paragraph",
+          "text": "He was never in a rush to prove His authority."
+        },
+        {
+          "type": "paragraph",
+          "text": "He carried it quietly."
+        }
+      ]
+    },
+    {
+      "key": "reflection",
+      "label": "Reflection",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Where have I been too quick to speak?",
+            "What would change if I listened longer before reacting?",
+            "Who in my life may need to feel heard, not handled?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "declaration",
+      "label": "Declaration",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "I will not be ruled by hurry."
+        },
+        {
+          "type": "paragraph",
+          "text": "I will listen with patience."
+        },
+        {
+          "type": "paragraph",
+          "text": "I will let wisdom slow my words and steady my reactions."
+        }
+      ]
+    },
+    {
+      "key": "action_step",
+      "label": "Action Step",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In your next meaningful conversation, practice restraint."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Let the other person finish.",
+            "Ask one more question before responding.",
+            "Pause before you answer."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Choose strength that listens."
+        }
+      ]
+    },
+    {
+      "key": "one_sentence_to_carry",
+      "label": "One Sentence to Carry",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "Strength does not rush; it listens."
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-05-06_james-1-19_strength-that-listens|"
+}
