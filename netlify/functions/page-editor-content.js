@@ -172,7 +172,11 @@ function scoreCandidate(path, type, date, slug, titleSlug) {
   return score;
 }
 
-async function resolveContentFile({ type, date, slug, title }) {
+async function resolveContentFile({ type, date, slug, title, filePath }) {
+  if (filePath) {
+    return getContentsByPath(filePath);
+  }
+
   const tree = await getRepoTree();
   const titleSlug = slugify(title || '');
 
@@ -184,7 +188,7 @@ async function resolveContentFile({ type, date, slug, title }) {
     }))
     .filter(node => node.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 25);
+    .slice(0, 50);
 
   if (!candidates.length) {
     throw new Error(`No candidate JSON files found for ${type} ${date} ${slug}`);
@@ -497,12 +501,13 @@ export default async (request) => {
       const date = cleanString(url.searchParams.get('date'));
       const slug = slugify(url.searchParams.get('slug') || '');
       const title = cleanString(url.searchParams.get('title'));
+      const filePath = cleanString(url.searchParams.get('file_path'));
 
       if (!type || !isIsoDate(date) || !slug) {
         return json({ ok: false, error: 'type, date, and slug are required' }, 400);
       }
 
-      const file = await resolveContentFile({ type, date, slug, title });
+      const file = await resolveContentFile({ type, date, slug, title, filePath });
 
       return json({
         ok: true,
@@ -523,13 +528,14 @@ export default async (request) => {
       const slug = slugify(payload.slug || '');
       const title = cleanString(payload.title);
       const editedTitle = cleanString(payload.edited_title);
+      const filePath = cleanString(payload.file_path);
       const sections = Array.isArray(payload.sections) ? payload.sections : null;
 
       if (!type || !isIsoDate(date) || !slug || !sections) {
         return json({ ok: false, error: 'type, date, slug, and sections are required' }, 400);
       }
 
-      const file = await resolveContentFile({ type, date, slug, title });
+      const file = await resolveContentFile({ type, date, slug, title, filePath });
 
       let updatedJson;
       if (type === 'daily') {

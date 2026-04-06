@@ -645,7 +645,18 @@ async function tryFetchLivePageDraft(entry) {
 
 async function apiLoadSource(entry) {
   const token = await getAccessToken();
-  const url = `/.netlify/functions/page-editor-content?type=${encodeURIComponent(entry.type)}&date=${encodeURIComponent(entry.date)}&slug=${encodeURIComponent(entry.slug)}&title=${encodeURIComponent(entry.title || '')}`;
+  const params = new URLSearchParams({
+    type: entry.type,
+    date: entry.date,
+    slug: entry.slug,
+    title: entry.title || ''
+  });
+
+  if (entry.filePath) {
+    params.set('file_path', entry.filePath);
+  }
+
+  const url = `/.netlify/functions/page-editor-content?${params.toString()}`;
 
   const res = await fetch(url, {
     method: 'GET',
@@ -677,6 +688,7 @@ async function apiPublish(entry, draft) {
       slug: entry.slug,
       title: entry.title || '',
       edited_title: draft.title || '',
+      file_path: entry.filePath || '',
       sections: draft.sections.map(section => ({
         label: section.label,
         content: section.content
