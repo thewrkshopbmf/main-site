@@ -176,7 +176,7 @@ async function resolveContentFile({ type, date, slug, title }) {
   const tree = await getRepoTree();
   const titleSlug = slugify(title || '');
 
-  let candidates = tree
+  const candidates = tree
     .filter(node => node.type === 'blob' && node.path.endsWith('.json'))
     .map(node => ({
       path: node.path,
@@ -253,6 +253,145 @@ function escapeHtml(value = '') {
     .replace(/'/g, '&#39;');
 }
 
+function dailyHrefFromEntry(entry) {
+  return entry?.date && entry?.title && entry?.verse_ref
+    ? `/daily/${scriptureSlug(entry.verse_ref)}_${slugify(entry.title)}_${entry.date}.html`
+    : '#';
+}
+
+function scriptureSlug(ref = '') {
+  return String(ref)
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/['"]/g, '')
+    .replace(/[^A-Za-z0-9\s:–—-]+/g, ' ')
+    .replace(/[:–—]/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
+}
+
+function blogHrefFromPath(path) {
+  if (!path) return '#';
+  const lower = path.toLowerCase();
+
+  if (lower.startsWith('content/blog/')) {
+    const rel = path.slice('content/blog/'.length).replace(/\.json$/i, '');
+    return `/blog/${rel}/`;
+  }
+
+  if (lower.startsWith('content/blogs/')) {
+    const rel = path.slice('content/blogs/'.length).replace(/\.json$/i, '');
+    return `/blog/${rel}/`;
+  }
+
+  return '#';
+}
+
+function podcastHrefFromJson(entry, path) {
+  if (entry?.page_url) return entry.page_url;
+  if (entry?.href) return entry.href;
+
+  const lower = (path || '').toLowerCase();
+
+  if (lower.startsWith('content/podcast/')) {
+    const rel = path.slice('content/podcast/'.length).replace(/\.json$/i, '');
+    return `/podcast/${rel}/`;
+  }
+
+  if (lower.startsWith('content/podcasts/')) {
+    const rel = path.slice('content/podcasts/'.length).replace(/\.json$/i, '');
+    return `/podcast/${rel}/`;
+  }
+
+  return '#';
+}
+
+function buildIndexEntryFromSource(type, path, data) {
+  const title = cleanString(data?.title) || 'Untitled';
+  const date = cleanString(data?.date);
+  const slug = slugify(title || path);
+
+  if (!date || !title) return null;
+
+  if (type === 'daily') {
+    return {
+      type,
+      title,
+      date,
+      slug,
+      verse_ref: cleanString(data?.verse_ref),
+      href: dailyHrefFromEntry(data),
+      file_path: path,
+      is_future: date > todayCentralISO()
+    };
+  }
+
+  if (type === 'blog') {
+    return {
+      type,
+      title,
+      date,
+      slug,
+      category: cleanString(data?.category),
+      href: blogHrefFromPath(path),
+      file_path: path,
+      is_future: false
+    };
+  }
+
+  return {
+    type,
+    title,
+    date,
+    slug,
+    duration: cleanString(data?.duration),
+    href: podcastHrefFromJson(data, path),
+    file_path: path,
+    is_future: false
+  };
+}
+
+async function buildEditorIndex() {
+  const tree = await getRepoTree();
+
+  const dailyFiles = tree
+    .filter(node => node.type === 'blob' && node.path.toLowerCase().startsWith('content/daily/') && node.path.toLowerCase().endsWith('.json'))
+    .map(node => ({ type: 'daily', path: node.path }));
+
+  const blogFiles = tree
+    .filter(node => node.type === 'blob' && (
+      node.path.toLowerCase().startsWith('content/blog/') ||
+      node.path.toLowerCase().startsWith('content/blogs/')
+    ) && node.path.toLowerCase().endsWith('.json'))
+    .map(node => ({ type: 'blog', path: node.path }));
+
+  const podcastFiles = tree
+    .filter(node => node.type === 'blob' && (
+      node.path.toLowerCase().startsWith('content/podcast/') ||
+      node.path.toLowerCase().startsWith('content/podcasts/')
+    ) && node.path.toLowerCase().endsWith('.json'))
+    .map(node => ({ type: 'podcast', path: node.path }));
+
+  const files = [...dailyFiles, ...blogFiles, ...podcastFiles];
+
+  const entries = [];
+
+  for (const file of files) {
+    try {
+      const loaded = await getContentsByPath(file.path);
+      const entry = buildIndexEntryFromSource(file.type, file.path, loaded.json);
+      if (entry) entries.push(entry);
+    } catch {
+      // ignore bad files
+    }
+  }
+
+  entries.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title));
+  return entries;
+}
+
 function applyDailySections(source, editedTitle, sections) {
   const next = { ...source };
 
@@ -314,9 +453,19 @@ export default async (request) => {
     if (auth.error) return auth.error;
 
     const method = request.method.toUpperCase();
+    const url = new URL(request.url);
 
     if (method === 'GET') {
-      const url = new URL(request.url);
+      const mode = cleanString(url.searchParams.get('mode'));
+
+      if (mode === 'index') {
+        const entries = await buildEditorIndex();
+        return json({
+          ok: true,
+          entries
+        });
+      }
+
       const type = normalizeType(url.searchParams.get('type'));
       const date = cleanString(url.searchParams.get('date'));
       const slug = slugify(url.searchParams.get('slug') || '');

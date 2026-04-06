@@ -99,6 +99,28 @@ function extractDateFromHref(href = '') {
   return match ? match[1] : '';
 }
 
+function normalizeRepoIndexItem(item) {
+  const type = item?.type || 'daily';
+  const date = item?.date || '';
+  const href = item?.href || '#';
+  const title = item?.title || 'Untitled';
+  const verse = item?.verse_ref || item?.verse || item?.category || item?.duration || '';
+  const slug = item?.slug || slugify(title || href || date);
+  const today = todayCentralISO();
+
+  return {
+    type,
+    title,
+    date,
+    href,
+    verse,
+    slug,
+    isFuture: type === 'daily' ? Boolean(date && date > today) : Boolean(item?.is_future),
+    filePath: item?.file_path || '',
+    sourceMode: 'repo_index'
+  };
+}
+
 function normalizeDailyArchiveItem(item) {
   const date = item.date || extractDateFromHref(item.href || '');
   const today = todayCentralISO();
@@ -109,7 +131,9 @@ function normalizeDailyArchiveItem(item) {
     href: item.href || '#',
     verse: item.verse_ref || '',
     slug: slugify(item.title || item.href || date),
-    isFuture: Boolean(date && date > today)
+    isFuture: Boolean(date && date > today),
+    filePath: item?.file_path || '',
+    sourceMode: 'archive'
   };
 }
 
@@ -121,7 +145,9 @@ function normalizeBlogArchiveItem(item) {
     href: item.href || '#',
     verse: item.category || '',
     slug: slugify(item.title || item.href || item.date),
-    isFuture: false
+    isFuture: false,
+    filePath: item?.file_path || '',
+    sourceMode: 'archive'
   };
 }
 
@@ -133,25 +159,53 @@ function normalizePodcastArchiveItem(item) {
     href: item.page_url || item.href || '#',
     verse: item.duration || item.subtitle || '',
     slug: slugify(item.title || item.page_url || item.date),
-    isFuture: false
+    isFuture: false,
+    filePath: item?.file_path || '',
+    sourceMode: 'archive'
   };
 }
 
-async function fetchJson(url) {
-  const res = await fetch(url, { cache: 'no-store' });
+async function fetchJson(url, options = {}) {
+  const res = await fetch(url, { cache: 'no-store', ...options });
   if (!res.ok) throw new Error(`Failed to load ${url}`);
   return res.json();
 }
 
-async function maybeFetchJson(url) {
+async function maybeFetchJson(url, options = {}) {
   try {
-    return await fetchJson(url);
+    return await fetchJson(url, options);
   } catch {
     return null;
   }
 }
 
-async function loadAllEntries() {
+async function getAccessToken() {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) throw error;
+  const token = data?.session?.access_token;
+  if (!token) throw new Error('No active session');
+  return token;
+}
+
+async function loadAllEntriesFromRepoIndex() {
+  const token = await getAccessToken();
+
+  const payload = await fetchJson('/.netlify/functions/page-editor-content?mode=index', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  const items = Array.isArray(payload?.entries) ? payload.entries.map(normalizeRepoIndexItem) : [];
+
+  state.allEntries = items
+    .filter(item => item.date)
+    .sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title));
+
+  state.filteredEntries = state.allEntries.slice();
+}
+
+async function loadAllEntriesFromArchivesFallback() {
   const dailyArchive = await maybeFetchJson('/data/daily-archive.json');
   const blogArchive = await maybeFetchJson('/data/blog-archive.json');
   const podcastArchive =
@@ -175,6 +229,15 @@ async function loadAllEntries() {
     .sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title));
 
   state.filteredEntries = state.allEntries.slice();
+}
+
+async function loadAllEntries() {
+  try {
+    await loadAllEntriesFromRepoIndex();
+  } catch (err) {
+    console.warn('Repo index load failed, falling back to archives:', err);
+    await loadAllEntriesFromArchivesFallback();
+  }
 }
 
 function renderYearMonthSelectors() {
@@ -541,14 +604,6 @@ function draftToExportJson() {
   };
 }
 
-async function getAccessToken() {
-  const { data, error } = await supabase.auth.getSession();
-  if (error) throw error;
-  const token = data?.session?.access_token;
-  if (!token) throw new Error('No active session');
-  return token;
-}
-
 async function tryFetchLivePageDraft(entry) {
   if (!entry.href || entry.href === '#') {
     return draftFromGenericText(entry, entry.type === 'daily' ? 'Insight' : 'Content', entry.verse || entry.title || '');
@@ -694,12 +749,12 @@ async function selectEntry(entry) {
   try {
     const payload = await apiLoadSource(entry);
     sourceJson = payload?.source_json || {};
-    sourcePath = payload?.file_path || '(unknown path)';
+    sourcePath = payload?.file_path || entry.filePath || '(unknown path)';
     draft = sourceToDraft(sourceJson, entry);
   } catch (err) {
     console.warn('Source function load failed, falling back to live page parse:', err);
     usedFallback = true;
-    sourcePath = '(live page fallback)';
+    sourcePath = entry.filePath || '(live page fallback)';
     sourceJson = null;
     draft = await tryFetchLivePageDraft(entry);
   }
@@ -949,14 +1004,14 @@ window.pageEditorInit = async function pageEditorInit() {
   try {
     await loadAllEntries();
   } catch (err) {
-    console.error('Archive load failed:', err);
-    els.searchResults.innerHTML = `<div class="empty-state small">The editor could not load published archive data.</div>`;
+    console.error('Archive/repo index load failed:', err);
+    els.searchResults.innerHTML = `<div class="empty-state small">The editor could not load content data.</div>`;
     els.calendarGrid.innerHTML = `<div class="empty-state small">The calendar could not be loaded.</div>`;
     return;
   }
 
   if (!state.allEntries.length) {
-    els.searchResults.innerHTML = `<div class="empty-state small">No published content data was found.</div>`;
+    els.searchResults.innerHTML = `<div class="empty-state small">No content files were found.</div>`;
     els.calendarGrid.innerHTML = `<div class="empty-state small">No calendar items available.</div>`;
     return;
   }
@@ -981,7 +1036,7 @@ window.pageEditorInit = async function pageEditorInit() {
       await selectEntry(firstDaily);
     } catch (err) {
       console.error('Initial entry load failed:', err);
-      els.editorNotice.textContent = `Archive data loaded, but the first source file could not be opened: ${err.message}`;
+      els.editorNotice.textContent = `Content index loaded, but the first source file could not be opened: ${err.message}`;
       els.selectedEmptyState.hidden = false;
       els.editorWorkspace.hidden = true;
       els.selectedMetaText.textContent = 'Choose a page from the calendar or search results.';
