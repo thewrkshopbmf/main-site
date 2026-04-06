@@ -1,0 +1,187 @@
+{
+  "date": "2026-05-07",
+  "title": "Become Still Enough",
+  "scriptures": [
+    {
+      "ref": "Psalm 46:10",
+      "text": "Be still, and know that I am God:"
+    }
+  ],
+  "sections": [
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Stillness is not emptiness."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a place where I remember who God is."
+        },
+        {
+          "type": "paragraph",
+          "text": "I do not need to carry everything at full speed."
+        },
+        {
+          "type": "paragraph",
+          "text": "I can become still enough to know again."
+        }
+      ]
+    },
+    {
+      "key": "the_devotional",
+      "label": "The Devotional",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Noise can make a person feel productive while leaving them inwardly thin."
+        },
+        {
+          "type": "paragraph",
+          "text": "Motion can create the illusion of control."
+        },
+        {
+          "type": "paragraph",
+          "text": "But stillness exposes what hurry often hides."
+        },
+        {
+          "type": "paragraph",
+          "text": "Psalm 46 does not tell us to become passive."
+        },
+        {
+          "type": "paragraph",
+          "text": "It tells us to stop long enough to know."
+        },
+        {
+          "type": "paragraph",
+          "text": "To remember."
+        },
+        {
+          "type": "paragraph",
+          "text": "To see God as God again."
+        },
+        {
+          "type": "paragraph",
+          "text": "That kind of stillness is not laziness."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is trust made quiet."
+        }
+      ]
+    },
+    {
+      "key": "the_shift",
+      "label": "The Shift",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You do not become strong only by pushing harder."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sometimes you become clear by becoming still."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Silence can reveal.",
+            "Slowness can restore.",
+            "Attention can re-order the soul."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Stillness makes room for remembrance."
+        }
+      ]
+    },
+    {
+      "key": "the_truth",
+      "label": "The Truth",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "If you never stop, you may forget what only quiet can teach."
+        },
+        {
+          "type": "paragraph",
+          "text": "God is not made more real by your speed."
+        },
+        {
+          "type": "paragraph",
+          "text": "He is simply remembered more clearly when you stop running long enough to notice Him."
+        }
+      ]
+    },
+    {
+      "key": "reflection",
+      "label": "Reflection",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "What has my pace been doing to my attention?",
+            "Where do I resist stillness the most?",
+            "What might I remember about God if I gave Him unhurried space today?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "declaration",
+      "label": "Declaration",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "I do not need noise to feel steady."
+        },
+        {
+          "type": "paragraph",
+          "text": "I will slow down enough to remember who God is."
+        },
+        {
+          "type": "paragraph",
+          "text": "I will become still enough to know again."
+        }
+      ]
+    },
+    {
+      "key": "action_step",
+      "label": "Action Step",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Set aside a small pocket of quiet today."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Put the phone down.",
+            "Sit without rushing.",
+            "Read the verse slowly.",
+            "Stay there longer than feels convenient."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Let stillness do its work."
+        }
+      ]
+    },
+    {
+      "key": "one_sentence_to_carry",
+      "label": "One Sentence to Carry",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "Stillness helps me remember what hurry makes me forget."
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-05-07_psalm-46-10_become-still-enough|"
+}

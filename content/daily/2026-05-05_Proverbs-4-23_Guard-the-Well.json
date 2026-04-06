@@ -1,0 +1,178 @@
+{
+  "date": "2026-05-05",
+  "title": "Guard the Well",
+  "scriptures": [
+    {
+      "ref": "Proverbs 4:23",
+      "text": "Keep thy heart with all diligence; for out of it are the issues of life."
+    }
+  ],
+  "sections": [
+    {
+      "key": "read_this_out_loud",
+      "label": "Read This Out Loud",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "What fills me will guide me."
+        },
+        {
+          "type": "paragraph",
+          "text": "What I keep near my heart will shape my life."
+        },
+        {
+          "type": "paragraph",
+          "text": "I cannot neglect the inside and expect strength on the outside."
+        },
+        {
+          "type": "paragraph",
+          "text": "I need to guard the well."
+        }
+      ]
+    },
+    {
+      "key": "the_devotional",
+      "label": "The Devotional",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Scripture does not talk about the heart as a side issue."
+        },
+        {
+          "type": "paragraph",
+          "text": "It treats it like a spring."
+        },
+        {
+          "type": "paragraph",
+          "text": "A source."
+        },
+        {
+          "type": "paragraph",
+          "text": "A place from which words, desires, choices, and habits flow."
+        },
+        {
+          "type": "paragraph",
+          "text": "That means drift is rarely only external."
+        },
+        {
+          "type": "paragraph",
+          "text": "It usually begins quietly within."
+        },
+        {
+          "type": "paragraph",
+          "text": "A neglected inner life eventually becomes a scattered outer life."
+        },
+        {
+          "type": "paragraph",
+          "text": "A guarded inner life becomes steadier, clearer, and more alive."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is not a call to fear everything."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is a call to pay attention to what is shaping you."
+        }
+      ]
+    },
+    {
+      "key": "the_shift",
+      "label": "The Shift",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Guarding your heart is not only about avoiding what is obviously wrong."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also about tending what is good."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Truth.",
+            "Prayer.",
+            "Attention.",
+            "Thought life.",
+            "Desire."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "What you repeatedly welcome will quietly lead you."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you want stronger fruit, care for the root."
+        }
+      ]
+    },
+    {
+      "key": "reflection",
+      "label": "Reflection",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "What has been shaping my inner life lately?",
+            "What have I allowed near my heart without much thought?",
+            "What needs more guarding, and what needs more feeding?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "declaration",
+      "label": "Declaration",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "I will not ignore my inner life."
+        },
+        {
+          "type": "paragraph",
+          "text": "I will guard what shapes me."
+        },
+        {
+          "type": "paragraph",
+          "text": "I will tend the well so that life can flow cleanly from it."
+        }
+      ]
+    },
+    {
+      "key": "action_step",
+      "label": "Action Step",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Take ten honest minutes today."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Notice what has been filling your mind.",
+            "Name what has been draining you.",
+            "Choose one thing to remove and one thing to strengthen."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Guard the well on purpose."
+        }
+      ]
+    },
+    {
+      "key": "one_sentence_to_carry",
+      "label": "One Sentence to Carry",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "I guard the well because life flows from it."
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-05-05_proverbs-4-23_guard-the-well|"
+}
