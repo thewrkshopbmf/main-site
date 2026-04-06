@@ -272,7 +272,12 @@ function renderCalendar() {
   els.calendarGrid.querySelectorAll('.day-badge').forEach(btn => {
     btn.addEventListener('click', () => {
       const entry = findEntryByKey(btn.dataset.entryKey);
-      if (entry) selectEntry(entry);
+      if (entry) {
+        selectEntry(entry).catch(err => {
+          console.error('Select entry failed:', err);
+          els.editorNotice.textContent = `Could not open source for this entry: ${err.message}`;
+        });
+      }
     });
   });
 }
@@ -326,7 +331,12 @@ function renderSearchResults() {
     els.searchResults.querySelectorAll('.open-search-result').forEach(btn => {
       btn.addEventListener('click', () => {
         const entry = findEntryByKey(btn.dataset.entryKey);
-        if (entry) selectEntry(entry);
+        if (entry) {
+          selectEntry(entry).catch(err => {
+            console.error('Select entry failed:', err);
+            els.editorNotice.textContent = `Could not open source for this entry: ${err.message}`;
+          });
+        }
       });
     });
   }
@@ -363,6 +373,23 @@ function blocksToParagraphs(blocks = []) {
   });
 
   return out.filter(Boolean);
+}
+
+function draftFromGenericText(entry, label, text) {
+  return {
+    type: entry.type,
+    title: entry.title || 'Untitled',
+    date: entry.date,
+    href: entry.href,
+    slug: entry.slug,
+    sections: [
+      {
+        id: `section-fallback-${Date.now()}`,
+        label,
+        content: String(text || '').trim()
+      }
+    ]
+  };
 }
 
 function dailySourceToDraft(source, entry) {
@@ -403,11 +430,13 @@ function dailySourceToDraft(source, entry) {
   }
 
   if (!sections.length) {
-    sections = [{
-      id: `section-fallback-${Date.now()}`,
-      label: 'Insight',
-      content: ''
-    }];
+    const fallbackText = [
+      source.verse_ref ? `${source.verse_ref}` : '',
+      source.verse_text ? `${source.verse_text}` : '',
+      source.title ? `${source.title}` : ''
+    ].filter(Boolean).join('\n\n');
+
+    return draftFromGenericText(entry, 'Insight', fallbackText);
   }
 
   return {
@@ -467,17 +496,24 @@ function genericSourceToDraft(source, entry) {
   const html = source.body_html || source.show_notes_html || source.content_html || '';
   const sections = htmlToDraftSections(html);
 
+  if (!sections.length) {
+    const fallbackText = [
+      source.title || entry.title || '',
+      source.excerpt || '',
+      source.description || '',
+      source.summary || ''
+    ].filter(Boolean).join('\n\n');
+
+    return draftFromGenericText(entry, 'Content', fallbackText);
+  }
+
   return {
     type: entry.type,
     title: source.title || entry.title || 'Untitled',
     date: source.date || entry.date,
     href: entry.href,
     slug: entry.slug,
-    sections: sections.length ? sections : [{
-      id: `section-fallback-${Date.now()}`,
-      label: 'Content',
-      content: ''
-    }]
+    sections
   };
 }
 
@@ -511,6 +547,33 @@ async function getAccessToken() {
   const token = data?.session?.access_token;
   if (!token) throw new Error('No active session');
   return token;
+}
+
+async function tryFetchLivePageDraft(entry) {
+  if (!entry.href || entry.href === '#') {
+    return draftFromGenericText(entry, entry.type === 'daily' ? 'Insight' : 'Content', entry.verse || entry.title || '');
+  }
+
+  const res = await fetch(entry.href, { cache: 'no-store' });
+  if (!res.ok) {
+    return draftFromGenericText(entry, entry.type === 'daily' ? 'Insight' : 'Content', entry.verse || entry.title || '');
+  }
+
+  const html = await res.text();
+  const sections = htmlToDraftSections(html);
+
+  if (!sections.length) {
+    return draftFromGenericText(entry, entry.type === 'daily' ? 'Insight' : 'Content', entry.verse || entry.title || '');
+  }
+
+  return {
+    type: entry.type,
+    title: entry.title || 'Untitled',
+    date: entry.date,
+    href: entry.href,
+    slug: entry.slug,
+    sections
+  };
 }
 
 async function apiLoadSource(entry) {
@@ -619,23 +682,40 @@ async function selectEntry(entry) {
     state.selectedIndex = state.filteredEntries.findIndex(item => getEntryKey(item) === getEntryKey(entry));
   }
 
+  els.selectedEmptyState.hidden = true;
+  els.editorWorkspace.hidden = false;
   els.editorNotice.textContent = 'Loading source file...';
 
-  const payload = await apiLoadSource(entry);
-  const sourceJson = payload?.source_json || {};
-  const sourcePath = payload?.file_path || '(unknown path)';
+  let draft;
+  let sourcePath = '';
+  let sourceJson = null;
+  let usedFallback = false;
 
-  const draft = sourceToDraft(sourceJson, entry);
+  try {
+    const payload = await apiLoadSource(entry);
+    sourceJson = payload?.source_json || {};
+    sourcePath = payload?.file_path || '(unknown path)';
+    draft = sourceToDraft(sourceJson, entry);
+  } catch (err) {
+    console.warn('Source function load failed, falling back to live page parse:', err);
+    usedFallback = true;
+    sourcePath = '(live page fallback)';
+    sourceJson = null;
+    draft = await tryFetchLivePageDraft(entry);
+  }
 
   state.selectedDraft = deepClone(draft);
   state.originalDraft = deepClone(draft);
   state.selectedSourcePath = sourcePath;
-  state.selectedRawSource = deepClone(sourceJson);
+  state.selectedRawSource = sourceJson;
 
   resetHistory(draft);
   renderEditor();
   syncPrevNextButtons();
-  els.editorNotice.textContent = 'Source loaded. Make your edits, then publish.';
+
+  els.editorNotice.textContent = usedFallback
+    ? 'Loaded from the live page because source JSON could not be fetched yet. Viewing/editing still works, but publish may fail until the source resolver is configured.'
+    : 'Source loaded. Make your edits, then publish.';
 }
 
 function renderEditor() {
@@ -793,7 +873,10 @@ function moveSelection(direction) {
   const nextIndex = state.selectedIndex + direction;
   if (nextIndex < 0 || nextIndex >= state.filteredEntries.length) return;
 
-  selectEntry(state.filteredEntries[nextIndex]);
+  selectEntry(state.filteredEntries[nextIndex]).catch(err => {
+    console.error('Move selection failed:', err);
+    els.editorNotice.textContent = `Could not open source for this entry: ${err.message}`;
+  });
 }
 
 function bindControls() {
@@ -832,7 +915,12 @@ function bindControls() {
 
   els.undoBtn.addEventListener('click', undoEdit);
   els.redoBtn.addEventListener('click', redoEdit);
-  els.revertBtn.addEventListener('click', reloadSource);
+  els.revertBtn.addEventListener('click', () => {
+    reloadSource().catch(err => {
+      console.error('Reload source failed:', err);
+      els.editorNotice.textContent = `Could not reload source: ${err.message}`;
+    });
+  });
   els.copyJsonBtn.addEventListener('click', copyJson);
   els.downloadJsonBtn.addEventListener('click', downloadJson);
   els.publishBtn.addEventListener('click', publishChanges);
@@ -860,34 +948,43 @@ window.pageEditorInit = async function pageEditorInit() {
 
   try {
     await loadAllEntries();
-
-    if (!state.allEntries.length) {
-      els.searchResults.innerHTML = `<div class="empty-state small">No published content data was found.</div>`;
-      els.calendarGrid.innerHTML = `<div class="empty-state small">No calendar items available.</div>`;
-      return;
-    }
-
-    const newest = state.allEntries[state.allEntries.length - 1];
-    if (newest?.date) {
-      const dt = new Date(newest.date + 'T00:00:00');
-      state.currentYear = dt.getFullYear();
-      state.currentMonth = dt.getMonth();
-    }
-
-    renderYearMonthSelectors();
-    renderSearchResults();
-
-    const firstDaily = state.allEntries
-      .slice()
-      .sort((a, b) => b.date.localeCompare(a.date))
-      .find(entry => entry.type === 'daily') || state.allEntries[state.allEntries.length - 1];
-
-    if (firstDaily) {
-      await selectEntry(firstDaily);
-    }
   } catch (err) {
-    console.error('Page editor failed to load:', err);
-    els.searchResults.innerHTML = `<div class="empty-state small">The editor could not load content data.</div>`;
+    console.error('Archive load failed:', err);
+    els.searchResults.innerHTML = `<div class="empty-state small">The editor could not load published archive data.</div>`;
     els.calendarGrid.innerHTML = `<div class="empty-state small">The calendar could not be loaded.</div>`;
+    return;
+  }
+
+  if (!state.allEntries.length) {
+    els.searchResults.innerHTML = `<div class="empty-state small">No published content data was found.</div>`;
+    els.calendarGrid.innerHTML = `<div class="empty-state small">No calendar items available.</div>`;
+    return;
+  }
+
+  const newest = state.allEntries[state.allEntries.length - 1];
+  if (newest?.date) {
+    const dt = new Date(newest.date + 'T00:00:00');
+    state.currentYear = dt.getFullYear();
+    state.currentMonth = dt.getMonth();
+  }
+
+  renderYearMonthSelectors();
+  renderSearchResults();
+
+  const firstDaily = state.allEntries
+    .slice()
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .find(entry => entry.type === 'daily') || state.allEntries[state.allEntries.length - 1];
+
+  if (firstDaily) {
+    try {
+      await selectEntry(firstDaily);
+    } catch (err) {
+      console.error('Initial entry load failed:', err);
+      els.editorNotice.textContent = `Archive data loaded, but the first source file could not be opened: ${err.message}`;
+      els.selectedEmptyState.hidden = false;
+      els.editorWorkspace.hidden = true;
+      els.selectedMetaText.textContent = 'Choose a page from the calendar or search results.';
+    }
   }
 };
