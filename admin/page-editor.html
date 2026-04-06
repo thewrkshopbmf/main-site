@@ -18,7 +18,7 @@
         <span class="page-editor-eyebrow">TheWrkShop Admin</span>
         <h1>Page Editor</h1>
         <p>
-          Search by date or title, browse by calendar, view upcoming content, and make simple section edits with undo and redo.
+          Search by date or title, browse by calendar, open a page, edit its sections, and publish directly to the repo.
         </p>
       </section>
 
@@ -134,6 +134,7 @@
                 <div class="selected-summary-text">
                   <h3 id="selectedTitle">Untitled</h3>
                   <p id="selectedDateLine">—</p>
+                  <p id="selectedSourcePath" class="selected-source-path">—</p>
                   <a id="selectedOpenLink" href="#" target="_blank" rel="noopener">Open live page</a>
                 </div>
               </div>
@@ -141,14 +142,14 @@
               <div class="editor-toolbar">
                 <button type="button" class="editor-btn secondary" id="undoBtn">Undo</button>
                 <button type="button" class="editor-btn secondary" id="redoBtn">Redo</button>
-                <button type="button" class="editor-btn secondary" id="revertBtn">Revert</button>
-                <button type="button" class="editor-btn secondary" id="saveDraftBtn">Save Draft</button>
+                <button type="button" class="editor-btn secondary" id="revertBtn">Reload Source</button>
                 <button type="button" class="editor-btn secondary" id="copyJsonBtn">Copy JSON</button>
-                <button type="button" class="editor-btn primary" id="downloadJsonBtn">Download JSON</button>
+                <button type="button" class="editor-btn secondary" id="downloadJsonBtn">Download JSON</button>
+                <button type="button" class="editor-btn primary" id="publishBtn">Publish Changes</button>
               </div>
 
               <div class="editor-note" id="editorNotice">
-                Changes here are local draft edits for now. They do not publish automatically until you add a real save endpoint.
+                This editor publishes straight to the repo. Undo and redo are local until you click Publish Changes.
               </div>
 
               <div class="editor-form-grid">

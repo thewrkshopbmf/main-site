@@ -1,0 +1,403 @@
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_OWNER = process.env.GITHUB_OWNER;
+const GITHUB_REPO = process.env.GITHUB_REPO;
+const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
+
+let treeCache = {
+  branch: null,
+  loadedAt: 0,
+  tree: []
+};
+
+function json(body, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
+function cleanString(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function normalizeType(value) {
+  const t = cleanString(value).toLowerCase();
+  return ['daily', 'blog', 'podcast'].includes(t) ? t : '';
+}
+
+function slugify(value = '') {
+  return String(value)
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/['"]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function isIsoDate(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(cleanString(value));
+}
+
+function ghPath(path = '') {
+  return path.split('/').map(encodeURIComponent).join('/');
+}
+
+async function ghFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      'X-GitHub-Api-Version': '2022-11-28',
+      ...(options.headers || {})
+    }
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`GitHub API error ${res.status}: ${text || res.statusText}`);
+  }
+
+  return res.json();
+}
+
+async function requireAdmin(request) {
+  const authHeader =
+    request.headers.get('authorization') ||
+    request.headers.get('Authorization') ||
+    '';
+
+  const match = authHeader.match(/^Bearer\s+(.+)$/i);
+  if (!match) {
+    return { error: json({ ok: false, error: 'Missing bearer token' }, 401) };
+  }
+
+  const token = match[1];
+
+  const { data: userData, error: userError } = await supabase.auth.getUser(token);
+  if (userError || !userData?.user) {
+    return { error: json({ ok: false, error: 'Invalid or expired session' }, 401) };
+  }
+
+  const user = userData.user;
+
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('role, email')
+    .eq('id', user.id)
+    .single();
+
+  if (profileError || !profile || profile.role !== 'admin') {
+    return { error: json({ ok: false, error: 'Admin access required' }, 403) };
+  }
+
+  return { user, profile };
+}
+
+async function getRepoTree() {
+  const now = Date.now();
+  if (
+    treeCache.branch === GITHUB_BRANCH &&
+    treeCache.tree.length &&
+    now - treeCache.loadedAt < 5 * 60 * 1000
+  ) {
+    return treeCache.tree;
+  }
+
+  const data = await ghFetch(
+    `https://api.github.com/repos/${encodeURIComponent(GITHUB_OWNER)}/${encodeURIComponent(GITHUB_REPO)}/git/trees/${encodeURIComponent(GITHUB_BRANCH)}?recursive=1`
+  );
+
+  const tree = Array.isArray(data.tree) ? data.tree : [];
+
+  treeCache = {
+    branch: GITHUB_BRANCH,
+    loadedAt: now,
+    tree
+  };
+
+  return tree;
+}
+
+async function getContentsByPath(path) {
+  const data = await ghFetch(
+    `https://api.github.com/repos/${encodeURIComponent(GITHUB_OWNER)}/${encodeURIComponent(GITHUB_REPO)}/contents/${ghPath(path)}?ref=${encodeURIComponent(GITHUB_BRANCH)}`
+  );
+
+  if (!data || Array.isArray(data) || data.type !== 'file') {
+    throw new Error(`Path is not a file: ${path}`);
+  }
+
+  const content = Buffer.from(data.content || '', 'base64').toString('utf8');
+  return {
+    path,
+    sha: data.sha,
+    content,
+    json: JSON.parse(content)
+  };
+}
+
+function typeDirHints(type) {
+  if (type === 'daily') return ['content/daily/'];
+  if (type === 'blog') return ['content/blog/', 'content/blogs/'];
+  if (type === 'podcast') return ['content/podcast/', 'content/podcasts/'];
+  return ['content/'];
+}
+
+function scoreCandidate(path, type, date, slug, titleSlug) {
+  let score = 0;
+  const lower = path.toLowerCase();
+
+  if (typeDirHints(type).some(prefix => lower.startsWith(prefix))) score += 50;
+  if (lower.endsWith('.json')) score += 10;
+  if (date && lower.includes(date)) score += 20;
+  if (slug && lower.includes(slug)) score += 25;
+  if (titleSlug && lower.includes(titleSlug)) score += 15;
+
+  return score;
+}
+
+async function resolveContentFile({ type, date, slug, title }) {
+  const tree = await getRepoTree();
+  const titleSlug = slugify(title || '');
+
+  let candidates = tree
+    .filter(node => node.type === 'blob' && node.path.endsWith('.json'))
+    .map(node => ({
+      path: node.path,
+      score: scoreCandidate(node.path, type, date, slug, titleSlug)
+    }))
+    .filter(node => node.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 25);
+
+  if (!candidates.length) {
+    throw new Error(`No candidate JSON files found for ${type} ${date} ${slug}`);
+  }
+
+  for (const candidate of candidates) {
+    try {
+      const file = await getContentsByPath(candidate.path);
+      const data = file.json || {};
+      const fileDate = cleanString(data.date);
+      const fileTitleSlug = slugify(cleanString(data.title));
+
+      const dateMatches = !date || fileDate === date;
+      const slugMatches = !slug || fileTitleSlug === slug || candidate.path.toLowerCase().includes(slug);
+
+      if (dateMatches && slugMatches) {
+        return file;
+      }
+    } catch {
+      // ignore bad candidates
+    }
+  }
+
+  throw new Error(`Could not resolve exact source JSON for ${type} ${date} ${slug}`);
+}
+
+function normalizeStringArray(value) {
+  if (Array.isArray(value)) {
+    return value.map(v => String(v || '').trim()).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value.split(/\n{2,}/).map(v => v.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+function paragraphsToBlocks(content) {
+  const paragraphs = String(content || '')
+    .split(/\n{2,}/)
+    .map(x => x.trim())
+    .filter(Boolean);
+
+  return paragraphs.map(text => ({ type: 'paragraph', text }));
+}
+
+function sectionsToBodyHtml(sections = []) {
+  return sections.map(section => {
+    const label = cleanString(section.label || 'Section');
+    const paragraphs = String(section.content || '')
+      .split(/\n{2,}/)
+      .map(x => x.trim())
+      .filter(Boolean)
+      .map(text => `<p>${escapeHtml(text)}</p>`)
+      .join('\n');
+
+    return `<section>\n<h2>${escapeHtml(label)}</h2>\n${paragraphs}\n</section>`;
+  }).join('\n\n');
+}
+
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function applyDailySections(source, editedTitle, sections) {
+  const next = { ...source };
+
+  next.title = editedTitle || next.title;
+
+  delete next.read_this_out_loud;
+  delete next.insight;
+  delete next.body;
+  delete next.shift;
+  delete next.jesus_set_the_pattern;
+  delete next.truth;
+  delete next.reflection;
+  delete next.one_minute_win;
+  delete next.action_step;
+  delete next.declaration;
+
+  next.sections = sections.map(section => ({
+    key: slugify(section.label || 'section').replace(/-/g, '_'),
+    label: cleanString(section.label || 'Section'),
+    blocks: paragraphsToBlocks(section.content || '')
+  }));
+
+  return next;
+}
+
+function applyGenericBodyHtml(source, editedTitle, sections, type) {
+  const next = { ...source };
+  next.title = editedTitle || next.title;
+
+  const html = sectionsToBodyHtml(sections);
+
+  next.body_html = html;
+
+  if (type === 'podcast') {
+    if ('show_notes_html' in next || !('body_html' in next)) {
+      next.show_notes_html = html;
+    }
+  }
+
+  return next;
+}
+
+function buildCommitMessage(type, date, title) {
+  const label = type.charAt(0).toUpperCase() + type.slice(1);
+  return `Admin edit: ${label} ${date}${title ? ` — ${title}` : ''}`;
+}
+
+export default async (request) => {
+  try {
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      return json({ ok: false, error: 'Missing Supabase function environment variables' }, 500);
+    }
+
+    if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
+      return json({ ok: false, error: 'Missing GitHub function environment variables' }, 500);
+    }
+
+    const auth = await requireAdmin(request);
+    if (auth.error) return auth.error;
+
+    const method = request.method.toUpperCase();
+
+    if (method === 'GET') {
+      const url = new URL(request.url);
+      const type = normalizeType(url.searchParams.get('type'));
+      const date = cleanString(url.searchParams.get('date'));
+      const slug = slugify(url.searchParams.get('slug') || '');
+      const title = cleanString(url.searchParams.get('title'));
+
+      if (!type || !isIsoDate(date) || !slug) {
+        return json({ ok: false, error: 'type, date, and slug are required' }, 400);
+      }
+
+      const file = await resolveContentFile({ type, date, slug, title });
+
+      return json({
+        ok: true,
+        file_path: file.path,
+        file_sha: file.sha,
+        source_json: file.json
+      });
+    }
+
+    if (method === 'POST') {
+      const payload = await request.json().catch(() => null);
+      if (!payload) {
+        return json({ ok: false, error: 'Invalid JSON body' }, 400);
+      }
+
+      const type = normalizeType(payload.type);
+      const date = cleanString(payload.date);
+      const slug = slugify(payload.slug || '');
+      const title = cleanString(payload.title);
+      const editedTitle = cleanString(payload.edited_title);
+      const sections = Array.isArray(payload.sections) ? payload.sections : null;
+
+      if (!type || !isIsoDate(date) || !slug || !sections) {
+        return json({ ok: false, error: 'type, date, slug, and sections are required' }, 400);
+      }
+
+      const file = await resolveContentFile({ type, date, slug, title });
+
+      let updatedJson;
+      if (type === 'daily') {
+        updatedJson = applyDailySections(file.json, editedTitle, sections);
+      } else {
+        updatedJson = applyGenericBodyHtml(file.json, editedTitle, sections, type);
+      }
+
+      const content = JSON.stringify(updatedJson, null, 2) + '\n';
+
+      const commit = await ghFetch(
+        `https://api.github.com/repos/${encodeURIComponent(GITHUB_OWNER)}/${encodeURIComponent(GITHUB_REPO)}/contents/${ghPath(file.path)}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: buildCommitMessage(type, date, editedTitle || title),
+            content: Buffer.from(content, 'utf8').toString('base64'),
+            sha: file.sha,
+            branch: GITHUB_BRANCH,
+            committer: auth.profile?.email
+              ? {
+                  name: 'TheWrkShop Admin Editor',
+                  email: auth.profile.email
+                }
+              : undefined
+          })
+        }
+      );
+
+      treeCache.loadedAt = 0;
+
+      return json({
+        ok: true,
+        file_path: file.path,
+        commit_sha: commit?.commit?.sha || '',
+        updated_json: updatedJson
+      });
+    }
+
+    return json({ ok: false, error: 'Method not allowed' }, 405);
+  } catch (err) {
+    return json({ ok: false, error: err?.message || 'Unexpected server error' }, 500);
+  }
+};

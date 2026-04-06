@@ -8,8 +8,11 @@ const state = {
   currentMonth: new Date().getMonth(),
   selectedDraft: null,
   originalDraft: null,
+  selectedSourcePath: '',
+  selectedRawSource: null,
   history: [],
-  historyIndex: -1
+  historyIndex: -1,
+  isPublishing: false
 };
 
 const els = {};
@@ -60,13 +63,6 @@ function deepClone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
-function normalizeTextBlocks(text) {
-  return String(text || '')
-    .split(/\n{2,}/)
-    .map(x => x.trim())
-    .filter(Boolean);
-}
-
 function entryVisualType(entry) {
   if (entry.type === 'daily' && entry.isFuture) return 'daily-future';
   return entry.type;
@@ -80,21 +76,13 @@ function typeLabel(type) {
   return 'Page';
 }
 
-function getStorageKey(entry) {
-  return `page-editor-draft:${entry.type}:${entry.date || 'unknown'}:${entry.slug || slugify(entry.title)}`;
-}
-
-function buildMonths() {
-  return [
+function getMonthOptions() {
+  const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-}
 
-function getMonthOptions() {
-  return buildMonths()
-    .map((label, idx) => `<option value="${idx}">${label}</option>`)
-    .join('');
+  return months.map((label, idx) => `<option value="${idx}">${label}</option>`).join('');
 }
 
 function getYearRange(entries) {
@@ -121,9 +109,7 @@ function normalizeDailyArchiveItem(item) {
     href: item.href || '#',
     verse: item.verse_ref || '',
     slug: slugify(item.title || item.href || date),
-    isFuture: Boolean(date && date > today),
-    sourceHint: 'archive',
-    sourceUrl: item.json_url || ''
+    isFuture: Boolean(date && date > today)
   };
 }
 
@@ -135,9 +121,7 @@ function normalizeBlogArchiveItem(item) {
     href: item.href || '#',
     verse: item.category || '',
     slug: slugify(item.title || item.href || item.date),
-    isFuture: false,
-    sourceHint: 'archive',
-    sourceUrl: item.json_url || ''
+    isFuture: false
   };
 }
 
@@ -149,9 +133,7 @@ function normalizePodcastArchiveItem(item) {
     href: item.page_url || item.href || '#',
     verse: item.duration || item.subtitle || '',
     slug: slugify(item.title || item.page_url || item.date),
-    isFuture: false,
-    sourceHint: 'archive',
-    sourceUrl: item.json_url || ''
+    isFuture: false
   };
 }
 
@@ -213,6 +195,16 @@ function getItemsForDate(dateStr) {
       const order = { 'daily-future': 0, daily: 1, blog: 2, podcast: 3 };
       return (order[entryVisualType(a)] || 99) - (order[entryVisualType(b)] || 99);
     });
+}
+
+function getEntryKey(entry) {
+  return `${entry.type}|${entry.date}|${entry.slug}`;
+}
+
+function findEntryByKey(key) {
+  return state.filteredEntries.find(entry => getEntryKey(entry) === key)
+    || state.allEntries.find(entry => getEntryKey(entry) === key)
+    || null;
 }
 
 function renderCalendar() {
@@ -285,16 +277,6 @@ function renderCalendar() {
   });
 }
 
-function getEntryKey(entry) {
-  return `${entry.type}|${entry.date}|${entry.slug}`;
-}
-
-function findEntryByKey(key) {
-  return state.filteredEntries.find(entry => getEntryKey(entry) === key)
-    || state.allEntries.find(entry => getEntryKey(entry) === key)
-    || null;
-}
-
 function renderSearchResults() {
   const q = els.pageSearchInput.value.trim().toLowerCase();
   const typeFilter = els.typeFilter.value;
@@ -353,94 +335,231 @@ function renderSearchResults() {
   syncPrevNextButtons();
 }
 
-function extractSectionsFromHtml(html) {
+function normalizeStringArray(value) {
+  if (Array.isArray(value)) {
+    return value.map(v => String(v || '').trim()).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value.split(/\n{2,}/).map(v => v.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+function blocksToParagraphs(blocks = []) {
+  const out = [];
+
+  blocks.forEach(block => {
+    if (!block || typeof block !== 'object') return;
+
+    if (block.type === 'paragraph' || block.type === 'quote' || block.type === 'callout') {
+      if (block.text) out.push(String(block.text).trim());
+      return;
+    }
+
+    if (block.type === 'lines' || block.type === 'bullet_list' || block.type === 'numbered_list') {
+      const items = normalizeStringArray(block.items);
+      if (items.length) out.push(items.join('\n'));
+    }
+  });
+
+  return out.filter(Boolean);
+}
+
+function dailySourceToDraft(source, entry) {
+  let sections = [];
+
+  if (Array.isArray(source.sections) && source.sections.length) {
+    sections = source.sections.map((section, index) => ({
+      id: `section-${index}-${Date.now()}`,
+      label: section.label || section.key || `Section ${index + 1}`,
+      content: blocksToParagraphs(section.blocks || []).join('\n\n')
+    })).filter(section => section.content.trim());
+  } else {
+    const legacyOrder = [
+      ['read_this_out_loud', 'Read This Out Loud'],
+      ['insight', 'Insight'],
+      ['body', 'Body'],
+      ['shift', 'The Shift'],
+      ['jesus_set_the_pattern', 'Jesus Set the Pattern'],
+      ['truth', 'The Truth'],
+      ['reflection', 'Reflection'],
+      ['one_minute_win', 'Action Step'],
+      ['action_step', 'Action Step'],
+      ['declaration', 'Declaration']
+    ];
+
+    sections = legacyOrder
+      .map(([key, label], index) => {
+        const value = source[key];
+        const parts = normalizeStringArray(value);
+        if (!parts.length) return null;
+        return {
+          id: `section-${index}-${Date.now()}`,
+          label,
+          content: parts.join('\n\n')
+        };
+      })
+      .filter(Boolean);
+  }
+
+  if (!sections.length) {
+    sections = [{
+      id: `section-fallback-${Date.now()}`,
+      label: 'Insight',
+      content: ''
+    }];
+  }
+
+  return {
+    type: 'daily',
+    title: source.title || entry.title || 'Untitled Daily',
+    date: source.date || entry.date,
+    href: entry.href,
+    slug: entry.slug,
+    sections
+  };
+}
+
+function htmlToDraftSections(html = '') {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
 
-  const title = doc.querySelector('h1')?.textContent?.trim() || 'Untitled';
-  const sectionNodes = Array.from(doc.querySelectorAll('section, article section'));
   const sections = [];
+  const topSections = Array.from(doc.body.children).filter(Boolean);
 
-  sectionNodes.forEach((node, index) => {
-    const heading = node.querySelector('h2, h3, h4');
+  topSections.forEach((node, index) => {
+    const heading = node.querySelector?.('h1, h2, h3, h4');
     const label = heading?.textContent?.trim() || `Section ${index + 1}`;
 
     const lines = [];
-    node.querySelectorAll('p, li, blockquote').forEach(el => {
+    node.querySelectorAll?.('p, li, blockquote').forEach(el => {
       const text = el.textContent?.trim();
       if (text) lines.push(text);
     });
 
-    if (!lines.length) return;
-
-    sections.push({
-      id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${index}`,
-      label,
-      content: lines.join('\n\n')
-    });
+    if (lines.length) {
+      sections.push({
+        id: `section-${index}-${Date.now()}`,
+        label,
+        content: lines.join('\n\n')
+      });
+    }
   });
 
   if (!sections.length) {
-    const bodyLines = Array.from(doc.querySelectorAll('main p, article p'))
+    const lines = Array.from(doc.querySelectorAll('p, li, blockquote'))
       .map(el => el.textContent?.trim())
       .filter(Boolean);
 
-    if (bodyLines.length) {
+    if (lines.length) {
       sections.push({
-        id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-fallback`,
+        id: `section-fallback-${Date.now()}`,
         label: 'Content',
-        content: bodyLines.join('\n\n')
+        content: lines.join('\n\n')
       });
     }
   }
 
-  return { title, sections };
+  return sections;
 }
 
-function buildFallbackDraftFromEntry(entry) {
+function genericSourceToDraft(source, entry) {
+  const html = source.body_html || source.show_notes_html || source.content_html || '';
+  const sections = htmlToDraftSections(html);
+
   return {
     type: entry.type,
-    title: entry.title,
-    date: entry.date,
+    title: source.title || entry.title || 'Untitled',
+    date: source.date || entry.date,
     href: entry.href,
     slug: entry.slug,
-    sections: [
-      {
-        id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-summary`,
-        label: entry.type === 'daily' ? 'Summary' : 'Content',
-        content: [entry.verse, entry.title].filter(Boolean).join('\n\n')
-      }
-    ]
+    sections: sections.length ? sections : [{
+      id: `section-fallback-${Date.now()}`,
+      label: 'Content',
+      content: ''
+    }]
   };
 }
 
-async function loadEntryDraft(entry) {
-  const savedDraftRaw = localStorage.getItem(getStorageKey(entry));
-  if (savedDraftRaw) {
-    try {
-      return JSON.parse(savedDraftRaw);
-    } catch {}
+function sourceToDraft(source, entry) {
+  if (entry.type === 'daily') {
+    return dailySourceToDraft(source, entry);
+  }
+  return genericSourceToDraft(source, entry);
+}
+
+function draftToExportJson() {
+  if (!state.selectedDraft) return null;
+
+  return {
+    title: state.selectedDraft.title,
+    date: state.selectedDraft.date,
+    type: state.selectedDraft.type,
+    sections: state.selectedDraft.sections.map(section => ({
+      label: section.label,
+      paragraphs: section.content
+        .split(/\n{2,}/)
+        .map(x => x.trim())
+        .filter(Boolean)
+    }))
+  };
+}
+
+async function getAccessToken() {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) throw error;
+  const token = data?.session?.access_token;
+  if (!token) throw new Error('No active session');
+  return token;
+}
+
+async function apiLoadSource(entry) {
+  const token = await getAccessToken();
+  const url = `/.netlify/functions/page-editor-content?type=${encodeURIComponent(entry.type)}&date=${encodeURIComponent(entry.date)}&slug=${encodeURIComponent(entry.slug)}&title=${encodeURIComponent(entry.title || '')}`;
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(payload?.error || 'Failed to load source');
   }
 
-  if (entry.href && entry.href !== '#') {
-    try {
-      const res = await fetch(entry.href, { cache: 'no-store' });
-      if (res.ok) {
-        const html = await res.text();
-        const parsed = extractSectionsFromHtml(html);
-        return {
-          type: entry.type,
-          title: parsed.title || entry.title,
-          date: entry.date,
-          href: entry.href,
-          slug: entry.slug,
-          sections: parsed.sections.length ? parsed.sections : buildFallbackDraftFromEntry(entry).sections
-        };
-      }
-    } catch {}
+  return payload;
+}
+
+async function apiPublish(entry, draft) {
+  const token = await getAccessToken();
+
+  const res = await fetch('/.netlify/functions/page-editor-content', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      type: entry.type,
+      date: entry.date,
+      slug: entry.slug,
+      title: entry.title || '',
+      edited_title: draft.title || '',
+      sections: draft.sections.map(section => ({
+        label: section.label,
+        content: section.content
+      }))
+    })
+  });
+
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(payload?.error || 'Publish failed');
   }
 
-  return buildFallbackDraftFromEntry(entry);
+  return payload;
 }
 
 function resetHistory(draft) {
@@ -488,6 +607,7 @@ function syncPrevNextButtons() {
   const hasNext = state.selectedIndex >= 0 && state.selectedIndex < state.filteredEntries.length - 1;
   els.prevEntryBtn.disabled = !hasPrev;
   els.nextEntryBtn.disabled = !hasNext;
+  els.publishBtn.disabled = !state.selectedDraft || state.isPublishing;
 }
 
 async function selectEntry(entry) {
@@ -495,18 +615,27 @@ async function selectEntry(entry) {
   if (idx >= 0) {
     state.selectedIndex = idx;
   } else {
-    const allIdx = state.allEntries.findIndex(item => getEntryKey(item) === getEntryKey(entry));
-    state.selectedIndex = allIdx;
     state.filteredEntries = state.allEntries.slice();
+    state.selectedIndex = state.filteredEntries.findIndex(item => getEntryKey(item) === getEntryKey(entry));
   }
 
-  const draft = await loadEntryDraft(entry);
+  els.editorNotice.textContent = 'Loading source file...';
+
+  const payload = await apiLoadSource(entry);
+  const sourceJson = payload?.source_json || {};
+  const sourcePath = payload?.file_path || '(unknown path)';
+
+  const draft = sourceToDraft(sourceJson, entry);
+
   state.selectedDraft = deepClone(draft);
   state.originalDraft = deepClone(draft);
+  state.selectedSourcePath = sourcePath;
+  state.selectedRawSource = deepClone(sourceJson);
 
   resetHistory(draft);
   renderEditor();
   syncPrevNextButtons();
+  els.editorNotice.textContent = 'Source loaded. Make your edits, then publish.';
 }
 
 function renderEditor() {
@@ -515,6 +644,7 @@ function renderEditor() {
     els.selectedEmptyState.hidden = false;
     els.editorWorkspace.hidden = true;
     els.selectedMetaText.textContent = 'Choose a day or search result to open a page.';
+    syncPrevNextButtons();
     return;
   }
 
@@ -526,6 +656,7 @@ function renderEditor() {
   els.selectedTypePill.className = `type-pill ${visualType}`;
   els.selectedTitle.textContent = state.selectedDraft.title || entry.title || 'Untitled';
   els.selectedDateLine.textContent = `${humanDate(entry.date)} · ${typeLabel(visualType)}`;
+  els.selectedSourcePath.textContent = state.selectedSourcePath ? `Source: ${state.selectedSourcePath}` : 'Source path unavailable';
   els.selectedOpenLink.href = entry.href || '#';
   els.selectedMetaText.textContent = `Editing ${typeLabel(visualType)} from ${humanDate(entry.date)}.`;
 
@@ -590,47 +721,59 @@ function renderEditor() {
       renderEditor();
     });
   });
+
+  syncPrevNextButtons();
 }
 
-function buildExportJson() {
-  if (!state.selectedDraft) return null;
-
-  return {
-    title: state.selectedDraft.title,
-    date: state.selectedDraft.date,
-    type: state.selectedDraft.type,
-    href: state.selectedDraft.href,
-    sections: state.selectedDraft.sections.map(section => ({
-      label: section.label,
-      paragraphs: normalizeTextBlocks(section.content)
-    }))
-  };
+async function reloadSource() {
+  const entry = getSelectedEntry();
+  if (!entry) return;
+  await selectEntry(entry);
 }
 
-function saveDraftLocal() {
+async function publishChanges() {
   const entry = getSelectedEntry();
   if (!entry || !state.selectedDraft) return;
-  localStorage.setItem(getStorageKey(entry), JSON.stringify(state.selectedDraft));
-  els.editorNotice.textContent = 'Draft saved locally in this browser.';
-}
 
-function revertDraft() {
-  if (!state.originalDraft) return;
-  state.selectedDraft = deepClone(state.originalDraft);
-  resetHistory(state.selectedDraft);
-  renderEditor();
-  els.editorNotice.textContent = 'Changes reverted to the original loaded version.';
+  try {
+    state.isPublishing = true;
+    syncPrevNextButtons();
+    els.editorNotice.textContent = 'Publishing changes to GitHub...';
+
+    const result = await apiPublish(entry, state.selectedDraft);
+
+    if (state.selectedDraft.title && entry.title !== state.selectedDraft.title) {
+      entry.title = state.selectedDraft.title;
+      entry.slug = slugify(state.selectedDraft.title);
+    }
+
+    state.originalDraft = deepClone(state.selectedDraft);
+    state.selectedSourcePath = result?.file_path || state.selectedSourcePath;
+    state.selectedRawSource = result?.updated_json || state.selectedRawSource;
+
+    resetHistory(state.selectedDraft);
+    renderSearchResults();
+    renderEditor();
+
+    els.editorNotice.textContent = `Published successfully. Commit: ${result?.commit_sha || 'created'}`;
+  } catch (err) {
+    console.error(err);
+    els.editorNotice.textContent = `Publish failed: ${err.message}`;
+  } finally {
+    state.isPublishing = false;
+    syncPrevNextButtons();
+  }
 }
 
 async function copyJson() {
-  const json = JSON.stringify(buildExportJson(), null, 2);
+  const json = JSON.stringify(draftToExportJson(), null, 2);
   await navigator.clipboard.writeText(json);
   els.editorNotice.textContent = 'Edited JSON copied to clipboard.';
 }
 
 function downloadJson() {
   const entry = getSelectedEntry();
-  const json = JSON.stringify(buildExportJson(), null, 2);
+  const json = JSON.stringify(draftToExportJson(), null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -689,10 +832,10 @@ function bindControls() {
 
   els.undoBtn.addEventListener('click', undoEdit);
   els.redoBtn.addEventListener('click', redoEdit);
-  els.revertBtn.addEventListener('click', revertDraft);
-  els.saveDraftBtn.addEventListener('click', saveDraftLocal);
+  els.revertBtn.addEventListener('click', reloadSource);
   els.copyJsonBtn.addEventListener('click', copyJson);
   els.downloadJsonBtn.addEventListener('click', downloadJson);
+  els.publishBtn.addEventListener('click', publishChanges);
   els.prevEntryBtn.addEventListener('click', () => moveSelection(-1));
   els.nextEntryBtn.addEventListener('click', () => moveSelection(1));
 }
@@ -702,8 +845,8 @@ function cacheEls() {
     'pageSearchInput', 'typeFilter', 'searchResults',
     'calendarMonth', 'calendarYear', 'monthPrevBtn', 'monthNextBtn', 'calendarGrid',
     'selectedMetaText', 'selectedEmptyState', 'editorWorkspace',
-    'selectedTypePill', 'selectedTitle', 'selectedDateLine', 'selectedOpenLink',
-    'undoBtn', 'redoBtn', 'revertBtn', 'saveDraftBtn', 'copyJsonBtn', 'downloadJsonBtn',
+    'selectedTypePill', 'selectedTitle', 'selectedDateLine', 'selectedSourcePath', 'selectedOpenLink',
+    'undoBtn', 'redoBtn', 'revertBtn', 'copyJsonBtn', 'downloadJsonBtn', 'publishBtn',
     'pageTitleInput', 'pageDateInput', 'sectionEditorList', 'editorNotice',
     'prevEntryBtn', 'nextEntryBtn'
   ].forEach(id => {
