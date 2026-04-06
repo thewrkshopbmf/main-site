@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Page Editor</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="page-editor.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico">
+  <meta name="description" content="Admin page editor for TheWrkShop."/>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="page-editor-page">
+    <div class="page-editor-shell">
+      <section class="page-editor-hero">
+        <span class="page-editor-eyebrow">TheWrkShop Admin</span>
+        <h1>Page Editor</h1>
+        <p>
+          Search by date or title, browse by calendar, view upcoming content, and make simple section edits with undo and redo.
+        </p>
+      </section>
+
+      <section class="page-editor-gate">
+        <div class="page-editor-gate-card" id="editorGateCard">
+          <h2 id="editorGateTitle">Verifying access...</h2>
+          <p id="editorGateText">Checking your session and admin role before loading editor tools.</p>
+          <div class="page-editor-gate-meta" id="editorGateActions" style="display:none;">
+            <a class="page-editor-inline-btn primary" href="../login.html">Go to Login</a>
+            <a class="page-editor-inline-btn secondary" href="admin.html">Back to Admin</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-editor-layout" data-editor-protected id="editorProtectedLayout">
+        <aside class="page-editor-sidebar">
+          <h2>Quick Links</h2>
+          <nav class="page-editor-nav">
+            <a href="#calendarPanel">Calendar</a>
+            <a href="#searchPanel">Search</a>
+            <a href="#selectedPanel">Selected Page</a>
+            <a href="push-center.html">Push Center</a>
+            <a href="admin.html">Back to Admin</a>
+            <button type="button" id="editorLogoutBtn">Log Out</button>
+          </nav>
+
+          <div class="legend-card">
+            <h3>Legend</h3>
+            <div class="legend-row"><span class="legend-dot legend-daily"></span> Daily</div>
+            <div class="legend-row"><span class="legend-dot legend-daily-future"></span> Pending Daily</div>
+            <div class="legend-row"><span class="legend-dot legend-blog"></span> Blog</div>
+            <div class="legend-row"><span class="legend-dot legend-podcast"></span> Podcast</div>
+          </div>
+        </aside>
+
+        <div class="page-editor-main">
+          <section class="editor-card search-panel" id="searchPanel">
+            <div class="panel-head">
+              <div>
+                <h2>Search</h2>
+                <p>Find content by title, date, type, verse, or month.</p>
+              </div>
+            </div>
+
+            <div class="search-tools">
+              <input
+                type="search"
+                id="pageSearchInput"
+                class="editor-input"
+                placeholder="Search title, date, verse, type..."
+              />
+              <select id="typeFilter" class="editor-select">
+                <option value="all">All Types</option>
+                <option value="daily">Daily</option>
+                <option value="blog">Blog</option>
+                <option value="podcast">Podcast</option>
+              </select>
+            </div>
+
+            <div class="search-results" id="searchResults">
+              <div class="empty-state small">No search results yet.</div>
+            </div>
+          </section>
+
+          <section class="editor-card calendar-panel" id="calendarPanel">
+            <div class="panel-head panel-head-spread">
+              <div>
+                <h2>Calendar</h2>
+                <p>See what came out and what is still pending.</p>
+              </div>
+
+              <div class="calendar-controls">
+                <button type="button" class="editor-btn secondary" id="monthPrevBtn">←</button>
+                <select id="calendarMonth" class="editor-select"></select>
+                <select id="calendarYear" class="editor-select"></select>
+                <button type="button" class="editor-btn secondary" id="monthNextBtn">→</button>
+              </div>
+            </div>
+
+            <div class="calendar-weekdays">
+              <div>Sun</div>
+              <div>Mon</div>
+              <div>Tue</div>
+              <div>Wed</div>
+              <div>Thu</div>
+              <div>Fri</div>
+              <div>Sat</div>
+            </div>
+
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </section>
+
+          <section class="editor-card selected-panel" id="selectedPanel">
+            <div class="panel-head panel-head-spread">
+              <div>
+                <h2>Selected Page</h2>
+                <p id="selectedMetaText">Choose a day or search result to open a page.</p>
+              </div>
+
+              <div class="selected-nav">
+                <button type="button" class="editor-btn secondary" id="prevEntryBtn">← Previous Day</button>
+                <button type="button" class="editor-btn secondary" id="nextEntryBtn">Next Day →</button>
+              </div>
+            </div>
+
+            <div id="selectedEmptyState" class="empty-state">
+              Pick a page from the calendar or the search list.
+            </div>
+
+            <div id="editorWorkspace" class="editor-workspace" hidden>
+              <div class="selected-summary">
+                <span class="type-pill" id="selectedTypePill">Daily</span>
+                <div class="selected-summary-text">
+                  <h3 id="selectedTitle">Untitled</h3>
+                  <p id="selectedDateLine">—</p>
+                  <a id="selectedOpenLink" href="#" target="_blank" rel="noopener">Open live page</a>
+                </div>
+              </div>
+
+              <div class="editor-toolbar">
+                <button type="button" class="editor-btn secondary" id="undoBtn">Undo</button>
+                <button type="button" class="editor-btn secondary" id="redoBtn">Redo</button>
+                <button type="button" class="editor-btn secondary" id="revertBtn">Revert</button>
+                <button type="button" class="editor-btn secondary" id="saveDraftBtn">Save Draft</button>
+                <button type="button" class="editor-btn secondary" id="copyJsonBtn">Copy JSON</button>
+                <button type="button" class="editor-btn primary" id="downloadJsonBtn">Download JSON</button>
+              </div>
+
+              <div class="editor-note" id="editorNotice">
+                Changes here are local draft edits for now. They do not publish automatically until you add a real save endpoint.
+              </div>
+
+              <div class="editor-form-grid">
+                <div class="editor-field">
+                  <label for="pageTitleInput">Title</label>
+                  <input type="text" id="pageTitleInput" class="editor-input" />
+                </div>
+
+                <div class="editor-field">
+                  <label for="pageDateInput">Date</label>
+                  <input type="text" id="pageDateInput" class="editor-input" readonly />
+                </div>
+              </div>
+
+              <div class="section-editor-list" id="sectionEditorList"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo"><span class="sitename"></span></div>
+      <p>&copy; 2026 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+  <script type="module" src="page-editor.js"></script>
+
+  <script type="module">
+    import { supabase } from '../scripts/supabase/supabaseClient.js';
+
+    const gateCard = document.getElementById('editorGateCard');
+    const gateTitle = document.getElementById('editorGateTitle');
+    const gateText = document.getElementById('editorGateText');
+    const gateActions = document.getElementById('editorGateActions');
+    const protectedLayout = document.getElementById('editorProtectedLayout');
+    const logoutBtn = document.getElementById('editorLogoutBtn');
+
+    function showProtected() {
+      protectedLayout.classList.add('is-visible');
+    }
+
+    function showDenied(title, text) {
+      gateCard.classList.add('is-denied');
+      gateTitle.textContent = title;
+      gateText.textContent = text;
+      gateActions.style.display = 'flex';
+    }
+
+    async function checkAdminAccess() {
+      try {
+        gateTitle.textContent = 'Verifying access...';
+        gateText.textContent = 'Checking your session and admin role before loading editor tools.';
+
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+
+        const user = userData?.user;
+        if (!user) {
+          window.location.href = '../login.html';
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role, email')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        if (!profile || profile.role !== 'admin') {
+          showDenied(
+            'Access denied',
+            'Your account is signed in, but it does not have admin access for this page.'
+          );
+          return;
+        }
+
+        gateTitle.textContent = 'Access confirmed';
+        gateText.textContent = `Signed in as admin: ${profile.email}`;
+        showProtected();
+
+        if (window.pageEditorInit) {
+          window.pageEditorInit();
+        }
+      } catch (err) {
+        showDenied(
+          'Could not verify access',
+          err.message || 'There was a problem checking your admin session.'
+        );
+      }
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        window.location.href = '../login.html';
+      });
+    }
+
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        window.location.href = '../login.html';
+      }
+    });
+
+    checkAdminAccess();
+  </script>
+</body>
+</html>
