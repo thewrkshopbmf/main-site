@@ -38,28 +38,31 @@ function setSaveStatus(message, tone = 'muted') {
 
 function setNotice(message = '', tone = 'warning') {
   if (!dom.notice) return;
+
   if (!message) {
-    dom.notice.hidden = true;
     dom.notice.textContent = '';
+    dom.notice.style.display = 'none';
     dom.notice.dataset.tone = '';
     return;
   }
 
-  dom.notice.hidden = false;
   dom.notice.textContent = message;
+  dom.notice.style.display = 'block';
   dom.notice.dataset.tone = tone;
 }
 
 function switchScreen(name) {
   const screens = {
-    intro: dom.intro,
-    flow: dom.flow,
+    cover: dom.cover,
+    instructions: dom.instructions,
+    assessment: dom.assessment,
     results: dom.results
   };
 
-  Object.entries(screens).forEach(([key, el]) => {
-    if (!el) return;
-    el.classList.toggle('assessment-screen--active', key === name);
+  Object.entries(screens).forEach(([key, element]) => {
+    if (!element) return;
+    element.classList.toggle('active', key === name);
+    element.style.display = key === name ? (key === 'cover' ? 'flex' : 'block') : 'none';
   });
 
   window.scrollTo(0, 0);
@@ -69,7 +72,7 @@ function ensureAttemptId() {
   if (state.attemptId) return state.attemptId;
   state.attemptId = localStorage.getItem(ATTEMPT_STORAGE_KEY) || generateAttemptId();
   localStorage.setItem(ATTEMPT_STORAGE_KEY, state.attemptId);
-  dom.attemptState.textContent = `Attempt ID saved for this browser`;
+  dom.attemptState.textContent = 'Attempt ID saved for this browser';
   return state.attemptId;
 }
 
@@ -183,11 +186,11 @@ function buildShareSummary(results) {
 
 function shadowWarning(score, lowNote) {
   if (score < 50) {
-    return `<div class="assessment-warning"><strong>Needs support (${score}%):</strong> ${lowNote}</div>`;
+    return `<div class="spc-warning"><strong>Scores low (${score}%):</strong> ${lowNote}</div>`;
   }
 
   if (score < 70) {
-    return '<div class="assessment-warning assessment-warning--warm"><strong>Developing:</strong> This companion gift is present, but intentional growth here will strengthen your primary gift.</div>';
+    return '<div class="spc-warning" style="background:#fffbec;border-color:var(--gold);"><strong>Developing:</strong> This gift is present but not yet at full expression alongside your primary. Intentional cultivation here will multiply your impact.</div>';
   }
 
   return '';
@@ -195,144 +198,149 @@ function shadowWarning(score, lowNote) {
 
 function buildResults(results) {
   const sorted = Object.entries(results).sort((a, b) => b[1] - a[1]);
-  const topThree = sorted.slice(0, 3);
-  const [primaryKey, primaryScore] = topThree[0];
+  const [primaryKey, primaryScore] = sorted[0];
   const primaryGift = GIFTS[primaryKey];
   const { cluster } = computeTopCluster(results);
   const [shadowOneKey, shadowTwoKey] = primaryGift.shadow;
   const shadowOne = GIFTS[shadowOneKey];
   const shadowTwo = GIFTS[shadowTwoKey];
 
-  const rankingRows = sorted.map(([giftKey, score]) => {
-    const tone = giftKey === primaryKey ? 'assessment-rank__fill--primary' : score >= 70 ? 'assessment-rank__fill--strong' : 'assessment-rank__fill--base';
+  const rankingRows = sorted.map(([giftKey, score], index) => {
+    const tone = index === 0 ? '' : index <= 2 ? 'secondary' : 'tertiary';
     return `
-      <div class="assessment-rank">
-        <div class="assessment-rank__meta">
-          <span>${GIFTS[giftKey].name}</span>
-          <span>${score}%</span>
+      <div class="gift-bar-row">
+        <div class="gift-bar-meta">
+          <span class="gift-bar-name">${GIFTS[giftKey].name}</span>
+          <span class="gift-bar-pct">${score}%</span>
         </div>
-        <div class="assessment-rank__track">
-          <div class="assessment-rank__fill ${tone}" style="width:${score}%"></div>
+        <div class="gift-bar-track">
+          <div class="gift-bar-fill ${tone}" style="width:${score}%"></div>
         </div>
       </div>
     `;
   }).join('');
 
   dom.resultsContent.innerHTML = `
-    <section class="assessment-primary">
-      <p class="assessment-primary__eyebrow">Primary Gift</p>
-      <h3>${primaryGift.name}</h3>
-      <p class="assessment-primary__meta">${primaryScore}% strength · ${primaryGift.category}</p>
-      <p>${primaryGift.desc}</p>
-    </section>
+    <div class="primary-gift-card">
+      <div class="pg-eyebrow">Your Primary Gift</div>
+      <div class="pg-name">${primaryGift.name}</div>
+      <div class="pg-score">${primaryScore}% strength · ${primaryGift.category}</div>
+      <p class="pg-desc">${primaryGift.desc}</p>
+    </div>
 
-    <section class="assessment-section">
-      <h3>Gift Rankings</h3>
-      <div class="assessment-rankings">${rankingRows}</div>
-    </section>
+    <div class="gift-rankings">
+      <h3 class="rankings-title">All Gift Rankings</h3>
+      ${rankingRows}
+    </div>
 
-    <section class="assessment-section assessment-scripture">
-      <p>"${primaryGift.scripture.text}"</p>
-      <span>${primaryGift.scripture.ref}</span>
-    </section>
+    <div class="scripture-block">
+      <p class="scripture-text">"${primaryGift.scripture.text}"</p>
+      <p class="scripture-ref">${primaryGift.scripture.ref}</p>
+    </div>
 
-    <section class="assessment-section">
-      <h3>The Shadow Gifts</h3>
-      <p class="assessment-section__intro">
-        Every primary gift depends on supporting gifts that help it land with health, wisdom, and durability.
-      </p>
-      <div class="assessment-shadow">
-        <div class="assessment-shadow__primary">
-          <p class="assessment-primary__eyebrow">Your Primary Gift</p>
-          <h4>${primaryGift.name}</h4>
-          <p>${primaryGift.shadowNote}</p>
+    <div class="shadow-section">
+      <h3 class="shadow-section-title">The Shadow Gifts</h3>
+      <p class="shadow-section-sub">Every primary gift runs on companion gifts that most assessments ignore. These are the gifts that make yours actually work — and understanding them changes how you read your own calling.</p>
+      <div class="shadow-primary-panel">
+        <div class="sg-eyebrow">Your Primary Gift</div>
+        <div class="sg-title">${primaryGift.name}</div>
+        <p class="sg-body">${primaryGift.shadowNote}</p>
+      </div>
+      <div class="shadow-pair-grid">
+        <div class="shadow-pair-card">
+          <div class="spc-label">Shadow Gift 1</div>
+          <div class="spc-name">${shadowOne.name}</div>
+          <div class="spc-score">Your score: ${results[shadowOneKey]}%</div>
+          <p class="spc-body">${shadowOne.desc}</p>
+          ${shadowWarning(results[shadowOneKey], primaryGift.shadowLow[shadowOneKey])}
         </div>
-        <div class="assessment-shadow__grid">
-          <article class="assessment-shadow__card">
-            <p class="assessment-shadow__label">Shadow Gift 1</p>
-            <h4>${shadowOne.name}</h4>
-            <p class="assessment-shadow__score">${results[shadowOneKey]}%</p>
-            <p>${shadowOne.desc}</p>
-            ${shadowWarning(results[shadowOneKey], primaryGift.shadowLow[shadowOneKey])}
-          </article>
-          <article class="assessment-shadow__card">
-            <p class="assessment-shadow__label">Shadow Gift 2</p>
-            <h4>${shadowTwo.name}</h4>
-            <p class="assessment-shadow__score">${results[shadowTwoKey]}%</p>
-            <p>${shadowTwo.desc}</p>
-            ${shadowWarning(results[shadowTwoKey], primaryGift.shadowLow[shadowTwoKey])}
-          </article>
+        <div class="shadow-pair-card">
+          <div class="spc-label">Shadow Gift 2</div>
+          <div class="spc-name">${shadowTwo.name}</div>
+          <div class="spc-score">Your score: ${results[shadowTwoKey]}%</div>
+          <p class="spc-body">${shadowTwo.desc}</p>
+          ${shadowWarning(results[shadowTwoKey], primaryGift.shadowLow[shadowTwoKey])}
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="assessment-section">
-      <h3>${cluster.name}</h3>
-      <p class="assessment-section__intro"><strong>${cluster.identity}</strong> ${cluster.desc}</p>
-      <div class="assessment-cluster">
-        <article class="assessment-cluster__card assessment-cluster__card--light">
-          <h4>Strengths</h4>
-          <ul>${cluster.strengths.map((item) => `<li>${item}</li>`).join('')}</ul>
-        </article>
-        <article class="assessment-cluster__card assessment-cluster__card--warm">
-          <h4>Watchouts</h4>
-          <ul>${cluster.dangers.map((item) => `<li>${item}</li>`).join('')}</ul>
-        </article>
+    <div class="cluster-section">
+      <div class="cluster-eyebrow">Your Gift Cluster</div>
+      <h3 class="cluster-title">${cluster.name}</h3>
+      <p class="cluster-desc"><strong>${cluster.identity}</strong> ${cluster.desc}</p>
+      <div class="cluster-grid">
+        <div class="cluster-card strength">
+          <div class="cc-label str">What This Cluster Does Well</div>
+          <div class="cc-body">${cluster.strengths.map((item) => `• ${item}`).join('<br><br>')}</div>
+        </div>
+        <div class="cluster-card danger">
+          <div class="cc-label dan">Where This Cluster Gets Into Trouble</div>
+          <div class="cc-body">${cluster.dangers.map((item) => `• ${item}`).join('<br><br>')}</div>
+        </div>
       </div>
-      <div class="assessment-cluster__foot">
-        <p><strong>Where you likely fit:</strong> ${cluster.placement}</p>
-        <p><strong>Who you need around you:</strong> ${cluster.partners}</p>
+      <div class="cluster-placement">
+        <div class="cp-label">Where You Belong</div>
+        <div class="cp-body">${cluster.placement}</div>
       </div>
-    </section>
+      <div class="cluster-partners">
+        <div class="cp2-label">Who You Need Around You</div>
+        <div class="cp2-body">${cluster.partners}</div>
+      </div>
+    </div>
 
-    <section class="assessment-section">
-      <h3>Deployment Plan</h3>
-      <div class="assessment-steps">
-        <article class="assessment-step">
-          <span>01</span>
-          <div>
-            <h4>Verify it with other men</h4>
-            <p>Take these results to two or three men who know you in real community and ask if they see the same pattern.</p>
-          </div>
-        </article>
-        <article class="assessment-step">
-          <span>02</span>
-          <div>
-            <h4>Strengthen the shadow gifts</h4>
-            <p>Notice which companion gift scored lowest and decide whether you need to cultivate it or partner with someone who carries it strongly.</p>
-          </div>
-        </article>
-        <article class="assessment-step">
-          <span>03</span>
-          <div>
-            <h4>Use it intentionally this month</h4>
-            <p>Pick one real context where you can deploy your strongest gift on purpose and then pay attention to the fruit it produces.</p>
-          </div>
-        </article>
+    <div class="next-steps-section">
+      <h3 class="ns-title">Your Deployment Plan</h3>
+      <p class="ns-sub">A gift profile with no deployment plan is a personality quiz. Here's what to actually do.</p>
+
+      <div class="step-card week">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">This Week — Verify It</div>
+          <p class="step-body">Take your results to two or three men who know you in real community and ask them if this matches what they see in you.</p>
+          <div class="step-action">→ Which two men will you ask?</div>
+        </div>
       </div>
-    </section>
+
+      <div class="step-card month">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">This Month — Strengthen the Shadow Gifts</div>
+          <p class="step-body">Notice which companion gift scored lowest and decide whether you need to cultivate it or partner with someone who carries it strongly.</p>
+          <div class="step-action">→ Which shadow gift needs attention first?</div>
+        </div>
+      </div>
+
+      <div class="step-card season">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">This Season — Deploy It Intentionally</div>
+          <p class="step-body">Pick one real context where you can use your strongest gift on purpose, then pay attention to the kind of fruit it produces.</p>
+          <div class="step-action">→ Where will you use it first?</div>
+        </div>
+      </div>
+    </div>
   `;
 
-  dom.shareSummary.value = buildShareSummary(results);
+  dom.shareSummary.textContent = buildShareSummary(results);
 }
 
 function buildQuestions() {
   const markup = QUESTIONS.map((question, index) => `
-    <article class="assessment-question" id="question-${index}">
-      <p class="assessment-question__meta">Q${String(index + 1).padStart(2, '0')} · ${GIFTS[question.gift].name}</p>
-      <h3>${question.text}</h3>
-      <div class="assessment-question__ratings" role="radiogroup" aria-label="Question ${index + 1}">
+    <div class="q-block" id="question-${index}">
+      <div class="q-number">Q${String(index + 1).padStart(2, '0')} · ${GIFTS[question.gift].name.toUpperCase()}</div>
+      <p class="q-text">${question.text}</p>
+      <div class="rating-row" role="radiogroup" aria-label="Question ${index + 1}">
         ${[1, 2, 3, 4, 5].map((value) => `
-          <button type="button" class="assessment-rating" data-question-index="${index}" data-value="${value}" aria-pressed="false">
+          <button type="button" class="rating-btn" data-question-index="${index}" data-value="${value}" aria-pressed="false">
             ${value}
           </button>
         `).join('')}
       </div>
-      <div class="assessment-question__labels">
-        <span>Not like me</span>
-        <span>Very much like me</span>
+      <div class="rating-labels">
+        <span class="rating-label-text">Not like me</span>
+        <span class="rating-label-text">Very much like me</span>
       </div>
-    </article>
+    </div>
   `).join('');
 
   dom.questionsContainer.innerHTML = markup;
@@ -344,10 +352,10 @@ function renderAnswers() {
     const questionEl = document.getElementById(`question-${index}`);
     if (!questionEl) return;
 
-    questionEl.classList.toggle('assessment-question--answered', value !== undefined);
-    questionEl.querySelectorAll('.assessment-rating').forEach((button) => {
+    questionEl.classList.toggle('answered', value !== undefined);
+    questionEl.querySelectorAll('.rating-btn').forEach((button) => {
       const selected = Number(button.dataset.value) === value;
-      button.classList.toggle('assessment-rating--selected', selected);
+      button.classList.toggle('selected', selected);
       button.setAttribute('aria-pressed', String(selected));
     });
   });
@@ -355,7 +363,7 @@ function renderAnswers() {
 
 function updateProgress() {
   const answeredCount = Object.keys(state.answers).length;
-  dom.progressCount.textContent = `${answeredCount} / ${QUESTIONS.length} answered`;
+  dom.progressCount.textContent = `${answeredCount} / ${QUESTIONS.length}`;
   dom.progressFill.style.width = `${(answeredCount / QUESTIONS.length) * 100}%`;
   dom.attemptState.textContent = answeredCount > 0 ? 'Progress saves automatically' : 'Anonymous attempt ready';
 }
@@ -443,7 +451,7 @@ function restoreFromAttempt(attempt) {
   }
 
   if (Object.keys(state.answers).length > 0) {
-    switchScreen('flow');
+    switchScreen('assessment');
     setSaveStatus('Saved progress restored', 'ok');
   }
 }
@@ -494,7 +502,7 @@ async function hydrateAttempt() {
 function submitAssessment() {
   const unanswered = QUESTIONS.length - Object.keys(state.answers).length;
   if (unanswered > 0) {
-    setNotice(`Please answer all questions before continuing. ${unanswered} remaining.`, 'warning');
+    setNotice(`Please answer all questions — ${unanswered} remaining.`, 'warning');
     const firstUnanswered = QUESTIONS.findIndex((_, index) => state.answers[index] === undefined);
     const target = document.getElementById(`question-${firstUnanswered}`);
     target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -526,17 +534,35 @@ function restartAssessment() {
   updateProgress();
   setNotice('');
   setSaveStatus('Not started', 'muted');
-  switchScreen('intro');
+  switchScreen('cover');
 }
 
 function bindEvents() {
-  dom.startButton.addEventListener('click', () => {
-    switchScreen('flow');
+  dom.coverBeginButton.addEventListener('click', () => {
+    if (Object.keys(state.answers).length > 0 || state.isComplete) {
+      switchScreen('assessment');
+      setSaveStatus('Progress restored', 'ok');
+      return;
+    }
+
+    switchScreen('instructions');
+  });
+
+  dom.instructionsBackButton.addEventListener('click', () => {
+    switchScreen('cover');
+  });
+
+  dom.instructionsBeginButton.addEventListener('click', () => {
+    switchScreen('assessment');
     setSaveStatus(Object.keys(state.answers).length ? 'Progress restored' : 'Progress will autosave after you answer', 'muted');
   });
 
+  dom.assessmentBackButton.addEventListener('click', () => {
+    switchScreen('instructions');
+  });
+
   dom.questionsContainer.addEventListener('click', (event) => {
-    const button = event.target.closest('.assessment-rating');
+    const button = event.target.closest('.rating-btn');
     if (!button) return;
 
     const questionIndex = Number(button.dataset.questionIndex);
@@ -548,11 +574,13 @@ function bindEvents() {
   dom.restartButton.addEventListener('click', restartAssessment);
   dom.copyButton.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(dom.shareSummary.value);
+      await navigator.clipboard.writeText(dom.shareSummary.textContent);
       const original = dom.copyButton.textContent;
-      dom.copyButton.textContent = 'Copied';
+      dom.copyButton.textContent = 'Copied!';
+      dom.copyButton.classList.add('copied');
       window.setTimeout(() => {
         dom.copyButton.textContent = original;
+        dom.copyButton.classList.remove('copied');
       }, 1800);
     } catch {
       setNotice('Copy failed on this device. You can still select and copy the summary manually.', 'warning');
@@ -569,10 +597,14 @@ function bindEvents() {
 }
 
 function cacheDom() {
-  dom.intro = document.getElementById('assessmentIntro');
-  dom.flow = document.getElementById('assessmentFlow');
-  dom.results = document.getElementById('assessmentResults');
-  dom.startButton = document.getElementById('startAssessmentBtn');
+  dom.cover = document.getElementById('cover');
+  dom.instructions = document.getElementById('instructions');
+  dom.assessment = document.getElementById('assessment');
+  dom.results = document.getElementById('results');
+  dom.coverBeginButton = document.getElementById('coverBeginBtn');
+  dom.instructionsBackButton = document.getElementById('instructionsBackBtn');
+  dom.instructionsBeginButton = document.getElementById('instructionsBeginBtn');
+  dom.assessmentBackButton = document.getElementById('assessmentBackBtn');
   dom.submitButton = document.getElementById('submitAssessmentBtn');
   dom.restartButton = document.getElementById('restartAssessmentBtn');
   dom.copyButton = document.getElementById('copySummaryBtn');

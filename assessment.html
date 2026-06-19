@@ -15,109 +15,84 @@
 <body class="assessment-page">
   <div id="site-header"></div>
 
-  <main class="assessment-main">
-    <section class="assessment-hero container">
-      <div class="assessment-hero__panel">
-        <p class="assessment-kicker">TheWrkShop Assessment</p>
-        <h1>Discover how God wired you to build, serve, and lead.</h1>
-        <p class="assessment-hero__body">
-          This public assessment helps surface your strongest spiritual gifts, the companion gifts that support them,
-          and the ministry environments where they can actually take root.
-        </p>
-        <div class="assessment-hero__meta">
-          <span>72 questions</span>
-          <span>15-20 minutes</span>
-          <span>No login required</span>
-        </div>
+  <main class="assessment-shell">
+    <section id="cover" class="screen active">
+      <p class="brand-mark">TheWrkShop · Men's Ministry</p>
+      <h1 class="cover-title">What did God<br><em>wire you</em><br>to do?</h1>
+      <div class="divider-line"></div>
+      <p class="cover-sub">Most men know their strengths. Few know their spiritual gifts — and almost no one knows the paired gifts that make their primary gift actually work.</p>
+      <button id="coverBeginBtn" class="btn-start" type="button">Begin Assessment</button>
+      <p class="cover-note">72 questions · 15–20 minutes</p>
+    </section>
+
+    <section id="instructions" class="screen">
+      <span class="section-label">Before you start</span>
+      <h2 class="instr-title">How to take this honestly</h2>
+      <div class="instr-body">
+        <p>This is not a personality test. It's a spiritual inventory. The goal is not to find out who you <em>want</em> to be — it's to surface what God has already placed in you.</p>
+        <p>Answer based on your <strong>actual experience</strong>, not what you wish were true. Think of your life in community, in service, in moments when something felt natural and fruitful — not your best Sunday.</p>
+        <p>Rate each statement on a scale of 1 to 5:</p>
+      </div>
+      <div class="scale-card">
+        <div class="scale-row"><span class="scale-num">1</span><span class="scale-desc">Not like me at all — I rarely or never experience this</span></div>
+        <div class="scale-row"><span class="scale-num">2</span><span class="scale-desc">Occasionally true, but not consistent</span></div>
+        <div class="scale-row"><span class="scale-num">3</span><span class="scale-desc">Sometimes true — I notice it but it's not defining</span></div>
+        <div class="scale-row"><span class="scale-num">4</span><span class="scale-desc">Often true — this shows up regularly in my life</span></div>
+        <div class="scale-row"><span class="scale-num">5</span><span class="scale-desc">Very much like me — this is consistent and others notice it too</span></div>
+      </div>
+      <div class="instr-body">
+        <p>At the end, you'll receive your top gifts, their paired shadow gifts, your gift cluster, and a concrete deployment plan — not just a profile to read and forget.</p>
+      </div>
+      <div class="nav-row">
+        <button id="instructionsBackBtn" class="btn btn-secondary" type="button">Back</button>
+        <button id="instructionsBeginBtn" class="btn btn-primary" type="button">Begin →</button>
       </div>
     </section>
 
-    <section class="assessment-content container">
-      <div class="assessment-card">
-        <div id="assessmentIntro" class="assessment-screen assessment-screen--active">
-          <div class="assessment-copy">
-            <span class="badge">Before You Start</span>
-            <h2>Answer from real life, not ideal life.</h2>
-            <p>
-              This is not a personality quiz. It is meant to help you notice patterns of fruit, burden, and wiring that
-              already show up in community.
-            </p>
-            <p>
-              Rate each statement from 1 to 5 based on what is usually true of you. Progress is saved automatically as
-              you go, so you can refresh or come back later without losing your place.
-            </p>
-          </div>
-
-          <div class="assessment-scale">
-            <div class="assessment-scale__row"><strong>1</strong><span>Not like me at all</span></div>
-            <div class="assessment-scale__row"><strong>2</strong><span>Occasionally true</span></div>
-            <div class="assessment-scale__row"><strong>3</strong><span>Sometimes true</span></div>
-            <div class="assessment-scale__row"><strong>4</strong><span>Often true</span></div>
-            <div class="assessment-scale__row"><strong>5</strong><span>Very much like me</span></div>
-          </div>
-
-          <div class="assessment-actions">
-            <a class="cta assessment-back-link" href="/">Back Home</a>
-            <button id="startAssessmentBtn" class="podcast-button assessment-button" type="button">Start Assessment</button>
+    <section id="assessment" class="screen" aria-live="polite">
+      <div class="progress-bar-wrap">
+        <div class="progress-meta">
+          <span class="progress-label">Progress</span>
+          <div class="progress-side">
+            <span class="progress-count" id="progressCount">0 / 72</span>
+            <span class="save-status" id="saveStatus">Not started</span>
           </div>
         </div>
-
-        <div id="assessmentFlow" class="assessment-screen" aria-live="polite">
-          <div class="assessment-toolbar">
-            <div>
-              <p class="assessment-toolbar__label">Spiritual Gifts Assessment</p>
-              <h2>Your Progress</h2>
-            </div>
-            <div class="assessment-toolbar__status">
-              <span id="saveStatus">Not started</span>
-            </div>
-          </div>
-
-          <div class="assessment-progress">
-            <div class="assessment-progress__meta">
-              <span id="progressCount">0 / 72 answered</span>
-              <span id="attemptState">Anonymous attempt ready</span>
-            </div>
-            <div class="assessment-progress__track">
-              <div id="progressFill" class="assessment-progress__fill"></div>
-            </div>
-          </div>
-
-          <div id="assessmentNotice" class="assessment-notice" hidden></div>
-          <div id="questionsContainer" class="assessment-questions"></div>
-
-          <div class="assessment-actions assessment-actions--submit">
-            <button id="submitAssessmentBtn" class="podcast-button assessment-button" type="button">See My Results</button>
-          </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-support">
+          <span id="attemptState">Anonymous attempt ready</span>
         </div>
+      </div>
+      <div id="questionsContainer"></div>
+      <p class="warning-msg" id="assessmentNotice"></p>
+      <div class="nav-row">
+        <button id="assessmentBackBtn" class="btn btn-secondary" type="button">← Back</button>
+        <button id="submitAssessmentBtn" class="btn btn-primary" type="button">See My Results →</button>
+      </div>
+    </section>
 
-        <div id="assessmentResults" class="assessment-screen">
-          <div class="assessment-results__header">
-            <span class="badge">Your Results</span>
-            <h2>Your Spiritual Gift Ecosystem</h2>
-            <p>
-              These results highlight your strongest gifts, the companion gifts that reinforce them, and the kind of
-              ministry environment where they may flourish.
-            </p>
-          </div>
+    <section id="results" class="screen">
+      <div class="results-header">
+        <span class="section-label">Your Profile</span>
+        <h2 class="results-title">Your Spiritual<br>Gift Ecosystem</h2>
+        <p class="results-sub">Here are your results — including the gifts most assessments never show you.</p>
+      </div>
+      <div id="resultsContent"></div>
 
-          <div id="resultsContent"></div>
+      <div class="email-gate">
+        <div class="eg-eyebrow">TheWrkShop · Progress Saved</div>
+        <h3 class="eg-title">Your results are already tied to this browser.</h3>
+        <p class="eg-body">Refresh the page or come back later and this browser will reopen your saved attempt or completed result. If you want something portable, copy the summary below and bring it into your next conversation, small group, or leadership check-in.</p>
+      </div>
 
-          <section class="assessment-share">
-            <div class="assessment-share__copy">
-              <h3>Keep a shareable summary</h3>
-              <p>
-                Your results stay tied to this browser automatically. You can also copy a clean summary to save, send,
-                or bring into your next conversation.
-              </p>
-            </div>
-            <textarea id="shareSummary" class="assessment-share__summary" readonly></textarea>
-            <div class="assessment-actions assessment-actions--results">
-              <button id="copySummaryBtn" class="podcast-button assessment-button" type="button">Copy Summary</button>
-              <button id="restartAssessmentBtn" class="cta assessment-secondary-button" type="button">Retake Assessment</button>
-            </div>
-          </section>
-        </div>
+      <div class="share-card visible" id="shareCard">
+        <div class="sc-label">Your Shareable Summary — Copy &amp; Share</div>
+        <div class="sc-summary" id="shareSummary"></div>
+        <button class="sc-copy-btn" id="copySummaryBtn" type="button">Copy to Clipboard</button>
+      </div>
+
+      <div class="restart-row">
+        <button id="restartAssessmentBtn" class="btn btn-secondary" type="button">Retake Assessment</button>
       </div>
     </section>
   </main>
