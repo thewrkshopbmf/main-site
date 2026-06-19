@@ -22,3 +22,5 @@ Thumbs.db
 /data/*.json
 /_redirects
 scripts/supabase/supabaseConfig.js
+supabase/assessment_attempts.sql
+Assesment.html

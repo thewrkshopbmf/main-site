@@ -697,6 +697,7 @@ body.products-theme .listen-btn {
 body.products-theme .listen-btn:hover {
   background-color: #1d355c;
 }
+.feature-banner,
 .easter-banner {
   position: relative;
   display: block;
@@ -717,15 +718,18 @@ body.products-theme .listen-btn:hover {
   transition: background 0.25s ease, transform 0.2s ease;
 }
 
+.feature-banner:hover,
 .easter-banner:hover {
   background: linear-gradient(90deg, #f8f4ea 0%, #f2ead8 50%, #f8f4ea 100%);
 }
 
+.feature-banner__text,
 .easter-banner__text {
   position: relative;
   z-index: 2;
 }
 
+.feature-banner__shine,
 .easter-banner__shine {
   position: absolute;
   top: 0;
