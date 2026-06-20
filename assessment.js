@@ -538,6 +538,12 @@ async function handleSendResultsEmail() {
   dom.sendResultsEmailButton.textContent = 'Sending...';
 
   try {
+    state.hasPendingSave = true;
+    const didSave = await saveAttempt({ flush: true });
+    if (!didSave) {
+      throw new Error('Your results could not be saved yet. Please try again in a moment.');
+    }
+
     const response = await fetch(EMAIL_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -563,7 +569,7 @@ async function handleSendResultsEmail() {
     }, 350);
   } catch (error) {
     console.error(error);
-    setEmailMessage('We could not send the email right now. You can still skip and view your results.', 'error');
+    setEmailMessage(error.message || 'We could not send the email right now. You can still continue to your results.', 'error');
   } finally {
     dom.sendResultsEmailButton.disabled = false;
     dom.sendResultsEmailButton.textContent = 'Send my results';

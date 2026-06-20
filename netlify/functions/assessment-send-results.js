@@ -38,6 +38,10 @@ function isValidEmail(value = '') {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value).trim());
 }
 
+function isMissingColumnError(message = '') {
+  return /column .* does not exist/i.test(String(message));
+}
+
 export default async (request) => {
   if (request.method !== 'POST') {
     return json({ ok: false, error: 'Method not allowed' }, 405);
@@ -176,7 +180,7 @@ export default async (request) => {
       .eq('attempt_id', attempt_id)
       .eq('assessment_slug', assessment_slug);
 
-    if (updateError) {
+    if (updateError && !isMissingColumnError(updateError.message)) {
       return json({ ok: false, error: updateError.message }, 500);
     }
 
