@@ -97,7 +97,7 @@ export default async (request) => {
 
       const { data, error } = await supabase
         .from(TABLE_NAME)
-        .select('attempt_id, assessment_slug, answers_json, result_json, is_complete, created_at, updated_at')
+        .select('attempt_id, assessment_slug, answers_json, result_json, is_complete, result_email, result_email_sent_at, result_email_message_id, created_at, updated_at')
         .eq('attempt_id', attempt_id)
         .eq('assessment_slug', assessment_slug)
         .maybeSingle();
@@ -142,7 +142,7 @@ export default async (request) => {
       const { data, error } = await supabase
         .from(TABLE_NAME)
         .upsert(payload, { onConflict: 'attempt_id,assessment_slug' })
-        .select('attempt_id, assessment_slug, answers_json, result_json, is_complete, created_at, updated_at')
+        .select('attempt_id, assessment_slug, answers_json, result_json, is_complete, result_email, result_email_sent_at, result_email_message_id, created_at, updated_at')
         .single();
 
       if (error) {

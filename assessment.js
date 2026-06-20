@@ -1,8 +1,10 @@
 import { ASSESSMENT_SLUG, CLUSTERS, GIFTS, QUESTIONS } from './assessment-data.js';
+import { buildShareSummary, computeTopCluster } from './assessment-summary.js';
 
 const ATTEMPT_STORAGE_KEY = `${ASSESSMENT_SLUG}:attempt-id`;
 const SNAPSHOT_STORAGE_KEY = `${ASSESSMENT_SLUG}:snapshot`;
 const SAVE_ENDPOINT = '/.netlify/functions/assessment-attempt';
+const EMAIL_ENDPOINT = '/.netlify/functions/assessment-send-results';
 const SAVE_DEBOUNCE_MS = 900;
 const MAX_GIFT_SCORE = 20;
 
@@ -29,6 +31,10 @@ function generateAttemptId() {
   });
 }
 
+function isValidEmail(value = '') {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value).trim());
+}
+
 function setSaveStatus(message, tone = 'muted') {
   const el = dom.saveStatus;
   if (!el) return;
@@ -51,11 +57,27 @@ function setNotice(message = '', tone = 'warning') {
   dom.notice.dataset.tone = tone;
 }
 
+function setEmailMessage(message = '', tone = 'error') {
+  if (!dom.emailMessage) return;
+
+  if (!message) {
+    dom.emailMessage.textContent = '';
+    dom.emailMessage.dataset.tone = '';
+    dom.emailMessage.style.display = 'none';
+    return;
+  }
+
+  dom.emailMessage.textContent = message;
+  dom.emailMessage.dataset.tone = tone;
+  dom.emailMessage.style.display = 'block';
+}
+
 function switchScreen(name) {
   const screens = {
     cover: dom.cover,
     instructions: dom.instructions,
     assessment: dom.assessment,
+    emailCapture: dom.emailCapture,
     results: dom.results
   };
 
@@ -133,55 +155,6 @@ function computeResults(answers) {
   });
 
   return normalized;
-}
-
-function computeTopCluster(normalized) {
-  const clusterScores = {};
-  Object.keys(CLUSTERS).forEach((cluster) => {
-    clusterScores[cluster] = 0;
-  });
-
-  Object.entries(normalized).forEach(([giftKey, score]) => {
-    const category = GIFTS[giftKey].category;
-    if (clusterScores[category] !== undefined) {
-      clusterScores[category] += score;
-    }
-  });
-
-  const [clusterKey] = Object.entries(clusterScores).sort((a, b) => b[1] - a[1])[0];
-  return { clusterKey, cluster: CLUSTERS[clusterKey] };
-}
-
-function buildShareSummary(results) {
-  const sorted = Object.entries(results).sort((a, b) => b[1] - a[1]);
-  const topFive = sorted.slice(0, 5);
-  const [primaryKey, primaryScore] = topFive[0];
-  const primaryGift = GIFTS[primaryKey];
-  const { cluster } = computeTopCluster(results);
-  const shadowNames = primaryGift.shadow.map((giftKey) => GIFTS[giftKey].name);
-
-  return [
-    'SPIRITUAL GIFTS ASSESSMENT - TheWrkShop',
-    '--------------------------------------------',
-    '',
-    `PRIMARY GIFT: ${primaryGift.name.toUpperCase()} (${primaryScore}%)`,
-    '',
-    primaryGift.desc,
-    '',
-    'TOP 5 GIFTS:',
-    ...topFive.map(([giftKey, score], index) => `  ${index + 1}. ${GIFTS[giftKey].name} - ${score}%`),
-    '',
-    'SHADOW GIFTS:',
-    `  ${shadowNames[0]} + ${shadowNames[1]}`,
-    `  ${primaryGift.shadowNote}`,
-    '',
-    `GIFT CLUSTER: ${cluster.name.toUpperCase()}`,
-    `  ${cluster.identity}`,
-    `  WHERE YOU BELONG: ${cluster.placement}`,
-    `  WHO YOU NEED: ${cluster.partners}`,
-    '',
-    'thewrkshop.com'
-  ].join('\n');
 }
 
 function shadowWarning(score, lowNote) {
@@ -369,8 +342,8 @@ function updateProgress() {
 }
 
 async function saveAttempt({ flush = false } = {}) {
-  if (!state.hasPendingSave && !flush) return;
-  if (!Object.keys(state.answers).length && !state.isComplete) return;
+  if (!state.hasPendingSave && !flush) return true;
+  if (!Object.keys(state.answers).length && !state.isComplete) return true;
 
   const attemptId = ensureAttemptId();
   const payload = {
@@ -397,10 +370,12 @@ async function saveAttempt({ flush = false } = {}) {
     }
 
     setSaveStatus(state.isComplete ? 'Results saved' : 'Progress saved', 'ok');
+    return true;
   } catch (error) {
     console.error(error);
     state.hasPendingSave = true;
     setSaveStatus('Save pending retry', 'warning');
+    return false;
   }
 }
 
@@ -499,7 +474,13 @@ async function hydrateAttempt() {
   }
 }
 
-function submitAssessment() {
+function continueToResults() {
+  if (!state.currentResults) return;
+  buildResults(state.currentResults);
+  switchScreen('results');
+}
+
+async function submitAssessment() {
   const unanswered = QUESTIONS.length - Object.keys(state.answers).length;
   if (unanswered > 0) {
     setNotice(`Please answer all questions — ${unanswered} remaining.`, 'warning');
@@ -511,11 +492,61 @@ function submitAssessment() {
 
   state.currentResults = computeResults(state.answers);
   state.isComplete = true;
-  buildResults(state.currentResults);
   saveSnapshot();
   state.hasPendingSave = true;
-  void saveAttempt({ flush: true });
-  switchScreen('results');
+  const didSave = await saveAttempt({ flush: true });
+
+  if (!didSave) {
+    continueToResults();
+    setNotice('We could not reach the server to prepare email delivery, but your results are still available in this browser.', 'warning');
+    return;
+  }
+
+  setEmailMessage('');
+  dom.resultEmailInput.value = '';
+  switchScreen('emailCapture');
+}
+
+async function handleSendResultsEmail() {
+  const email = dom.resultEmailInput.value.trim();
+
+  if (!isValidEmail(email)) {
+    setEmailMessage('Please enter a valid email address.', 'error');
+    dom.resultEmailInput.focus();
+    return;
+  }
+
+  setEmailMessage('');
+  dom.sendResultsEmailButton.disabled = true;
+  dom.sendResultsEmailButton.textContent = 'Sending...';
+
+  try {
+    const response = await fetch(EMAIL_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        attempt_id: ensureAttemptId(),
+        assessment_slug: ASSESSMENT_SLUG,
+        email
+      })
+    });
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.ok) {
+      throw new Error(payload.error || `Email send failed with status ${response.status}`);
+    }
+
+    setEmailMessage('Results sent. Opening your full report...', 'success');
+    window.setTimeout(() => {
+      continueToResults();
+    }, 350);
+  } catch (error) {
+    console.error(error);
+    setEmailMessage('We could not send the email right now. You can still skip and view your results.', 'error');
+  } finally {
+    dom.sendResultsEmailButton.disabled = false;
+    dom.sendResultsEmailButton.textContent = 'Send my results';
+  }
 }
 
 function restartAssessment() {
@@ -533,6 +564,7 @@ function restartAssessment() {
   buildQuestions();
   updateProgress();
   setNotice('');
+  setEmailMessage('');
   setSaveStatus('Not started', 'muted');
   switchScreen('cover');
 }
@@ -561,6 +593,14 @@ function bindEvents() {
     switchScreen('instructions');
   });
 
+  dom.skipEmailButton.addEventListener('click', () => {
+    continueToResults();
+  });
+
+  dom.sendResultsEmailButton.addEventListener('click', () => {
+    void handleSendResultsEmail();
+  });
+
   dom.questionsContainer.addEventListener('click', (event) => {
     const button = event.target.closest('.rating-btn');
     if (!button) return;
@@ -570,7 +610,9 @@ function bindEvents() {
     handleAnswerChange(questionIndex, value);
   });
 
-  dom.submitButton.addEventListener('click', submitAssessment);
+  dom.submitButton.addEventListener('click', () => {
+    void submitAssessment();
+  });
   dom.restartButton.addEventListener('click', restartAssessment);
   dom.copyButton.addEventListener('click', async () => {
     try {
@@ -600,11 +642,16 @@ function cacheDom() {
   dom.cover = document.getElementById('cover');
   dom.instructions = document.getElementById('instructions');
   dom.assessment = document.getElementById('assessment');
+  dom.emailCapture = document.getElementById('emailCapture');
   dom.results = document.getElementById('results');
   dom.coverBeginButton = document.getElementById('coverBeginBtn');
   dom.instructionsBackButton = document.getElementById('instructionsBackBtn');
   dom.instructionsBeginButton = document.getElementById('instructionsBeginBtn');
   dom.assessmentBackButton = document.getElementById('assessmentBackBtn');
+  dom.skipEmailButton = document.getElementById('skipEmailBtn');
+  dom.sendResultsEmailButton = document.getElementById('sendResultsEmailBtn');
+  dom.resultEmailInput = document.getElementById('resultEmailInput');
+  dom.emailMessage = document.getElementById('emailCaptureMessage');
   dom.submitButton = document.getElementById('submitAssessmentBtn');
   dom.restartButton = document.getElementById('restartAssessmentBtn');
   dom.copyButton = document.getElementById('copySummaryBtn');
