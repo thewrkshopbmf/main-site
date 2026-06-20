@@ -509,6 +509,7 @@ async function submitAssessment() {
 
 async function handleSendResultsEmail() {
   const email = dom.resultEmailInput.value.trim();
+  const messageOptIn = dom.resultEmailConsent.checked;
 
   if (!isValidEmail(email)) {
     setEmailMessage('Please enter a valid email address.', 'error');
@@ -527,7 +528,8 @@ async function handleSendResultsEmail() {
       body: JSON.stringify({
         attempt_id: ensureAttemptId(),
         assessment_slug: ASSESSMENT_SLUG,
-        email
+        email,
+        message_opt_in: messageOptIn
       })
     });
 
@@ -651,6 +653,7 @@ function cacheDom() {
   dom.skipEmailButton = document.getElementById('skipEmailBtn');
   dom.sendResultsEmailButton = document.getElementById('sendResultsEmailBtn');
   dom.resultEmailInput = document.getElementById('resultEmailInput');
+  dom.resultEmailConsent = document.getElementById('resultEmailConsent');
   dom.emailMessage = document.getElementById('emailCaptureMessage');
   dom.submitButton = document.getElementById('submitAssessmentBtn');
   dom.restartButton = document.getElementById('restartAssessmentBtn');

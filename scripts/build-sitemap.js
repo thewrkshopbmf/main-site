@@ -14,7 +14,12 @@ const OUTPUT_PATH = path.join(ROOT, 'sitemap.xml');
 const EXCLUDED_ROOT_HTML = new Set([
   '404.html',
   '500.html',
-  'login.html'
+  'login.html',
+  'Assesment.html'
+]);
+
+const EXCLUDED_RELATIVE_HTML = new Set([
+  'pages/details/header.html'
 ]);
 
 // Folders that should never be crawled for sitemap URLs
@@ -132,6 +137,7 @@ async function walkPublicHtml(absDir, relDir = '') {
     if (!entry.isFile()) continue;
     if (!isHtmlFile(entry.name)) continue;
     if (isHiddenOrPrivateLike(entry.name)) continue;
+    if (EXCLUDED_RELATIVE_HTML.has(toPosix(relPath))) continue;
 
     // Exclude error/auth pages even if they appear under scanned folders
     const lower = entry.name.toLowerCase();

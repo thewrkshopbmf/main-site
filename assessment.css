@@ -960,6 +960,26 @@ body.assessment-page {
   z-index: 1;
 }
 
+.eg-consent-row {
+  margin-top: 0.9rem;
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  color: var(--parchment);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+.eg-consent-row input[type='checkbox'] {
+  margin-top: 0.18rem;
+  accent-color: var(--gold);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 .eg-inline-message[data-tone='error'] {
   display: block;
   color: #fca5a5;
