@@ -12,6 +12,8 @@ const state = {
   answers: {},
   currentResults: null,
   attemptId: '',
+  resultEmail: '',
+  resultEmailSentAt: '',
   saveTimer: null,
   hasPendingSave: false,
   isComplete: false
@@ -103,7 +105,9 @@ function saveSnapshot() {
     attemptId: state.attemptId,
     answers: state.answers,
     currentResults: state.currentResults,
-    isComplete: state.isComplete
+    isComplete: state.isComplete,
+    resultEmail: state.resultEmail,
+    resultEmailSentAt: state.resultEmailSentAt
   };
 
   localStorage.setItem(SNAPSHOT_STORAGE_KEY, JSON.stringify(payload));
@@ -414,14 +418,23 @@ function restoreFromAttempt(attempt) {
   state.answers = normalizeAnswers(attempt.answers_json);
   state.isComplete = Boolean(attempt.is_complete);
   state.currentResults = attempt.result_json?.normalized || (state.isComplete ? computeResults(state.answers) : null);
+  state.resultEmail = attempt.result_email || '';
+  state.resultEmailSentAt = attempt.result_email_sent_at || '';
   saveSnapshot();
   renderAnswers();
   updateProgress();
 
   if (state.isComplete && state.currentResults) {
-    buildResults(state.currentResults);
-    switchScreen('results');
-    setSaveStatus('Completed results restored', 'ok');
+    if (state.resultEmailSentAt) {
+      buildResults(state.currentResults);
+      switchScreen('results');
+      setSaveStatus('Completed results restored', 'ok');
+    } else {
+      setEmailMessage('');
+      dom.resultEmailInput.value = state.resultEmail || '';
+      switchScreen('emailCapture');
+      setSaveStatus('Completed results restored', 'ok');
+    }
     return;
   }
 
@@ -468,7 +481,9 @@ async function hydrateAttempt() {
       attempt_id: snapshot.attemptId,
       answers_json: snapshot.answers,
       result_json: snapshot.currentResults ? { normalized: snapshot.currentResults } : null,
-      is_complete: snapshot.isComplete
+      is_complete: snapshot.isComplete,
+      result_email: snapshot.resultEmail || '',
+      result_email_sent_at: snapshot.resultEmailSentAt || ''
     });
     setSaveStatus('Restored from this browser', 'warning');
   }
@@ -496,14 +511,15 @@ async function submitAssessment() {
   state.hasPendingSave = true;
   const didSave = await saveAttempt({ flush: true });
 
+  setEmailMessage('');
+  dom.resultEmailInput.value = state.resultEmail || '';
+
   if (!didSave) {
-    continueToResults();
-    setNotice('We could not reach the server to prepare email delivery, but your results are still available in this browser.', 'warning');
+    setEmailMessage('We could not confirm the save yet, but you can still continue or try sending your results now.', 'error');
+    switchScreen('emailCapture');
     return;
   }
 
-  setEmailMessage('');
-  dom.resultEmailInput.value = '';
   switchScreen('emailCapture');
 }
 
@@ -538,6 +554,9 @@ async function handleSendResultsEmail() {
       throw new Error(payload.error || `Email send failed with status ${response.status}`);
     }
 
+    state.resultEmail = email;
+    state.resultEmailSentAt = new Date().toISOString();
+    saveSnapshot();
     setEmailMessage('Results sent. Opening your full report...', 'success');
     window.setTimeout(() => {
       continueToResults();
@@ -562,6 +581,8 @@ function restartAssessment() {
   state.isComplete = false;
   state.hasPendingSave = false;
   state.attemptId = '';
+  state.resultEmail = '';
+  state.resultEmailSentAt = '';
   clearSnapshot();
   buildQuestions();
   updateProgress();
