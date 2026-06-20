@@ -39,7 +39,9 @@ function isValidEmail(value = '') {
 }
 
 function isMissingColumnError(message = '') {
-  return /column .* does not exist/i.test(String(message));
+  const text = String(message);
+  return /column .* does not exist/i.test(text) ||
+    /could not find the '.*' column .* schema cache/i.test(text);
 }
 
 export default async (request) => {
