@@ -305,45 +305,97 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 })();
 
-// ===== Text-to-Speech (TTS) for Daily Devotionals =====
-function speakText(element, onDone) {
+// --------- Text-to-Speech (Daily "Listen") ----------
+// Prefer the most natural British voice the device offers, then Australian.
+// Edge: Microsoft "Natural" voices; Chrome: Google UK English; Apple: Daniel/Lee.
+let ttsSession = 0;
+
+function scoreVoice(v) {
+  const name = v.name || '';
+  const lang = (v.lang || '').replace('_', '-').toLowerCase();
+  let score;
+  if (lang.startsWith('en-gb')) score = 40;
+  else if (lang.startsWith('en-au')) score = 35;
+  else if (lang.startsWith('en')) score = 5;
+  else return -1;
+  if (/natural|neural|online|premium|enhanced/i.test(name)) score += 30;
+  if (/google/i.test(name)) score += 15;
+  if (/\b(ryan|thomas|william|daniel|arthur|lee|gordon|oliver|george|male)\b/i.test(name)) score += 10;
+  if (/compact|espeak|novelty|whisper|zarvox|bad news|bells|trinoids|fred|albert|jester|organ|bubbles|cellos|boing|hysterical|superstar|wobble|grandpa|grandma|eddy|flo|reed|rocko|sandy|shelley/i.test(name)) score -= 60;
+  return score;
+}
+
+function pickVoice() {
+  const voices = window.speechSynthesis.getVoices() || [];
+  let best = null, bestScore = 0;
+  voices.forEach(v => {
+    const s = scoreVoice(v);
+    if (s > bestScore) { best = v; bestScore = s; }
+  });
+  return best;
+}
+
+function voicesReady() {
+  return new Promise(resolve => {
+    if (window.speechSynthesis.getVoices().length) return resolve();
+    const done = () => { window.speechSynthesis.removeEventListener('voiceschanged', done); resolve(); };
+    window.speechSynthesis.addEventListener('voiceschanged', done);
+    setTimeout(done, 1500);
+  });
+}
+
+// Break text into sentence-sized chunks (long single utterances cut off in Chrome).
+function chunkText(text, max = 220) {
+  const sentences = text.replace(/\s+/g, ' ').match(/[^.!?]+[.!?]+["”’)]*\s*|[^.!?]+$/g) || [text];
+  const chunks = [];
+  let cur = '';
+  sentences.forEach(sent => {
+    if ((cur + sent).length > max && cur) { chunks.push(cur.trim()); cur = ''; }
+    cur += sent;
+  });
+  if (cur.trim()) chunks.push(cur.trim());
+  return chunks;
+}
+
+async function speakText(element, onDone) {
   if (!('speechSynthesis' in window)) {
     alert('Your browser does not support Text-to-Speech.');
     return;
   }
 
-  if (!element) {
-    if (typeof onDone === 'function') onDone();
-    return;
-  }
+  const finish = () => { if (typeof onDone === 'function') onDone(); };
 
-  const text = (element.innerText || '').trim();
-  if (!text) {
-    if (typeof onDone === 'function') onDone();
-    return;
-  }
+  const text = element ? (element.innerText || '').trim() : '';
+  if (!text) return finish();
 
   // Stop anything already speaking first
   window.speechSynthesis.cancel();
+  const session = ++ttsSession;
 
-  const utter = new SpeechSynthesisUtterance(
-    text.replace(/([.!?])\s+/g, '$1. ')
-  );
+  await voicesReady();
+  if (session !== ttsSession) return;
 
-  utter.lang = 'en-US';
-  utter.rate = 0.93;
-  utter.pitch = 1.0;
-  utter.volume = 1.0;
+  const voice = pickVoice();
+  const chunks = chunkText(text);
 
-  utter.onend = () => {
-    if (typeof onDone === 'function') onDone();
-  };
-
-  utter.onerror = () => {
-    if (typeof onDone === 'function') onDone();
-  };
-
-  window.speechSynthesis.speak(utter);
+  chunks.forEach((chunk, i) => {
+    const utter = new SpeechSynthesisUtterance(chunk);
+    if (voice) { utter.voice = voice; utter.lang = voice.lang; }
+    else { utter.lang = 'en-GB'; }
+    utter.rate = 0.95;
+    utter.pitch = 1.0;
+    utter.volume = 1.0;
+    if (i === chunks.length - 1) {
+      utter.onend = () => { if (session === ttsSession) finish(); };
+    }
+    utter.onerror = (e) => {
+      if (session !== ttsSession) return;
+      if (e && (e.error === 'interrupted' || e.error === 'canceled')) return;
+      window.speechSynthesis.cancel();
+      finish();
+    };
+    window.speechSynthesis.speak(utter);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
