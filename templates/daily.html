@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TheWrkShop — {{TITLE}}</title>
+  <title>TheWrkShop — {{PAGE_TITLE}}</title>
   <link rel="stylesheet" href="../style.css"/>
   <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico?v=2">
-  <meta name="description" content="{{TITLE}} — Daily devotional: scripture, reflection, and a practical next step."/>
+  <meta name="description" content="{{PAGE_TITLE}} — Daily devotional: scripture, reflection, and a practical next step."/>
   <style>
     .page-hero {
       background: #3e2c23;
@@ -47,6 +47,20 @@
     .daily-card h2 {
       color: #3e2c23;
       margin: .25rem 0 .35rem;
+    }
+
+    .daily-subtitle {
+      color: #6b4a36;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0 0 .5rem;
+    }
+
+    .daily-tagline {
+      color: #3e2c23;
+      font-style: italic;
+      line-height: 1.6;
+      margin: .25rem 0 .75rem;
     }
 
     .verse-block {
@@ -154,6 +168,8 @@
       </div>
 
       <h2 id="dTitle">{{TITLE}}</h2>
+      {{SUBTITLE_HTML}}
+      {{TAGLINE_HTML}}
 
       <div class="verse-block" id="dVerseBlock">
         <div id="dVerse">{{VERSE_TEXT}}</div>

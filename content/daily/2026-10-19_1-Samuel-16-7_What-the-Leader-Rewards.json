@@ -1,6 +1,8 @@
 {
   "date": "2026-10-19",
-  "title": "What the Leader Rewards",
+  "title": "The Battle Before The Battle",
+  "subtitle": "What The Leader Rewards",
+  "tagline": "Your stated values describe the culture you want. Your rewards reveal the culture you are actually building.",
   "scriptures": [
     {
       "ref": "1 Samuel 16:7",
@@ -12,16 +14,6 @@
     }
   ],
   "sections": [
-    {
-      "key": "the_battle_before_the_battle",
-      "label": "The Battle Before the Battle",
-      "blocks": [
-        {
-          "type": "paragraph",
-          "text": "Your stated values describe the culture you want. Your rewards reveal the culture you are actually building."
-        }
-      ]
-    },
     {
       "key": "the_revelation",
       "label": "The Revelation",

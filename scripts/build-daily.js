@@ -436,6 +436,7 @@ async function writeArchiveJson(visible) {
     .map(e => ({
       date: e.date,
       title: e.title || '',
+      subtitle: e.subtitle || '',
       verse_ref: e.verse_ref || '',
       href: `/daily/${fileNameFor(e)}`
     }));
@@ -458,8 +459,8 @@ async function writeLatestDailyJson(visible) {
 
   const declarationSection = findSection(todayEntry, ['declaration']);
   const actionSection = findSection(todayEntry, ['action_step', 'one_minute_win']);
-  const teaser = todayEntry.sections
-    .map(sectionToPlainText)
+  const teaser = [todayEntry.tagline || '', ...todayEntry.sections
+    .map(sectionToPlainText)]
     .join(' ')
     .replace(/\s+/g, ' ')
     .trim()
@@ -468,6 +469,8 @@ async function writeLatestDailyJson(visible) {
   const dailyData = {
     date: todayEntry.date,
     title: todayEntry.title || '',
+    subtitle: todayEntry.subtitle || '',
+    tagline: todayEntry.tagline || '',
     verse_ref: todayEntry.verse_ref || '',
     verse_text: todayEntry.verse_text || '',
     scriptures: todayEntry.scriptures || [],
@@ -497,6 +500,9 @@ async function buildDailyPages(visible) {
 
     const html = fill(tpl, {
       TITLE: e.title || 'Untitled',
+      PAGE_TITLE: escapeHtml([e.title || 'Untitled', e.subtitle].filter(Boolean).join(' — ')),
+      SUBTITLE_HTML: e.subtitle ? `<p class="daily-subtitle" id="dSubtitle">${escapeHtml(e.subtitle)}</p>` : '',
+      TAGLINE_HTML: e.tagline ? `<p class="daily-tagline" id="dTagline">${escapeHtml(e.tagline)}</p>` : '',
       HUMAN_DATE: toHuman(e.date),
       DATE: e.date,
       VERSE_REF: buildPrimaryVerseRefHTML(e),

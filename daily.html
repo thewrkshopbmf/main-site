@@ -23,6 +23,8 @@
     }
 
     .daily-card h2 { color:#3e2c23; margin:.25rem 0 .35rem; }
+    .daily-subtitle { color:#6b4a36; font-size:1.2rem; font-weight:600; margin:0 0 .5rem; }
+    .daily-tagline { color:#3e2c23; font-style:italic; line-height:1.6; margin:.25rem 0 .75rem; }
 
     .verse-block {
       margin:.75rem 0;
@@ -112,6 +114,8 @@
       </div>
 
       <h2 id="dTitle">First Things First</h2>
+      <p class="daily-subtitle" id="dSubtitle" hidden></p>
+      <p class="daily-tagline" id="dTagline" hidden></p>
 
       <div class="verse-block" id="dVerseBlock">
         <div><strong id="dRef">Matthew 6:33</strong></div>
@@ -390,6 +394,14 @@
         }
 
         if (d.title) document.getElementById('dTitle').textContent = d.title;
+        if (d.subtitle) {
+          const sub = document.getElementById('dSubtitle');
+          sub.textContent = d.subtitle; sub.hidden = false;
+        }
+        if (d.tagline) {
+          const tag = document.getElementById('dTagline');
+          tag.textContent = d.tagline; tag.hidden = false;
+        }
 
         const verseBlock = document.getElementById('dVerseBlock');
         const verseParts = d.scriptures.length ? d.scriptures : [{ ref: d.verse_ref, text: d.verse_text }];

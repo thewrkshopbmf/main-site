@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const el = {
     title:   ctx.querySelector('.df-title'),
+    subtitle: ctx.querySelector('.df-subtitle'),
     teaser:  ctx.querySelector('.df-teaser'),
     date:    ctx.querySelector('.df-date'),
     ref:     ctx.querySelector('.verse-ref'),
@@ -139,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const d = await r.json();
 
     if (el.title && d.title) el.title.textContent = d.title;
+    if (el.subtitle && d.subtitle) { el.subtitle.textContent = d.subtitle; el.subtitle.hidden = false; }
     if (el.teaser) {
       const teaser = d.insight_teaser || (Array.isArray(d.insight) ? d.insight[0] : (d.insight || ''));
       el.teaser.textContent = (teaser || '').trim();
