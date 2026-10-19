@@ -508,7 +508,12 @@ async function buildDailyPages(visible) {
       NEXT_HREF: next ? `./${fileNameFor(next)}` : '#'
     });
 
-    await fs.writeFile(path.join(DAILY_DIR, fileNameFor(e)), html, 'utf-8');
+    // Drop the Action Step / Declaration boxes when this daily doesn't have them
+    const cleaned = html
+      .replace(/\s*<section class="daily-section">\s*<h3>Action Step<\/h3>\s*<div class="action-step" id="dActionStep">\s*<\/div>\s*<\/section>/, '')
+      .replace(/\s*<section class="daily-section">\s*<h3>Declaration<\/h3>\s*<p class="declaration-text" id="dDeclaration">\s*<\/p>\s*<\/section>/, '');
+
+    await fs.writeFile(path.join(DAILY_DIR, fileNameFor(e)), cleaned, 'utf-8');
   }
 }
 
