@@ -309,6 +309,9 @@ document.addEventListener("DOMContentLoaded", function () {
 // Prefer the most natural British voice the device offers, then Australian.
 // Edge: Microsoft "Natural" voices; Chrome: Google UK English; Apple: Daniel/Lee.
 let ttsSession = 0;
+let ttsActive = false;
+const MALE_VOICE_RE = /\b(male|ryan|thomas|william|daniel|arthur|lee|gordon|oliver|george|alfie|elliot|ethan|noah|harry|james|malcolm|jack|darren|duncan|neil|ken|tim|rishi)\b/i;
+const FEMALE_VOICE_RE = /\b(female|libby|sonia|maisie|mia|bella|hollie|abbie|natasha|annette|carly|elsie|freya|joanne|kim|tina|karen|kate|serena|martha|catherine|moira|tessa|samantha|aria|jenny|zira|hazel|susan|fiona)\b/i;
 
 function scoreVoice(v) {
   const name = v.name || '';
@@ -320,7 +323,8 @@ function scoreVoice(v) {
   else return -1;
   if (/natural|neural|online|premium|enhanced/i.test(name)) score += 30;
   if (/google/i.test(name)) score += 15;
-  if (/\b(ryan|thomas|william|daniel|arthur|lee|gordon|oliver|george|male)\b/i.test(name)) score += 10;
+  if (MALE_VOICE_RE.test(name)) score += 40;
+  if (FEMALE_VOICE_RE.test(name)) score -= 20;
   if (/compact|espeak|novelty|whisper|zarvox|bad news|bells|trinoids|fred|albert|jester|organ|bubbles|cellos|boing|hysterical|superstar|wobble|grandpa|grandma|eddy|flo|reed|rocko|sandy|shelley/i.test(name)) score -= 60;
   return score;
 }
@@ -370,32 +374,52 @@ async function speakText(element, onDone) {
 
   // Stop anything already speaking first
   window.speechSynthesis.cancel();
+  ttsActive = false;
   const session = ++ttsSession;
 
   await voicesReady();
   if (session !== ttsSession) return;
 
-  const voice = pickVoice();
+  const chosen = pickVoice();
+  const voiceName = chosen ? chosen.name : null;
   const chunks = chunkText(text);
+  let idx = 0;
+  ttsActive = true;
 
-  chunks.forEach((chunk, i) => {
-    const utter = new SpeechSynthesisUtterance(chunk);
+  // Re-find the same voice by name before every sentence: browsers can reload
+  // their voice list mid-read, which otherwise drops back to the default voice.
+  const currentVoice = () => {
+    const voices = window.speechSynthesis.getVoices() || [];
+    return (voiceName && voices.find(v => v.name === voiceName)) || pickVoice();
+  };
+
+  const end = () => {
+    if (session !== ttsSession) return;
+    ttsActive = false;
+    finish();
+  };
+
+  const speakNext = () => {
+    if (session !== ttsSession) return;
+    if (idx >= chunks.length) return end();
+    const utter = new SpeechSynthesisUtterance(chunks[idx++]);
+    const voice = currentVoice();
     if (voice) { utter.voice = voice; utter.lang = voice.lang; }
     else { utter.lang = 'en-GB'; }
     utter.rate = 0.95;
     utter.pitch = 1.0;
     utter.volume = 1.0;
-    if (i === chunks.length - 1) {
-      utter.onend = () => { if (session === ttsSession) finish(); };
-    }
+    window.__ttsUtterance = utter; // keep a reference so Chrome doesn't drop it mid-read
+    utter.onend = speakNext;
     utter.onerror = (e) => {
       if (session !== ttsSession) return;
       if (e && (e.error === 'interrupted' || e.error === 'canceled')) return;
-      window.speechSynthesis.cancel();
-      finish();
+      speakNext();
     };
     window.speechSynthesis.speak(utter);
-  });
+  };
+
+  speakNext();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -427,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (listenDailyBtn) {
     listenDailyBtn.addEventListener('click', () => {
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+      if ((window.speechSynthesis.speaking || ttsActive) && !window.speechSynthesis.paused && !isPaused) {
         window.speechSynthesis.pause();
         isPaused = true;
         listenDailyBtn.textContent = "⏸️ Paused — Click to Resume";
@@ -447,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (listenHomeBtn) {
     listenHomeBtn.addEventListener('click', () => {
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+      if ((window.speechSynthesis.speaking || ttsActive) && !window.speechSynthesis.paused && !isPaused) {
         window.speechSynthesis.pause();
         isPaused = true;
         listenHomeBtn.textContent = "⏸️ Paused — Click to Resume";
