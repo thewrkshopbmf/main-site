@@ -383,6 +383,8 @@ async function speakText(element, onDone) {
   if (session !== ttsSession) return;
 
   const chosen = pickVoice();
+  window.__ttsVoiceName = chosen ? `${chosen.name} (${chosen.lang})` : 'device default';
+  console.log('TTS voice:', window.__ttsVoiceName);
   const voiceName = chosen ? chosen.name : null;
   const chunks = chunkText(text);
   let idx = 0;
@@ -409,7 +411,7 @@ async function speakText(element, onDone) {
     if (voice) { utter.voice = voice; utter.lang = voice.lang; }
     else { utter.lang = 'en-GB'; }
     utter.rate = 0.95;
-    utter.pitch = 1.0;
+    utter.pitch = 0.82; // deeper voice
     utter.volume = 1.0;
     window.__ttsUtterance = utter; // keep a reference so Chrome doesn't drop it mid-read
     utter.onend = speakNext;
@@ -445,6 +447,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     button.textContent = listeningLabel;
+
+    // On the staging preview only, show which voice was chosen (helps testing on phones)
+    if (location.hostname.startsWith('staging--')) {
+      setTimeout(() => {
+        if (window.__ttsVoiceName) button.textContent = `${listeningLabel} — ${window.__ttsVoiceName}`;
+      }, 1800);
+    }
 
     speakText(content, () => {
       resetTTSButtons();
