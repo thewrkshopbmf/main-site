@@ -58,6 +58,12 @@ Example sections:
   - RSS feed for podcasts (parsed from Spotify/Podcasters)  
 
 ---
+
+## 👀 Previewing Changes
+
+Make changes on a separate branch and open a pull request into `main`. Netlify builds every pull request as a **deploy preview** with the same settings as the live site, and posts the preview link on the pull request. Review the preview, then merge to publish the change to thewrkshop.com.
+
+---
 ---
 
 ## 📥 Adding Content
