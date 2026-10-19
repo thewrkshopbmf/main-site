@@ -341,6 +341,12 @@ function pickVoice() {
   return best;
 }
 
+// Load the voice list as soon as the page opens, so it's ready by the first tap
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener?.('voiceschanged', () => window.speechSynthesis.getVoices());
+}
+
 function voicesReady() {
   return new Promise(resolve => {
     if (window.speechSynthesis.getVoices().length) return resolve();
@@ -379,8 +385,15 @@ async function speakText(element, onDone) {
   ttsActive = false;
   const session = ++ttsSession;
 
-  await voicesReady();
-  if (session !== ttsSession) return;
+  // Start speech right inside the tap: iPhones block speech that starts later.
+  // If voices aren't loaded yet, "unlock" speech with a silent utterance, then wait.
+  if (!window.speechSynthesis.getVoices().length) {
+    const unlock = new SpeechSynthesisUtterance(' ');
+    unlock.volume = 0;
+    window.speechSynthesis.speak(unlock);
+    await voicesReady();
+    if (session !== ttsSession) return;
+  }
 
   const chosen = pickVoice();
   window.__ttsVoiceName = chosen ? `${chosen.name} (${chosen.lang})` : 'device default';
