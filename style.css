@@ -837,6 +837,7 @@ body.products-theme .listen-btn:hover {
 }
 .daily-signup button:hover:not(:disabled) { background: #e6cdb9; }
 .daily-signup button:disabled { opacity: .6; cursor: default; }
-.daily-signup .kit-signup-msg { margin: .75rem 0 0; font-weight: 600; min-height: 1.2em; }
-.daily-signup .kit-signup-msg.is-error { color: #ffcfbf; }
+.daily-signup .daily-signup-msg { margin: .75rem 0 0; font-weight: 600; min-height: 1.2em; }
+.daily-signup .daily-signup-msg.is-error { color: #ffcfbf; }
+.daily-signup .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 @media (max-width: 480px) { .daily-signup button { flex: 1 1 100%; } }

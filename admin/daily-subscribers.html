@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Daily Email List</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico?v=2">
+  <meta name="robots" content="noindex"/>
+  <style>
+    .ds-page { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+    .ds-card { background: #f4f1ee; border-radius: 14px; padding: 1.25rem; box-shadow: 0 2px 6px rgba(0,0,0,.07); margin-bottom: 1.25rem; }
+    .ds-eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; font-weight: 700; color: #6b4a36; }
+    .ds-page h1 { color: #3e2c23; margin: .2rem 0 .4rem; }
+    .ds-page h2 { color: #3e2c23; margin: 0 0 .75rem; font-size: 1.2rem; }
+    .ds-muted { color: #6b5a50; margin: 0; }
+    .ds-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; }
+    .ds-stat { background: #fff; border-radius: 10px; padding: .9rem 1rem; }
+    .ds-stat b { display: block; font-size: 1.8rem; color: #3e2c23; line-height: 1.1; }
+    .ds-stat span { font-size: .85rem; color: #6b5a50; }
+    .ds-tools { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: .75rem; }
+    .ds-tools input { flex: 1 1 220px; min-height: 40px; padding: .5rem .75rem; border: 1px solid #cbb8aa; border-radius: 6px; font-size: .95rem; }
+    .ds-chip, .ds-btn { min-height: 40px; padding: .45rem .85rem; border-radius: 6px; border: 1px solid #3e2c23; background: #fff; color: #3e2c23; font-weight: 600; cursor: pointer; text-decoration: none; font-size: .9rem; }
+    .ds-chip.is-active, .ds-btn.primary { background: #3e2c23; color: #f4f1ee; }
+    .ds-table-wrap { overflow-x: auto; background: #fff; border-radius: 10px; }
+    table.ds-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    .ds-table th, .ds-table td { text-align: left; padding: .6rem .75rem; border-bottom: 1px solid #eee3da; white-space: nowrap; }
+    .ds-table th { background: #3e2c23; color: #f4f1ee; font-weight: 600; }
+    .ds-badge { display: inline-block; padding: .15rem .55rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .ds-badge.active { background: #dcefdc; color: #1f5a1f; }
+    .ds-badge.pending { background: #fbeccd; color: #7a5300; }
+    .ds-badge.unsubscribed { background: #eee; color: #666; }
+    .ds-empty { padding: 1.25rem; text-align: center; color: #6b5a50; }
+    #dsProtected { display: none; }
+    #dsProtected.is-visible { display: block; }
+    .ds-gate.is-denied { border-left: 4px solid #a33; }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="ds-page">
+    <div class="ds-card">
+      <span class="ds-eyebrow">TheWrkShop Admin</span>
+      <h1>Daily Email List</h1>
+      <p class="ds-muted">Men who signed up to receive The Daily by email. New signups are “pending” until they tap the confirm link in their inbox.</p>
+    </div>
+
+    <div class="ds-card ds-gate" id="dsGate">
+      <h2 id="dsGateTitle">Verifying access...</h2>
+      <p class="ds-muted" id="dsGateText">Checking your session and admin role.</p>
+      <div class="ds-tools" id="dsGateActions" style="display:none;margin-top:.75rem;">
+        <a class="ds-btn primary" href="../login.html">Go to Login</a>
+        <a class="ds-btn" href="admin.html">Back to Admin</a>
+      </div>
+    </div>
+
+    <div id="dsProtected">
+      <div class="ds-card">
+        <div class="ds-stats">
+          <div class="ds-stat"><b id="statActive">–</b><span>Active (receiving emails)</span></div>
+          <div class="ds-stat"><b id="statPending">–</b><span>Waiting to confirm</span></div>
+          <div class="ds-stat"><b id="statUnsub">–</b><span>Unsubscribed</span></div>
+          <div class="ds-stat"><b id="statLast">–</b><span id="statLastLabel">Last Daily emailed</span></div>
+        </div>
+        <p class="ds-muted" style="margin-top:.75rem;font-size:.85rem;">Resend’s free plan sends up to 100 emails a day. Once active subscribers approach 100, upgrade Resend to Pro ($20/month).</p>
+      </div>
+
+      <div class="ds-card">
+        <div class="ds-tools">
+          <input type="search" id="dsSearch" placeholder="Search name or email…" autocomplete="off"/>
+          <button class="ds-chip is-active" data-filter="all" type="button">All</button>
+          <button class="ds-chip" data-filter="active" type="button">Active</button>
+          <button class="ds-chip" data-filter="pending" type="button">Pending</button>
+          <button class="ds-chip" data-filter="unsubscribed" type="button">Unsubscribed</button>
+          <button class="ds-btn" id="dsExport" type="button">Download CSV</button>
+          <button class="ds-btn" id="dsRefresh" type="button">Refresh</button>
+          <a class="ds-btn" href="admin.html">Back to Admin</a>
+        </div>
+        <div class="ds-table-wrap">
+          <table class="ds-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Signed up</th><th>Confirmed</th><th>Last Daily sent</th></tr></thead>
+            <tbody id="dsRows"><tr><td colspan="6" class="ds-empty">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../script.js"></script>
+  <script type="module">
+    import { supabase } from '../scripts/supabase/supabaseClient.js';
+
+    const $ = (id) => document.getElementById(id);
+    let rows = [];
+    let filter = 'all';
+
+    const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    const fmt = (ts) => ts ? new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+    const fmtDate = (d) => d ? new Date(d + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+
+    function denied(title, text) {
+      $('dsGate').classList.add('is-denied');
+      $('dsGateTitle').textContent = title;
+      $('dsGateText').textContent = text;
+      $('dsGateActions').style.display = 'flex';
+    }
+
+    function visibleRows() {
+      const q = $('dsSearch').value.trim().toLowerCase();
+      return rows.filter(r =>
+        (filter === 'all' || r.status === filter) &&
+        (!q || (r.email || '').includes(q) || (r.first_name || '').toLowerCase().includes(q)));
+    }
+
+    function render() {
+      const list = visibleRows();
+      $('dsRows').innerHTML = list.length ? list.map(r => `
+        <tr>
+          <td>${esc(r.first_name || '—')}</td>
+          <td>${esc(r.email)}</td>
+          <td><span class="ds-badge ${esc(r.status)}">${esc(r.status)}</span></td>
+          <td>${fmt(r.created_at)}</td>
+          <td>${fmt(r.confirmed_at)}</td>
+          <td>${fmtDate(r.last_sent_date)}</td>
+        </tr>`).join('') : `<tr><td colspan="6" class="ds-empty">${rows.length ? 'No one matches that search.' : 'No signups yet.'}</td></tr>`;
+    }
+
+    async function load() {
+      $('dsRows').innerHTML = '<tr><td colspan="6" class="ds-empty">Loading…</td></tr>';
+      const [{ data, error }, { data: sends }] = await Promise.all([
+        supabase.from('daily_subscribers')
+          .select('first_name, email, status, created_at, confirmed_at, unsubscribed_at, last_sent_date')
+          .order('created_at', { ascending: false }).limit(5000),
+        supabase.from('daily_email_sends').select('send_date, daily_title, recipients').order('send_date', { ascending: false }).limit(1)
+      ]);
+      if (error) {
+        $('dsRows').innerHTML = `<tr><td colspan="6" class="ds-empty">Could not load the list: ${esc(error.message)}</td></tr>`;
+        return;
+      }
+      rows = data || [];
+      $('statActive').textContent = rows.filter(r => r.status === 'active').length;
+      $('statPending').textContent = rows.filter(r => r.status === 'pending').length;
+      $('statUnsub').textContent = rows.filter(r => r.status === 'unsubscribed').length;
+      const last = sends && sends[0];
+      $('statLast').textContent = last ? fmtDate(last.send_date) : '—';
+      $('statLastLabel').textContent = last ? `Last Daily emailed (${last.recipients} men)` : 'Last Daily emailed';
+      render();
+    }
+
+    function exportCsv() {
+      const list = visibleRows();
+      const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+      const lines = [['First name','Email','Status','Signed up','Confirmed','Unsubscribed','Last Daily sent'].map(cell).join(',')]
+        .concat(list.map(r => [r.first_name, r.email, r.status, r.created_at, r.confirmed_at, r.unsubscribed_at, r.last_sent_date].map(cell).join(',')));
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `daily-email-list-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }
+
+    document.querySelectorAll('.ds-chip').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.ds-chip').forEach(b => b.classList.toggle('is-active', b === btn));
+      filter = btn.dataset.filter;
+      render();
+    }));
+    $('dsSearch').addEventListener('input', render);
+    $('dsRefresh').addEventListener('click', load);
+    $('dsExport').addEventListener('click', exportCsv);
+
+    (async () => {
+      try {
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+        const user = userData?.user;
+        if (!user) { window.location.href = '../login.html'; return; }
+        const { data: profile, error: profileError } = await supabase.from('profiles').select('role, email').eq('id', user.id).single();
+        if (profileError) throw profileError;
+        if (!profile || profile.role !== 'admin') {
+          denied('Access denied', 'Your account is signed in, but it does not have admin access for this page.');
+          return;
+        }
+        $('dsGate').style.display = 'none';
+        $('dsProtected').classList.add('is-visible');
+        load();
+      } catch (err) {
+        denied('Could not verify access', err.message || 'There was a problem checking your admin session.');
+      }
+    })();
+  </script>
+</body>
+</html>

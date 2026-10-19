@@ -90,29 +90,37 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Daily email signup (Kit) — any form with class "kit-signup"
-  document.querySelectorAll('form.kit-signup').forEach(f => {
-    const msg = f.parentElement.querySelector('.kit-signup-msg');
+  // Daily email signup — saves to TheWrkShop's own list (see netlify/functions/daily-subscribe.mjs)
+  document.querySelectorAll('form.daily-signup-form').forEach(f => {
+    const msg = f.parentElement.querySelector('.daily-signup-msg');
     const say = (text, ok) => { if (msg) { msg.textContent = text; msg.classList.toggle('is-error', !ok); } };
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = (f.email.value || '').trim();
-      const firstName = (f.first_name ? f.first_name.value : '').trim();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('Please enter a valid email address.', false); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('Please enter a valid email address.', false); return; }
       const btn = f.querySelector('button');
       btn.disabled = true;
+      say('Signing you up…', true);
       try {
-        const res = await fetch(`https://api.convertkit.com/v3/forms/${f.dataset.kitForm}/subscribe`, {
+        const res = await fetch('/email/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ api_key: 'qwXtdRjQfoLppDUjjcd_8Q', email, first_name: firstName || undefined })
+          body: JSON.stringify({
+            email,
+            first_name: (f.first_name ? f.first_name.value : '').trim(),
+            company: f.company ? f.company.value : '',
+            source: location.pathname.startsWith('/daily/') ? 'daily-page' : 'daily-today'
+          })
         });
-        if (!res.ok) throw new Error('Kit ' + res.status);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
         f.reset();
-        say("You're in. Check your inbox to confirm, then the Daily will come to you.", true);
+        say(data.status === 'active'
+          ? (data.message || "You're already on the list.")
+          : "Almost done. Check your inbox and tap the confirm button, and the Daily will come to you.", true);
       } catch (err) {
         console.error(err);
-        say('Something went wrong. Please try again.', false);
+        say(err.message || 'Something went wrong. Please try again.', false);
       } finally {
         btn.disabled = false;
       }
