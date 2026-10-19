@@ -34,7 +34,7 @@ function blockHtml(block) {
     case 'quote':
       return `<blockquote style="margin:0 0 12px;padding:8px 14px;border-left:4px solid ${BROWN};background:${CREAM};font-style:italic;color:${BROWN};">${escapeHtml(block.text)}</blockquote>`;
     case 'lines':
-      return items.map(i => `<p style="${p}">${escapeHtml(i)}</p>`).join('');
+      return `<p style="${p}line-height:1.75;">${items.map(i => escapeHtml(i)).join('<br>')}</p>`;
     case 'bullet_list':
     case 'numbered_list': {
       const tag = block.type === 'bullet_list' ? 'ul' : 'ol';

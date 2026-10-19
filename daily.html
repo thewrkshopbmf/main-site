@@ -49,6 +49,7 @@
       font-weight:600;
       color:#3e2c23;
     }
+    .daily-section p.daily-lines { line-height:1.75; }
 
     .action-step {
       background:#fff;
@@ -351,7 +352,7 @@
         return `<p class="daily-callout"><span>${prefix}</span> ${escapeHtml(block.text)}</p>`;
       }
       if (block.type === 'quote') return `<blockquote>${escapeHtml(block.text)}</blockquote>`;
-      if (block.type === 'lines') return block.items.map(item => `<p>${escapeHtml(item)}</p>`).join('');
+      if (block.type === 'lines') return `<p class="daily-lines">${block.items.map(item => escapeHtml(item)).join('<br>')}</p>`;
       if (block.type === 'bullet_list') return `<ul>${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
       if (block.type === 'numbered_list') return `<ol>${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ol>`;
 

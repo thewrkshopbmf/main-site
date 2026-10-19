@@ -286,7 +286,8 @@ function renderBlock(block) {
   }
 
   if (block.type === 'lines') {
-    return block.items.map(item => `<p>${escapeHtml(item)}</p>`).join('\n');
+    // Lines that belong together stay together (one short group, line breaks inside)
+    return `<p class="daily-lines">${block.items.map(item => escapeHtml(item)).join('<br>')}</p>`;
   }
 
   if (block.type === 'bullet_list') {
