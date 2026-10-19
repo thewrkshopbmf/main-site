@@ -58,6 +58,20 @@ Example sections:
   - RSS feed for podcasts (parsed from Spotify/Podcasters)  
 
 ---
+
+## 👀 Previewing Changes (Staging)
+
+All changes go to the `staging` branch first. Netlify builds that branch at one fixed preview address:
+
+**https://staging--curious-profiterole-fae7e1.netlify.app**
+
+1. Commit changes to `staging` (or merge work branches into `staging`).
+2. Review them at the staging address. Every update to `staging` rebuilds the same link.
+3. When approved, merge `staging` into `main`. That publishes the change to thewrkshop.com.
+
+Netlify deploy previews for pull requests are turned off, so the staging address is the only preview link.
+
+---
 ---
 
 ## 📥 Adding Content
