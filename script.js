@@ -310,8 +310,6 @@ document.addEventListener("DOMContentLoaded", function () {
 // --------- Text-to-Speech (Daily "Listen") ----------
 // Prefer the most natural British voice the device offers, then Australian.
 // Edge: Microsoft "Natural" voices; Chrome: Google UK English; Apple: Daniel/Lee.
-let ttsSession = 0;
-let ttsActive = false;
 const MALE_VOICE_RE = /\b(male|ryan|thomas|william|daniel|arthur|lee|gordon|oliver|george|alfie|elliot|ethan|noah|harry|james|malcolm|jack|darren|duncan|neil|ken|tim|rishi)\b/i;
 const FEMALE_VOICE_RE = /\b(female|libby|sonia|maisie|mia|bella|hollie|abbie|natasha|annette|carly|elsie|freya|joanne|kim|tina|karen|kate|serena|martha|catherine|moira|tessa|samantha|aria|jenny|zira|hazel|susan|fiona)\b/i;
 
@@ -357,7 +355,7 @@ function voicesReady() {
 }
 
 // Break text into sentence-sized chunks (long single utterances cut off in Chrome).
-function chunkText(text, max = 220) {
+function chunkText(text, max = 160) {
   const sentences = text.replace(/\s+/g, ' ').match(/[^.!?]+[.!?]+["”’)]*\s*|[^.!?]+$/g) || [text];
   const chunks = [];
   let cur = '';
@@ -369,153 +367,173 @@ function chunkText(text, max = 220) {
   return chunks;
 }
 
-async function speakText(element, onDone) {
-  if (!('speechSynthesis' in window)) {
-    alert('Your browser does not support Text-to-Speech.');
-    return;
+// ---- Listen player: one shared player with Start / Pause / Rewind / Forward ----
+const tts = {
+  chunks: [], idx: 0, playing: false, session: 0,
+  voiceName: null, targetSelector: null, button: null, idleLabel: '🔊 Listen',
+  bars: []
+};
+
+// Read only the devotional text (skip buttons, badges, the control bar, nav links).
+function ttsTextFrom(el) {
+  const skip = el.querySelectorAll('.tts-controls, button, .badge, .nav-archive, .df-actions, time');
+  const prev = [];
+  skip.forEach(n => { prev.push(n.style.display); n.style.display = 'none'; });
+  const raw = el.innerText || '';
+  skip.forEach((n, i) => { n.style.display = prev[i]; });
+  // Give headings and short lines a full stop so the voice pauses between them.
+  return raw.split(/\n+/).map(l => l.trim()).filter(Boolean)
+    .map(l => /[.!?:;"”’)]$/.test(l) ? l : l + '.').join(' ');
+}
+
+function ttsCurrentVoice() {
+  const voices = window.speechSynthesis.getVoices() || [];
+  return (tts.voiceName && voices.find(v => v.name === tts.voiceName)) || pickVoice();
+}
+
+function ttsUpdateUI() {
+  const total = tts.chunks.length;
+  const pos = total ? Math.min(tts.idx + 1, total) : 0;
+  if (tts.button) {
+    tts.button.textContent = tts.playing ? '🔊 Listening…'
+      : (total && tts.idx > 0 && tts.idx < total ? '⏸️ Paused — tap to resume' : tts.idleLabel);
   }
+  const staging = location.hostname.startsWith('staging--');
+  tts.bars.forEach(bar => {
+    bar.querySelector('[data-tts="start"]').disabled = tts.playing;
+    bar.querySelector('[data-tts="pause"]').disabled = !tts.playing;
+    bar.querySelector('[data-tts="back"]').disabled = !total || tts.idx === 0;
+    bar.querySelector('[data-tts="fwd"]').disabled = !total || tts.idx >= total - 1;
+    const status = bar.querySelector('.tts-status');
+    status.textContent = total ? `${pos} / ${total}` : '';
+    if (staging && tts.voiceName) status.textContent += ` · ${tts.voiceName}`;
+  });
+}
 
-  const finish = () => { if (typeof onDone === 'function') onDone(); };
+function ttsSpeakCurrent(session) {
+  if (session !== tts.session) return;
+  if (tts.idx >= tts.chunks.length) {           // finished
+    tts.playing = false; tts.idx = 0; ttsUpdateUI(); return;
+  }
+  const utter = new SpeechSynthesisUtterance(tts.chunks[tts.idx]);
+  const voice = ttsCurrentVoice();
+  if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = 'en-GB'; }
+  utter.rate = 0.95;
+  utter.pitch = 0.82; // deeper voice
+  utter.volume = 1.0;
+  window.__ttsUtterance = utter; // keep a reference so Chrome doesn't drop it mid-read
+  utter.onend = () => {
+    if (session !== tts.session) return;
+    tts.idx++; ttsUpdateUI(); ttsSpeakCurrent(session);
+  };
+  utter.onerror = (e) => {
+    if (session !== tts.session) return;
+    if (e && (e.error === 'interrupted' || e.error === 'canceled')) return;
+    tts.idx++; ttsUpdateUI(); ttsSpeakCurrent(session);
+  };
+  window.speechSynthesis.speak(utter);
+}
 
-  const text = element ? (element.innerText || '').trim() : '';
-  if (!text) return finish();
-
-  // Stop anything already speaking first
+function ttsPlayFrom(i) {
   window.speechSynthesis.cancel();
-  ttsActive = false;
-  const session = ++ttsSession;
+  const session = ++tts.session;
+  tts.idx = Math.max(0, Math.min(i, tts.chunks.length - 1));
+  tts.playing = true;
+  ttsUpdateUI();
+  ttsSpeakCurrent(session);
+}
 
+function ttsLoad(targetSelector) {
+  const el = document.querySelector(targetSelector);
+  if (!el) return false;
+  if (tts.targetSelector !== targetSelector || !tts.chunks.length) {
+    tts.chunks = chunkText(ttsTextFrom(el));
+    tts.idx = 0;
+    tts.targetSelector = targetSelector;
+  }
+  return tts.chunks.length > 0;
+}
+
+async function ttsStart() {
+  if (!('speechSynthesis' in window)) { alert('Your browser does not support Text-to-Speech.'); return; }
+  if (!ttsLoad(tts.targetSelector)) return;
   // Start speech right inside the tap: iPhones block speech that starts later.
-  // If voices aren't loaded yet, "unlock" speech with a silent utterance, then wait.
   if (!window.speechSynthesis.getVoices().length) {
     const unlock = new SpeechSynthesisUtterance(' ');
     unlock.volume = 0;
     window.speechSynthesis.speak(unlock);
+    const session = ++tts.session;
     await voicesReady();
-    if (session !== ttsSession) return;
+    if (session !== tts.session) return;
   }
+  if (!tts.voiceName) {
+    const v = pickVoice();
+    tts.voiceName = v ? v.name : null;
+    console.log('TTS voice:', v ? `${v.name} (${v.lang})` : 'device default');
+  }
+  ttsPlayFrom(tts.idx);
+}
 
-  const chosen = pickVoice();
-  window.__ttsVoiceName = chosen ? `${chosen.name} (${chosen.lang})` : 'device default';
-  console.log('TTS voice:', window.__ttsVoiceName);
-  const voiceName = chosen ? chosen.name : null;
-  const chunks = chunkText(text);
-  let idx = 0;
-  ttsActive = true;
+function ttsPause() {
+  tts.playing = false;
+  tts.session++;                 // stop the read loop; resume restarts the current sentence
+  window.speechSynthesis.cancel();
+  ttsUpdateUI();
+}
 
-  // Re-find the same voice by name before every sentence: browsers can reload
-  // their voice list mid-read, which otherwise drops back to the default voice.
-  const currentVoice = () => {
-    const voices = window.speechSynthesis.getVoices() || [];
-    return (voiceName && voices.find(v => v.name === voiceName)) || pickVoice();
-  };
+function ttsStep(delta) {
+  if (!tts.chunks.length) return;
+  const target = Math.max(0, Math.min(tts.idx + delta, tts.chunks.length - 1));
+  if (tts.playing) ttsPlayFrom(target);
+  else { tts.idx = target; ttsUpdateUI(); }
+}
 
-  const end = () => {
-    if (session !== ttsSession) return;
-    ttsActive = false;
-    finish();
-  };
-
-  const speakNext = () => {
-    if (session !== ttsSession) return;
-    if (idx >= chunks.length) return end();
-    const utter = new SpeechSynthesisUtterance(chunks[idx++]);
-    const voice = currentVoice();
-    if (voice) { utter.voice = voice; utter.lang = voice.lang; }
-    else { utter.lang = 'en-GB'; }
-    utter.rate = 0.95;
-    utter.pitch = 0.82; // deeper voice
-    utter.volume = 1.0;
-    window.__ttsUtterance = utter; // keep a reference so Chrome doesn't drop it mid-read
-    utter.onend = speakNext;
-    utter.onerror = (e) => {
-      if (session !== ttsSession) return;
-      if (e && (e.error === 'interrupted' || e.error === 'canceled')) return;
-      speakNext();
-    };
-    window.speechSynthesis.speak(utter);
-  };
-
-  speakNext();
+function ttsBuildBar(anchor) {
+  const bar = document.createElement('div');
+  bar.className = 'tts-controls';
+  bar.setAttribute('role', 'group');
+  bar.setAttribute('aria-label', 'Audio controls');
+  bar.innerHTML = `
+    <button type="button" class="tts-btn" data-tts="back" aria-label="Rewind one sentence">⏪ Rewind</button>
+    <button type="button" class="tts-btn" data-tts="start" aria-label="Start">▶ Start</button>
+    <button type="button" class="tts-btn" data-tts="pause" aria-label="Pause">⏸ Pause</button>
+    <button type="button" class="tts-btn" data-tts="fwd" aria-label="Fast forward one sentence">⏩ Forward</button>
+    <span class="tts-status" aria-live="polite"></span>`;
+  anchor.insertAdjacentElement('afterend', bar);
+  bar.querySelector('[data-tts="start"]').addEventListener('click', ttsStart);
+  bar.querySelector('[data-tts="pause"]').addEventListener('click', ttsPause);
+  bar.querySelector('[data-tts="back"]').addEventListener('click', () => ttsStep(-1));
+  bar.querySelector('[data-tts="fwd"]').addEventListener('click', () => ttsStep(1));
+  tts.bars.push(bar);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  let isPaused = false;
+  const setups = [
+    { id: 'listenDailyBtn', target: '.daily-article, .daily-feature', idle: '🔊 Listen' },
+    { id: 'listenHomeBtn',  target: '.daily-feature', idle: '🔊 Listen to Today’s Devotional' }
+  ];
 
-  const listenDailyBtn = document.getElementById('listenDailyBtn');
-  const listenHomeBtn = document.getElementById('listenHomeBtn');
-
-  function resetTTSButtons() {
-    if (listenDailyBtn) listenDailyBtn.textContent = "🔊 Listen";
-    if (listenHomeBtn) listenHomeBtn.textContent = "🔊 Listen to Today’s Devotional";
-    isPaused = false;
-  }
-
-  function startReading(targetSelector, button, listeningLabel) {
-    const content = document.querySelector(targetSelector);
-
-    if (!content) {
-      resetTTSButtons();
-      return;
-    }
-
-    button.textContent = listeningLabel;
-
-    // On the staging preview only, show which voice was chosen (helps testing on phones)
-    if (location.hostname.startsWith('staging--')) {
-      setTimeout(() => {
-        if (window.__ttsVoiceName) button.textContent = `${listeningLabel} — ${window.__ttsVoiceName}`;
-      }, 1800);
-    }
-
-    speakText(content, () => {
-      resetTTSButtons();
+  setups.forEach(({ id, target, idle }) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    // Put the control bar just under the row that holds the Listen button
+    ttsBuildBar(btn.parentElement);
+    const choose = () => {
+      if (tts.button !== btn) {        // switching which devotional is being read
+        if (tts.playing) ttsPause();
+        tts.button = btn; tts.idleLabel = idle; tts.targetSelector = target; tts.chunks = []; tts.idx = 0;
+      }
+    };
+    tts.button = tts.button || btn; tts.idleLabel = tts.idleLabel || idle; tts.targetSelector = tts.targetSelector || target;
+    btn.addEventListener('click', () => {
+      choose();
+      if (tts.playing) ttsPause(); else ttsStart();
     });
-  }
+  });
 
-  if (listenDailyBtn) {
-    listenDailyBtn.addEventListener('click', () => {
-      if ((window.speechSynthesis.speaking || ttsActive) && !window.speechSynthesis.paused && !isPaused) {
-        window.speechSynthesis.pause();
-        isPaused = true;
-        listenDailyBtn.textContent = "⏸️ Paused — Click to Resume";
-        return;
-      }
-
-      if (isPaused) {
-        window.speechSynthesis.resume();
-        isPaused = false;
-        listenDailyBtn.textContent = "🔊 Listening…";
-        return;
-      }
-
-      startReading('.daily-article, .daily-feature', listenDailyBtn, "🔊 Listening…");
-    });
-  }
-
-  if (listenHomeBtn) {
-    listenHomeBtn.addEventListener('click', () => {
-      if ((window.speechSynthesis.speaking || ttsActive) && !window.speechSynthesis.paused && !isPaused) {
-        window.speechSynthesis.pause();
-        isPaused = true;
-        listenHomeBtn.textContent = "⏸️ Paused — Click to Resume";
-        return;
-      }
-
-      if (isPaused) {
-        window.speechSynthesis.resume();
-        isPaused = false;
-        listenHomeBtn.textContent = "🔊 Listening…";
-        return;
-      }
-
-      startReading('.daily-feature', listenHomeBtn, "🔊 Listening…");
-    });
-  }
+  ttsUpdateUI();
 
   window.addEventListener('beforeunload', () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   });
 });

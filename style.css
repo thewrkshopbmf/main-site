@@ -775,3 +775,31 @@ body.products-theme .listen-btn:hover {
   55%  { left: 120%; }
   100% { left: 120%; }
 }
+
+/* Listen audio controls (Rewind / Start / Pause / Forward) */
+.tts-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin: .6rem 0 .9rem;
+}
+.tts-btn {
+  background: #fff;
+  color: #3e2c23;
+  border: 1px solid #3e2c23;
+  border-radius: 6px;
+  padding: .5rem .85rem;
+  min-height: 40px;
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.tts-btn:hover:not(:disabled) { background: #3e2c23; color: #f4f1ee; }
+.tts-btn:disabled { opacity: .4; cursor: default; }
+.tts-status { font-size: .85rem; color: #6b4a36; margin-left: .25rem; }
+@media (max-width: 480px) {
+  .tts-btn { flex: 1 1 calc(50% - .5rem); }
+  .tts-status { flex-basis: 100%; margin-left: 0; }
+}
