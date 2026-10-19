@@ -414,12 +414,18 @@
           document.getElementById('dActionStep').textContent = sectionPlainText(actionSection);
         } else if (d.one_minute_win || d.action_step || d.step) {
           document.getElementById('dActionStep').textContent = d.one_minute_win || d.action_step || d.step;
+        } else {
+          // No action step in this daily: hide the box instead of showing placeholder text
+          document.getElementById('dActionStep').closest('section').hidden = true;
         }
 
         if (declarationSection) {
           document.getElementById('dDeclaration').textContent = sectionPlainText(declarationSection);
         } else if (d.declaration) {
           document.getElementById('dDeclaration').textContent = d.declaration;
+        } else {
+          // No declaration in this daily: hide the box instead of showing placeholder text
+          document.getElementById('dDeclaration').closest('section').hidden = true;
         }
 
         try {
