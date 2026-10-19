@@ -620,6 +620,28 @@ footer {
   color: inherit; /* keep your logo color */
   font-size: 1.8rem;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+/* Header logo image (transparent background) */
+.navbar .site-logo {
+  display: block;
+  height: 64px;
+  width: auto;
+}
+
+/* Footer logo image */
+.footer-logo img {
+  display: block;
+  height: 80px;
+  width: auto;
+  margin: 0 auto 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .navbar .site-logo { height: 50px; }
+  .footer-logo img { height: 64px; }
 }
 
 
