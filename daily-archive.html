@@ -66,6 +66,7 @@
     .ac-head { display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
     .ac-date { color:#6b5b53; font-size:.9rem; white-space:nowrap; }
     .ac-title { color:#3e2c23; margin:.2rem 0 0; font-size:1.05rem; }
+    .ac-subtitle { color:#6b4a36; margin:.1rem 0 0; font-size:.95rem; font-weight:600; }
     .ac-verse { color:#6b5b53; font-style:italic; font-size:.95rem; }
     .empty { text-align:center; padding:2rem; color:#6b5b53; }
 
@@ -176,6 +177,7 @@
             <time class="ac-date" datetime="${o.date}">${human}</time>
           </div>
           <h3 class="ac-title">${o.title || 'Untitled'}</h3>
+          ${o.subtitle ? `<p class="ac-subtitle">${o.subtitle}</p>` : ''}
           <p class="ac-verse">${o.verse || ''}</p>
         `;
         return a;
@@ -207,6 +209,7 @@
         if (q) {
           filtered = filtered.filter(e =>
             (e.title || '').toLowerCase().includes(q) ||
+            (e.subtitle || '').toLowerCase().includes(q) ||
             (e.verse || '').toLowerCase().includes(q)
           );
         }
@@ -266,6 +269,7 @@
             .map(x => ({
               date: x.date,
               title: x.title || '',
+              subtitle: x.subtitle || '',
               verse: x.verse_ref || '',
               href: (x.href && x.href.startsWith('/')) ? x.href : ('/' + (x.href || '').replace(/^\/+/, ''))
             }))

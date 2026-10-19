@@ -566,6 +566,7 @@ footer {
 }
 .df-date { color:#6b5b53; font-size:.85rem; }
 .df-title { font-size: clamp(1.25rem, 2vw, 1.6rem); color:#3e2c23; margin: 0; }
+.df-subtitle { font-size: 1.05rem; font-weight: 600; color:#6b4a36; margin: .15rem 0 0; }
 .df-teaser { margin: 0; }
 .df-verse {
   display:flex; gap:.6rem; align-items:baseline; flex-wrap:wrap;
