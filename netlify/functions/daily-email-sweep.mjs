@@ -1,5 +1,5 @@
-// Safety net: every hour from midnight to noon (Central), make sure everyone
-// has received today's Daily, in case the after-deploy send was missed or interrupted.
+// Sends today's Daily at 5:30 am Central, then re-checks each hour until noon
+// so anyone missed (or a Daily released later in the morning) still gets it.
 import { sendTodaysDaily } from '../shared/daily-list.js';
 
 export default async () => {
@@ -12,5 +12,6 @@ export default async () => {
   return new Response('ok');
 };
 
-// :10 past each hour, 05:00–18:00 UTC (covers midnight–noon Central in both CST and CDT)
-export const config = { schedule: '10 5-18 * * *' };
+// :30 past each hour, 10:30–18:30 UTC. That's 5:30 am–1:30 pm in summer (CDT) and
+// 4:30 am–12:30 pm in winter (CST); the sender itself skips anything before 5:30 or after noon.
+export const config = { schedule: '30 10-18 * * *' };

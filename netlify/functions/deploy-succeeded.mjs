@@ -1,5 +1,6 @@
 // Netlify runs this automatically after every successful deploy.
-// When a production deploy puts a new Daily live, email it to the list right away.
+// When a production deploy puts a new Daily live, email it to the list, but never
+// before 5:30 am Central (the 12:01 am release waits for the 5:30 scheduled send).
 import { sendTodaysDaily } from '../shared/daily-list.js';
 
 export const handler = async (event) => {

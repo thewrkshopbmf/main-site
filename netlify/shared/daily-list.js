@@ -13,7 +13,8 @@ export const FROM = RAW_FROM.includes('<') ? RAW_FROM : `TheWrkShop <${RAW_FROM}
 export const TABLE = 'daily_subscribers';
 const SENDS_TABLE = 'daily_email_sends';
 const BATCH_SIZE = 100;          // Resend batch API maximum
-const LATE_SEND_HOUR = 12;       // after noon Central, don't send catch-up emails for today
+const SEND_AT_MINUTES = 5 * 60 + 25; // emails go out from 5:30 am Central (5-minute grace for the scheduler)
+const LATE_SEND_HOUR = 12;       // no Daily emails after noon Central
 
 let _db = null;
 export function __setDbForTests(fake) { _db = fake; }
@@ -54,9 +55,9 @@ export function html(body, status = 200) {
 // Today's date and hour in Chicago time.
 export function centralNow(date = new Date()) {
   const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23'
+    timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
   }).formatToParts(date).map(p => [p.type, p.value]));
-  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour) };
+  return { date: `${parts.year}-${parts.month}-${parts.day}`, hour: Number(parts.hour), minute: Number(parts.minute) };
 }
 
 async function resend(path, payload) {
@@ -90,7 +91,14 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
  * Safe to call many times: each subscriber is "claimed" before sending, so nobody gets it twice.
  */
 export async function sendTodaysDaily({ reason = 'manual', now = new Date(), live } = {}) {
-  const { date: today, hour } = centralNow(now);
+  const { date: today, hour, minute } = centralNow(now);
+  // Daily emails only go out between 5:30 am and noon Central.
+  if (hour * 60 + minute < SEND_AT_MINUTES) {
+    return { sent: 0, skipped: `Too early: The Daily emails go out at 5:30 am Central.` };
+  }
+  if (hour >= LATE_SEND_HOUR) {
+    return { sent: 0, skipped: `Too late: no Daily emails after ${LATE_SEND_HOUR}:00 noon Central.` };
+  }
   const daily = live || await fetchLiveDaily();
 
   if (!daily || daily.date !== today) {
@@ -99,9 +107,7 @@ export async function sendTodaysDaily({ reason = 'manual', now = new Date(), liv
 
   const supabase = db();
   const { data: run } = await supabase.from(SENDS_TABLE).select('send_date, recipients').eq('send_date', today).maybeSingle();
-  if (hour >= LATE_SEND_HOUR && ((run && run.recipients > 0) || reason === 'hourly-sweep')) {
-    return { sent: 0, skipped: `Today's Daily already went out; no catch-up sends after ${LATE_SEND_HOUR}:00.` };
-  }
+
 
   const url = daily.href ? `${SITE_URL}${daily.href}` : `${SITE_URL}/daily.html`;
   let sent = 0, failed = 0, firstSentAt = run?.recipients ? null : new Date().toISOString();
