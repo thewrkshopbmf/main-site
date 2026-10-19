@@ -90,6 +90,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Daily email signup (Kit) — any form with class "kit-signup"
+  document.querySelectorAll('form.kit-signup').forEach(f => {
+    const msg = f.parentElement.querySelector('.kit-signup-msg');
+    const say = (text, ok) => { if (msg) { msg.textContent = text; msg.classList.toggle('is-error', !ok); } };
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = (f.email.value || '').trim();
+      const firstName = (f.first_name ? f.first_name.value : '').trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('Please enter a valid email address.', false); return; }
+      const btn = f.querySelector('button');
+      btn.disabled = true;
+      try {
+        const res = await fetch(`https://api.convertkit.com/v3/forms/${f.dataset.kitForm}/subscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ api_key: 'qwXtdRjQfoLppDUjjcd_8Q', email, first_name: firstName || undefined })
+        });
+        if (!res.ok) throw new Error('Kit ' + res.status);
+        f.reset();
+        say("You're in. Check your inbox to confirm, then the Daily will come to you.", true);
+      } catch (err) {
+        console.error(err);
+        say('Something went wrong. Please try again.', false);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+
   // ✅ Inject header on any page that has #site-header (home + blog + others)
   const needsHeader = document.getElementById('site-header');
   if (needsHeader) {

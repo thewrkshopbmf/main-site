@@ -523,6 +523,82 @@ async function buildDailyPages(visible) {
   }
 }
 
+// ---------- Email feed (Kit RSS-to-email reads this) ----------
+const SITE_URL = 'https://thewrkshop.com';
+
+function xmlEscape(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+// Simple inline-styled HTML that reads well inside an email
+function emailBlock(block) {
+  if (!block) return '';
+  const p = 'margin:0 0 12px;line-height:1.6;color:#2b2b2b;';
+  if (block.type === 'paragraph') return `<p style="${p}">${escapeHtml(block.text)}</p>`;
+  if (block.type === 'callout') {
+    const prefix = cleanString(block.prefix || '👉');
+    return `<p style="${p}font-weight:700;color:#3e2c23;">${escapeHtml(prefix)} ${escapeHtml(block.text)}</p>`;
+  }
+  if (block.type === 'quote') {
+    return `<blockquote style="margin:0 0 12px;padding:8px 14px;border-left:4px solid #3e2c23;background:#f4f1ee;font-style:italic;color:#3e2c23;">${escapeHtml(block.text)}</blockquote>`;
+  }
+  if (block.type === 'lines') return block.items.map(i => `<p style="${p}">${escapeHtml(i)}</p>`).join('');
+  if (block.type === 'bullet_list' || block.type === 'numbered_list') {
+    const tag = block.type === 'bullet_list' ? 'ul' : 'ol';
+    return `<${tag} style="margin:0 0 12px;padding-left:22px;line-height:1.6;color:#2b2b2b;">${block.items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</${tag}>`;
+  }
+  return '';
+}
+
+function emailHtmlFor(e, url) {
+  const parts = [];
+  if (e.subtitle) parts.push(`<h2 style="margin:0 0 8px;color:#6b4a36;font-size:20px;">${escapeHtml(e.subtitle)}</h2>`);
+  if (e.tagline) parts.push(`<p style="margin:0 0 16px;line-height:1.6;font-style:italic;color:#3e2c23;">${escapeHtml(e.tagline)}</p>`);
+  const scriptures = (e.scriptures && e.scriptures.length) ? e.scriptures : [{ ref: e.verse_ref, text: e.verse_text }];
+  const verses = scriptures.filter(x => x.ref || x.text).map(x =>
+    `<p style="margin:0 0 8px;line-height:1.6;"><strong>${escapeHtml(x.ref || '')}</strong><br>${escapeHtml(x.text || '')}</p>`).join('');
+  if (verses) parts.push(`<div style="margin:0 0 18px;padding:10px 14px;border-left:4px solid #3e2c23;background:#ffffff;">${verses}</div>`);
+  (e.sections || []).forEach(sec => {
+    parts.push(`<h3 style="margin:20px 0 8px;color:#3e2c23;font-size:18px;">${escapeHtml(sec.label || '')}</h3>`);
+    parts.push((sec.blocks || []).map(emailBlock).join(''));
+  });
+  parts.push(`<p style="margin:24px 0 0;"><a href="${url}" style="display:inline-block;background:#3e2c23;color:#f4f1ee;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:700;">Read &amp; listen on TheWrkShop →</a></p>`);
+  return parts.join('\n');
+}
+
+async function writeDailyFeed(visible) {
+  const items = visible.slice(-20).reverse().map(e => {
+    const url = `${SITE_URL}/daily/${fileNameFor(e)}`;
+    const title = [e.title || 'Daily', e.subtitle].filter(Boolean).join(' — ');
+    const pubDate = new Date(`${e.date}T06:01:00Z`).toUTCString(); // just after midnight Central
+    const html = emailHtmlFor(e, url).replace(/]]>/g, ']]&gt;');
+    return `    <item>
+      <title>${xmlEscape(title)}</title>
+      <link>${url}</link>
+      <guid isPermaLink="true">${url}</guid>
+      <pubDate>${pubDate}</pubDate>
+      <description><![CDATA[${html}]]></description>
+      <content:encoded><![CDATA[${html}]]></content:encoded>
+    </item>`;
+  }).join('\n');
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TheWrkShop — The Daily</title>
+    <link>${SITE_URL}/daily.html</link>
+    <atom:link href="${SITE_URL}/daily/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Daily devotionals for men from TheWrkShop: scripture, reflection, and one clear step to live it out.</description>
+    <language>en-us</language>
+${items}
+  </channel>
+</rss>
+`;
+  await fs.writeFile(path.join(DAILY_DIR, 'feed.xml'), xml, 'utf-8');
+}
+
 async function writeGuardRedirects(older, future) {
   const guardLines = [
     ...older.map(e => `/daily/${fileNameFor(e)}   /daily-archive.html   302!`),
@@ -545,6 +621,7 @@ async function main() {
   await writeArchiveJson(visible);
   await writeLatestDailyJson(visible);
   await buildDailyPages(visible);
+  await writeDailyFeed(visible);
   await writeGuardRedirects(older, future);
 
   console.log(
