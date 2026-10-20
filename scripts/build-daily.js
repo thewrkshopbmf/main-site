@@ -534,7 +534,7 @@ async function buildDailyPages(visible) {
         const sub = cleanString(e.headline) ? cleanString(e.headline_sub) : cleanString(e.subtitle);
         return sub ? `<span class="daily-subtitle" id="dSubtitle">${escapeHtml(sub)}</span>` : '';
       })(),
-      SERIES_NOTE_HTML: cleanString(e.headline) && cleanString(e.series)
+      SERIES_NOTE_HTML: cleanString(e.series)
         ? `<p class="daily-series-note">Part of the series <em>${escapeHtml(cleanString(e.series))}</em></p>`
         : '',
       TAGLINE_HTML: e.tagline ? `<p class="daily-tagline" id="dTagline">${escapeHtml(e.tagline)}</p>` : '',
@@ -625,18 +625,14 @@ function seriesHubHref(e) {
   return cleanString(e.category) === LEADERSHIP_CATEGORY ? '/leadership/' : '';
 }
 
-// Small label above the title: the category (linked to its hub) or, failing
-// that, the series name when it isn't already the post's title.
+// Small label above the title: the category, linked to its hub when it has one.
 function eyebrowHtml(e) {
   const category = cleanString(e.category);
   const series = cleanString(e.series);
   const href = seriesHubHref(e);
   if (category && href) return `<a class="daily-series" href="${href}">${escapeHtml(category)}</a>`;
   if (category) return `<span class="daily-series">${escapeHtml(category)}</span>`;
-  if (series && series.toLowerCase() !== cleanString(e.title).toLowerCase()) {
-    return `<span class="daily-series">${escapeHtml(series)}</span>`;
-  }
-  return '';
+  return ''; // the series name goes in the note at the bottom, never above the title
 }
 
 function jsonLdFor(e, seo) {
