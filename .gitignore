@@ -20,6 +20,7 @@ Thumbs.db
 /daily/
 /blog/
 /leadership/
+/library/
 /data/*.json
 /_redirects
 scripts/supabase/supabaseConfig.js

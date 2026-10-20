@@ -377,7 +377,11 @@ async function mergeRedirectLines(linesToEnsure) {
     }
   }
 
-  await fs.writeFile(REDIRECTS, existingLines.join('\n') + '\n', 'utf-8');
+  // Netlify uses the first matching rule: keep the catch-all "200" passthroughs
+  // last so redirects and release guards above them actually apply.
+  const isPassthrough = l => /\s200!?$/.test(l);
+  const ordered = [...existingLines.filter(l => !isPassthrough(l)), ...existingLines.filter(isPassthrough)];
+  await fs.writeFile(REDIRECTS, ordered.join('\n') + '\n', 'utf-8');
 }
 
 async function ensurePassthroughs() {
@@ -445,7 +449,10 @@ async function writeArchiveJson(visible) {
       title: e.title || '',
       subtitle: e.subtitle || '',
       verse_ref: e.verse_ref || '',
-      href: pagePathFor(e)
+      href: pagePathFor(e),
+      ...(cleanString(e.headline) ? { headline: cleanString(e.headline) } : {}),
+      ...(cleanString(e.category) ? { category: cleanString(e.category) } : {}),
+      ...(cleanString(e.tagline) ? { tagline: cleanString(e.tagline) } : {})
     }));
 
   await fs.writeFile(
