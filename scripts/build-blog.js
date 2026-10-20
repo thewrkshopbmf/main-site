@@ -11,6 +11,7 @@ import {
 } from './shared/render-content.js';
 
 const __filename = fileURLToPath(import.meta.url);
+const SITE_URL = 'https://thewrkshop.com';
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
 
@@ -41,7 +42,11 @@ async function mergeRedirectLines(linesToEnsure) {
     }
   }
 
-  await fs.writeFile(REDIRECTS, existingLines.join('\n') + '\n', 'utf-8');
+  // Netlify uses the first matching rule: keep the catch-all "200" passthroughs
+  // last so redirects and release guards above them actually apply.
+  const isPassthrough = l => /\s200!?$/.test(l);
+  const ordered = [...existingLines.filter(l => !isPassthrough(l)), ...existingLines.filter(isPassthrough)];
+  await fs.writeFile(REDIRECTS, ordered.join('\n') + '\n', 'utf-8');
 }
 
 async function ensurePassthroughs() {
@@ -149,7 +154,38 @@ async function main() {
       `[blog] ${e.date} :: ${e.title} | source=${source} | body_parts=${partsCount ?? 'none'} | bytes=${bodyHTML.length}`
     );
 
+    const canonical = `${SITE_URL}/blog/${path.dirname(fileNameFor(e))}/`;
+    const plainTitle = String(e.seo_title || e.title || 'Untitled').trim();
+    const description = String(e.seo_description || e.excerpt || '').replace(/\s+/g, ' ').trim();
+    const ogImage = e.og_image
+      ? (/^https?:/i.test(e.og_image) ? e.og_image : `${SITE_URL}/${String(e.og_image).replace(/^\/+/, '')}`)
+      : `${SITE_URL}/assets/og/site.png`;
+    const jsonLd = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: plainTitle.slice(0, 110),
+      description,
+      datePublished: e.date,
+      dateModified: e.date,
+      url: canonical,
+      mainEntityOfPage: canonical,
+      image: ogImage,
+      inLanguage: 'en-US',
+      ...(e.category ? { articleSection: e.category } : {}),
+      ...(e.reading_minutes ? { timeRequired: `PT${Number(e.reading_minutes)}M` } : {}),
+      author: { '@id': 'https://thewrkshop.com/#organization' },
+      publisher: { '@id': 'https://thewrkshop.com/#organization' },
+      isPartOf: { '@id': 'https://thewrkshop.com/#website' }
+    }).replace(/</g, '\\u003c');
+    const attr = v => String(v ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
     const html = fill(tpl, {
+      SEO_TITLE: attr(/\|\s*TheWrkShop\s*$/i.test(plainTitle) ? plainTitle : `${plainTitle} | TheWrkShop`),
+      SOCIAL_TITLE: attr(plainTitle.replace(/\s*\|\s*TheWrkShop\s*$/i, '')),
+      SEO_DESCRIPTION: attr(description),
+      CANONICAL_URL: attr(canonical),
+      OG_IMAGE: attr(ogImage),
+      JSON_LD: jsonLd,
       TITLE: e.title || 'Untitled',
       CATEGORY: e.category || 'Article',
       DATE: e.date,

@@ -4,8 +4,20 @@
   <base href="/" />
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{{TITLE}} — TheWrkShop Blog</title>
-  <meta name="description" content="{{EXCERPT}}"/>
+  <title>{{SEO_TITLE}}</title>
+  <meta name="description" content="{{SEO_DESCRIPTION}}"/>
+  <link rel="canonical" href="{{CANONICAL_URL}}"/>
+  <link rel="alternate" type="application/rss+xml" title="TheWrkShop — The Daily" href="https://thewrkshop.com/daily/feed.xml"/>
+  <meta property="og:site_name" content="TheWrkShop"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="{{SOCIAL_TITLE}}"/>
+  <meta property="og:description" content="{{SEO_DESCRIPTION}}"/>
+  <meta property="og:url" content="{{CANONICAL_URL}}"/>
+  <meta property="og:image" content="{{OG_IMAGE}}"/>
+  <meta property="article:published_time" content="{{DATE}}"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:image" content="{{OG_IMAGE}}"/>
+  <script type="application/ld+json">{{JSON_LD}}</script>
   <link rel="stylesheet" href="/style.css"/>
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
   <style>
