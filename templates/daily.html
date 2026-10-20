@@ -4,8 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{{SEO_TITLE}}</title>
-  <link rel="stylesheet" href="../style.css"/>
-  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico?v=2">
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
   <meta name="description" content="{{SEO_DESCRIPTION}}"/>
   <link rel="canonical" href="{{CANONICAL_URL}}"/>
   <meta property="og:site_name" content="TheWrkShop"/>
@@ -99,6 +99,12 @@
     }
 
     .daily-series:hover { text-decoration: underline; }
+
+    .daily-series-note {
+      color: #6b5b53;
+      font-size: .9rem;
+      margin: 1.25rem 0 0;
+    }
 
     .share-row {
       display: flex;
@@ -249,8 +255,8 @@
   <div id="site-header"></div>
 
   <section class="page-hero">
-    <p class="page-hero-title">Daily</p>
-    <p>Scripture, reflection, and one clear step to live it out.</p>
+    <p class="page-hero-title">{{HERO_TITLE}}</p>
+    <p>{{HERO_SUB}}</p>
   </section>
 
   <main class="daily-wrap">
@@ -283,6 +289,8 @@
         <p class="declaration-text" id="dDeclaration">{{DECLARATION}}</p>
       </section>
 
+      {{SERIES_NOTE_HTML}}
+
       <div class="share-row" aria-label="Share this devotional">
         <span class="share-label">Share</span>
         <button type="button" class="share-native" data-url="{{CANONICAL_URL}}" data-title="{{SOCIAL_TITLE}}">Share…</button>
@@ -295,7 +303,7 @@
 
       <div class="nav-archive">
         <a href="{{PREV_HREF}}" id="prevDay">← Previous</a>
-        <a href="../daily-archive.html">See Archive →</a>
+        <a href="/daily-archive.html">See Archive →</a>
         <a href="{{NEXT_HREF}}" id="nextDay">Next →</a>
       </div>
     </article>
@@ -320,7 +328,7 @@
     </div>
   </footer>
 
-  <script src="../script.js"></script>
+  <script src="/script.js"></script>
   <script>
     (function () {
       var nativeBtn = document.querySelector('.share-native');
