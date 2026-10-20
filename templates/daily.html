@@ -3,10 +3,26 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TheWrkShop — {{PAGE_TITLE}}</title>
-  <link rel="stylesheet" href="../style.css"/>
-  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico?v=2">
-  <meta name="description" content="{{PAGE_TITLE}} — Daily devotional: scripture, reflection, and a practical next step."/>
+  <title>{{SEO_TITLE}}</title>
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
+  <meta name="description" content="{{SEO_DESCRIPTION}}"/>
+  <link rel="alternate" type="application/rss+xml" title="TheWrkShop — The Daily" href="https://thewrkshop.com/daily/feed.xml"/>
+  <link rel="canonical" href="{{CANONICAL_URL}}"/>
+  <meta property="og:site_name" content="TheWrkShop"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="{{SOCIAL_TITLE}}"/>
+  <meta property="og:description" content="{{SEO_DESCRIPTION}}"/>
+  <meta property="og:url" content="{{CANONICAL_URL}}"/>
+  <meta property="og:image" content="{{OG_IMAGE}}"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="article:published_time" content="{{DATE}}"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="{{SOCIAL_TITLE}}"/>
+  <meta name="twitter:description" content="{{SEO_DESCRIPTION}}"/>
+  <meta name="twitter:image" content="{{OG_IMAGE}}"/>
+  <script type="application/ld+json">{{JSON_LD}}</script>
   <style>
     .page-hero {
       background: #3e2c23;
@@ -15,7 +31,11 @@
       text-align: center;
     }
 
-    .page-hero h1 {
+    .page-hero h1,
+    .page-hero .page-hero-title {
+      font-weight: 700;
+      line-height: 1.2;
+      margin-top: 0;
       font-size: clamp(1.8rem, 3vw, 2.6rem);
       margin-bottom: .4rem;
     }
@@ -44,17 +64,80 @@
       box-shadow: 0 2px 6px rgba(0,0,0,.07);
     }
 
-    .daily-card h2 {
+    .daily-card h2,
+    .daily-title {
       color: #3e2c23;
       margin: .25rem 0 .35rem;
     }
 
+    .daily-title {
+      font-size: 1.5rem;
+      line-height: 1.25;
+      margin-bottom: .5rem;
+    }
+
+    .daily-title #dTitle {
+      display: block;
+    }
+
     .daily-subtitle {
+      display: block;
       color: #6b4a36;
       font-size: 1.2rem;
       font-weight: 600;
-      margin: 0 0 .5rem;
+      margin: .35rem 0 0;
     }
+
+    .daily-series {
+      display: inline-block;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #8a6a52;
+      text-decoration: none;
+      margin-top: .25rem;
+    }
+
+    .daily-series:hover { text-decoration: underline; }
+
+    .daily-series-note {
+      color: #6b5b53;
+      font-size: .9rem;
+      margin: 1.25rem 0 0;
+    }
+
+    .share-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem;
+      margin: 1.25rem 0 .25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0,0,0,.08);
+    }
+
+    .share-row .share-label {
+      font-weight: 700;
+      color: #3e2c23;
+      margin-right: .25rem;
+    }
+
+    .share-row a,
+    .share-row button {
+      font: inherit;
+      font-size: .9rem;
+      color: #3e2c23;
+      background: #fff;
+      border: 1px solid rgba(62,44,35,.25);
+      border-radius: 999px;
+      padding: .35rem .8rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .share-row a:hover,
+    .share-row button:hover { background: #ece5df; }
 
     .daily-tagline {
       color: #3e2c23;
@@ -102,6 +185,15 @@
     .daily-section li {
       margin: .4rem 0;
       line-height: 1.6;
+    }
+
+    .daily-subhead {
+      font-size: .85rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #6b4a36;
+      margin: 1.1rem 0 .35rem;
     }
 
     .daily-callout {
@@ -164,8 +256,8 @@
   <div id="site-header"></div>
 
   <section class="page-hero">
-    <h1>Daily</h1>
-    <p>Scripture, reflection, and one clear step to live it out.</p>
+    <p class="page-hero-title">{{HERO_TITLE}}</p>
+    <p>{{HERO_SUB}}</p>
   </section>
 
   <main class="daily-wrap">
@@ -176,8 +268,8 @@
         <button class="listen-btn" id="listenDailyBtn">🔊 Listen</button>
       </div>
 
-      <h2 id="dTitle">{{TITLE}}</h2>
-      {{SUBTITLE_HTML}}
+      {{SERIES_HTML}}
+      <h1 class="daily-title"><span id="dTitle">{{TITLE}}</span> {{SUBTITLE_HTML}}</h1>
       {{TAGLINE_HTML}}
 
       <div class="verse-block" id="dVerseBlock">
@@ -198,9 +290,21 @@
         <p class="declaration-text" id="dDeclaration">{{DECLARATION}}</p>
       </section>
 
+      {{SERIES_NOTE_HTML}}
+
+      <div class="share-row" aria-label="Share this devotional">
+        <span class="share-label">Share</span>
+        <button type="button" class="share-native" data-url="{{CANONICAL_URL}}" data-title="{{SOCIAL_TITLE}}">Share…</button>
+        <button type="button" class="share-copy" data-url="{{CANONICAL_URL}}">Copy link</button>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{CANONICAL_URL_ENC}}" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{CANONICAL_URL_ENC}}" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://twitter.com/intent/tweet?url={{CANONICAL_URL_ENC}}&amp;text={{SOCIAL_TITLE_ENC}}" target="_blank" rel="noopener">X</a>
+        <a href="mailto:?subject={{SOCIAL_TITLE_ENC}}&amp;body={{CANONICAL_URL_ENC}}">Email</a>
+      </div>
+
       <div class="nav-archive">
         <a href="{{PREV_HREF}}" id="prevDay">← Previous</a>
-        <a href="../daily-archive.html">See Archive →</a>
+        <a href="/daily-archive.html">See Archive →</a>
         <a href="{{NEXT_HREF}}" id="nextDay">Next →</a>
       </div>
     </article>
@@ -220,11 +324,47 @@
 
   <footer>
     <div class="footer-content">
+      <nav class="footer-links" aria-label="Browse">
+        <a href="/library/">Library</a>
+        <a href="/leadership/">Leadership &amp; Culture</a>
+        <a href="/daily-archive.html">Daily Archive</a>
+        <a href="/blog-archive.html">Blog</a>
+        <a href="/podcasts.html">Podcast</a>
+      </nav>
       <div class="footer-logo"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop" width="233" height="180"></div>
       <p>&copy; 2026 <span class="sitename">TheWrkShop</span>. All rights reserved.</p>
     </div>
   </footer>
 
-  <script src="../script.js"></script>
+  <script src="/script.js"></script>
+  <script>
+    (function () {
+      var nativeBtn = document.querySelector('.share-native');
+      if (nativeBtn) {
+        if (!navigator.share) {
+          nativeBtn.style.display = 'none';
+        } else {
+          nativeBtn.addEventListener('click', function () {
+            navigator.share({ title: nativeBtn.dataset.title, url: nativeBtn.dataset.url }).catch(function () {});
+          });
+        }
+      }
+      var copyBtn = document.querySelector('.share-copy');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          var url = copyBtn.dataset.url;
+          var done = function () {
+            copyBtn.textContent = 'Copied ✓';
+            setTimeout(function () { copyBtn.textContent = 'Copy link'; }, 2000);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(done, function () { window.prompt('Copy this link:', url); });
+          } else {
+            window.prompt('Copy this link:', url);
+          }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

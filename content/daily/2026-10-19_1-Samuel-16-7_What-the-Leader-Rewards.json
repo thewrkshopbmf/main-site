@@ -3,6 +3,22 @@
   "title": "The Battle Before The Battle",
   "subtitle": "What The Leader Rewards",
   "tagline": "Your stated values describe the culture you want. Your rewards reveal the culture you are actually building.",
+  "headline": "What Leaders Reward Shapes Culture",
+  "headline_sub": "Are You Reinforcing the Right Behaviors?",
+  "slug": "what-leaders-reward",
+  "series": "The Battle Before the Battle",
+  "category": "Leadership & Culture",
+  "seo_title": "What Leaders Reward Shapes Culture | TheWrkShop",
+  "seo_description": "Your stated values describe the culture you want. Your rewards reveal the one you are building. A biblical leadership lesson for work, teams and home.",
+  "keywords": [
+    "leadership",
+    "organizational culture",
+    "employee recognition",
+    "accountability",
+    "values-based leadership",
+    "Christian leadership"
+  ],
+  "og_image": "/assets/og/what-the-leader-rewards.png",
   "scriptures": [
     {
       "ref": "1 Samuel 16:7",
@@ -256,6 +272,84 @@
           "type": "callout",
           "prefix": "👉",
           "text": "WHO CAN BE TRUSTED WHEN NOBODY IS WATCHING?"
+        }
+      ]
+    },
+    {
+      "key": "how_leaders_shape_culture",
+      "label": "How Leaders Shape Culture Through What They Reward",
+      "blocks": [
+        {
+          "type": "subhead",
+          "text": "At Work"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "A manager says, “We collaborate here.”",
+            "Then the bonus goes to the person who hoarded information and hit the number alone."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The team learns: protect your turf."
+        },
+        {
+          "type": "subhead",
+          "text": "At Home"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "A parent says, “Character matters more than grades.”",
+            "Then the only celebration in the house is for the report card and the trophy."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The kids learn: performance earns attention."
+        },
+        {
+          "type": "subhead",
+          "text": "On the Field"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "A coach says, “Nobody is bigger than the team.”",
+            "Then the star skips practice and still starts."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The roster learns: talent buys exceptions."
+        },
+        {
+          "type": "subhead",
+          "text": "In the Church"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "A pastor says, “Every member is a minister.”",
+            "Then thanks only the people on the stage."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The volunteers learn: visibility is what counts."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Different arena.",
+            "Same lesson."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "WHATEVER YOU CELEBRATE, THEY WILL COPY."
         }
       ]
     },

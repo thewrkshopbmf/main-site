@@ -91,7 +91,7 @@ function normalizeBlock(block) {
 
   const type = cleanString(block.type || 'paragraph').toLowerCase();
 
-  if (type === 'paragraph' || type === 'callout' || type === 'quote') {
+  if (type === 'paragraph' || type === 'callout' || type === 'quote' || type === 'subhead') {
     const text = cleanString(block.text);
     if (!text) return null;
     const prefix = cleanString(block.prefix);
@@ -250,7 +250,7 @@ function normalizeDailyEntry(entry) {
 
 function blockToPlainText(block) {
   if (!block) return '';
-  if (block.type === 'paragraph' || block.type === 'callout' || block.type === 'quote') {
+  if (block.type === 'paragraph' || block.type === 'callout' || block.type === 'quote' || block.type === 'subhead') {
     return cleanString(block.text);
   }
   if (block.type === 'lines' || block.type === 'bullet_list' || block.type === 'numbered_list') {
@@ -274,6 +274,10 @@ function renderBlock(block) {
 
   if (block.type === 'paragraph') {
     return `<p>${escapeHtml(block.text)}</p>`;
+  }
+
+  if (block.type === 'subhead') {
+    return `<h4 class="daily-subhead">${escapeHtml(block.text)}</h4>`;
   }
 
   if (block.type === 'callout') {
@@ -373,7 +377,11 @@ async function mergeRedirectLines(linesToEnsure) {
     }
   }
 
-  await fs.writeFile(REDIRECTS, existingLines.join('\n') + '\n', 'utf-8');
+  // Netlify uses the first matching rule: keep the catch-all "200" passthroughs
+  // last so redirects and release guards above them actually apply.
+  const isPassthrough = l => /\s200!?$/.test(l);
+  const ordered = [...existingLines.filter(l => !isPassthrough(l)), ...existingLines.filter(isPassthrough)];
+  await fs.writeFile(REDIRECTS, ordered.join('\n') + '\n', 'utf-8');
 }
 
 async function ensurePassthroughs() {
@@ -418,6 +426,7 @@ async function readDailyEntries() {
 async function rebuildDailyOutputDir() {
   try {
     await fs.rm(DAILY_DIR, { recursive: true, force: true });
+    await fs.rm(LEADERSHIP_DIR, { recursive: true, force: true });
   } catch {}
   await fs.mkdir(DAILY_DIR, { recursive: true });
 }
@@ -440,7 +449,10 @@ async function writeArchiveJson(visible) {
       title: e.title || '',
       subtitle: e.subtitle || '',
       verse_ref: e.verse_ref || '',
-      href: `/daily/${fileNameFor(e)}`
+      href: pagePathFor(e),
+      ...(cleanString(e.headline) ? { headline: cleanString(e.headline) } : {}),
+      ...(cleanString(e.category) ? { category: cleanString(e.category) } : {}),
+      ...(cleanString(e.tagline) ? { tagline: cleanString(e.tagline) } : {})
     }));
 
   await fs.writeFile(
@@ -470,7 +482,7 @@ async function writeLatestDailyJson(visible) {
 
   const dailyData = {
     date: todayEntry.date,
-    href: `/daily/${fileNameFor(todayEntry)}`,
+    href: pagePathFor(todayEntry),
     title: todayEntry.title || '',
     subtitle: todayEntry.subtitle || '',
     tagline: todayEntry.tagline || '',
@@ -501,10 +513,30 @@ async function buildDailyPages(visible) {
     const declarationSection = findSection(e, ['declaration']);
     const actionSection = findSection(e, ['action_step', 'one_minute_win']);
 
+    const seo = seoFor(e);
+
     const html = fill(tpl, {
-      TITLE: e.title || 'Untitled',
-      PAGE_TITLE: escapeHtml([e.title || 'Untitled', e.subtitle].filter(Boolean).join(' — ')),
-      SUBTITLE_HTML: e.subtitle ? `<p class="daily-subtitle" id="dSubtitle">${escapeHtml(e.subtitle)}</p>` : '',
+      SEO_TITLE: escapeHtml(seo.title),
+      SEO_DESCRIPTION: escapeHtml(seo.description),
+      SOCIAL_TITLE: escapeHtml(seo.socialTitle),
+      SOCIAL_TITLE_ENC: escapeHtml(encodeURIComponent(seo.socialTitle)),
+      CANONICAL_URL: escapeHtml(seo.url),
+      CANONICAL_URL_ENC: escapeHtml(encodeURIComponent(seo.url)),
+      OG_IMAGE: escapeHtml(seo.image),
+      JSON_LD: jsonLdFor(e, seo),
+      SERIES_HTML: eyebrowHtml(e),
+      HERO_TITLE: hasLeadershipPage(e) ? 'Leadership &amp; Culture' : 'Daily',
+      HERO_SUB: hasLeadershipPage(e)
+        ? 'For leaders, managers, coaches, pastors and parents.'
+        : 'Scripture, reflection, and one clear step to live it out.',
+      TITLE: escapeHtml(cleanString(e.headline) || e.title || 'Untitled'),
+      SUBTITLE_HTML: (() => {
+        const sub = cleanString(e.headline) ? cleanString(e.headline_sub) : cleanString(e.subtitle);
+        return sub ? `<span class="daily-subtitle" id="dSubtitle">${escapeHtml(sub)}</span>` : '';
+      })(),
+      SERIES_NOTE_HTML: cleanString(e.series)
+        ? `<p class="daily-series-note">Part of the series <em>${escapeHtml(cleanString(e.series))}</em></p>`
+        : '',
       TAGLINE_HTML: e.tagline ? `<p class="daily-tagline" id="dTagline">${escapeHtml(e.tagline)}</p>` : '',
       HUMAN_DATE: toHuman(e.date),
       DATE: e.date,
@@ -513,8 +545,8 @@ async function buildDailyPages(visible) {
       INSIGHT_HTML: buildInsightHTML(e),
       ONE_MINUTE_WIN: actionSection ? sectionToPlainText(actionSection) : (e.one_minute_win || ''),
       DECLARATION: declarationSection ? sectionToPlainText(declarationSection) : (e.declaration || ''),
-      PREV_HREF: prev ? `./${fileNameFor(prev)}` : '#',
-      NEXT_HREF: next ? `./${fileNameFor(next)}` : '#'
+      PREV_HREF: prev ? pagePathFor(prev) : '#',
+      NEXT_HREF: next ? pagePathFor(next) : '#'
     });
 
     // Drop the Action Step / Declaration boxes when this daily doesn't have them
@@ -522,8 +554,162 @@ async function buildDailyPages(visible) {
       .replace(/\s*<section class="daily-section">\s*<h3>Action Step<\/h3>\s*<div class="action-step" id="dActionStep">\s*<\/div>\s*<\/section>/, '')
       .replace(/\s*<section class="daily-section">\s*<h3>Declaration<\/h3>\s*<p class="declaration-text" id="dDeclaration">\s*<\/p>\s*<\/section>/, '');
 
-    await fs.writeFile(path.join(DAILY_DIR, fileNameFor(e)), cleaned, 'utf-8');
+    const outFile = pageFileFor(e);
+    await fs.mkdir(path.dirname(outFile), { recursive: true });
+    await fs.writeFile(outFile, cleaned, 'utf-8');
   }
+}
+
+
+// ---------- SEO / social metadata ----------
+// Optional per-post fields in content/daily/*.json:
+//   seo_title        – what Google shows as the blue link (keep under ~60 chars)
+//   seo_description  – the snippet under it (aim for 140–160 chars)
+//   og_image         – site path to a 1200x630 social card (scripts/og/make-og-card.py)
+//   category         – e.g. "Leadership & Culture" (posts in this category appear on /leadership/)
+//   series           – e.g. "The Battle Before the Battle"
+// Every field is optional; posts without them get sensible defaults.
+
+const DEFAULT_OG_IMAGE = '/assets/og/the-daily.png';
+const LEADERSHIP_DIR = path.join(ROOT, 'leadership');
+const DEFAULT_DESCRIPTION = 'Daily devotional: scripture, reflection, and a practical next step.';
+const LEADERSHIP_CATEGORY = 'Leadership & Culture';
+
+// Where a post lives on the site. Leadership posts with a "slug" get a clean
+// /leadership/<slug>/ address; everything else stays at /daily/<file>.html.
+function hasLeadershipPage(e) {
+  return cleanString(e.category) === LEADERSHIP_CATEGORY && /^[a-z0-9-]+$/.test(cleanString(e.slug));
+}
+
+function pagePathFor(e) {
+  return hasLeadershipPage(e) ? `/leadership/${cleanString(e.slug)}/` : `/daily/${fileNameFor(e)}`;
+}
+
+function pageFileFor(e) {
+  return hasLeadershipPage(e)
+    ? path.join(LEADERSHIP_DIR, cleanString(e.slug), 'index.html')
+    : path.join(DAILY_DIR, fileNameFor(e));
+}
+
+function absoluteUrl(p = '') {
+  if (/^https?:\/\//i.test(p)) return p;
+  return `${SITE_URL}/${String(p).replace(/^\/+/, '')}`;
+}
+
+function truncate(text = '', max = 160) {
+  const t = String(text).replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;:\s]+$/, '') + '…';
+}
+
+function displayTitle(e) {
+  if (cleanString(e.headline)) return cleanString(e.headline);
+  return [e.title || 'Daily', e.subtitle].filter(Boolean).join(': ');
+}
+
+function seoFor(e) {
+  const url = `${SITE_URL}${pagePathFor(e)}`;
+  const seoTitle = cleanString(e.seo_title) || `${displayTitle(e)} | TheWrkShop`;
+  const description = truncate(cleanString(e.seo_description) || cleanString(e.tagline) || `${displayTitle(e)}. ${DEFAULT_DESCRIPTION}`);
+  return {
+    url,
+    title: seoTitle,
+    socialTitle: cleanString(e.seo_title).replace(/\s*\|\s*TheWrkShop\s*$/i, '') || displayTitle(e),
+    description,
+    image: absoluteUrl(cleanString(e.og_image) || DEFAULT_OG_IMAGE)
+  };
+}
+
+function seriesHubHref(e) {
+  return cleanString(e.category) === LEADERSHIP_CATEGORY ? '/leadership/' : '';
+}
+
+// Small label above the title: the category, linked to its hub when it has one.
+function eyebrowHtml(e) {
+  const category = cleanString(e.category);
+  const series = cleanString(e.series);
+  const href = seriesHubHref(e);
+  if (category && href) return `<a class="daily-series" href="${href}">${escapeHtml(category)}</a>`;
+  if (category) return `<span class="daily-series">${escapeHtml(category)}</span>`;
+  return ''; // the series name goes in the note at the bottom, never above the title
+}
+
+function jsonLdFor(e, seo) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: truncate(seo.socialTitle, 110),
+    description: seo.description,
+    datePublished: e.date,
+    dateModified: e.date,
+    url: seo.url,
+    mainEntityOfPage: seo.url,
+    image: seo.image,
+    inLanguage: 'en-US',
+    author: { '@id': 'https://thewrkshop.com/#organization' },
+    publisher: { '@id': 'https://thewrkshop.com/#organization' },
+    isPartOf: { '@id': 'https://thewrkshop.com/#website' }
+  };
+  if (cleanString(e.category)) data.articleSection = cleanString(e.category);
+  if (Array.isArray(e.keywords) && e.keywords.length) data.keywords = e.keywords.join(', ');
+  const refs = (e.scriptures || []).map(s => s.ref).filter(Boolean);
+  if (refs.length) data.about = refs.map(ref => ({ '@type': 'CreativeWork', name: ref }));
+  // keep "</script>" out of the inline JSON
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
+// ---------- Leadership hub (/leadership/) ----------
+
+async function buildLeadershipHub(visible) {
+  const posts = visible
+    .filter(e => cleanString(e.category) === LEADERSHIP_CATEGORY)
+    .slice()
+    .reverse();
+
+  const outDir = LEADERSHIP_DIR;
+  await fs.mkdir(outDir, { recursive: true });
+
+  const tplPath = path.join(ROOT, 'templates', 'leadership.html');
+  const tpl = await fs.readFile(tplPath, 'utf-8');
+
+  const cards = posts.length
+    ? posts.map(e => {
+        const seo = seoFor(e);
+        return `
+      <article class="lead-card">
+        <h2><a href="${pagePathFor(e)}">${escapeHtml(cleanString(e.headline) || e.subtitle || e.title || 'Daily')}</a></h2>
+        ${cleanString(e.headline_sub) ? `<p class="lead-sub">${escapeHtml(cleanString(e.headline_sub))}</p>` : ''}
+        ${e.tagline ? `<p class="lead-tagline">${escapeHtml(e.tagline)}</p>` : ''}
+        <p class="lead-meta"><time datetime="${e.date}">${toHuman(e.date)}</time>${e.verse_ref ? ` · ${escapeHtml(e.verse_ref)}` : ''}</p>
+        <a class="lead-read" href="${pagePathFor(e)}" aria-label="Read ${escapeHtml(seo.socialTitle)}">Read →</a>
+      </article>`;
+      }).join('\n')
+    : '<p>New leadership posts are on the way.</p>';
+
+  const itemList = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Leadership & Culture',
+    url: `${SITE_URL}/leadership/`,
+    isPartOf: { '@id': 'https://thewrkshop.com/#website' },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: posts.map((e, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${SITE_URL}${pagePathFor(e)}`,
+        name: seoFor(e).socialTitle
+      }))
+    }
+  };
+
+  const html = fill(tpl, {
+    CARDS_HTML: cards,
+    JSON_LD: JSON.stringify(itemList).replace(/</g, '\\u003c')
+  });
+  await fs.writeFile(path.join(outDir, 'index.html'), html, 'utf-8');
+  return posts.length;
 }
 
 // ---------- Email feed (Kit RSS-to-email reads this) ----------
@@ -536,7 +722,7 @@ function xmlEscape(value = '') {
 
 async function writeDailyFeed(visible) {
   const items = visible.slice(-20).reverse().map(e => {
-    const url = `${SITE_URL}/daily/${fileNameFor(e)}`;
+    const url = `${SITE_URL}${pagePathFor(e)}`;
     const title = [e.title || 'Daily', e.subtitle].filter(Boolean).join(' — ');
     const pubDate = new Date(`${e.date}T06:01:00Z`).toUTCString(); // just after midnight Central
     const html = dailyBodyHtml(e, url).replace(/]]>/g, ']]&gt;');
@@ -565,17 +751,16 @@ ${items}
   await fs.writeFile(path.join(DAILY_DIR, 'feed.xml'), xml, 'utf-8');
 }
 
-async function writeGuardRedirects(older, future) {
-  const guardLines = [
+function guardAndMoveLines(visible, older, future) {
+  return [
+    // posts that moved to /leadership/<slug>/ keep their old daily link working
+    ...visible.filter(hasLeadershipPage).map(e => `/daily/${fileNameFor(e)}   ${pagePathFor(e)}   301!`),
     ...older.map(e => `/daily/${fileNameFor(e)}   /daily-archive.html   302!`),
     ...future.map(e => `/daily/${fileNameFor(e)}   /daily-archive.html   302!`)
   ];
-
-  await mergeRedirectLines(guardLines);
 }
 
 async function main() {
-  await ensurePassthroughs();
   await fs.mkdir(DATA_DIR, { recursive: true });
 
   const entries = await readDailyEntries();
@@ -583,15 +768,19 @@ async function main() {
 
   const { visible, future, older } = partitionEntries(entries, today);
 
+  // Netlify uses the first matching rule, so moves and guards go before the passthroughs
+  await mergeRedirectLines(guardAndMoveLines(visible, older, future));
+  await ensurePassthroughs();
+
   await rebuildDailyOutputDir();
   await writeArchiveJson(visible);
   await writeLatestDailyJson(visible);
   await buildDailyPages(visible);
+  const leadershipCount = await buildLeadershipHub(visible);
   await writeDailyFeed(visible);
-  await writeGuardRedirects(older, future);
 
   console.log(
-    `Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}.`
+    `Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}. Leadership hub: ${leadershipCount} posts.`
   );
 }
 

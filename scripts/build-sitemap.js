@@ -1,6 +1,7 @@
 // scripts/build-sitemap.js
 import fs from 'fs/promises';
 import path from 'path';
+import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -45,6 +46,8 @@ const EXCLUDED_DIRS = new Set([
 const RECURSIVE_PUBLIC_DIRS = [
   'blog',
   'daily',
+  'leadership',
+  'library',
   'pages',
   'sub-pages'
 ];
@@ -88,9 +91,50 @@ function relPathToAbsoluteUrl(relPath) {
   return `${SITE_URL}/${rel}`;
 }
 
+// lastmod should mean "this page's content changed", not "the site was rebuilt",
+// or search engines learn to ignore it. Posts use their publish date; listing
+// pages use their newest post; other pages use their last git commit.
+let CONTENT_DATES = null;
+
+async function loadContentDates() {
+  if (CONTENT_DATES) return CONTENT_DATES;
+  const byUrl = new Map();
+  let newestAll = '';
+  let newestLeadership = '';
+  for (const file of ['daily-archive.json', 'blog-archive.json']) {
+    try {
+      const list = JSON.parse(await fs.readFile(path.join(ROOT, 'data', file), 'utf-8'));
+      for (const item of Array.isArray(list) ? list : []) {
+        if (!item?.href || !/^\d{4}-\d{2}-\d{2}$/.test(item.date || '')) continue;
+        byUrl.set(`${SITE_URL}${item.href}`, item.date);
+        if (item.date > newestAll) newestAll = item.date;
+        if (item.category === 'Leadership & Culture' && item.date > newestLeadership) newestLeadership = item.date;
+      }
+    } catch {}
+  }
+  if (newestLeadership) byUrl.set(`${SITE_URL}/leadership/`, newestLeadership);
+  if (newestAll) byUrl.set(`${SITE_URL}/library/`, newestAll);
+  CONTENT_DATES = byUrl;
+  return byUrl;
+}
+
+function gitLastCommitIso(absPath) {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', absPath], {
+      cwd: ROOT,
+      stdio: ['ignore', 'pipe', 'ignore']
+    }).toString().trim();
+    return out || '';
+  } catch {
+    return '';
+  }
+}
+
 async function statMtimeIso(absPath) {
-  const stat = await fs.stat(absPath);
-  return stat.mtime.toISOString();
+  const loc = relPathToAbsoluteUrl(path.relative(ROOT, absPath));
+  const dates = await loadContentDates();
+  if (dates.has(loc)) return dates.get(loc);
+  return gitLastCommitIso(absPath); // '' → lastmod omitted
 }
 
 async function readRootPublicHtml() {
@@ -161,7 +205,7 @@ function dedupeAndSort(items) {
     if (!item?.loc) continue;
     // Keep the newest lastmod if the same URL appears twice
     const existing = map.get(item.loc);
-    if (!existing || new Date(item.lastmod) > new Date(existing.lastmod)) {
+    if (!existing || (item.lastmod || '') > (existing.lastmod || '')) {
       map.set(item.loc, item);
     }
   }

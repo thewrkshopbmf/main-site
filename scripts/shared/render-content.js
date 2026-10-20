@@ -284,7 +284,7 @@ function normalizeBlock(block) {
 
   const type = cleanString(block.type || 'paragraph').toLowerCase();
 
-  if (type === 'paragraph' || type === 'callout' || type === 'quote') {
+  if (type === 'paragraph' || type === 'callout' || type === 'quote' || type === 'subhead') {
     const text = cleanString(block.text);
     if (!text) return null;
     const prefix = cleanString(block.prefix);
@@ -431,6 +431,10 @@ function renderDailyBlock(block) {
     return `<p>${escapeHtml(block.text)}</p>`;
   }
 
+  if (block.type === 'subhead') {
+    return `<h4 class="daily-subhead">${escapeHtml(block.text)}</h4>`;
+  }
+
   if (block.type === 'callout') {
     const prefix = escapeHtml(block.prefix || '👉');
     return `<p class="daily-callout"><span class="daily-callout-prefix">${prefix}</span> ${escapeHtml(block.text)}</p>`;
@@ -469,7 +473,7 @@ function renderDailySection(section) {
 function sectionPlainText(section) {
   if (!section?.blocks) return '';
   return section.blocks.map(block => {
-    if (block.type === 'paragraph' || block.type === 'callout' || block.type === 'quote') {
+    if (block.type === 'paragraph' || block.type === 'callout' || block.type === 'quote' || block.type === 'subhead') {
       return cleanString(block.text);
     }
     if (block.type === 'lines' || block.type === 'bullet_list' || block.type === 'numbered_list') {

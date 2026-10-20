@@ -841,3 +841,19 @@ body.products-theme .listen-btn:hover {
 .daily-signup .daily-signup-msg.is-error { color: #ffcfbf; }
 .daily-signup .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 @media (max-width: 480px) { .daily-signup button { flex: 1 1 100%; } }
+
+/* Footer browse links (crawlable paths to the whole library) */
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .4rem 1.1rem;
+  margin: .75rem 0 .5rem;
+}
+.footer-links a {
+  color: inherit;
+  opacity: .9;
+  text-decoration: none;
+  font-weight: 600;
+}
+.footer-links a:hover { text-decoration: underline; opacity: 1; }
