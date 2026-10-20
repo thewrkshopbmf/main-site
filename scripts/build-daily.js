@@ -422,6 +422,7 @@ async function readDailyEntries() {
 async function rebuildDailyOutputDir() {
   try {
     await fs.rm(DAILY_DIR, { recursive: true, force: true });
+    await fs.rm(LEADERSHIP_DIR, { recursive: true, force: true });
   } catch {}
   await fs.mkdir(DAILY_DIR, { recursive: true });
 }
@@ -444,7 +445,7 @@ async function writeArchiveJson(visible) {
       title: e.title || '',
       subtitle: e.subtitle || '',
       verse_ref: e.verse_ref || '',
-      href: `/daily/${fileNameFor(e)}`
+      href: pagePathFor(e)
     }));
 
   await fs.writeFile(
@@ -474,7 +475,7 @@ async function writeLatestDailyJson(visible) {
 
   const dailyData = {
     date: todayEntry.date,
-    href: `/daily/${fileNameFor(todayEntry)}`,
+    href: pagePathFor(todayEntry),
     title: todayEntry.title || '',
     subtitle: todayEntry.subtitle || '',
     tagline: todayEntry.tagline || '',
@@ -517,8 +518,18 @@ async function buildDailyPages(visible) {
       OG_IMAGE: escapeHtml(seo.image),
       JSON_LD: jsonLdFor(e, seo),
       SERIES_HTML: eyebrowHtml(e),
-      TITLE: escapeHtml(e.title || 'Untitled'),
-      SUBTITLE_HTML: e.subtitle ? `<span class="daily-subtitle" id="dSubtitle">${escapeHtml(e.subtitle)}</span>` : '',
+      HERO_TITLE: hasLeadershipPage(e) ? 'Leadership &amp; Culture' : 'Daily',
+      HERO_SUB: hasLeadershipPage(e)
+        ? 'For leaders, managers, coaches, pastors and parents.'
+        : 'Scripture, reflection, and one clear step to live it out.',
+      TITLE: escapeHtml(cleanString(e.headline) || e.title || 'Untitled'),
+      SUBTITLE_HTML: (() => {
+        const sub = cleanString(e.headline) ? cleanString(e.headline_sub) : cleanString(e.subtitle);
+        return sub ? `<span class="daily-subtitle" id="dSubtitle">${escapeHtml(sub)}</span>` : '';
+      })(),
+      SERIES_NOTE_HTML: cleanString(e.headline) && cleanString(e.series)
+        ? `<p class="daily-series-note">Part of the series <em>${escapeHtml(cleanString(e.series))}</em></p>`
+        : '',
       TAGLINE_HTML: e.tagline ? `<p class="daily-tagline" id="dTagline">${escapeHtml(e.tagline)}</p>` : '',
       HUMAN_DATE: toHuman(e.date),
       DATE: e.date,
@@ -527,8 +538,8 @@ async function buildDailyPages(visible) {
       INSIGHT_HTML: buildInsightHTML(e),
       ONE_MINUTE_WIN: actionSection ? sectionToPlainText(actionSection) : (e.one_minute_win || ''),
       DECLARATION: declarationSection ? sectionToPlainText(declarationSection) : (e.declaration || ''),
-      PREV_HREF: prev ? `./${fileNameFor(prev)}` : '#',
-      NEXT_HREF: next ? `./${fileNameFor(next)}` : '#'
+      PREV_HREF: prev ? pagePathFor(prev) : '#',
+      NEXT_HREF: next ? pagePathFor(next) : '#'
     });
 
     // Drop the Action Step / Declaration boxes when this daily doesn't have them
@@ -536,7 +547,9 @@ async function buildDailyPages(visible) {
       .replace(/\s*<section class="daily-section">\s*<h3>Action Step<\/h3>\s*<div class="action-step" id="dActionStep">\s*<\/div>\s*<\/section>/, '')
       .replace(/\s*<section class="daily-section">\s*<h3>Declaration<\/h3>\s*<p class="declaration-text" id="dDeclaration">\s*<\/p>\s*<\/section>/, '');
 
-    await fs.writeFile(path.join(DAILY_DIR, fileNameFor(e)), cleaned, 'utf-8');
+    const outFile = pageFileFor(e);
+    await fs.mkdir(path.dirname(outFile), { recursive: true });
+    await fs.writeFile(outFile, cleaned, 'utf-8');
   }
 }
 
@@ -551,8 +564,25 @@ async function buildDailyPages(visible) {
 // Every field is optional; posts without them get sensible defaults.
 
 const DEFAULT_OG_IMAGE = '/assets/og/the-daily.png';
+const LEADERSHIP_DIR = path.join(ROOT, 'leadership');
 const DEFAULT_DESCRIPTION = 'Daily devotional: scripture, reflection, and a practical next step.';
 const LEADERSHIP_CATEGORY = 'Leadership & Culture';
+
+// Where a post lives on the site. Leadership posts with a "slug" get a clean
+// /leadership/<slug>/ address; everything else stays at /daily/<file>.html.
+function hasLeadershipPage(e) {
+  return cleanString(e.category) === LEADERSHIP_CATEGORY && /^[a-z0-9-]+$/.test(cleanString(e.slug));
+}
+
+function pagePathFor(e) {
+  return hasLeadershipPage(e) ? `/leadership/${cleanString(e.slug)}/` : `/daily/${fileNameFor(e)}`;
+}
+
+function pageFileFor(e) {
+  return hasLeadershipPage(e)
+    ? path.join(LEADERSHIP_DIR, cleanString(e.slug), 'index.html')
+    : path.join(DAILY_DIR, fileNameFor(e));
+}
 
 function absoluteUrl(p = '') {
   if (/^https?:\/\//i.test(p)) return p;
@@ -567,11 +597,12 @@ function truncate(text = '', max = 160) {
 }
 
 function displayTitle(e) {
+  if (cleanString(e.headline)) return cleanString(e.headline);
   return [e.title || 'Daily', e.subtitle].filter(Boolean).join(': ');
 }
 
 function seoFor(e) {
-  const url = `${SITE_URL}/daily/${fileNameFor(e)}`;
+  const url = `${SITE_URL}${pagePathFor(e)}`;
   const seoTitle = cleanString(e.seo_title) || `${displayTitle(e)} | TheWrkShop`;
   const description = truncate(cleanString(e.seo_description) || cleanString(e.tagline) || `${displayTitle(e)}. ${DEFAULT_DESCRIPTION}`);
   return {
@@ -633,8 +664,7 @@ async function buildLeadershipHub(visible) {
     .slice()
     .reverse();
 
-  const outDir = path.join(ROOT, 'leadership');
-  await fs.rm(outDir, { recursive: true, force: true });
+  const outDir = LEADERSHIP_DIR;
   await fs.mkdir(outDir, { recursive: true });
 
   const tplPath = path.join(ROOT, 'templates', 'leadership.html');
@@ -645,11 +675,11 @@ async function buildLeadershipHub(visible) {
         const seo = seoFor(e);
         return `
       <article class="lead-card">
-        ${e.series ? `<p class="lead-series">${escapeHtml(e.series)}</p>` : ''}
-        <h2><a href="/daily/${fileNameFor(e)}">${escapeHtml(e.subtitle || e.title || 'Daily')}</a></h2>
+        <h2><a href="${pagePathFor(e)}">${escapeHtml(cleanString(e.headline) || e.subtitle || e.title || 'Daily')}</a></h2>
+        ${cleanString(e.headline_sub) ? `<p class="lead-sub">${escapeHtml(cleanString(e.headline_sub))}</p>` : ''}
         ${e.tagline ? `<p class="lead-tagline">${escapeHtml(e.tagline)}</p>` : ''}
         <p class="lead-meta"><time datetime="${e.date}">${toHuman(e.date)}</time>${e.verse_ref ? ` · ${escapeHtml(e.verse_ref)}` : ''}</p>
-        <a class="lead-read" href="/daily/${fileNameFor(e)}" aria-label="Read ${escapeHtml(seo.socialTitle)}">Read →</a>
+        <a class="lead-read" href="${pagePathFor(e)}" aria-label="Read ${escapeHtml(seo.socialTitle)}">Read →</a>
       </article>`;
       }).join('\n')
     : '<p>New leadership posts are on the way.</p>';
@@ -665,7 +695,7 @@ async function buildLeadershipHub(visible) {
       itemListElement: posts.map((e, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        url: `${SITE_URL}/daily/${fileNameFor(e)}`,
+        url: `${SITE_URL}${pagePathFor(e)}`,
         name: seoFor(e).socialTitle
       }))
     }
@@ -689,7 +719,7 @@ function xmlEscape(value = '') {
 
 async function writeDailyFeed(visible) {
   const items = visible.slice(-20).reverse().map(e => {
-    const url = `${SITE_URL}/daily/${fileNameFor(e)}`;
+    const url = `${SITE_URL}${pagePathFor(e)}`;
     const title = [e.title || 'Daily', e.subtitle].filter(Boolean).join(' — ');
     const pubDate = new Date(`${e.date}T06:01:00Z`).toUTCString(); // just after midnight Central
     const html = dailyBodyHtml(e, url).replace(/]]>/g, ']]&gt;');
@@ -718,17 +748,16 @@ ${items}
   await fs.writeFile(path.join(DAILY_DIR, 'feed.xml'), xml, 'utf-8');
 }
 
-async function writeGuardRedirects(older, future) {
-  const guardLines = [
+function guardAndMoveLines(visible, older, future) {
+  return [
+    // posts that moved to /leadership/<slug>/ keep their old daily link working
+    ...visible.filter(hasLeadershipPage).map(e => `/daily/${fileNameFor(e)}   ${pagePathFor(e)}   301!`),
     ...older.map(e => `/daily/${fileNameFor(e)}   /daily-archive.html   302!`),
     ...future.map(e => `/daily/${fileNameFor(e)}   /daily-archive.html   302!`)
   ];
-
-  await mergeRedirectLines(guardLines);
 }
 
 async function main() {
-  await ensurePassthroughs();
   await fs.mkdir(DATA_DIR, { recursive: true });
 
   const entries = await readDailyEntries();
@@ -736,13 +765,16 @@ async function main() {
 
   const { visible, future, older } = partitionEntries(entries, today);
 
+  // Netlify uses the first matching rule, so moves and guards go before the passthroughs
+  await mergeRedirectLines(guardAndMoveLines(visible, older, future));
+  await ensurePassthroughs();
+
   await rebuildDailyOutputDir();
   await writeArchiveJson(visible);
   await writeLatestDailyJson(visible);
   await buildDailyPages(visible);
   const leadershipCount = await buildLeadershipHub(visible);
   await writeDailyFeed(visible);
-  await writeGuardRedirects(older, future);
 
   console.log(
     `Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}. Leadership hub: ${leadershipCount} posts.`
