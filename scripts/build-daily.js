@@ -91,7 +91,7 @@ function normalizeBlock(block) {
 
   const type = cleanString(block.type || 'paragraph').toLowerCase();
 
-  if (type === 'paragraph' || type === 'callout' || type === 'quote') {
+  if (type === 'paragraph' || type === 'callout' || type === 'quote' || type === 'subhead') {
     const text = cleanString(block.text);
     if (!text) return null;
     const prefix = cleanString(block.prefix);
@@ -250,7 +250,7 @@ function normalizeDailyEntry(entry) {
 
 function blockToPlainText(block) {
   if (!block) return '';
-  if (block.type === 'paragraph' || block.type === 'callout' || block.type === 'quote') {
+  if (block.type === 'paragraph' || block.type === 'callout' || block.type === 'quote' || block.type === 'subhead') {
     return cleanString(block.text);
   }
   if (block.type === 'lines' || block.type === 'bullet_list' || block.type === 'numbered_list') {
@@ -274,6 +274,10 @@ function renderBlock(block) {
 
   if (block.type === 'paragraph') {
     return `<p>${escapeHtml(block.text)}</p>`;
+  }
+
+  if (block.type === 'subhead') {
+    return `<h4 class="daily-subhead">${escapeHtml(block.text)}</h4>`;
   }
 
   if (block.type === 'callout') {
@@ -501,10 +505,20 @@ async function buildDailyPages(visible) {
     const declarationSection = findSection(e, ['declaration']);
     const actionSection = findSection(e, ['action_step', 'one_minute_win']);
 
+    const seo = seoFor(e);
+
     const html = fill(tpl, {
-      TITLE: e.title || 'Untitled',
-      PAGE_TITLE: escapeHtml([e.title || 'Untitled', e.subtitle].filter(Boolean).join(' — ')),
-      SUBTITLE_HTML: e.subtitle ? `<p class="daily-subtitle" id="dSubtitle">${escapeHtml(e.subtitle)}</p>` : '',
+      SEO_TITLE: escapeHtml(seo.title),
+      SEO_DESCRIPTION: escapeHtml(seo.description),
+      SOCIAL_TITLE: escapeHtml(seo.socialTitle),
+      SOCIAL_TITLE_ENC: escapeHtml(encodeURIComponent(seo.socialTitle)),
+      CANONICAL_URL: escapeHtml(seo.url),
+      CANONICAL_URL_ENC: escapeHtml(encodeURIComponent(seo.url)),
+      OG_IMAGE: escapeHtml(seo.image),
+      JSON_LD: jsonLdFor(e, seo),
+      SERIES_HTML: eyebrowHtml(e),
+      TITLE: escapeHtml(e.title || 'Untitled'),
+      SUBTITLE_HTML: e.subtitle ? `<span class="daily-subtitle" id="dSubtitle">${escapeHtml(e.subtitle)}</span>` : '',
       TAGLINE_HTML: e.tagline ? `<p class="daily-tagline" id="dTagline">${escapeHtml(e.tagline)}</p>` : '',
       HUMAN_DATE: toHuman(e.date),
       DATE: e.date,
@@ -524,6 +538,145 @@ async function buildDailyPages(visible) {
 
     await fs.writeFile(path.join(DAILY_DIR, fileNameFor(e)), cleaned, 'utf-8');
   }
+}
+
+
+// ---------- SEO / social metadata ----------
+// Optional per-post fields in content/daily/*.json:
+//   seo_title        – what Google shows as the blue link (keep under ~60 chars)
+//   seo_description  – the snippet under it (aim for 140–160 chars)
+//   og_image         – site path to a 1200x630 social card (scripts/og/make-og-card.py)
+//   category         – e.g. "Leadership & Culture" (posts in this category appear on /leadership/)
+//   series           – e.g. "The Battle Before the Battle"
+// Every field is optional; posts without them get sensible defaults.
+
+const DEFAULT_OG_IMAGE = '/assets/og/the-daily.png';
+const DEFAULT_DESCRIPTION = 'Daily devotional: scripture, reflection, and a practical next step.';
+const LEADERSHIP_CATEGORY = 'Leadership & Culture';
+
+function absoluteUrl(p = '') {
+  if (/^https?:\/\//i.test(p)) return p;
+  return `${SITE_URL}/${String(p).replace(/^\/+/, '')}`;
+}
+
+function truncate(text = '', max = 160) {
+  const t = String(text).replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;:\s]+$/, '') + '…';
+}
+
+function displayTitle(e) {
+  return [e.title || 'Daily', e.subtitle].filter(Boolean).join(': ');
+}
+
+function seoFor(e) {
+  const url = `${SITE_URL}/daily/${fileNameFor(e)}`;
+  const seoTitle = cleanString(e.seo_title) || `${displayTitle(e)} | TheWrkShop`;
+  const description = truncate(cleanString(e.seo_description) || cleanString(e.tagline) || `${displayTitle(e)}. ${DEFAULT_DESCRIPTION}`);
+  return {
+    url,
+    title: seoTitle,
+    socialTitle: cleanString(e.seo_title).replace(/\s*\|\s*TheWrkShop\s*$/i, '') || displayTitle(e),
+    description,
+    image: absoluteUrl(cleanString(e.og_image) || DEFAULT_OG_IMAGE)
+  };
+}
+
+function seriesHubHref(e) {
+  return cleanString(e.category) === LEADERSHIP_CATEGORY ? '/leadership/' : '';
+}
+
+// Small label above the title: the category (linked to its hub) or, failing
+// that, the series name when it isn't already the post's title.
+function eyebrowHtml(e) {
+  const category = cleanString(e.category);
+  const series = cleanString(e.series);
+  const href = seriesHubHref(e);
+  if (category && href) return `<a class="daily-series" href="${href}">${escapeHtml(category)}</a>`;
+  if (category) return `<span class="daily-series">${escapeHtml(category)}</span>`;
+  if (series && series.toLowerCase() !== cleanString(e.title).toLowerCase()) {
+    return `<span class="daily-series">${escapeHtml(series)}</span>`;
+  }
+  return '';
+}
+
+function jsonLdFor(e, seo) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: truncate(seo.socialTitle, 110),
+    description: seo.description,
+    datePublished: e.date,
+    dateModified: e.date,
+    url: seo.url,
+    mainEntityOfPage: seo.url,
+    image: seo.image,
+    inLanguage: 'en-US',
+    author: { '@id': 'https://thewrkshop.com/#organization' },
+    publisher: { '@id': 'https://thewrkshop.com/#organization' },
+    isPartOf: { '@id': 'https://thewrkshop.com/#website' }
+  };
+  if (cleanString(e.category)) data.articleSection = cleanString(e.category);
+  if (Array.isArray(e.keywords) && e.keywords.length) data.keywords = e.keywords.join(', ');
+  const refs = (e.scriptures || []).map(s => s.ref).filter(Boolean);
+  if (refs.length) data.about = refs.map(ref => ({ '@type': 'CreativeWork', name: ref }));
+  // keep "</script>" out of the inline JSON
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
+// ---------- Leadership hub (/leadership/) ----------
+
+async function buildLeadershipHub(visible) {
+  const posts = visible
+    .filter(e => cleanString(e.category) === LEADERSHIP_CATEGORY)
+    .slice()
+    .reverse();
+
+  const outDir = path.join(ROOT, 'leadership');
+  await fs.rm(outDir, { recursive: true, force: true });
+  await fs.mkdir(outDir, { recursive: true });
+
+  const tplPath = path.join(ROOT, 'templates', 'leadership.html');
+  const tpl = await fs.readFile(tplPath, 'utf-8');
+
+  const cards = posts.length
+    ? posts.map(e => {
+        const seo = seoFor(e);
+        return `
+      <article class="lead-card">
+        ${e.series ? `<p class="lead-series">${escapeHtml(e.series)}</p>` : ''}
+        <h2><a href="/daily/${fileNameFor(e)}">${escapeHtml(e.subtitle || e.title || 'Daily')}</a></h2>
+        ${e.tagline ? `<p class="lead-tagline">${escapeHtml(e.tagline)}</p>` : ''}
+        <p class="lead-meta"><time datetime="${e.date}">${toHuman(e.date)}</time>${e.verse_ref ? ` · ${escapeHtml(e.verse_ref)}` : ''}</p>
+        <a class="lead-read" href="/daily/${fileNameFor(e)}" aria-label="Read ${escapeHtml(seo.socialTitle)}">Read →</a>
+      </article>`;
+      }).join('\n')
+    : '<p>New leadership posts are on the way.</p>';
+
+  const itemList = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Leadership & Culture',
+    url: `${SITE_URL}/leadership/`,
+    isPartOf: { '@id': 'https://thewrkshop.com/#website' },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: posts.map((e, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${SITE_URL}/daily/${fileNameFor(e)}`,
+        name: seoFor(e).socialTitle
+      }))
+    }
+  };
+
+  const html = fill(tpl, {
+    CARDS_HTML: cards,
+    JSON_LD: JSON.stringify(itemList).replace(/</g, '\\u003c')
+  });
+  await fs.writeFile(path.join(outDir, 'index.html'), html, 'utf-8');
+  return posts.length;
 }
 
 // ---------- Email feed (Kit RSS-to-email reads this) ----------
@@ -587,11 +740,12 @@ async function main() {
   await writeArchiveJson(visible);
   await writeLatestDailyJson(visible);
   await buildDailyPages(visible);
+  const leadershipCount = await buildLeadershipHub(visible);
   await writeDailyFeed(visible);
   await writeGuardRedirects(older, future);
 
   console.log(
-    `Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}.`
+    `Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}. Leadership hub: ${leadershipCount} posts.`
   );
 }
 
