@@ -29,6 +29,8 @@ function blockHtml(block) {
   switch (block.type) {
     case 'paragraph':
       return `<p style="${p}">${escapeHtml(block.text)}</p>`;
+    case 'subhead':
+      return `<p style="${p}margin-top:16px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:13px;color:${BROWN};">${escapeHtml(block.text)}</p>`;
     case 'callout':
       return `<p style="${p}font-weight:700;color:${BROWN};">${escapeHtml(clean(block.prefix) || '👉')} ${escapeHtml(block.text)}</p>`;
     case 'quote':

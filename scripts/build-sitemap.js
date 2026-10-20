@@ -45,6 +45,7 @@ const EXCLUDED_DIRS = new Set([
 const RECURSIVE_PUBLIC_DIRS = [
   'blog',
   'daily',
+  'leadership',
   'pages',
   'sub-pages'
 ];

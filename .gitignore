@@ -19,6 +19,7 @@ Thumbs.db
 # Build outputs (generated each build)
 /daily/
 /blog/
+/leadership/
 /data/*.json
 /_redirects
 scripts/supabase/supabaseConfig.js
