@@ -49,6 +49,20 @@ async function mergeRedirectLines(linesToEnsure) {
   await fs.writeFile(REDIRECTS, ordered.join('\n') + '\n', 'utf-8');
 }
 
+// Hand-kept permanent redirects (moved/removed pages) live in config/redirects.txt
+async function readPermanentRedirects() {
+  try {
+    const raw = await fs.readFile(path.join(ROOT, 'config', 'redirects.txt'), 'utf-8');
+    return raw
+      .split('\n')
+      .map(l => l.trim())
+      .filter(l => l && !l.startsWith('#'))
+      .map(l => l.split(/\s+/).join('   '));
+  } catch {
+    return [];
+  }
+}
+
 async function ensurePassthroughs() {
   await mergeRedirectLines([
     '/blog/*   /blog/:splat   200',
@@ -208,7 +222,7 @@ async function main() {
     ...future.map(e => `/blog/${path.dirname(fileNameFor(e))}/   /blog-archive.html   302!`)
   ];
 
-  await mergeRedirectLines(guardLines);
+  await mergeRedirectLines([...await readPermanentRedirects(), ...guardLines]);
 
   console.log(`Blogs built: ${visible.length} in [${START_DATE}..${today}], future: ${future.length}, older: ${older.length}`);
   console.log('Blog pages generated:');

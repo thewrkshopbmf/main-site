@@ -1,0 +1,7 @@
+# Permanent redirects for pages that moved or were removed.
+# One rule per line:  /old-path   /new-path   301!
+# Merged into _redirects at build time (ahead of the /blog/* and /daily/* passthroughs).
+
+# Duplicate of the Oct 11, 2025 post, removed Oct 2026
+/blog/2026-01-01_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update/   /blog/2025-10-11_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update/   301!
+/blog/2026-01-01_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update/*   /blog/2025-10-11_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update/   301!
