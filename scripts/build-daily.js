@@ -1,5 +1,6 @@
 // scripts/build-daily.js
 import fs from 'fs/promises';
+import { normalizeFlowBlock, flowPlainText, renderFlowHtml } from '../netlify/shared/flow-block.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
@@ -103,6 +104,8 @@ function normalizeBlock(block) {
     if (!items.length) return null;
     return { type, items };
   }
+
+  if (type === 'flow') return normalizeFlowBlock(block);
 
   return null;
 }
@@ -256,6 +259,7 @@ function blockToPlainText(block) {
   if (block.type === 'lines' || block.type === 'bullet_list' || block.type === 'numbered_list') {
     return normalizeStringArray(block.items).join(' ');
   }
+  if (block.type === 'flow') return flowPlainText(block);
   return '';
 }
 
@@ -303,6 +307,8 @@ function renderBlock(block) {
     const items = block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('');
     return `<ol>${items}</ol>`;
   }
+
+  if (block.type === 'flow') return renderFlowHtml(block, escapeHtml);
 
   return '';
 }

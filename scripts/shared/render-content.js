@@ -1,3 +1,4 @@
+import { normalizeFlowBlock, flowPlainText, renderFlowHtml } from '../../netlify/shared/flow-block.js';
 // scripts/shared/render-content.js
 
 export function todayCentralISO() {
@@ -297,6 +298,8 @@ function normalizeBlock(block) {
     return { type, items };
   }
 
+  if (type === 'flow') return normalizeFlowBlock(block);
+
   return null;
 }
 
@@ -456,6 +459,8 @@ function renderDailyBlock(block) {
     return `<ol>${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ol>`;
   }
 
+  if (block.type === 'flow') return renderFlowHtml(block, escapeHtml);
+
   return '';
 }
 
@@ -479,6 +484,7 @@ function sectionPlainText(section) {
     if (block.type === 'lines' || block.type === 'bullet_list' || block.type === 'numbered_list') {
       return normalizeStringArray(block.items).join(' ');
     }
+    if (block.type === 'flow') return flowPlainText(block);
     return '';
   }).filter(Boolean).join('\n');
 }

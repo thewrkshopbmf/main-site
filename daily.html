@@ -107,6 +107,17 @@
       font-style:italic;
       color:#3e2c23;
     }
+    /* Flow visuals (progressions); keep in sync with netlify/shared/flow-block.js */
+    .daily-flow { margin: 1.25rem auto 1.4rem; max-width: 440px; text-align: center; }
+    .daily-flow-title { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; margin-bottom: .6rem; }
+    .daily-flow-steps { list-style: none; margin: 0; padding: 0; }
+    .daily-flow-step { margin: 0; padding: 0; }
+    .daily-flow-step + .daily-flow-step::before { content: "↓"; display: block; color: #c9aa8c; font-size: 1.15rem; line-height: 1; margin: .3rem 0; }
+    .daily-flow-box { display: block; border: 1px solid; border-radius: 10px; padding: .6rem .9rem; }
+    .daily-flow-label { display: block; font-weight: 700; line-height: 1.35; }
+    .daily-flow-note { display: block; font-size: .92rem; font-style: italic; line-height: 1.4; margin-top: .2rem; }
+    .daily-flow-loop { margin: .7rem 0 0; color: #6b4a36; font-weight: 600; font-size: .95rem; }
+    .daily-flow-caption { margin: .6rem 0 0; color: #6b5b53; font-style: italic; font-size: .95rem; }
   </style>
   <!-- Google Analytics (same GA4 property as the homepage's Firebase analytics) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
@@ -252,6 +263,10 @@
         return { type, items };
       }
 
+      if (type === 'flow' && Array.isArray(block.steps) && block.steps.length >= 2) {
+        return { ...block, type: 'flow' };
+      }
+
       return null;
     }
 
@@ -355,6 +370,10 @@
         if (block.type === 'lines' || block.type === 'bullet_list' || block.type === 'numbered_list') {
           return normalizeStringArray(block.items).join('\n');
         }
+        if (block.type === 'flow') {
+          return [block.title, ...(block.steps || []).map(s => s.note ? `${s.label} ${s.note}` : s.label), block.loop, block.caption]
+            .filter(Boolean).join('\n');
+        }
         return '';
       }).filter(Boolean).join('\n');
     }
@@ -362,6 +381,30 @@
     function findSection(entry, keys) {
       const wanted = new Set(keys.map(k => String(k).toLowerCase()));
       return (entry.sections || []).find(section => wanted.has((section.key || '').toLowerCase())) || null;
+    }
+
+
+    // Flow visuals: browser copy of renderFlowHtml in netlify/shared/flow-block.js (keep in sync)
+    function flowShade(i, n) {
+      if (i === n - 1) return { bg: '#3e2c23', fg: '#f4f1ee', note: '#e8dccf', border: '#3e2c23' };
+      const t = n <= 2 ? 0 : i / (n - 2);
+      const c = [255, 255, 255].map((f, k) => Math.round(f + ([234, 217, 200][k] - f) * t));
+      return { bg: `rgb(${c.join(',')})`, fg: '#3e2c23', note: '#6b5b53', border: 'rgba(62,44,35,.18)' };
+    }
+    function renderFlow(block) {
+      const steps = Array.isArray(block.steps) ? block.steps : [];
+      if (steps.length < 2) return '';
+      const n = steps.length;
+      const lis = steps.map((s, i) => {
+        const c = flowShade(i, n);
+        return `<li class="daily-flow-step"><span class="daily-flow-box" style="background:${c.bg};color:${c.fg};border-color:${c.border};"><span class="daily-flow-label">${escapeHtml(s.label)}</span>${s.note ? `<span class="daily-flow-note" style="color:${c.note};">${escapeHtml(s.note)}</span>` : ''}</span></li>`;
+      }).join('');
+      return `<figure class="daily-flow" role="group" aria-label="${escapeHtml(block.title || 'Progression')}">`
+        + (block.title ? `<div class="daily-flow-title">${escapeHtml(block.title)}</div>` : '')
+        + `<ol class="daily-flow-steps">${lis}</ol>`
+        + (block.loop ? `<p class="daily-flow-loop">↻ ${escapeHtml(block.loop)}</p>` : '')
+        + (block.caption ? `<figcaption class="daily-flow-caption">${escapeHtml(block.caption)}</figcaption>` : '')
+        + `</figure>`;
     }
 
     function renderBlock(block) {
@@ -376,6 +419,7 @@
       if (block.type === 'lines') return `<p class="daily-lines">${block.items.map(item => escapeHtml(item)).join('<br>')}</p>`;
       if (block.type === 'bullet_list') return `<ul>${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
       if (block.type === 'numbered_list') return `<ol>${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ol>`;
+      if (block.type === 'flow') return renderFlow(block);
 
       return '';
     }
