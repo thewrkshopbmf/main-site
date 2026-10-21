@@ -168,7 +168,7 @@ def meeting_agenda():
 
 # ---------- 2. 4-Week Reading Plan ----------
 WEEKS = [
-    ('Week 1', 'Foundation', 'Matthew 7:24–27', 'Set expectations and complete the 7-Lens Lamp Check.'),
+    ('Week 1', 'Foundation', 'Matthew 7:24–27', 'Set expectations and read the passage together.'),
     ('Week 2', 'Formation', 'Romans 12:1–2', 'Identify one habit to start and one to surrender.'),
     ('Week 3', 'Fellowship', 'Hebrews 10:24–25', 'Each man shares a testimony in 2 minutes.'),
     ('Week 4', 'Faith-in-Action', 'James 1:22–25', 'Plan a simple serve together (1 hour).'),

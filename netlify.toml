@@ -45,8 +45,3 @@
 [functions]
   node_bundler = "esbuild"
 
-[[scheduled.functions]]
-  name = "send-devotional"
-  schedule = "0 13 * * *"
-  # Runs every day at 13:00 UTC (≈ 8:00 AM America/Chicago)
-  # Adjust if you want a different time
