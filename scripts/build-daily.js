@@ -537,7 +537,10 @@ async function buildDailyPages(visible) {
       SERIES_NOTE_HTML: cleanString(e.series)
         ? `<p class="daily-series-note">Part of the series <em>${escapeHtml(cleanString(e.series))}</em></p>`
         : '',
-      TAGLINE_HTML: e.tagline ? `<p class="daily-tagline" id="dTagline">${escapeHtml(e.tagline)}</p>` : '',
+      TAGLINE_HTML: (e.tagline ? `<p class="daily-tagline" id="dTagline">${escapeHtml(e.tagline)}</p>` : '')
+        + (cleanString(e.hero_image)
+          ? `<figure class="daily-hero-image" style="margin:1rem auto 1.25rem;max-width:480px;"><img src="${escapeHtml(cleanString(e.hero_image))}" alt="${escapeHtml(cleanString(e.hero_image_alt) || cleanString(e.headline) || e.title || '')}" style="display:block;width:100%;height:auto;border-radius:12px;" loading="eager"></figure>`
+          : ''),
       HUMAN_DATE: toHuman(e.date),
       DATE: e.date,
       VERSE_REF: buildPrimaryVerseRefHTML(e),
@@ -565,6 +568,7 @@ async function buildDailyPages(visible) {
 // Optional per-post fields in content/daily/*.json:
 //   seo_title        – what Google shows as the blue link (keep under ~60 chars)
 //   seo_description  – the snippet under it (aim for 140–160 chars)
+//   hero_image       – optional site path to an image shown under the title
 //   og_image         – site path to a 1200x630 social card (scripts/og/make-og-card.py)
 //   category         – e.g. "Leadership & Culture" (posts in this category appear on /leadership/)
 //   series           – e.g. "The Battle Before the Battle"
