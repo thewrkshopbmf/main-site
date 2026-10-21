@@ -77,6 +77,18 @@
     <div class="lead-list">
 {{CARDS_HTML}}
     </div>
+
+    <section class="daily-signup" aria-labelledby="leadSignupTitle">
+      <h3 id="leadSignupTitle">Get new leadership posts by email</h3>
+      <p>They come out as part of The Daily. Get each one in your inbox the morning it comes out.</p>
+      <form class="daily-signup-form" novalidate>
+        <input type="text" name="first_name" placeholder="First name (optional)" autocomplete="given-name" maxlength="60" />
+        <input type="email" name="email" placeholder="Your email" autocomplete="email" required />
+        <input type="text" name="company" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button type="submit">Send Them to Me</button>
+      </form>
+      <p class="daily-signup-msg" role="status" aria-live="polite"></p>
+    </section>
   </main>
 
   <footer>

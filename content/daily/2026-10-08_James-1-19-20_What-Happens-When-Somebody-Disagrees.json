@@ -84,7 +84,11 @@
             "Counterargument.",
             "Escalation."
           ],
-          "caption": "The visible conflict came later."
+          "caption": "The visible conflict came later.",
+          "link": {
+            "href": "/upstream/",
+            "text": "See the full framework"
+          }
         },
         {
           "type": "callout",
