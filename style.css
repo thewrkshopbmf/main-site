@@ -857,3 +857,21 @@ body.products-theme .listen-btn:hover {
   font-weight: 600;
 }
 .footer-links a:hover { text-decoration: underline; opacity: 1; }
+
+/* About: values list */
+.values-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+.values-list li { line-height: 1.45; }
+.values-list strong { color: #3e2c23; }
+
+/* The Work Beneath the Work (formation path) */
+.path-section { max-width: 1100px; margin: 0 auto; }
+.path-lead { text-align: center; font-size: 1.2rem; font-style: italic; color: #3e2c23; max-width: 640px; margin: -1rem auto 2rem; }
+.path-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; counter-reset: none; }
+.path-step { position: relative; background: #f4f1ee; border-radius: 12px; padding: 1.5rem 1.25rem 1.25rem; border-top: 4px solid #3e2c23; display: flex; flex-direction: column; gap: .5rem; }
+.path-num { font-size: 2.2rem; font-weight: 800; line-height: 1; color: #c9aa8c; }
+.path-step h3 { margin: 0; color: #3e2c23; font-size: 1.25rem; }
+.path-step p { margin: 0; color: #2b2b2b; flex: 1; }
+.path-link { color: #3e2c23; font-weight: 700; text-decoration: none; margin-top: .25rem; }
+.path-link:hover { text-decoration: underline; }
+@media (max-width: 960px) { .path-steps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .path-steps { grid-template-columns: 1fr; } .path-lead { margin-top: -.5rem; } }
