@@ -91,14 +91,20 @@
       "label": "Watch the Progression",
       "blocks": [
         {
-          "type": "flow",
-          "steps": [
+          "type": "lines",
+          "items": [
             "Someone succeeds.",
+            "↓",
             "Comparison activates.",
+            "↓",
             "Their success becomes commentary about me.",
+            "↓",
             "Insecurity interprets.",
+            "↓",
             "Their blessing begins feeling like my threat.",
+            "↓",
             "I start watching them differently.",
+            "↓",
             "Relationship changes."
           ]
         },
