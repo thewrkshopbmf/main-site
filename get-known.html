@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Known: Join an Online Men’s Group | TheWrkShop</title>
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
+  <meta name="description" content="Stop carrying it alone. Tell us a little about where you are, then we’ll set up a 20-minute phone call or Google Meet to find the right next step, including an online group."/>
+  <link rel="canonical" href="https://thewrkshop.com/get-known.html"/>
+  <meta property="og:site_name" content="TheWrkShop"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Get Known | TheWrkShop"/>
+  <meta property="og:description" content="Stop carrying it alone. Tell us where you are, and we’ll set up a 20-minute call to find the right next step."/>
+  <meta property="og:url" content="https://thewrkshop.com/get-known.html"/>
+  <meta property="og:image" content="https://thewrkshop.com/assets/og/site.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <style>
+    .gk-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem 2.5rem; text-align:center; }
+    .gk-hero h1 { font-size:clamp(1.9rem,3.4vw,2.7rem); margin:0 0 .5rem; }
+    .gk-hero p { max-width:640px; margin:0 auto; opacity:.95; line-height:1.6; }
+    .gk-wrap { max-width:760px; margin:0 auto; padding:2rem 1rem 3rem; }
+    .gk-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; margin:0 0 1.5rem; padding:0; list-style:none; }
+    .gk-steps li { background:#f4f1ee; border-radius:12px; padding:1rem; border-top:4px solid #3e2c23; }
+    .gk-steps b { display:block; color:#3e2c23; margin-bottom:.25rem; }
+    .gk-steps span { color:#4a3d36; font-size:.95rem; line-height:1.45; }
+    .gk-card { background:#f4f1ee; border-radius:14px; padding:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,.07); }
+    .gk-card h2 { color:#3e2c23; font-size:1.25rem; margin:1.5rem 0 .25rem; text-align:left; }
+    .gk-card h2:first-child { margin-top:0; }
+    .gk-hint { color:#6b5b53; font-size:.92rem; margin:0 0 .75rem; }
+    .gk-row { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+    .gk-field { display:flex; flex-direction:column; gap:.3rem; margin-bottom:.75rem; }
+    .gk-field label, .gk-legend { font-weight:600; color:#3e2c23; font-size:.95rem; }
+    .gk-field input, .gk-field select, .gk-field textarea {
+      font:inherit; padding:.65rem .75rem; border-radius:8px; border:1px solid rgba(0,0,0,.18); background:#fff; color:#2b2b2b; width:100%; box-sizing:border-box; }
+    .gk-field textarea { min-height:96px; resize:vertical; }
+    .gk-field input:focus, .gk-field select:focus, .gk-field textarea:focus { outline:2px solid #6b4a36; outline-offset:1px; }
+    fieldset { border:0; padding:0; margin:0 0 .75rem; }
+    .gk-choices { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+    .gk-choice { display:flex; align-items:flex-start; gap:.55rem; background:#fff; border:1px solid rgba(0,0,0,.12); border-radius:8px; padding:.6rem .7rem; cursor:pointer; line-height:1.35; }
+    .gk-choice input { margin-top:.2rem; accent-color:#3e2c23; }
+    .gk-choice:has(input:checked) { border-color:#3e2c23; box-shadow:inset 0 0 0 1px #3e2c23; }
+    .gk-optional { font-weight:400; color:#6b5b53; font-size:.85rem; }
+    .gk-hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+    .gk-privacy { color:#6b5b53; font-size:.9rem; margin:1rem 0; }
+    .gk-submit { background:#3e2c23; color:#f4f1ee; border:0; border-radius:8px; padding:.85rem 1.4rem; font:inherit; font-weight:700; cursor:pointer; width:100%; }
+    .gk-submit:hover { background:#5b3a29; }
+    .gk-submit[disabled] { opacity:.6; cursor:default; }
+    .gk-error { color:#8a1f11; font-weight:600; margin:.75rem 0 0; min-height:1.2em; }
+    .gk-done { display:none; text-align:center; }
+    .gk-done h2 { text-align:center; }
+    .gk-done.is-visible { display:block; }
+    .gk-btn { display:inline-block; background:#3e2c23; color:#f4f1ee; padding:.75rem 1.2rem; border-radius:8px; text-decoration:none; font-weight:700; }
+    @media (max-width:640px) {
+      .gk-steps, .gk-row, .gk-choices { grid-template-columns:1fr; }
+    }
+  </style>
+  <!-- Google Analytics (same GA4 property as the homepage's Firebase analytics) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N48478JV2Z');</script>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <section class="gk-hero">
+    <h1>Get Known</h1>
+    <p>Stop carrying it alone. Tell us a little about where you are. Then we’ll set up a short call to hear your story and find the right next step together.</p>
+  </section>
+
+  <main class="gk-wrap">
+    <ol class="gk-steps" aria-label="What happens">
+      <li><b>1. Tell us where you are</b><span>About two minutes. No essays.</span></li>
+      <li><b>2. A 20-minute conversation</b><span>By phone or Google Meet. No pressure, no pitch.</span></li>
+      <li><b>3. Your next step</b><span>An online group, The Daily first, or one-on-one time.</span></li>
+    </ol>
+
+    <form class="gk-card" id="gkForm" novalidate>
+      <h2>About you</h2>
+      <div class="gk-row">
+        <div class="gk-field"><label for="gkFirst">First name</label><input id="gkFirst" name="first_name" autocomplete="given-name" required maxlength="60"></div>
+        <div class="gk-field"><label for="gkLast">Last name <span class="gk-optional">(optional)</span></label><input id="gkLast" name="last_name" autocomplete="family-name" maxlength="60"></div>
+      </div>
+      <div class="gk-row">
+        <div class="gk-field"><label for="gkEmail">Email</label><input id="gkEmail" name="email" type="email" autocomplete="email" required maxlength="254"></div>
+        <div class="gk-field"><label for="gkPhone">Phone <span class="gk-optional">(needed for a call)</span></label><input id="gkPhone" name="phone" type="tel" autocomplete="tel" maxlength="30"></div>
+      </div>
+      <div class="gk-field">
+        <label for="gkSeason">Season of life</label>
+        <select id="gkSeason" name="season">
+          <option value="">Choose one</option>
+          <option value="single">Single</option>
+          <option value="married">Married</option>
+          <option value="dad_young">Dad with kids at home</option>
+          <option value="empty_nester">Empty nester</option>
+          <option value="divorced">Divorced or separated</option>
+          <option value="widowed">Widowed</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <h2>What’s bringing you here right now?</h2>
+      <p class="gk-hint">Check any that fit.</p>
+      <fieldset>
+        <legend class="gk-hp">What’s bringing you here</legend>
+        <div class="gk-choices">
+          <label class="gk-choice"><input type="checkbox" name="bringing" value="isolated">Feeling isolated</label>
+          <label class="gk-choice"><input type="checkbox" name="bringing" value="identity">Unsure who I am or what I’m for</label>
+          <label class="gk-choice"><input type="checkbox" name="bringing" value="family">My marriage or family</label>
+          <label class="gk-choice"><input type="checkbox" name="bringing" value="work">Pressure at work or in leadership</label>
+          <label class="gk-choice"><input type="checkbox" name="bringing" value="faith_stuck">My faith feels stuck</label>
+          <label class="gk-choice"><input type="checkbox" name="bringing" value="grow">I want to grow</label>
+          <label class="gk-choice"><input type="checkbox" name="bringing" value="sent">Someone sent me</label>
+        </div>
+      </fieldset>
+
+      <h2>What are you looking for?</h2>
+      <p class="gk-hint">Check any that fit.</p>
+      <fieldset>
+        <legend class="gk-hp">What you’re looking for</legend>
+        <div class="gk-choices">
+          <label class="gk-choice"><input type="checkbox" name="looking_for" value="truth">Men who will tell me the truth</label>
+          <label class="gk-choice"><input type="checkbox" name="looking_for" value="accountability">Accountability</label>
+          <label class="gk-choice"><input type="checkbox" name="looking_for" value="scripture">Studying Scripture</label>
+          <label class="gk-choice"><input type="checkbox" name="looking_for" value="leading">Help leading better</label>
+          <label class="gk-choice"><input type="checkbox" name="looking_for" value="talk">Someone to talk to</label>
+          <label class="gk-choice"><input type="checkbox" name="looking_for" value="unsure">Not sure yet</label>
+        </div>
+      </fieldset>
+
+      <h2>A little more</h2>
+      <fieldset>
+        <legend class="gk-legend">Have you been in a men’s group before?</legend>
+        <div class="gk-choices" style="margin-top:.4rem;">
+          <label class="gk-choice"><input type="radio" name="group_experience" value="never">Never been in one</label>
+          <label class="gk-choice"><input type="radio" name="group_experience" value="helped">Been in one that helped</label>
+          <label class="gk-choice"><input type="radio" name="group_experience" value="didnt_help">Been in one that didn’t</label>
+        </div>
+      </fieldset>
+      <div class="gk-field">
+        <label for="gkWorth">What would make this worth your time? <span class="gk-optional">(optional)</span></label>
+        <textarea id="gkWorth" name="worth_your_time" maxlength="1000" placeholder="A sentence or two is plenty."></textarea>
+      </div>
+
+      <h2>Your conversation</h2>
+      <p class="gk-hint">About 20 minutes with someone from TheWrkShop.</p>
+      <fieldset>
+        <legend class="gk-legend">How should we connect?</legend>
+        <div class="gk-choices" style="margin-top:.4rem;">
+          <label class="gk-choice"><input type="radio" name="contact_pref" value="google_meet" checked>Google Meet (video)</label>
+          <label class="gk-choice"><input type="radio" name="contact_pref" value="phone">Phone call</label>
+        </div>
+      </fieldset>
+      <div class="gk-row">
+        <div class="gk-field">
+          <label for="gkTz">Your time zone</label>
+          <select id="gkTz" name="time_zone">
+            <option value="Eastern">Eastern</option>
+            <option value="Central" selected>Central</option>
+            <option value="Mountain">Mountain</option>
+            <option value="Pacific">Pacific</option>
+            <option value="Alaska">Alaska</option>
+            <option value="Hawaii">Hawaii</option>
+            <option value="Outside the US">Outside the US</option>
+          </select>
+        </div>
+        <div class="gk-field">
+          <label for="gkTimes">Best days and times <span class="gk-optional">(optional)</span></label>
+          <input id="gkTimes" name="best_times" maxlength="200" placeholder="e.g., weekday evenings, Saturday mornings">
+        </div>
+      </div>
+      <div class="gk-field">
+        <label for="gkHeard">How did you hear about TheWrkShop? <span class="gk-optional">(optional)</span></label>
+        <input id="gkHeard" name="heard_from" maxlength="200">
+      </div>
+
+      <div class="gk-hp" aria-hidden="true"><label for="gkCompany">Company</label><input id="gkCompany" name="company" tabindex="-1" autocomplete="off"></div>
+
+      <p class="gk-privacy">Only TheWrkShop’s leaders see your answers. We’ll never share them or add you to a list without asking.</p>
+      <button class="gk-submit" id="gkSubmit" type="submit">Start the conversation</button>
+      <p class="gk-error" id="gkError" role="alert"></p>
+    </form>
+
+    <div class="gk-card gk-done" id="gkDone" aria-live="polite">
+      <h2>Got it. Thanks for taking the first step.</h2>
+      <p>Check your email. Someone from TheWrkShop will reach out within a few days to set up your conversation.</p>
+      <p>Until then, start with today’s Daily.</p>
+      <p><a class="gk-btn" href="/daily.html">Read today’s Daily</a></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <nav class="footer-links" aria-label="Browse">
+        <a href="/library/">Library</a>
+        <a href="/leadership/">Leadership &amp; Culture</a>
+        <a href="/daily-archive.html">Daily Archive</a>
+        <a href="/blog-archive.html">Blog</a>
+        <a href="/podcasts.html">Podcast</a>
+      </nav>
+      <div class="footer-logo"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop" width="233" height="180" loading="lazy"></div>
+      <p>&copy; 2026 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/script.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('gkForm');
+      var btn = document.getElementById('gkSubmit');
+      var err = document.getElementById('gkError');
+      var done = document.getElementById('gkDone');
+      var phone = document.getElementById('gkPhone');
+
+      // Guess the time zone from the browser.
+      try {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        var map = { 'America/New_York':'Eastern','America/Detroit':'Eastern','America/Chicago':'Central','America/Denver':'Mountain','America/Phoenix':'Mountain','America/Los_Angeles':'Pacific','America/Anchorage':'Alaska','Pacific/Honolulu':'Hawaii' };
+        if (map[tz]) document.getElementById('gkTz').value = map[tz];
+        else if (tz && tz.indexOf('America/') !== 0) document.getElementById('gkTz').value = 'Outside the US';
+      } catch (e) {}
+
+      form.addEventListener('change', function (e) {
+        if (e.target.name === 'contact_pref') phone.required = e.target.value === 'phone';
+      });
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        err.textContent = '';
+        var fd = new FormData(form);
+        var body = {
+          first_name: fd.get('first_name'), last_name: fd.get('last_name'), email: fd.get('email'), phone: fd.get('phone'),
+          season: fd.get('season'), bringing: fd.getAll('bringing'), looking_for: fd.getAll('looking_for'),
+          group_experience: fd.get('group_experience'), worth_your_time: fd.get('worth_your_time'),
+          contact_pref: fd.get('contact_pref'), time_zone: fd.get('time_zone'), best_times: fd.get('best_times'),
+          heard_from: fd.get('heard_from'), company: fd.get('company'), source: 'get-known'
+        };
+        if (!String(body.first_name || '').trim()) { err.textContent = 'Please tell us your first name.'; return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(body.email || '').trim())) { err.textContent = 'Please enter a valid email address.'; return; }
+        if (body.contact_pref === 'phone' && String(body.phone || '').replace(/\D/g, '').length < 7) { err.textContent = 'Please add a phone number so we can call you.'; return; }
+
+        btn.disabled = true; btn.textContent = 'Sending…';
+        try {
+          var res = await fetch('/groups/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+          var data = await res.json().catch(function () { return {}; });
+          if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+          form.style.display = 'none';
+          done.classList.add('is-visible');
+          done.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (window.gtag) gtag('event', 'group_intake_submitted', { contact_pref: body.contact_pref });
+        } catch (e2) {
+          err.textContent = e2.message;
+          btn.disabled = false; btn.textContent = 'Start the conversation';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

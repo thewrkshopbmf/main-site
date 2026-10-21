@@ -72,6 +72,9 @@ async function resend(path, payload) {
   return body;
 }
 
+// Send one email through Resend (used by other site functions, e.g. the group intake).
+export { resend as sendEmail };
+
 export async function sendConfirmation(sub) {
   const mail = confirmEmail({ firstName: sub.first_name, confirmUrl: confirmUrl(sub.confirm_token) });
   return resend('/emails', { from: FROM, to: [sub.email], subject: mail.subject, html: mail.html, text: mail.text });
