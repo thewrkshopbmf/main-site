@@ -96,7 +96,13 @@ async function main() {
   }
 
   entries.sort((a, b) => a.date.localeCompare(b.date));
-  const today = todayCentralISO();
+  // On the staging preview, show weekend posts up to a week ahead so the Friday draft can be reviewed
+  // before it goes live. Production (thewrkshop.com) still only shows posts dated today or earlier.
+  const isStagingPreview = process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging';
+  const today = isStagingPreview
+    ? new Date(new Date(todayCentralISO() + 'T12:00:00Z').getTime() + 7 * 864e5).toISOString().slice(0, 10)
+    : todayCentralISO();
+  if (isStagingPreview) console.log(`[blog] staging preview: showing posts dated through ${today}`);
 
   const allowed = entries.filter(e => e.date >= START_DATE);
   const visible = allowed.filter(e => e.date <= today);
