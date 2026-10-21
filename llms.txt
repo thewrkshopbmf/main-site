@@ -1,0 +1,30 @@
+# TheWrkShop
+
+> TheWrkShop is a Christian men's discipleship and formation ministry that serves men online. It helps men face "the wound beneath the wound": the battle that starts inside a man before it shows up at work, at home or in the rooms he leads. Its central idea is that the battle starts before the behavior, so formation has to happen upstream, in what a man believes in the moment.
+
+TheWrkShop publishes The Daily (a short Scripture-based devotional every weekday), leadership studies for anyone who leads (managers, coaches, pastors and parents), a weekend 4-3-2-1 post, and practical tools for men's groups. Content is written from a Christian perspective and quotes Scripture (usually the NIV).
+
+## Start here
+
+- [The Upstream Formation Framework](https://thewrkshop.com/upstream/): A teaching model (trigger, interpretation, agreement, response, formation) for how what a man believes in the moment shapes who he becomes. Includes Scripture, a worked example, a worksheet and a Q&A. It is a proposed teaching model, not a neurological claim or a quotation of Scripture.
+- [The Daily](https://thewrkshop.com/daily.html): Today's devotional. One Scripture, one hard question and one step, released at 12:01 am Central on weekdays.
+- [Leadership & Culture](https://thewrkshop.com/leadership/): Studies on how leaders shape culture: what they reward, tolerate and model, and how they respond to disagreement, success and the need to be liked.
+- [Get Known](https://thewrkshop.com/get-known.html): For men who want to join an online group. A short form followed by a 20-minute phone call or Google Meet.
+
+## Resources
+
+- [Men's Group Starter Kit](https://thewrkshop.com/sub-pages/resources/starter-kit.html): A weekly rhythm, a first-four-weeks plan, a discussion flow and free printable PDFs (meeting agenda, reading plan, accountability pairs guide, group covenant, facilitator one-pager).
+- [Spiritual Gifts Assessment](https://thewrkshop.com/assessment.html): A free assessment of spiritual gifts and likely ministry fit.
+- [Resources](https://thewrkshop.com/resources.html): Bible study tools, habit trackers and reading plans.
+
+## Archives
+
+- [Library](https://thewrkshop.com/library/): Every Daily and blog post in one place.
+- [Daily Archive](https://thewrkshop.com/daily-archive.html)
+- [Blog: Weekend 4-3-2-1](https://thewrkshop.com/blog-archive.html): Four Scriptures, three insights, two questions and one action step each weekend.
+- [Podcast](https://thewrkshop.com/podcasts.html)
+
+## Optional
+
+- [Store](https://thewrkshop.com/products.html): Guides and printable PDFs (coming soon).
+- [Sitemap](https://thewrkshop.com/sitemap.xml)
