@@ -3,6 +3,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
+import { SEASONAL_PAGES, isInSeason } from './shared/seasonal.js';
+import { todayCentralISO } from './shared/render-content.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -147,6 +149,8 @@ async function readRootPublicHtml() {
     if (!isHtmlFile(entry.name)) continue;
     if (EXCLUDED_ROOT_HTML.has(entry.name)) continue;
     if (isHiddenOrPrivateLike(entry.name)) continue;
+    const seasonal = SEASONAL_PAGES.find(p => p.file === entry.name);
+    if (seasonal && !isInSeason(seasonal, todayCentralISO())) continue; // out of season
 
     const absPath = path.join(ROOT, entry.name);
     urls.push({
