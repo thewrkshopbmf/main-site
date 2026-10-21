@@ -535,6 +535,10 @@ async function buildDailyPages(visible) {
       JSON_LD: jsonLdFor(e, seo),
       SERIES_HTML: eyebrowHtml(e),
       HERO_TITLE: hasLeadershipPage(e) ? 'Leadership &amp; Culture' : 'Daily',
+      SIGNUP_TITLE: hasLeadershipPage(e) ? 'Get posts like this in your inbox' : 'Get the Daily in your inbox',
+      SIGNUP_TEXT: hasLeadershipPage(e)
+        ? 'Leadership posts like this one come out as part of The Daily. Get each one by email the morning it comes out.'
+        : 'Join the men receiving each new Daily by email the morning it comes out.',
       HERO_SUB: hasLeadershipPage(e)
         ? 'For leaders, managers, coaches, pastors and parents.'
         : 'Scripture, reflection, and one clear step to live it out.',

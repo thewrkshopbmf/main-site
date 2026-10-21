@@ -8,49 +8,30 @@
   <link rel="stylesheet" href="/style.css"/>
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
   <style>
-    /* Custom Deep Blue Page Style */
-    body.products-theme {
-      background:#0f1220; 
-      color:#e9eef6;
-      --header-bg: #12243a;        
-      --header-text: #e9eef6;
-      --header-link: #e9eef6;
-      --header-link-hover: #9ac3ff;
-
-      background: #0f1220;
-      color: #e9eef6;
-    }
-    body.products-theme { background:#0f1220; color:#e9eef6; }
     .shop-shell { max-width:1100px; margin:0 auto; padding:2rem 1rem 3rem; }
-    .shop-hero { text-align:center; margin:1rem 0 2rem; }
-    .shop-hero .eyebrow { color:#8ea4ff; font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:.8rem; }
-    .shop-hero h1 { margin:.4rem 0; line-height:1.15; }
-    .shop-hero p.sub { color:#a9b5d1; margin:.25rem 0 0; }
+    .shop-hero { text-align:center; margin:1rem 0 2rem; color:#3e2c23; }
+    .shop-hero .eyebrow { color:#6b4a36; font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem; }
+    .shop-hero h1 { margin:.4rem 0; line-height:1.15; color:#3e2c23; }
+    .shop-hero p.sub { color:#3e2c23; margin:.25rem auto 0; max-width:680px; line-height:1.55; }
 
-    .choice-grid { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); margin:1.75rem 0 2.25rem; }
-    .card { background:#141932; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:1.1rem; display:flex; flex-direction:column; gap:.6rem }
-    .card .k { font-weight:700; color:#c3cffc; font-size:.9rem; letter-spacing:.03em }
-    .card h3 { margin:0; color:#e9eef6 }
-    .card p { color:#b9c3da; margin:0 }
-    .cta-row { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.4rem }
-    .btn { display:inline-flex; align-items:center; gap:.5rem; text-decoration:none; padding:.6rem .9rem; border-radius:10px; font-weight:600 }
-    .btn.primary { background:#5c6cff; color:white; border:1px solid rgba(255,255,255,.08) }
-    .btn.ghost { background:transparent; color:#c3cffc; border:1px solid rgba(255,255,255,.18) }
-    .btn:hover { filter:brightness(1.07) }
+    .choice-grid { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); margin:1.75rem 0 2.25rem; align-items:start; }
+    .card { background:#f4f1ee; border:1px solid rgba(0,0,0,.08); border-radius:14px; padding:1.25rem; display:flex; flex-direction:column; gap:.6rem; box-shadow:0 2px 6px rgba(0,0,0,.07); }
+    .card .k { font-weight:700; color:#8a6a52; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; }
+    .card h3 { margin:0; color:#3e2c23; }
+    .card p { color:#2b2b2b; margin:0; line-height:1.55; }
+    .cta-row { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.4rem; }
+    .btn { display:inline-flex; align-items:center; gap:.5rem; text-decoration:none; padding:.65rem 1rem; border-radius:8px; font-weight:700; font:inherit; font-weight:700; cursor:pointer; }
+    .btn.primary { background:#3e2c23; color:#f4f1ee; border:1px solid #3e2c23; }
+    .btn.ghost { background:#fff; color:#3e2c23; border:1px solid #3e2c23; }
+    .btn:hover { filter:brightness(1.08); }
 
-    .gift { background:linear-gradient(180deg, #182043 0%, #141932 100%); border:1px solid rgba(142,164,255,.25) }
-    .gift h3 { color:#f6f9ff }
-    .pill { display:inline-flex; align-items:center; gap:.35rem; font-size:.75rem; font-weight:700; background:#25306b; color:#c8d2ff; border:1px solid rgba(142,164,255,.25); padding:.15rem .55rem; border-radius:999px }
-    .list { padding-left:1.1rem; margin:.2rem 0 0 }
-    .list li { margin:.2rem 0; color:#c7d2ec }
-
-    /* Make injected header readable on dark bg */
-    header, .navbar, .nav-links a { background:transparent !important; color:#e9eef6 !important; }
-    .navbar .active { border-color:rgba(255,255,255,.25) !important }
-    footer { background:#0b0e1a }
+    .gift { border-top:4px solid #3e2c23; }
+    .pill { align-self:flex-start; display:inline-flex; align-items:center; gap:.35rem; font-size:.75rem; font-weight:700; background:#3e2c23; color:#f4f1ee; padding:.2rem .6rem; border-radius:999px; }
+    .list { padding-left:1.1rem; margin:.2rem 0 0; }
+    .list li { margin:.2rem 0; color:#2b2b2b; }
     .shop-notify { max-width: 720px; margin: 2rem auto 0; text-align: center; }
     .shop-notify-form { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; margin-top: .75rem; }
-    .shop-notify-form input { flex: 1 1 240px; max-width: 360px; padding: .65rem .8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,.25); font: inherit; }
+    .shop-notify-form input { flex: 1 1 240px; max-width: 360px; padding: .65rem .8rem; border-radius: 8px; border: 1px solid rgba(0,0,0,.18); font: inherit; background:#fff; }
     .shop-notify .subscribe-success { display: none; margin-top: .75rem; }
   </style>
   <meta name="description" content="TheWrkShop store is coming soon: guides and printable PDFs for men’s groups, leadership teams and personal growth. Get the free Starter Pack now."/>
@@ -71,7 +52,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N48478JV2Z');</script>
 </head>
-<body class="products-theme">
+<body>
   
   <!-- Global header -->
   <div id="site-header"></div>

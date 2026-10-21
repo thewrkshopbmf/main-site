@@ -109,7 +109,8 @@ document.addEventListener("DOMContentLoaded", function () {
             email,
             first_name: (f.first_name ? f.first_name.value : '').trim(),
             company: f.company ? f.company.value : '',
-            source: location.pathname.startsWith('/daily/') ? 'daily-page' : 'daily-today'
+            source: location.pathname.startsWith('/leadership/') ? 'leadership'
+              : location.pathname.startsWith('/daily/') ? 'daily-page' : 'daily-today'
           })
         });
         const data = await res.json().catch(() => ({}));

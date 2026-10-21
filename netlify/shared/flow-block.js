@@ -11,7 +11,8 @@
 //     { "label": "Shame interprets it.", "note": "“If they know, they’ll think less of me.”" }  (…or label + note)
 //   ],
 //   "loop": "Repeated responses shape what we see next time",   (optional, shown with ↻)
-//   "caption": "The visible conflict came later."              (optional, below)
+//   "caption": "The visible conflict came later.",             (optional, below)
+//   "link": { "href": "/upstream/", "text": "See the Upstream Formation Framework" }   (optional)
 // }
 
 const BROWN = '#3e2c23';
@@ -30,6 +31,10 @@ export function normalizeFlowBlock(block) {
   if (steps.length < 2) return null;
   const out = { type: 'flow', steps };
   for (const k of ['title', 'loop', 'caption']) if (clean(block[k])) out[k] = clean(block[k]);
+  const href = clean(block.link?.href);
+  if (href && (href.startsWith('/') || href.startsWith('https://'))) {
+    out.link = { href, text: clean(block.link?.text) || 'Learn more' };
+  }
   return out;
 }
 
@@ -67,6 +72,7 @@ export function renderFlowHtml(block, escapeHtml) {
     + `<ol class="daily-flow-steps">${steps}</ol>`
     + (block.loop ? `<p class="daily-flow-loop">↻ ${escapeHtml(block.loop)}</p>` : '')
     + (block.caption ? `<figcaption class="daily-flow-caption">${escapeHtml(block.caption)}</figcaption>` : '')
+    + (block.link ? `<p class="daily-flow-link"><a href="${escapeHtml(block.link.href)}">${escapeHtml(block.link.text)} →</a></p>` : '')
     + `</figure>`;
 }
 
@@ -81,6 +87,8 @@ export const FLOW_CSS = `
     .daily-flow-note { display: block; font-size: .92rem; font-style: italic; line-height: 1.4; margin-top: .2rem; }
     .daily-flow-loop { margin: .7rem 0 0; color: #6b4a36; font-weight: 600; font-size: .95rem; }
     .daily-flow-caption { margin: .6rem 0 0; color: #6b5b53; font-style: italic; font-size: .95rem; }
+    .daily-flow-link { margin: .7rem 0 0; }
+    .daily-flow-link a { color: #3e2c23; font-weight: 700; }
 `;
 
 // Email version: tables and inline styles only.
@@ -96,5 +104,6 @@ export function renderFlowEmailHtml(block, escapeHtml) {
     + rows
     + (block.loop ? `<tr><td align="center" style="padding-top:10px;color:#6b4a36;font-weight:700;">&#8635; ${escapeHtml(block.loop)}</td></tr>` : '')
     + (block.caption ? `<tr><td align="center" style="padding-top:8px;color:#6b5b53;font-style:italic;">${escapeHtml(block.caption)}</td></tr>` : '')
+    + (block.link ? `<tr><td align="center" style="padding-top:10px;"><a href="${escapeHtml(block.link.href.startsWith('/') ? 'https://thewrkshop.com' + block.link.href : block.link.href)}" style="color:${BROWN};font-weight:700;">${escapeHtml(block.link.text)} &rarr;</a></td></tr>` : '')
     + `</table>`;
 }

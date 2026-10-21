@@ -122,7 +122,8 @@ Any section of a daily can include a progression drawn as a visual (on the page 
     "Escalation."
   ],
   "loop": "Optional line shown with ↻",
-  "caption": "Optional line under the visual."
+  "caption": "Optional line under the visual.",
+  "link": { "href": "/upstream/", "text": "See the Upstream Formation Framework" }
 }
 ```
 
