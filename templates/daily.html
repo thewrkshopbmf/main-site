@@ -251,6 +251,17 @@
       font-style: italic;
       color: #3e2c23;
     }
+    /* Flow visuals (progressions); keep in sync with netlify/shared/flow-block.js */
+    .daily-flow { margin: 1.25rem auto 1.4rem; max-width: 440px; text-align: center; }
+    .daily-flow-title { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; margin-bottom: .6rem; }
+    .daily-flow-steps { list-style: none; margin: 0; padding: 0; }
+    .daily-flow-step { margin: 0; padding: 0; }
+    .daily-flow-step + .daily-flow-step::before { content: "↓"; display: block; color: #c9aa8c; font-size: 1.15rem; line-height: 1; margin: .3rem 0; }
+    .daily-flow-box { display: block; border: 1px solid; border-radius: 10px; padding: .6rem .9rem; }
+    .daily-flow-label { display: block; font-weight: 700; line-height: 1.35; }
+    .daily-flow-note { display: block; font-size: .92rem; font-style: italic; line-height: 1.4; margin-top: .2rem; }
+    .daily-flow-loop { margin: .7rem 0 0; color: #6b4a36; font-weight: 600; font-size: .95rem; }
+    .daily-flow-caption { margin: .6rem 0 0; color: #6b5b53; font-style: italic; font-size: .95rem; }
   </style>
   <!-- Google Analytics (same GA4 property as the homepage's Firebase analytics) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>

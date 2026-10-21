@@ -108,6 +108,26 @@ The build scripts use these files to generate static HTML + JSON archives automa
   "declaration": "My soul deserves better than endless scrolls."
 }
 ```
+#### Visual progressions ("flow" blocks)
+
+Any section of a daily can include a progression drawn as a visual (on the page and in the email):
+
+```json
+{
+  "type": "flow",
+  "title": "Optional small label",
+  "steps": [
+    "Disagreement.",
+    { "label": "Shame interprets it.", "note": "“If they know, they’ll think less of me.”" },
+    "Escalation."
+  ],
+  "loop": "Optional line shown with ↻",
+  "caption": "Optional line under the visual."
+}
+```
+
+Steps go top to bottom, getting darker, and the last step is highlighted. Use it for real sequences (cause → effect), not for every list.
+
 ### ✍️ Weekly Blogs
 
 - **File path:**  

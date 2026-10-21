@@ -2,6 +2,8 @@
 // Used by Netlify functions (confirmation + daily emails) and scripts/build-daily.js (feed).
 // Pure functions only: no network, no environment.
 
+import { renderFlowEmailHtml, flowPlainText } from './flow-block.js';
+
 export const SITE_URL = 'https://thewrkshop.com';
 const BROWN = '#3e2c23';
 const ACCENT = '#6b4a36';
@@ -42,6 +44,8 @@ function blockHtml(block) {
       const tag = block.type === 'bullet_list' ? 'ul' : 'ol';
       return `<${tag} style="margin:0 0 12px;padding-left:22px;line-height:1.6;color:#2b2b2b;">${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</${tag}>`;
     }
+    case 'flow':
+      return Array.isArray(block.steps) ? renderFlowEmailHtml(block, escapeHtml) : '';
     default:
       return block.text ? `<p style="${p}">${escapeHtml(block.text)}</p>` : '';
   }
@@ -80,7 +84,8 @@ export function dailyBodyText(daily, url) {
   (daily.sections || []).forEach(sec => {
     out.push('', clean(sec.label).toUpperCase());
     (sec.blocks || []).forEach(b => {
-      if (Array.isArray(b.items)) b.items.forEach(i => out.push((b.type === 'lines' ? '' : '• ') + clean(i)));
+      if (b.type === 'flow' && Array.isArray(b.steps)) out.push(flowPlainText(b, { arrows: true }));
+      else if (Array.isArray(b.items)) b.items.forEach(i => out.push((b.type === 'lines' ? '' : '• ') + clean(i)));
       else if (b.text) out.push((b.type === 'callout' ? (clean(b.prefix) || '👉') + ' ' : '') + clean(b.text));
     });
   });

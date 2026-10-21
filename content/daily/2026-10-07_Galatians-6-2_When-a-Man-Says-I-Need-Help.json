@@ -233,37 +233,21 @@
           "text": "Then:"
         },
         {
-          "type": "lines",
-          "items": [
+          "type": "flow",
+          "steps": [
             "Need appears.",
-            "↓",
-            "Shame interprets it.",
-            "↓"
-          ]
-        },
-        {
-          "type": "quote",
-          "text": "“If they know, they’ll think less of me.”"
-        },
-        {
-          "type": "lines",
-          "items": [
-            "↓",
+            {
+              "label": "Shame interprets it.",
+              "note": "“If they know, they’ll think less of me.”"
+            },
             "Pride protects image.",
-            "↓",
             "Fear predicts rejection.",
-            "↓",
             "Silence feels safer.",
-            "↓"
+            {
+              "label": "“I’M GOOD.”",
+              "note": "What the man says"
+            }
           ]
-        },
-        {
-          "type": "paragraph",
-          "text": "The man says:"
-        },
-        {
-          "type": "paragraph",
-          "text": "“I’M GOOD.”"
         },
         {
           "type": "lines",
