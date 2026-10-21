@@ -141,6 +141,9 @@ ${list.map(e => `        <li><a href="${esc(e.href)}">${esc(dailyName(e))}</a><s
     .lib-note { display:block; color:#6b5b53; font-size:.88rem; }
     .lib-more { color:#3e2c23; font-weight:700; }
   </style>
+  <!-- Google Analytics (same GA4 property as the homepage's Firebase analytics) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N48478JV2Z');</script>
 </head>
 <body>
   <div id="site-header"></div>

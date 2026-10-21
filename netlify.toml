@@ -21,6 +21,27 @@
   [headers.values]
   Cache-Control = "no-store"
 
+# Basic security headers for every page
+[[headers]]
+  for = "/*"
+  [headers.values]
+  X-Content-Type-Options = "nosniff"
+  Referrer-Policy = "strict-origin-when-cross-origin"
+  X-Frame-Options = "SAMEORIGIN"
+  Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+  Strict-Transport-Security = "max-age=31536000"
+
+# Keep admin and login pages out of search results
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+  X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/login.html"
+  [headers.values]
+  X-Robots-Tag = "noindex, nofollow"
+
 [functions]
   node_bundler = "esbuild"
 
