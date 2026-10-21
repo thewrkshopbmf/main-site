@@ -467,6 +467,11 @@ function blocksToParagraphs(blocks = []) {
       const items = normalizeStringArray(block.items);
       if (items.length) out.push(items.join('\n'));
     }
+
+    if (block.type === 'flow' && Array.isArray(block.steps)) {
+      const steps = block.steps.map(s => (typeof s === 'string' ? s : [s && s.label, s && s.note].filter(Boolean).join(' ')));
+      out.push([...steps.flatMap((s, i) => (i ? ['↓', s] : [s])), block.caption].filter(Boolean).join('\n'));
+    }
   });
 
   return out.filter(Boolean);

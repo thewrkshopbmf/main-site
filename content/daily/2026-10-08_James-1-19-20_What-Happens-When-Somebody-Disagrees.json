@@ -75,21 +75,16 @@
           "text": "Because the argument you eventually have may have started several moments earlier."
         },
         {
-          "type": "lines",
-          "items": [
+          "type": "flow",
+          "steps": [
             "Disagreement.",
-            "↓",
             "Threat.",
-            "↓",
             "Interpretation.",
-            "↓",
             "Defensiveness.",
-            "↓",
             "Counterargument.",
-            "↓",
-            "Escalation.",
-            "The visible conflict came later."
-          ]
+            "Escalation."
+          ],
+          "caption": "The visible conflict came later."
         },
         {
           "type": "callout",

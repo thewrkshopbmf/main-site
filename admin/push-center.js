@@ -327,6 +327,15 @@ function flattenBlocksToHtml(blocks = []) {
       return `<ol>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ol>`;
     }
 
+    if (block.type === 'flow') {
+      const steps = Array.isArray(block.steps) ? block.steps : [];
+      return `<div style="text-align:center">${steps.map((s) => {
+        const label = typeof s === 'string' ? s : (s && s.label) || '';
+        const note = typeof s === 'string' ? '' : (s && s.note) || '';
+        return `<p style="margin:.2rem 0"><strong>${escapeHtml(label)}</strong>${note ? `<br><em>${escapeHtml(note)}</em>` : ''}</p>`;
+      }).join('<p style="margin:0">↓</p>')}${block.caption ? `<p><em>${escapeHtml(block.caption)}</em></p>` : ''}</div>`;
+    }
+
     return '';
   }).join('\n');
 }
