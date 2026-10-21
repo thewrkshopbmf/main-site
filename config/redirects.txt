@@ -5,3 +5,13 @@
 # Duplicate of the Oct 11, 2025 post, removed Oct 2026
 /blog/2026-01-01_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update/   /blog/2025-10-11_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update/   301!
 /blog/2026-01-01_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update/*   /blog/2025-10-11_rewrite-your-defaults-stop-hitting-remind-me-later-on-gods-update/   301!
+
+# Old blog page with placeholder posts; the Blog menu link uses the archive. Removed Oct 2026
+/blog.html   /blog-archive.html   301!
+
+# Placeholder podcast episode pages (filler text, no audio). Real episodes are on the Podcasts page. Removed Oct 2026
+/podcast1.html   /podcasts.html   301!
+/podcast2.html   /podcasts.html   301!
+
+# Aug 2025 test daily page. Removed Oct 2026
+/pages/daily/2025-08-22.html   /daily-archive.html   301!
