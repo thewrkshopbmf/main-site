@@ -118,6 +118,8 @@
     .daily-flow-note { display: block; font-size: .92rem; font-style: italic; line-height: 1.4; margin-top: .2rem; }
     .daily-flow-loop { margin: .7rem 0 0; color: #6b4a36; font-weight: 600; font-size: .95rem; }
     .daily-flow-caption { margin: .6rem 0 0; color: #6b5b53; font-style: italic; font-size: .95rem; }
+    .daily-flow-link { margin: .7rem 0 0; }
+    .daily-flow-link a { color: #3e2c23; font-weight: 700; }
   </style>
   <!-- Google Analytics (same GA4 property as the homepage's Firebase analytics) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
@@ -404,6 +406,7 @@
         + `<ol class="daily-flow-steps">${lis}</ol>`
         + (block.loop ? `<p class="daily-flow-loop">↻ ${escapeHtml(block.loop)}</p>` : '')
         + (block.caption ? `<figcaption class="daily-flow-caption">${escapeHtml(block.caption)}</figcaption>` : '')
+        + (block.link && block.link.href ? `<p class="daily-flow-link"><a href="${escapeHtml(block.link.href)}">${escapeHtml(block.link.text || 'Learn more')} →</a></p>` : '')
         + `</figure>`;
     }
 

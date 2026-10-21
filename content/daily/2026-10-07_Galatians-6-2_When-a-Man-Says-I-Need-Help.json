@@ -247,7 +247,11 @@
               "label": "“I’M GOOD.”",
               "note": "What the man says"
             }
-          ]
+          ],
+          "link": {
+            "href": "/upstream/",
+            "text": "See the full framework"
+          }
         },
         {
           "type": "lines",
