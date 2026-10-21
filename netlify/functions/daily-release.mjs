@@ -1,7 +1,14 @@
-// 12:01 am Central: if a Daily is dated today but isn't live yet, release it.
+// 12:01 am Central: if a Daily or a weekend blog post is dated today but isn't live yet, release it.
 // It does this by adding an empty "Release daily" commit to main, which makes Netlify
 // rebuild the site. When that deploy finishes, deploy-succeeded emails it to the list.
-import { centralNow, fetchLiveDaily } from '../shared/daily-list.js';
+import { centralNow, fetchLiveDaily, SITE_URL } from '../shared/daily-list.js';
+
+// What weekend blog post is live right now (data/blog.json is the latest visible post).
+async function fetchLiveBlog() {
+  const res = await fetch(`${SITE_URL}/data/blog.json?t=${Date.now()}`, { headers: { 'Cache-Control': 'no-cache' } });
+  if (!res.ok) return null;
+  return res.json();
+}
 
 const TOKEN = process.env.GITHUB_TOKEN;
 const OWNER = process.env.GITHUB_REPO_OWNER;
@@ -35,17 +42,26 @@ export default async () => {
   }
 
   try {
-    const files = await gh(`/contents/content/daily?ref=${encodeURIComponent(BRANCH)}`);
-    const todays = (Array.isArray(files) ? files : []).filter(f => f.name.startsWith(`${today}_`));
-    if (!todays.length) {
-      console.log(`daily-release: no Daily dated ${today}.`);
-      return new Response('No Daily today');
+    // Something dated today that isn't live yet: a Daily (Mon–Fri) or a weekend blog post (Saturday 4-3-2-1).
+    const toRelease = [];
+
+    const dailyFiles = await gh(`/contents/content/daily?ref=${encodeURIComponent(BRANCH)}`);
+    const todaysDaily = (Array.isArray(dailyFiles) ? dailyFiles : []).filter(f => f.name.startsWith(`${today}_`));
+    if (todaysDaily.length) {
+      const live = await fetchLiveDaily().catch(() => null);
+      if (!(live && live.date === today)) toRelease.push(`daily ${todaysDaily[0].name.replace(/\.json$/, '')}`);
     }
 
-    const live = await fetchLiveDaily().catch(() => null);
-    if (live && live.date === today) {
-      console.log(`daily-release: ${today} is already live.`);
-      return new Response('Already live');
+    const blogFiles = await gh(`/contents/content/blog?ref=${encodeURIComponent(BRANCH)}`).catch(() => []);
+    const todaysBlog = (Array.isArray(blogFiles) ? blogFiles : []).filter(f => f.name.startsWith(`${today}_`));
+    if (todaysBlog.length) {
+      const liveBlog = await fetchLiveBlog().catch(() => null);
+      if (!(liveBlog && liveBlog.date === today)) toRelease.push(`blog ${todaysBlog[0].name.replace(/\.json$/, '')}`);
+    }
+
+    if (!toRelease.length) {
+      console.log(`daily-release: nothing new dated ${today} to release.`);
+      return new Response('Nothing to release today');
     }
 
     const ref = await gh(`/git/ref/heads/${encodeURIComponent(BRANCH)}`);
@@ -53,7 +69,7 @@ export default async () => {
     const commit = await gh('/git/commits', {
       method: 'POST',
       body: JSON.stringify({
-        message: `Release daily ${today}: ${todays[0].name.replace(/\.json$/, '')}`,
+        message: `Release ${today}: ${toRelease.join(' + ')}`,
         tree: parent.tree.sha,
         parents: [ref.object.sha]
       })
