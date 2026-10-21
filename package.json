@@ -22,7 +22,8 @@
     "build:library": "node scripts/build-library.js",
     "build:web": "vite build",
     "build:sitemap": "node scripts/build-sitemap.js",
-    "build:all": "npm run build:supabase && npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:library && npm run build:web && npm run build:sitemap",
+    "build:seasonal": "node scripts/build-seasonal.js",
+    "build:all": "npm run build:supabase && npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:library && npm run build:web && npm run build:seasonal && npm run build:sitemap",
     "send:devotional": "netlify functions:invoke send-devotional",
     "dev:web": "vite"
   }
