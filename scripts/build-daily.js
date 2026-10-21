@@ -523,6 +523,9 @@ async function buildDailyPages(visible) {
       CANONICAL_URL: escapeHtml(seo.url),
       CANONICAL_URL_ENC: escapeHtml(encodeURIComponent(seo.url)),
       OG_IMAGE: escapeHtml(seo.image),
+      OG_IMAGE_ALT_TAGS: seo.imageAlt
+        ? `<meta property="og:image:alt" content="${escapeHtml(seo.imageAlt)}"/>\n  <meta name="twitter:image:alt" content="${escapeHtml(seo.imageAlt)}"/>`
+        : '',
       JSON_LD: jsonLdFor(e, seo),
       SERIES_HTML: eyebrowHtml(e),
       HERO_TITLE: hasLeadershipPage(e) ? 'Leadership &amp; Culture' : 'Daily',
@@ -570,6 +573,8 @@ async function buildDailyPages(visible) {
 //   seo_description  – the snippet under it (aim for 140–160 chars)
 //   hero_image       – optional site path to an image shown under the title
 //   og_image         – site path to a 1200x630 social card (scripts/og/make-og-card.py)
+//   og_image_alt     – alt text for that card (og:image:alt / twitter:image:alt)
+//   related_scriptures – extra passages the post discusses but doesn't quote up top (structured data only)
 //   category         – e.g. "Leadership & Culture" (posts in this category appear on /leadership/)
 //   series           – e.g. "The Battle Before the Battle"
 // Every field is optional; posts without them get sensible defaults.
@@ -621,7 +626,8 @@ function seoFor(e) {
     title: seoTitle,
     socialTitle: cleanString(e.seo_title).replace(/\s*\|\s*TheWrkShop\s*$/i, '') || displayTitle(e),
     description,
-    image: absoluteUrl(cleanString(e.og_image) || DEFAULT_OG_IMAGE)
+    image: absoluteUrl(cleanString(e.og_image) || DEFAULT_OG_IMAGE),
+    imageAlt: cleanString(e.og_image_alt)
   };
 }
 
@@ -657,7 +663,10 @@ function jsonLdFor(e, seo) {
   };
   if (cleanString(e.category)) data.articleSection = cleanString(e.category);
   if (Array.isArray(e.keywords) && e.keywords.length) data.keywords = e.keywords.join(', ');
-  const refs = (e.scriptures || []).map(s => s.ref).filter(Boolean);
+  const refs = [
+    ...(e.scriptures || []).map(s => s.ref),
+    ...(Array.isArray(e.related_scriptures) ? e.related_scriptures : [])
+  ].map(cleanString).filter(Boolean);
   if (refs.length) data.about = refs.map(ref => ({ '@type': 'CreativeWork', name: ref }));
   // keep "</script>" out of the inline JSON
   return JSON.stringify(data).replace(/</g, '\\u003c');
