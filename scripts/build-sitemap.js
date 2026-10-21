@@ -16,7 +16,8 @@ const EXCLUDED_ROOT_HTML = new Set([
   '404.html',
   '500.html',
   'login.html',
-  'Assesment.html'
+  'Assesment.html',
+  'request-membership.html' // placeholder page (noindex) until the member area exists
 ]);
 
 const EXCLUDED_RELATIVE_HTML = new Set([
