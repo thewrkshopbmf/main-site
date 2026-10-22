@@ -1,0 +1,154 @@
+{
+  "date": "2026-10-22",
+  "title": "The Battle Before The Battle",
+  "subtitle": "When Bad News Stops Traveling Upward",
+  "tagline": "If telling the leader the truth consistently costs something, eventually the leader will be surrounded by people who tell him what he wants to hear.",
+  "headline": "Why Leaders Stop Hearing Bad News",
+  "headline_sub": "Are You Surrounded by Peace, or Silence?",
+  "slug": "why-leaders-stop-hearing-bad-news",
+  "series": "The Battle Before the Battle",
+  "category": "Leadership & Culture",
+  "seo_title": "Why Leaders Stop Hearing Bad News | TheWrkShop",
+  "seo_description": "When telling the leader the truth costs something, people stop telling it. A biblical look at how leaders lose honest information at work, on teams and at home.",
+  "keywords": [
+    "leadership",
+    "bad news",
+    "psychological safety",
+    "honest feedback",
+    "organizational culture",
+    "Christian leadership"
+  ],
+  "og_image": "/assets/og/when-bad-news-stops-traveling-upward.png",
+  "og_image_alt": "Why Leaders Stop Hearing Bad News: When truth becomes expensive, information becomes distorted. TheWrkShop, Leadership & Culture.",
+  "scriptures": [
+    {
+      "ref": "1 Kings 22:8",
+      "text": "The king of Israel answered Jehoshaphat, “There is still one prophet through whom we can inquire of the LORD, but I hate him because he never prophesies anything good about me, but always bad. He is Micaiah son of Imlah.”"
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_revelation",
+      "label": "The Revelation",
+      "blocks": [
+        { "type": "paragraph", "text": "Ahab says something extraordinary." },
+        { "type": "paragraph", "text": "There is a man who may tell him the truth." },
+        { "type": "paragraph", "text": "And Ahab’s response is essentially:" },
+        { "type": "callout", "prefix": "👉", "text": "“I DON’T LIKE HIM.”" },
+        { "type": "paragraph", "text": "Why?" },
+        { "type": "paragraph", "text": "Because Micaiah doesn’t tell him what he wants to hear." },
+        { "type": "paragraph", "text": "Think about that organizationally." },
+        { "type": "lines", "items": ["The king has power.", "Micaiah has information."] },
+        { "type": "paragraph", "text": "But the king’s hostility toward unwelcome information creates a dangerous environment." },
+        { "type": "paragraph", "text": "Eventually people learn:" },
+        { "type": "callout", "prefix": "👉", "text": "GOOD NEWS TRAVELS SAFELY. BAD NEWS DOESN’T." },
+        { "type": "paragraph", "text": "That’s how leaders become blind while remaining completely in charge." }
+      ]
+    },
+    {
+      "key": "the_lie",
+      "label": "The Lie",
+      "blocks": [
+        { "type": "paragraph", "text": "“IF SOMETHING WERE REALLY WRONG, SOMEBODY WOULD TELL ME.”" },
+        { "type": "paragraph", "text": "Would they?" },
+        { "type": "paragraph", "text": "What happened the last time someone brought you bad news?" },
+        { "type": "paragraph", "text": "Did you:" },
+        { "type": "lines", "items": ["get defensive?", "blame them?", "interrogate their motives?", "humiliate them?", "shoot the messenger?", "remove access?", "become cold?", "retaliate later?"] },
+        { "type": "paragraph", "text": "Because people remember." },
+        { "type": "paragraph", "text": "And then:" },
+        { "type": "callout", "prefix": "👉", "text": "THE ORGANIZATION LEARNS YOUR EMOTIONAL PRICE FOR TRUTH." },
+        { "type": "paragraph", "text": "Eventually information gets edited before it reaches you." }
+      ]
+    },
+    {
+      "key": "the_truth",
+      "label": "The Truth",
+      "blocks": [
+        { "type": "callout", "prefix": "👉", "text": "LEADERS NEED PEOPLE WHO CAN INTERRUPT THEIR VERSION OF REALITY." },
+        { "type": "lines", "items": ["Not constant critics.", "Not cynical opposition.", "Truth-tellers."] },
+        { "type": "paragraph", "text": "People who can say:" },
+        { "type": "lines", "items": ["“We have a problem.”", "“The numbers aren’t telling the whole story.”", "“People are afraid.”", "“This isn’t working.”", "“You’re missing something.”", "“You handled that badly.”", "“Your decision is hurting people.”"] },
+        { "type": "paragraph", "text": "And:" },
+        { "type": "callout", "prefix": "👉", "text": "“I THINK YOU’RE WRONG.”" },
+        { "type": "paragraph", "text": "A leader who cannot receive those sentences eventually becomes dependent upon incomplete information." }
+      ]
+    },
+    {
+      "key": "the_information_funnel",
+      "label": "The Information Funnel",
+      "blocks": [
+        { "type": "paragraph", "text": "Watch the progression:" },
+        {
+          "type": "flow",
+          "steps": [
+            "Leader reacts badly to truth.",
+            "People notice.",
+            "Bad news gets softened.",
+            "Problems get delayed.",
+            "Reports become polished.",
+            "Leader receives distorted reality.",
+            "Leader makes decisions from distorted reality.",
+            "Problems increase.",
+            { "label": "“WHY DIDN’T ANYBODY TELL ME?”", "note": "The leader wonders" }
+          ],
+          "caption": "They may have learned not to."
+        }
+      ]
+    },
+    {
+      "key": "the_audit",
+      "label": "The Audit",
+      "blocks": [
+        { "type": "bullet_list", "items": ["WHAT INFORMATION AM I LEAST LIKELY TO HEAR?", "WHO CAN TELL ME SOMETHING I DON’T WANT TO HEAR?", "WHAT HAPPENS TO PEOPLE WHO DISAGREE WITH ME?", "DO PEOPLE BRING ME PROBLEMS EARLY OR WAIT UNTIL THEY’RE UNAVOIDABLE?", "HAVE I CONFUSED LOYALTY WITH AGREEMENT?"] },
+        { "type": "paragraph", "text": "Then:" },
+        { "type": "callout", "prefix": "👉", "text": "AM I SURROUNDED BY PEACE, OR SILENCE?" },
+        { "type": "paragraph", "text": "Those are not necessarily the same thing." }
+      ]
+    },
+    {
+      "key": "the_surrender",
+      "label": "The Surrender",
+      "blocks": [
+        { "type": "paragraph", "text": "Ask someone with enough proximity to know:" },
+        { "type": "quote", "text": "“WHAT DO YOU THINK PEOPLE ARE AFRAID TO TELL ME?”" },
+        { "type": "paragraph", "text": "Then do something difficult." },
+        { "type": "lines", "items": ["Don’t explain.", "Don’t defend.", "Don’t correct their perception immediately."] },
+        { "type": "lines", "items": ["Listen.", "Thank them.", "Pray.", "Examine."] },
+        { "type": "paragraph", "text": "Because if truth reaches you safely today, it may reach you sooner tomorrow." }
+      ]
+    },
+    {
+      "key": "take_it_with_you",
+      "label": "Take It With You",
+      "blocks": [
+        { "type": "quote", "text": "When truth becomes expensive, information becomes distorted." }
+      ]
+    },
+    {
+      "key": "the_prayer",
+      "label": "The Prayer",
+      "blocks": [
+        { "type": "paragraph", "text": "Father," },
+        { "type": "paragraph", "text": "Protect me from becoming hostile toward truth because truth makes me uncomfortable." },
+        { "type": "lines", "items": ["Give me Micaiahs.", "And give me humility to listen to them."] },
+        { "type": "lines", "items": ["Make me secure enough to hear bad news.", "Wise enough to test it.", "Humble enough to change.", "And courageous enough to act."] },
+        { "type": "paragraph", "text": "Don’t let my authority isolate me from reality." },
+        { "type": "lines", "items": ["In Jesus name,", "Amen."] }
+      ]
+    },
+    {
+      "key": "hidden_gems",
+      "label": "Hidden Gems 💎",
+      "blocks": [
+        { "type": "callout", "prefix": "👉", "text": "When truth becomes expensive, information becomes distorted." },
+        { "type": "callout", "prefix": "💎", "text": "People learn the emotional price a leader charges for truth." },
+        { "type": "callout", "prefix": "💎", "text": "Leaders need people who can interrupt their version of reality." },
+        { "type": "callout", "prefix": "💎", "text": "Authority without honest information creates confident blindness." },
+        { "type": "callout", "prefix": "💎", "text": "Have I confused loyalty with agreement?" },
+        { "type": "callout", "prefix": "💎", "text": "Am I surrounded by peace, or silence?" },
+        { "type": "paragraph", "text": "-TheWrkShop" }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-10-22_1-kings-22-8_when-bad-news-stops-traveling-upward|"
+}
