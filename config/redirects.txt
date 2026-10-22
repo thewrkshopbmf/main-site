@@ -15,3 +15,6 @@
 
 # Aug 2025 test daily page. Removed Oct 2026
 /pages/daily/2025-08-22.html   /daily-archive.html   301!
+
+# /tools/ has no index page yet; send it to Resources (temporary, so a future /tools/ page can take over)
+/tools   /resources.html   302
