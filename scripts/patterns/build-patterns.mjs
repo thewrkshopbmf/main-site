@@ -15,6 +15,7 @@ const SITE = 'https://thewrkshop.com';
 const OUT = path.join(ROOT, 'patterns');
 const FINDER = '/tools/pattern-finder/';
 const LAB = '/tools/interruption-lab/';
+const JOURNAL = '/tools/growth-journal/';
 
 const esc = (s = '') => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const bible = (ref) => `https://www.biblegateway.com/passage/?search=${encodeURIComponent(ref.replace(/–/g, '-'))}&version=NIV`;
@@ -101,6 +102,7 @@ function indexPage() {
         <div class="pt-actions">
           <a class="pt-btn pt-btn--ember" href="${FINDER}">Take the Pattern Finder</a>
           <a class="pt-btn pt-btn--ghost" href="${LAB}">Practice in the Lab</a>
+          <a class="pt-btn pt-btn--ghost" href="${JOURNAL}">Open the Growth Journal</a>
         </div>
       </div>
     </section>
@@ -117,10 +119,11 @@ ${PATTERNS.map(card).join('\n')}
 
     <section class="pt-section">
       <div class="pt-wrap">
-        <div class="pt-grid3">
+        <div class="pt-grid4">
           <div class="pt-panel"><span class="pt-label">Step 1</span><h3 class="pt-h3">Find it</h3><p>The <a href="${FINDER}">Pattern Finder</a> takes 3–5 minutes and points you to the pattern that shows up most for you.</p></div>
           <div class="pt-panel"><span class="pt-label">Step 2</span><h3 class="pt-h3">Understand it</h3><p>Each pattern page shows what may be underneath, where it shows up, and a 7-day practice.</p></div>
           <div class="pt-panel"><span class="pt-label">Step 3</span><h3 class="pt-h3">Rehearse it</h3><p>The <a href="${LAB}">Interruption Lab</a> walks you through a tense moment so the better response is ready when you need it.</p></div>
+          <div class="pt-panel"><span class="pt-label">Step 4</span><h3 class="pt-h3">Track it</h3><p>The <a href="${JOURNAL}">Growth Journal</a> helps you record real moments, notice what repeats, and review your week. Entries stay on your device.</p></div>
         </div>
         <p class="pt-note">${esc(SAFETY)}</p>
       </div>
@@ -206,6 +209,7 @@ ${p.scenarios.map((s, i) => `          <div class="pt-scenario"><strong>${places
           </div>
           <div class="pt-actions pt-no-print">
             <a class="pt-btn pt-btn--ghost" href="${LAB}?pattern=${p.id}">Rehearse it in the Interruption Lab</a>
+            <a class="pt-btn pt-btn--ghost" href="${JOURNAL}?pattern=${p.id}">Record a moment in the Growth Journal</a>
           </div>
         </div>
       </div>
