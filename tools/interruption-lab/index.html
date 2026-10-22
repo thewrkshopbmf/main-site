@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Pattern Interruption Lab: Practice the Pause | TheWrkShop</title>
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="stylesheet" href="/patterns/patterns.css"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
+  <meta name="description" content="Rehearse a tense moment before it happens: notice your first instinct, look beneath it, and practice a response you can actually use. Free from TheWrkShop."/>
+  <link rel="canonical" href="https://thewrkshop.com/tools/interruption-lab/"/>
+  <meta property="og:site_name" content="TheWrkShop"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Practice the pause before the pressure"/>
+  <meta property="og:description" content="The Pattern Interruption Lab: rehearse a better response to a tense moment. Free from TheWrkShop."/>
+  <meta property="og:url" content="https://thewrkshop.com/tools/interruption-lab/"/>
+  <meta property="og:image" content="https://thewrkshop.com/assets/og/site.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "The Pattern Interruption Lab",
+  "url": "https://thewrkshop.com/tools/interruption-lab/",
+  "description": "Rehearse a tense moment: notice your first instinct, look beneath it, and practice a better response.",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "inLanguage": "en-US",
+  "publisher": { "@id": "https://thewrkshop.com/#organization", "@type": "Organization", "name": "TheWrkShop", "url": "https://thewrkshop.com" },
+  "isPartOf": { "@id": "https://thewrkshop.com/#website" }
+}
+  </script>
+  <!-- Google Analytics: page views and start/finish counts only, never what is written. -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N48478JV2Z');</script>
+</head>
+<body class="pt-page">
+  <div id="site-header"></div>
+  <main>
+    <section class="pt-hero">
+      <div class="pt-narrow">
+        <nav class="pt-crumbs" aria-label="Breadcrumb"><a href="/patterns/">Pattern Library</a> / Interruption Lab</nav>
+        <span class="pt-eyebrow">The Pattern Interruption Lab</span>
+        <h1 class="pt-h1">Practice the <em>pause</em> before the pressure.</h1>
+        <p class="pt-lead">Walk through a realistic tense moment. Notice your first instinct, consider what might be underneath it, and rehearse a response you can actually use.</p>
+      </div>
+    </section>
+
+    <section class="pt-tool">
+      <div class="pt-narrow">
+
+        <div id="labIntro" class="pt-tool-card">
+          <span class="pt-eyebrow">Set up your rehearsal</span>
+          <div class="pt-field">
+            <label for="labContext">Choose a setting</label>
+            <select id="labContext"></select>
+          </div>
+          <div class="pt-field">
+            <label for="labPattern">Choose a pattern to practice</label>
+            <select id="labPattern"></select>
+          </div>
+          <p class="pt-small pt-muted">Not sure which pattern? <a href="/tools/pattern-finder/">Take the Pattern Finder</a> first.</p>
+          <div class="pt-actions"><button class="pt-btn pt-btn--ember" type="button" id="labStart">Start the rehearsal →</button></div>
+        </div>
+
+        <div id="labRun" class="pt-tool-card" hidden aria-live="polite">
+          <div class="pt-tool-top"><span class="pt-eyebrow" style="margin:0" id="labStep"></span><span class="pt-count" id="labWhere"></span></div>
+          <div class="pt-track"><div id="labBar"></div></div>
+          <h2 class="pt-h2" id="labHeading" tabindex="-1"></h2>
+          <p id="labPrompt"></p>
+          <div id="labChoices"></div>
+          <div id="labFeedback" class="pt-callout" hidden></div>
+          <div id="labWrite" class="pt-field" hidden>
+            <label for="labNotes">Write a response in your own words (optional, stays on this device)</label>
+            <textarea id="labNotes" placeholder="Next time this happens, I will…"></textarea>
+          </div>
+          <div class="pt-actions">
+            <button class="pt-btn pt-btn--ghost" type="button" id="labBack">Back</button>
+            <button class="pt-btn" type="button" id="labNext" hidden>Continue →</button>
+          </div>
+        </div>
+
+        <div id="labResult" hidden>
+          <div class="pt-tool-card">
+            <span class="pt-eyebrow">Your practice card</span>
+            <h2 class="pt-h2" tabindex="-1" id="labResultTitle">Notice. Pause. Choose.</h2>
+            <div class="pt-practice-card" id="labCard"></div>
+            <div class="pt-actions pt-no-print">
+              <button class="pt-btn" type="button" id="labCopy">Copy my practice card</button>
+              <button class="pt-btn pt-btn--ghost" type="button" id="labPrint">Print / save PDF</button>
+              <button class="pt-btn pt-btn--ghost" type="button" id="labAgain">Try another scenario</button>
+            </div>
+            <p class="pt-feedback" id="labCopied" role="status"></p>
+            <p class="pt-small pt-no-print">Go deeper: <a id="labPatternLink" href="/patterns/">read about this pattern and start its 7-day practice</a>, or <a id="labJournalLink" href="/tools/growth-journal/">record a real moment in the Growth Journal</a>.</p>
+          </div>
+        </div>
+
+        <p class="pt-note">This exercise supports reflection and skill rehearsal. It does not diagnose motives, predict how others will respond, or replace professional support. In unsafe or coercive situations, put your safety first and reach out for support rather than trying to manage the other person’s reaction. What you write is not sent anywhere or stored on a server.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <nav class="footer-links" aria-label="Browse">
+        <a href="/upstream/">Start Here</a>
+        <a href="/daily.html">The Daily</a>
+        <a href="/leadership/">Leadership</a>
+        <a href="/get-known.html">Groups</a>
+        <a href="/library/">Library</a>
+        <a href="/blog-archive.html">Blog</a>
+        <a href="/podcasts.html">Podcast</a>
+        <a href="/products.html">Store</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <div class="footer-logo"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop" width="233" height="180" loading="lazy"></div>
+      <p>&copy; 2026 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/script.js"></script>
+  <script src="/patterns/patterns-data.js"></script>
+  <script src="/tools/interruption-lab/lab.js"></script>
+</body>
+</html>
