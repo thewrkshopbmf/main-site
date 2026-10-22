@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheWrkShop — Messages</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon/favicon.ico?v=2">
+  <meta name="robots" content="noindex"/>
+  <style>
+    .gi-page { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+    .gi-card { background: #f4f1ee; border-radius: 14px; padding: 1.25rem; box-shadow: 0 2px 6px rgba(0,0,0,.07); margin-bottom: 1.25rem; }
+    .gi-eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; font-weight: 700; color: #6b4a36; }
+    .gi-page h1 { color: #3e2c23; margin: .2rem 0 .4rem; }
+    .gi-page h2 { color: #3e2c23; margin: 0 0 .75rem; font-size: 1.15rem; text-align: left; }
+    .gi-muted { color: #6b5a50; margin: 0; }
+    .gi-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .75rem; }
+    .gi-stat { background: #fff; border-radius: 10px; padding: .9rem 1rem; }
+    .gi-stat b { display: block; font-size: 1.8rem; color: #3e2c23; line-height: 1.1; }
+    .gi-stat span { font-size: .85rem; color: #6b5a50; }
+    .gi-tally { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .gi-bar { display: grid; grid-template-columns: 210px 1fr 32px; gap: .5rem; align-items: center; font-size: .9rem; margin-bottom: .35rem; }
+    .gi-bar i { display: block; height: 10px; border-radius: 5px; background: #6b4a36; min-width: 2px; }
+    .gi-bar em { font-style: normal; text-align: right; color: #3e2c23; font-weight: 700; }
+    .gi-tools { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: .75rem; }
+    .gi-tools input { flex: 1 1 220px; min-height: 40px; padding: .5rem .75rem; border: 1px solid #cbb8aa; border-radius: 6px; font-size: .95rem; }
+    .gi-chip, .gi-btn { min-height: 40px; padding: .45rem .85rem; border-radius: 6px; border: 1px solid #3e2c23; background: #fff; color: #3e2c23; font-weight: 600; cursor: pointer; text-decoration: none; font-size: .9rem; }
+    .gi-chip.is-active, .gi-btn.primary { background: #3e2c23; color: #f4f1ee; }
+    .gi-list { display: grid; gap: .75rem; }
+    .gi-item { background: #fff; border-radius: 10px; padding: 1rem; border-left: 4px solid #cbb8aa; }
+    .gi-item.new { border-left-color: #c47a1c; }
+    .gi-head { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: baseline; justify-content: space-between; }
+    .gi-name { font-weight: 700; color: #3e2c23; font-size: 1.05rem; }
+    .gi-meta { color: #6b5a50; font-size: .88rem; }
+    .gi-grid { display: grid; grid-template-columns: 180px 1fr; gap: .25rem .75rem; margin: .75rem 0; font-size: .92rem; }
+    .gi-grid dt { color: #6b5a50; }
+    .gi-grid dd { margin: 0; }
+    .gi-edit { display: grid; grid-template-columns: 180px 220px 1fr auto; gap: .5rem; align-items: start; }
+    .gi-edit select, .gi-edit textarea { font: inherit; font-size: .9rem; padding: .45rem .55rem; border: 1px solid #cbb8aa; border-radius: 6px; background: #fff; }
+    .gi-edit textarea { min-height: 40px; resize: vertical; }
+    .gi-saved { color: #1f5a1f; font-size: .85rem; align-self: center; }
+    .gi-empty { padding: 1.25rem; text-align: center; color: #6b5a50; }
+    #giProtected { display: none; }
+    #giProtected.is-visible { display: block; }
+    .gi-gate.is-denied { border-left: 4px solid #a33; }
+    @media (max-width: 760px) { .gi-tally, .gi-edit { grid-template-columns: 1fr; } .gi-grid { grid-template-columns: 1fr; } .gi-grid dt { font-weight: 600; } .gi-bar { grid-template-columns: 150px 1fr 28px; } }
+      .gi-msg { white-space: pre-wrap; line-height: 1.55; background: #faf8f6; border-left: 3px solid #cbb8aa; padding: .6rem .75rem; margin: .6rem 0; }
+    .gi-edit2 { display: grid; grid-template-columns: 180px 1fr auto; gap: .5rem; align-items: start; }
+    .gi-edit2 select, .gi-edit2 textarea { font: inherit; font-size: .9rem; padding: .45rem .55rem; border: 1px solid #cbb8aa; border-radius: 6px; background: #fff; }
+    @media (max-width: 760px) { .gi-edit2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="gi-page">
+    <div class="gi-card">
+      <span class="gi-eyebrow">TheWrkShop Admin</span>
+      <h1>Messages</h1>
+      <p class="gi-muted">Messages sent through the Contact Us form. Each one is also emailed to steven@thewrkshop.com; reply from your email and mark it replied here.</p>
+    </div>
+
+    <div class="gi-card gi-gate" id="giGate">
+      <h2 id="giGateTitle">Verifying access...</h2>
+      <p class="gi-muted" id="giGateText">Checking your session and admin role.</p>
+      <div class="gi-tools" id="giGateActions" style="display:none;margin-top:.75rem;">
+        <a class="gi-btn primary" href="../login.html">Go to Login</a>
+        <a class="gi-btn" href="admin.html">Back to Admin</a>
+      </div>
+    </div>
+
+    <div id="giProtected">
+      <div class="gi-card">
+        <div class="gi-stats">
+          <div class="gi-stat"><b id="statNew">–</b><span>New: needs a reply</span></div>
+          <div class="gi-stat"><b id="statReplied">–</b><span>Replied</span></div>
+          <div class="gi-stat"><b id="statTotal">–</b><span>All messages</span></div>
+        </div>
+      </div>
+      <div class="gi-card">
+        <div class="gi-tools">
+          <input type="search" id="giSearch" placeholder="Search name, email or message…" autocomplete="off"/>
+          <button class="gi-chip is-active" data-filter="all" type="button">All</button>
+          <button class="gi-chip" data-filter="new" type="button">New</button>
+          <button class="gi-chip" data-filter="replied" type="button">Replied</button>
+          <button class="gi-chip" data-filter="archived" type="button">Archived</button>
+          <button class="gi-btn" id="giRefresh" type="button">Refresh</button>
+          <a class="gi-btn" href="admin.html">Back to Admin</a>
+        </div>
+        <div class="gi-list" id="giRows"><div class="gi-empty">Loading…</div></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../script.js"></script>
+  <script type="module">
+    import { supabase } from '../scripts/supabase/supabaseClient.js';
+    const STATUS = { new: 'New', replied: 'Replied', archived: 'Archived' };
+    const $ = (id) => document.getElementById(id);
+    const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    const fmt = (ts) => ts ? new Date(ts).toLocaleString(undefined, { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' }) : '—';
+    let rows = []; let filter = 'all';
+
+    function denied(title, text) {
+      $('giGate').classList.add('is-denied'); $('giGateTitle').textContent = title; $('giGateText').textContent = text; $('giGateActions').style.display = 'flex';
+    }
+    function visible() {
+      const q = $('giSearch').value.trim().toLowerCase();
+      return rows.filter(r => (filter === 'all' || r.status === filter) && (!q || [r.name, r.email, r.message, r.notes].join(' ').toLowerCase().includes(q)));
+    }
+    function stats() {
+      $('statNew').textContent = rows.filter(r => r.status === 'new').length;
+      $('statReplied').textContent = rows.filter(r => r.status === 'replied').length;
+      $('statTotal').textContent = rows.length;
+    }
+    function render() {
+      const list = visible();
+      $('giRows').innerHTML = list.length ? list.map(r => `
+        <article class="gi-item ${esc(r.status)}" data-id="${esc(r.id)}">
+          <div class="gi-head">
+            <span class="gi-name">${esc(r.name)}</span>
+            <span class="gi-meta">${esc(fmt(r.created_at))} · <a href="mailto:${esc(r.email)}?subject=${encodeURIComponent('Re: your message to TheWrkShop')}">${esc(r.email)}</a></span>
+          </div>
+          <div class="gi-msg">${esc(r.message)}</div>
+          <div class="gi-edit2">
+            <select data-field="status" aria-label="Status">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}"${r.status === k ? ' selected' : ''}>${v}</option>`).join('')}</select>
+            <textarea data-field="notes" placeholder="Notes" aria-label="Notes">${esc(r.notes || '')}</textarea>
+            <span class="gi-saved" aria-live="polite"></span>
+          </div>
+        </article>`).join('') : `<div class="gi-empty">${rows.length ? 'No messages match.' : 'No messages yet.'}</div>`;
+    }
+    async function load() {
+      $('giRows').innerHTML = '<div class="gi-empty">Loading…</div>';
+      const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false }).limit(2000);
+      if (error) { $('giRows').innerHTML = `<div class="gi-empty">Could not load messages: ${esc(error.message)}</div>`; return; }
+      rows = data || []; stats(); render();
+    }
+    $('giRows').addEventListener('change', async (e) => {
+      const f = e.target.dataset.field; if (!f) return;
+      const item = e.target.closest('.gi-item'); const note = item.querySelector('.gi-saved');
+      note.textContent = 'Saving…';
+      const { error } = await supabase.from('contact_messages').update({ [f]: e.target.value }).eq('id', item.dataset.id);
+      if (error) { note.textContent = 'Not saved: ' + error.message; note.style.color = '#a33'; return; }
+      const row = rows.find(r => r.id === item.dataset.id); if (row) row[f] = e.target.value;
+      note.style.color = ''; note.textContent = 'Saved';
+      if (f === 'status') { item.className = 'gi-item ' + e.target.value; stats(); }
+      setTimeout(() => { if (note.textContent === 'Saved') note.textContent = ''; }, 2000);
+    });
+    document.querySelectorAll('.gi-chip').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.gi-chip').forEach(b => b.classList.toggle('is-active', b === btn)); filter = btn.dataset.filter; render();
+    }));
+    $('giSearch').addEventListener('input', render);
+    $('giRefresh').addEventListener('click', load);
+    (async () => {
+      try {
+        const { data: u, error: ue } = await supabase.auth.getUser(); if (ue) throw ue;
+        if (!u?.user) { location.href = '../login.html'; return; }
+        const { data: profile, error: pe } = await supabase.from('profiles').select('role').eq('id', u.user.id).single(); if (pe) throw pe;
+        if (!profile || profile.role !== 'admin') { denied('Access denied', 'Your account is signed in, but it does not have admin access for this page.'); return; }
+        $('giGate').style.display = 'none'; $('giProtected').classList.add('is-visible'); load();
+      } catch (err) { denied('Could not verify access', err.message || 'There was a problem checking your admin session.'); }
+    })();
+  </script>
+</body>
+</html>

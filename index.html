@@ -275,25 +275,14 @@
   
   <section id="contact" class="content-section contact-section">
     <h2>Contact Us</h2>
-    <form action="https://formsubmit.co/f25468eae77a6323c66f6f8e7ff728be" method="POST">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="email" name="email" placeholder="Your Email" required />
-      <textarea name="message" placeholder="Your Message" required></textarea>
-
-      
-      <input type="hidden" name="_autoresponse" value="Hey there! 👋
-
-Thanks so much for reaching out to TheWrkShop — we’ve received your message and will get back to you soon.
-
-In the meantime, stay bold, stay faithful, and keep building with purpose.
-
-— TheWrkShop Team" />
-
-      
-      <input type="hidden" name="_template" value="table" />
-
+    <form id="contactForm" action="/contact/send" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required maxlength="100" />
+      <input type="email" name="email" placeholder="Your Email" required maxlength="254" />
+      <textarea name="message" placeholder="Your Message" required maxlength="5000"></textarea>
+      <input type="text" name="company" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
       <button type="submit">Send Message</button>
     </form>
+    <p class="contact-msg" id="contactMsg" role="status" aria-live="polite"></p>
   </section>
 
   
