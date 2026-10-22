@@ -90,6 +90,41 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Contact form — sends to TheWrkShop (see netlify/functions/contact-send.mjs)
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    const contactMsg = document.getElementById('contactMsg');
+    const sayContact = (text, ok) => { if (contactMsg) { contactMsg.textContent = text; contactMsg.classList.toggle('is-error', !ok); } };
+    const params = new URLSearchParams(location.search);
+    if (params.get('contact') === 'sent') sayContact("Thanks! Your message is on its way. Check your inbox for a confirmation.", true);
+    if (params.get('contact') === 'error') sayContact('Something went wrong. Please try again.', false);
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = contactForm.querySelector('button');
+      const body = {
+        name: contactForm.name.value.trim(),
+        email: contactForm.email.value.trim(),
+        message: contactForm.message.value.trim(),
+        company: contactForm.company ? contactForm.company.value : ''
+      };
+      if (!body.name || !body.email || !body.message) { sayContact('Please fill in your name, email and message.', false); return; }
+      btn.disabled = true;
+      sayContact('Sending…', true);
+      try {
+        const res = await fetch('/contact/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+        contactForm.reset();
+        sayContact("Thanks! Your message is on its way. Check your inbox for a confirmation.", true);
+        if (window.gtag) gtag('event', 'contact_form_sent');
+      } catch (err) {
+        sayContact(err.message || 'Something went wrong. Please try again.', false);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  }
+
   // Daily email signup — saves to TheWrkShop's own list (see netlify/functions/daily-subscribe.mjs)
   document.querySelectorAll('form.daily-signup-form').forEach(f => {
     const msg = f.parentElement.querySelector('.daily-signup-msg');

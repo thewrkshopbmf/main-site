@@ -875,3 +875,8 @@ body.products-theme .listen-btn:hover {
 .path-link:hover { text-decoration: underline; }
 @media (max-width: 960px) { .path-steps { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .path-steps { grid-template-columns: 1fr; } .path-lead { margin-top: -.5rem; } }
+
+/* Contact form status */
+.contact-msg { text-align: center; font-weight: 600; min-height: 1.2em; margin: .75rem auto 0; color: #3e2c23; }
+.contact-msg.is-error { color: #8a1f11; }
+.contact-section .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

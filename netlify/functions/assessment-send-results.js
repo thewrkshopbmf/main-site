@@ -6,6 +6,11 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL;
 const TABLE_NAME = 'assessment_attempts';
+const ASSESSMENT_NOTIFY_EMAIL = process.env.ASSESSMENT_NOTIFY_EMAIL || 'steven@thewrkshop.com';
+
+function escapeHtml(value = '') {
+  return String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 const supabase = SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY
   ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
@@ -117,6 +122,29 @@ export default async (request) => {
     const resendPayload = await resendResponse.json().catch(() => ({}));
     if (!resendResponse.ok) {
       return json({ ok: false, error: resendPayload.message || resendPayload.error || 'Resend email failed' }, 502);
+    }
+
+    // Send TheWrkShop a copy so someone can follow up. A failure here never blocks the person's results.
+    try {
+      const safeEmail = escapeHtml(email);
+      const copyRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: RESEND_FROM_EMAIL,
+          to: [ASSESSMENT_NOTIFY_EMAIL],
+          reply_to: email,
+          subject: `Spiritual gifts results: ${email}`,
+          text: `${email} took the spiritual gifts assessment.\nWants messages from TheWrkShop: ${messageOptIn ? 'Yes' : 'No'}\nReply to this email to reach them.\n\n${text}`,
+          html: `<div style="font-family:Arial,Helvetica,sans-serif;padding:12px 16px;margin:0 0 12px;background:#f4f1ee;border-left:4px solid #3e2c23;color:#3e2c23;">`
+            + `<strong>${safeEmail}</strong> took the spiritual gifts assessment.<br>`
+            + `Wants messages from TheWrkShop: <strong>${messageOptIn ? 'Yes' : 'No'}</strong><br>`
+            + `Reply to this email to reach them directly.</div>${html}`
+        })
+      });
+      if (!copyRes.ok) console.error('assessment copy email failed:', copyRes.status, await copyRes.text().catch(() => ''));
+    } catch (copyErr) {
+      console.error('assessment copy email failed:', copyErr);
     }
 
     const { data: existingContacts, error: contactLookupError } = await supabase

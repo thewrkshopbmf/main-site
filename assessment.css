@@ -1095,3 +1095,4 @@ body.assessment-page {
     width: 100%;
   }
 }
+.eg-note { font-size: .85rem; opacity: .8; margin: .5rem 0 0; line-height: 1.45; }
