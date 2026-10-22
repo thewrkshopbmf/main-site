@@ -52,7 +52,8 @@ const RECURSIVE_PUBLIC_DIRS = [
   'leadership',
   'library',
   'pages',
-  'sub-pages'
+  'sub-pages',
+  'upstream'
 ];
 
 function toPosix(p) {
