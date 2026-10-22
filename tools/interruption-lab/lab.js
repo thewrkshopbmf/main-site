@@ -121,6 +121,7 @@
       card.appendChild(p);
     });
     $('labPatternLink').href = '/patterns/' + pat.id + '/';
+    $('labJournalLink').href = '/tools/growth-journal/?pattern=' + pat.id;
     $('labCopied').textContent = '';
     track('interruption_lab_complete');
     show('result');

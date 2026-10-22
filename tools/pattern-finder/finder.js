@@ -123,6 +123,7 @@
       '<div class="pt-actions pt-no-print">' +
         '<a class="pt-btn pt-btn--ember" href="/patterns/' + p.id + '/#practice">Open my practice page</a>' +
         '<a class="pt-btn pt-btn--ghost" href="/tools/interruption-lab/?pattern=' + p.id + '">Rehearse it in the Lab</a>' +
+        '<a class="pt-btn pt-btn--ghost" href="/tools/growth-journal/?pattern=' + p.id + '">Start a Growth Journal</a>' +
       '</div>' +
       '<p class="pt-muted pt-small">Your practice page has a checklist that remembers your progress in this browser, plus examples and Scripture.</p>' +
       '<div class="pt-actions pt-no-print">' + btn('Copy my reflection', 'copy', 'pt-btn--ghost') + btn('Print / save PDF', 'print', 'pt-btn--ghost') + btn('Start over', 'reset', 'pt-btn--ghost') + '</div>' +
