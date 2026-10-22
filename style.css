@@ -880,3 +880,46 @@ body.products-theme .listen-btn:hover {
 .contact-msg { text-align: center; font-weight: 600; min-height: 1.2em; margin: .75rem auto 0; color: #3e2c23; }
 .contact-msg.is-error { color: #8a1f11; }
 .contact-section .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+/* ===== Homepage layout v2 ===== */
+.hero-eyebrow { font-size: .85rem !important; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #d4b49c; margin: 0 0 .5rem !important; }
+.hero-overlay h1 { font-size: clamp(2rem, 4.6vw, 3.2rem); line-height: 1.15; }
+.hero-signup { max-width: 460px; margin: 1.25rem auto .5rem; }
+.hero-signup form { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+.hero-signup input[type=email] { flex: 1 1 220px; padding: .75rem .9rem; border-radius: 8px; border: 0; font: inherit; }
+.hero-signup button { padding: .75rem 1.2rem; border-radius: 8px; border: 0; background: #d4b49c; color: #3e2c23; font: inherit; font-weight: 700; cursor: pointer; }
+.hero-signup button:hover:not(:disabled) { background: #e6cdb9; }
+.hero-signup .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.hero-signup .daily-signup-msg { margin: .6rem 0 0; font-weight: 600; min-height: 1.2em; font-size: 1rem !important; }
+.hero-signup .daily-signup-msg.is-error { color: #ffcfbf; }
+.hero-link { color: #f4f1ee; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.hero-link:hover { color: #d4b49c; }
+
+.about-lead { max-width: 720px; margin: -1rem auto 2rem; text-align: center; font-size: 1.1rem; line-height: 1.6; color: #3e2c23; }
+
+.upstream-feature { max-width: 1000px; margin: 0 auto; }
+.uf-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; align-items: center; background: #f4f1ee; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 6px rgba(0,0,0,.07); }
+.uf-eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8a6a52; }
+.upstream-feature h2 { text-align: left; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: .3rem 0 .75rem; }
+.uf-text p { line-height: 1.65; color: #2b2b2b; margin: 0 0 1.1rem; }
+.uf-btn { display: inline-block; background: #3e2c23; color: #f4f1ee; padding: .75rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 700; }
+.uf-btn:hover { background: #5b3a29; }
+.uf-flow { list-style: none; margin: 0; padding: 0; text-align: center; }
+.uf-flow li { background: #fff; border: 1px solid rgba(62,44,35,.18); border-radius: 10px; padding: .5rem .75rem; color: #3e2c23; }
+.uf-flow li + li { margin-top: 1.4rem; position: relative; }
+.uf-flow li + li::before { content: "↓"; position: absolute; top: -1.3rem; left: 0; right: 0; color: #c9aa8c; line-height: 1.2rem; }
+.uf-flow li b { display: block; }
+.uf-flow li span { display: block; font-size: .88rem; font-style: italic; color: #6b5b53; }
+.uf-flow li.uf-up { background: #efe4d8; }
+.uf-flow li.uf-last { background: #3e2c23; border-color: #3e2c23; color: #f4f1ee; }
+.uf-flow li.uf-last span { color: #e8dccf; }
+@media (max-width: 760px) { .uf-grid { grid-template-columns: 1fr; padding: 1.4rem; } }
+
+.lead-feature-sub { max-width: 720px; margin: -1rem auto 1.5rem; text-align: center; line-height: 1.6; color: #3e2c23; }
+
+.newsletter-section { text-align: center; padding-top: 0; }
+.newsletter-section h2 { font-size: 1.6rem; margin-bottom: .4rem; }
+.newsletter-section p { color: #3e2c23; }
+.newsletter-section .subscribe-form { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; max-width: 460px; margin: .75rem auto 0; }
+.newsletter-section .subscribe-form input { flex: 1 1 220px; padding: .7rem .85rem; border-radius: 8px; border: 1px solid rgba(0,0,0,.15); font: inherit; }
+.newsletter-section .subscribe-form button { padding: .7rem 1.1rem; border-radius: 8px; border: 0; background: #3e2c23; color: #f4f1ee; font: inherit; font-weight: 700; cursor: pointer; }
