@@ -1,4 +1,6 @@
-/* The Pattern Finder. Answers stay in this browser tab (sessionStorage) and are never sent anywhere.
+/* The Pattern Finder. Answers stay in this browser tab (sessionStorage) and are never stored on a server.
+   Only if he asks for the email plan are his scores, pattern and follow-up choices sent, once, to
+   /reflection/pattern-send to write his results email; the server keeps just email, name and pattern.
    Pattern data comes from /patterns/patterns-data.js (built from scripts/patterns/patterns-data.mjs). */
 (function () {
   'use strict';
@@ -126,6 +128,7 @@
         '<a class="pt-btn pt-btn--ghost" href="/tools/growth-journal/?pattern=' + p.id + '">Start a Growth Journal</a>' +
       '</div>' +
       '<p class="pt-muted pt-small">Your practice page has a checklist that remembers your progress in this browser, plus examples and Scripture.</p>' +
+      planHtml(p) +
       '<div class="pt-actions pt-no-print">' + btn('Copy my reflection', 'copy', 'pt-btn--ghost') + btn('Print / save PDF', 'print', 'pt-btn--ghost') + btn('Start over', 'reset', 'pt-btn--ghost') + '</div>' +
       '<p class="pt-feedback" id="ptFeedback" role="status"></p>';
   }
@@ -176,6 +179,84 @@
     else if (a === 'print') { window.print(); return; }
     else if (a === 'copy') { copy(); return; }
     render(true);
+  });
+
+  /* ---------- email results + 7-day plan ---------- */
+  function planHtml(p) {
+    if (st.emailed) {
+      return '<div class="pt-plan pt-no-print"><p class="pt-plan-msg is-ok" role="status">' + esc(st.emailed) + '</p></div>';
+    }
+    return '<section class="pt-plan pt-no-print" aria-labelledby="ptPlanTitle">' +
+      '<span class="pt-eyebrow">Free 7-day plan</span>' +
+      '<h3 class="pt-h3" id="ptPlanTitle">Get this by email, one practice a day</h3>' +
+      '<p>We’ll email your reflection now, then one short email each morning for 7 days with that day’s practice for ' + esc(p.name) + '. Stop anytime.</p>' +
+      '<form id="ptPlanForm" novalidate>' +
+        '<div class="pt-plan-row">' +
+          '<div class="pt-field"><label for="ptPlanName">First name <span class="pt-optional">(optional)</span></label><input id="ptPlanName" type="text" autocomplete="given-name" maxlength="60"></div>' +
+          '<div class="pt-field"><label for="ptPlanEmail">Email</label><input id="ptPlanEmail" type="email" autocomplete="email" required></div>' +
+        '</div>' +
+        '<div class="pt-hp" aria-hidden="true"><label for="ptPlanCompany">Company</label><input id="ptPlanCompany" type="text" tabindex="-1" autocomplete="off"></div>' +
+        '<label class="pt-check" for="ptPlanDaily"><input id="ptPlanDaily" type="checkbox"><span>Also send me The Daily: one Scripture, one hard question and one step, every weekday morning.</span></label>' +
+        '<button class="pt-btn pt-btn--ember" type="submit" id="ptPlanBtn">Email me my plan</button>' +
+        '<p class="pt-small pt-muted" style="margin-top:.8rem">Your answers are used to write your reflection email and aren’t stored. We keep only your email, first name and pattern to send the 7 days.</p>' +
+      '</form>' +
+      '<p class="pt-plan-msg" id="ptPlanMsg" role="status" aria-live="polite"></p>' +
+    '</section>';
+  }
+
+  function postJson(url, data) {
+    return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (body) {
+          if (!r.ok || body.ok === false) throw new Error(body.error || 'Something went wrong. Please try again.');
+          return body;
+        });
+      });
+  }
+
+  app.addEventListener('submit', function (e) {
+    if (e.target.id !== 'ptPlanForm') return;
+    e.preventDefault();
+    var msg = document.getElementById('ptPlanMsg');
+    var email = document.getElementById('ptPlanEmail').value.trim();
+    var name = document.getElementById('ptPlanName').value.trim();
+    var wantsDaily = document.getElementById('ptPlanDaily').checked;
+    msg.className = 'pt-plan-msg';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      msg.textContent = 'Please enter a valid email address.';
+      msg.classList.add('is-error');
+      document.getElementById('ptPlanEmail').focus();
+      return;
+    }
+    var sc = {};
+    scores().forEach(function (x) { sc[P[x.i].id] = x.s; });
+    var b = document.getElementById('ptPlanBtn');
+    b.disabled = true; b.textContent = 'Sending…';
+    postJson('/reflection/pattern-send', {
+      email: email, first_name: name, scores: sc, pattern: P[st.top].id, follow: st.follow,
+      company: document.getElementById('ptPlanCompany').value
+    }).then(function () {
+      track('pattern_finder_plan_signup');
+      var note = 'Sent. Check your inbox for your reflection. Day 1 of your plan arrives tomorrow morning.';
+      if (!wantsDaily) return note;
+      return postJson('/email/subscribe', { email: email, first_name: name, source: 'pattern-finder', company: '' })
+        .then(function (r) {
+          track('pattern_finder_daily_signup');
+          return r && r.status === 'active' ? note + ' You’re already on The Daily list.' : note + ' We also sent a separate email to confirm The Daily.';
+        })
+        .catch(function () { return note + ' The Daily sign-up didn’t go through, but you can sign up on any Daily page.'; });
+    }).then(function (text) {
+      st.emailed = text;
+      save();
+      var form = document.getElementById('ptPlanForm');
+      if (form) form.hidden = true;
+      msg.textContent = text;
+      msg.classList.add('is-ok');
+    }).catch(function (err) {
+      msg.textContent = err.message;
+      msg.classList.add('is-error');
+      b.disabled = false; b.textContent = 'Email me my plan';
+    });
   });
 
   function copy() {
