@@ -54,7 +54,8 @@ const RECURSIVE_PUBLIC_DIRS = [
   'pages',
   'sub-pages',
   'upstream',
-  'infographics'
+  'infographics',
+  'one-verse-man'
 ];
 
 function toPosix(p) {
