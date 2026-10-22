@@ -144,7 +144,8 @@ document.addEventListener("DOMContentLoaded", function () {
             email,
             first_name: (f.first_name ? f.first_name.value : '').trim(),
             company: f.company ? f.company.value : '',
-            source: location.pathname.startsWith('/leadership/') ? 'leadership'
+            source: location.pathname === '/' || location.pathname === '/index.html' ? 'home'
+              : location.pathname.startsWith('/leadership/') ? 'leadership'
               : location.pathname.startsWith('/daily/') ? 'daily-page' : 'daily-today'
           })
         });
@@ -212,8 +213,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!r.ok) return;
     const d = await r.json();
 
-    if (el.title && d.title) el.title.textContent = d.title;
-    if (el.subtitle && d.subtitle) { el.subtitle.textContent = d.subtitle; el.subtitle.hidden = false; }
+    // Lead with the topic headline when the Daily has one (the series name never leads)
+    const mainTitle = d.headline || d.subtitle || d.title;
+    const subTitle = d.headline ? (d.headline_sub || '') : (d.subtitle && d.subtitle !== mainTitle ? d.subtitle : '');
+    if (el.title && mainTitle) el.title.textContent = mainTitle;
+    if (el.subtitle) { el.subtitle.textContent = subTitle; el.subtitle.hidden = !subTitle; }
     if (el.teaser) {
       const teaser = d.insight_teaser || (Array.isArray(d.insight) ? d.insight[0] : (d.insight || ''));
       el.teaser.textContent = (teaser || '').trim();
@@ -244,6 +248,29 @@ document.addEventListener("DOMContentLoaded", function () {
     if (d.date && d.date > todayCentralISO()) href = '/daily-archive.html';
 
     if (el.cta && href) el.cta.setAttribute('href', href);
+  } catch {}
+})();
+
+// --------- Leadership feature (latest 3 leadership posts) ----------
+(async function loadLeadershipCards(){
+  const wrap = document.getElementById('leadCards');
+  if (!wrap) return;
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  try {
+    const r = await fetch('/data/daily-archive.json?ts=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return;
+    const list = await r.json();
+    const today = todayCentralISO();
+    const posts = (Array.isArray(list) ? list : [])
+      .filter(p => p.category === 'Leadership & Culture' && p.href && p.date <= today)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, 3);
+    if (!posts.length) return;
+    wrap.innerHTML = posts.map(p => `
+      <article class="blog-card">
+        <h3><a href="${esc(p.href)}">${esc(p.headline || p.subtitle || p.title)}</a></h3>
+        ${p.tagline ? `<p class="excerpt">${esc(p.tagline)}</p>` : ''}
+      </article>`).join('');
   } catch {}
 })();
 
@@ -307,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   try {
     const r = await fetch('/data/podcast.json?ts=' + Date.now(), { cache:'no-store' });
-    if (!r.ok) return;
+    if (!r.ok) throw new Error('No podcast data');
     const p = await r.json();
 
     const mins = formatDuration(p.duration);

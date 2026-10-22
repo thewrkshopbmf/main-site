@@ -62,35 +62,27 @@
   </a>
   <section class="hero">
     <div class="hero-overlay">
-      <h1><span class="sitename"></span></h1>
-      <p>The battle starts before the behavior. We help men win it upstream.</p>
+      <p class="hero-eyebrow"><span class="sitename">TheWrkShop</span></p>
+      <h1>The battle starts before the behavior.</h1>
+      <p>Daily formation for men: one Scripture, one hard question and one step, every weekday. We help men win the battle upstream.</p>
 
-      <form id="emailForm" class="subscribe-form">
-        <input type="email" id="email" name="email" placeholder="Your Email - Our Newsletter" required />
-        <button type="submit">Subscribe</button>
-      </form>
-      <p id="successMessage" class="subscribe-success">Thanks! Check your email to confirm your subscription</p>
+      <div class="hero-signup">
+        <form class="daily-signup-form" novalidate>
+          <input type="email" name="email" placeholder="Your email" autocomplete="email" required aria-label="Your email" />
+          <input type="text" name="company" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button type="submit">Get The Daily</button>
+        </form>
+        <p class="daily-signup-msg" role="status" aria-live="polite"></p>
+      </div>
 
-      <a href="#about" class="hero-button" data-scroll="#about">Learn More</a>
+      <a href="/upstream/" class="hero-link">New here? Start with the framework →</a>
     </div>
-  </section>
-
-  <section class="quick-actions" aria-label="Quick Actions">
-    <a class="qa-pill" href="#daily" data-scroll="#daily">
-      <span>📖</span> Today’s Verse
-    </a>
-    <a class="qa-pill" href="#blog" data-scroll="#blog">
-      <span>✍️</span> Latest Blog
-    </a>
-    <a class="qa-pill" href="#resources" data-scroll="#resources">
-      <span>🧰</span> Starter Kit
-    </a>
   </section>
 
   <section class="home-feature container" id="daily" aria-label="Today at TheWrkShop">
     <article class="daily-feature">
       <div class="df-head">
-        <span class="badge">Hidden Gem</span>
+        <span class="badge">Today’s Daily</span>
         <time class="df-date" datetime="2026-08-22">Aug 22</time>
       </div>
 
@@ -105,9 +97,8 @@
         <span class="verse-snippet">“Seek first the kingdom of God…”</span>
       </div>
 
-      <div class="df-actions df-actions--with-push">
-        <a class="df-cta" href="daily.html">Read Today’s Devotional →</a>
-        <button class="listen-btn" id="listenDailyBtn">🔊 Listen</button>
+      <div class="df-actions">
+        <a class="df-cta" href="daily.html">Read Today’s Daily →</a>
       </div>
     </article>
 
@@ -126,30 +117,6 @@
     </div>
   </section>
 
-
-  <section id="about" class="content-section about-section">
-    <h2>About Us</h2>
-    <div class="cards-container">
-      <div class="card">
-        <h3>Our Mission</h3>
-        <p>Most men don’t fall apart in public. They drift in private. TheWrkShop helps men face the wound beneath the wound: the battle that starts inside a man long before it shows up at work, at home or in the rooms he leads.</p>
-      </div>
-      <div class="card">
-        <h3>Our Vision</h3>
-        <p>Men who are the same in private as they are in public, and who make every room they enter a place where truth is easier to tell.</p>
-      </div>
-      <div class="card values-card">
-        <h3>Our Values</h3>
-        <ul class="values-list">
-          <li><strong>Truth over image.</strong> We’d rather be honest than impressive.</li>
-          <li><strong>Daily faithfulness.</strong> Formation happens in small daily reps, not big moments.</li>
-          <li><strong>Brotherhood, not an audience.</strong> Men grow in rooms where they’re known.</li>
-          <li><strong>Accountability without humiliation.</strong> We hold the line, and we hold each other up.</li>
-          <li><strong>Christ is Lord of the room.</strong> Not success, not approval, not comfort.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
   <section id="path" class="content-section path-section" aria-labelledby="path-title">
     <h2 id="path-title">The Work Beneath the Work</h2>
@@ -181,6 +148,69 @@
         <a class="path-link" href="/leadership/">Explore Leadership &amp; Culture →</a>
       </li>
     </ol>
+  </section>
+
+  <section id="upstream-feature" class="content-section upstream-feature" aria-labelledby="upTitle">
+    <div class="uf-grid">
+      <div class="uf-text">
+        <span class="uf-eyebrow">Start here</span>
+        <h2 id="upTitle">The Upstream Formation Framework</h2>
+        <p>Most men try to fix the reaction. But the reaction was usually decided further upstream, in what we told ourselves the moment meant. Five questions help you catch it there.</p>
+        <a class="uf-btn" href="/upstream/">See how the battle starts →</a>
+      </div>
+      <ol class="uf-flow" aria-label="Trigger, interpretation, agreement, response, formation">
+        <li><b>Trigger</b><span>What happened?</span></li>
+        <li class="uf-up"><b>Interpretation</b><span>What meaning did I assign?</span></li>
+        <li class="uf-up"><b>Agreement</b><span>What did I accept as true?</span></li>
+        <li><b>Response</b><span>What did I choose to do?</span></li>
+        <li class="uf-last"><b>Formation</b><span>What is repetition shaping?</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="leadership" class="content-section lead-feature" aria-labelledby="leadTitle">
+    <h2 id="leadTitle">Leadership &amp; Culture</h2>
+    <p class="lead-feature-sub">For leaders, managers, coaches, pastors and parents. What you reward, tolerate and model becomes the culture around you.</p>
+    <div class="cards lead-feature-cards" id="leadCards">
+      <article class="blog-card">
+        <h3><a href="/leadership/when-leaders-need-to-be-liked/">When Leaders Need to Be Liked</a></h3>
+        <p class="excerpt">The need to be loved by everyone can eventually make a leader unable to faithfully lead anyone.</p>
+      </article>
+      <article class="blog-card">
+        <h3><a href="/leadership/what-leaders-tolerate/">What Leaders Tolerate Becomes Culture</a></h3>
+        <p class="excerpt">What leadership repeatedly refuses to confront eventually receives permission to remain.</p>
+      </article>
+      <article class="blog-card">
+        <h3><a href="/leadership/what-leaders-reward/">What Leaders Reward Shapes Culture</a></h3>
+        <p class="excerpt">Your stated values describe the culture you want. Your rewards reveal the culture you are actually building.</p>
+      </article>
+    </div>
+    <a class="cta" href="/leadership/">All leadership posts →</a>
+  </section>
+
+  <section id="about" class="content-section about-section">
+    <h2>Who We Are</h2>
+    <p class="about-lead">TheWrkShop isn’t about one person. It’s about the work: helping men be formed into the likeness of Christ, and sending them out to be a blessing to the people around them.</p>
+    <div class="cards-container">
+      <div class="card">
+        <h3>Our Mission</h3>
+        <p>Most men don’t fall apart in public. They drift in private. TheWrkShop helps men face the wound beneath the wound: the battle that starts inside a man long before it shows up at work, at home or in the rooms he leads.</p>
+      </div>
+      <div class="card">
+        <h3>Our Vision</h3>
+        <p>Men who are the same in private as they are in public, and who make every room they enter a place where truth is easier to tell.</p>
+      </div>
+      <div class="card values-card">
+        <h3>Our Values</h3>
+        <ul class="values-list">
+          <li><strong>Truth over image.</strong> We’d rather be honest than impressive.</li>
+          <li><strong>Daily faithfulness.</strong> Formation happens in small daily reps, not big moments.</li>
+          <li><strong>Brotherhood, not an audience.</strong> Men grow in rooms where they’re known.</li>
+          <li><strong>Accountability without humiliation.</strong> We hold the line, and we hold each other up.</li>
+          <li><strong>Christ is Lord of the room.</strong> Not success, not approval, not comfort.</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
   <section id="podcast" class="content-section podcast-section container">
@@ -285,15 +315,29 @@
     <p class="contact-msg" id="contactMsg" role="status" aria-live="polite"></p>
   </section>
 
+  <section class="content-section newsletter-section" aria-labelledby="newsTitle">
+    <h2 id="newsTitle">TheWrkShop Newsletter</h2>
+    <p>Occasional updates on new resources, groups and guides.</p>
+    <form id="emailForm" class="subscribe-form">
+      <input type="email" id="email" name="email" placeholder="Your email" required />
+      <button type="submit">Subscribe</button>
+    </form>
+    <p id="successMessage" class="subscribe-success">Thanks! Check your email to confirm your subscription</p>
+  </section>
+
   
   <footer>
     <div class="footer-content">
       <nav class="footer-links" aria-label="Browse">
+        <a href="/upstream/">Start Here</a>
+        <a href="/daily.html">The Daily</a>
+        <a href="/leadership/">Leadership</a>
+        <a href="/get-known.html">Groups</a>
         <a href="/library/">Library</a>
-        <a href="/leadership/">Leadership &amp; Culture</a>
-        <a href="/daily-archive.html">Daily Archive</a>
         <a href="/blog-archive.html">Blog</a>
         <a href="/podcasts.html">Podcast</a>
+        <a href="/products.html">Store</a>
+        <a href="/#contact">Contact</a>
       </nav>
       <div class="footer-logo"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop" width="233" height="180" loading="lazy"></div>
       <p>&copy; 2026 <span class="sitename"></span>. All rights reserved.</p>
