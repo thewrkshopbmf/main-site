@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Are You Missing Your Moments? A Biblical Self-Reflection | TheWrkShop</title>
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="stylesheet" href="/one-verse-man/diagnostic/moments.css"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
+  <meta name="description" content="A free biblical self-reflection on attention, motives, courage and everyday faithfulness. 35 questions, 7 areas, about 10 minutes. Private: your answers never leave your browser."/>
+  <link rel="canonical" href="https://thewrkshop.com/one-verse-man/diagnostic/"/>
+  <link rel="alternate" type="application/rss+xml" title="TheWrkShop — The Daily" href="https://thewrkshop.com/daily/feed.xml"/>
+  <meta property="og:site_name" content="TheWrkShop"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Are You Missing Your Moments?"/>
+  <meta property="og:description" content="A free, private biblical self-reflection on attention, motives, courage and everyday faithfulness."/>
+  <meta property="og:url" content="https://thewrkshop.com/one-verse-man/diagnostic/"/>
+  <meta property="og:image" content="https://thewrkshop.com/assets/og/site.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Are You Missing Your Moments?",
+  "url": "https://thewrkshop.com/one-verse-man/diagnostic/",
+  "description": "A free biblical self-reflection on attention, motives, courage and everyday faithfulness.",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "inLanguage": "en-US",
+  "publisher": { "@id": "https://thewrkshop.com/#organization", "@type": "Organization", "name": "TheWrkShop", "url": "https://thewrkshop.com" },
+  "isPartOf": { "@id": "https://thewrkshop.com/#website" }
+}
+  </script>
+  <!-- Google Analytics (same GA4 property as the rest of the site). Only page views and start/finish counts are sent, never answers. -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N48478JV2Z');</script>
+</head>
+<body class="moments-page">
+  <div id="site-header"></div>
+
+  <main class="mm-shell">
+
+    <!-- Cover -->
+    <section id="mmCover" class="mm-screen mm-cover is-active" aria-labelledby="mmCoverTitle">
+      <p class="mm-brand">The One Verse Man · Don’t Miss Your Verse</p>
+      <h1 id="mmCoverTitle" class="mm-cover-title">Are you missing<br>your <em>moments</em>?</h1>
+      <div class="mm-divider"></div>
+      <p class="mm-cover-sub">Some men are known for chapters. Others are known for moments. God uses both. A biblical self-reflection on attention, motives, courage and everyday faithfulness.</p>
+      <button id="mmCoverBtn" class="mm-btn-start" type="button">Begin reflection</button>
+      <p class="mm-cover-note">35 questions · 7 areas · about 8–12 minutes · no account needed</p>
+      <p id="mmResumeNote" class="mm-resume" hidden>You have a reflection in progress. <button id="mmResumeBtn" class="mm-link-btn" type="button">Pick up where you left off</button></p>
+    </section>
+
+    <!-- Before you begin -->
+    <section id="mmIntro" class="mm-screen mm-narrow" aria-labelledby="mmIntroTitle">
+      <span class="mm-label">Before you begin</span>
+      <h2 id="mmIntroTitle" class="mm-h2" tabindex="-1">Answer honestly, not ideally</h2>
+      <div class="mm-body">
+        <p>Think about your behavior over the <strong>past 30 days</strong>. Answer based on what is usually true, not what you wish were true.</p>
+        <p>This is a spiritual reflection aid. It is not a clinical or scientifically validated test, a measure of salvation, or a verdict on your character.</p>
+      </div>
+      <div class="mm-scale-card" aria-label="Rating scale">
+        <div class="mm-scale-row"><span class="mm-scale-num">1</span><span>Rarely</span></div>
+        <div class="mm-scale-row"><span class="mm-scale-num">2</span><span>Occasionally</span></div>
+        <div class="mm-scale-row"><span class="mm-scale-num">3</span><span>Sometimes</span></div>
+        <div class="mm-scale-row"><span class="mm-scale-num">4</span><span>Often</span></div>
+        <div class="mm-scale-row"><span class="mm-scale-num">5</span><span>Almost always</span></div>
+      </div>
+      <div class="mm-privacy">
+        <strong>Your answers stay private.</strong> They never leave this browser tab and are never sent to TheWrkShop or stored on a server. If you refresh the page, your progress is kept until you close the tab. Printing or downloading your results is up to you.
+      </div>
+      <div class="mm-nav">
+        <button id="mmIntroBack" class="mm-btn mm-btn-secondary" type="button">Back</button>
+        <button id="mmIntroStart" class="mm-btn mm-btn-primary" type="button">Start →</button>
+      </div>
+    </section>
+
+    <!-- Questions -->
+    <section id="mmQuiz" class="mm-screen mm-narrow" aria-labelledby="mmSectionTitle">
+      <div class="mm-progress">
+        <div class="mm-progress-meta">
+          <span id="mmStepLabel" class="mm-label mm-label--flat"></span>
+          <span id="mmCount" class="mm-count"></span>
+        </div>
+        <div class="mm-progress-track"><div id="mmProgressFill" class="mm-progress-fill"></div></div>
+      </div>
+      <h2 id="mmSectionTitle" class="mm-h2" tabindex="-1"></h2>
+      <p id="mmSectionVerse" class="mm-verse"></p>
+      <div id="mmQuestions"></div>
+      <p id="mmError" class="mm-error" role="alert" tabindex="-1"></p>
+      <div class="mm-nav">
+        <button id="mmBack" class="mm-btn mm-btn-secondary" type="button">← Previous</button>
+        <button id="mmNext" class="mm-btn mm-btn-primary" type="button">Next section →</button>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="mmResults" class="mm-screen mm-narrow" aria-labelledby="mmResultsTitle">
+      <span class="mm-label">Your personal reflection</span>
+      <h2 id="mmResultsTitle" class="mm-h2" tabindex="-1">Where might your next growth step begin?</h2>
+      <p class="mm-body-text">Higher scores mean you reported these obstacles more often. Compare the patterns with real situations and with feedback from people you trust. These numbers are not diagnoses or spiritual rankings.</p>
+      <p class="mm-print-date" id="mmPrintDate"></p>
+
+      <div id="mmScores" class="mm-scores"></div>
+      <div id="mmReflection"></div>
+
+      <div class="mm-commit">
+        <h3 class="mm-h3">One faithful response</h3>
+        <p>Name a real situation, what may be driving your response, and one appropriate step grounded in Scripture, wisdom and love.</p>
+        <label for="mmCommitment" class="mm-commit-label">My next step</label>
+        <textarea id="mmCommitment" rows="4" placeholder="One concrete step, and when I will take it…"></textarea>
+      </div>
+
+      <div class="mm-nav mm-nav--wrap">
+        <button id="mmPrint" class="mm-btn mm-btn-primary" type="button">Print / Save as PDF</button>
+        <button id="mmDownload" class="mm-btn mm-btn-secondary" type="button">Download text report</button>
+        <button id="mmEdit" class="mm-btn mm-btn-secondary" type="button">Change my answers</button>
+        <button id="mmRestart" class="mm-btn mm-btn-secondary" type="button">Start over</button>
+      </div>
+
+      <div class="mm-note">
+        <p>For group use, share only what you choose. No one should be required to disclose results.</p>
+        <p>If you are experiencing abuse or coercion, put your safety first and reach out for appropriate support, rather than treating every demand as an obligation.</p>
+        <p class="mm-print-hide">Leading a group? The <a href="/one-verse-man/group-facilitator-guide.html">facilitator guide</a> shows how to use this reflection together, and the <a href="/one-verse-man/">One Verse Man hub</a> has every resource.</p>
+        <p class="mm-print-hide">Want to walk this out with other men? <a href="/get-known.html">Join a group</a> or get <a href="/daily.html">The Daily</a> every weekday.</p>
+      </div>
+    </section>
+
+    <p class="mm-scripture-note">Scripture references are given for further study. Read each passage in its context.</p>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <nav class="footer-links" aria-label="Browse">
+        <a href="/upstream/">Start Here</a>
+        <a href="/daily.html">The Daily</a>
+        <a href="/leadership/">Leadership</a>
+        <a href="/get-known.html">Groups</a>
+        <a href="/library/">Library</a>
+        <a href="/blog-archive.html">Blog</a>
+        <a href="/podcasts.html">Podcast</a>
+        <a href="/products.html">Store</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <div class="footer-logo"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop" width="233" height="180" loading="lazy"></div>
+      <p>&copy; 2026 <span class="sitename"></span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/script.js"></script>
+  <script src="/one-verse-man/diagnostic/moments.js"></script>
+</body>
+</html>
