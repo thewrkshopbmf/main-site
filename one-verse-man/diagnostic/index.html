@@ -72,7 +72,7 @@
         <div class="mm-scale-row"><span class="mm-scale-num">5</span><span>Almost always</span></div>
       </div>
       <div class="mm-privacy">
-        <strong>Your answers stay private.</strong> They never leave this browser tab and are never sent to TheWrkShop or stored on a server. If you refresh the page, your progress is kept until you close the tab. Printing or downloading your results is up to you.
+        <strong>Your answers stay private.</strong> They stay in this browser tab and are never stored on a server. If you refresh the page, your progress is kept until you close the tab. At the end you can print or download your results, or have them emailed to you with a free 7-day plan. That part is up to you.
       </div>
       <div class="mm-nav">
         <button id="mmIntroBack" class="mm-btn mm-btn-secondary" type="button">Back</button>
@@ -115,6 +115,36 @@
         <label for="mmCommitment" class="mm-commit-label">My next step</label>
         <textarea id="mmCommitment" rows="4" placeholder="One concrete step, and when I will take it…"></textarea>
       </div>
+
+      <section class="mm-plan mm-print-hide" aria-labelledby="mmPlanTitle">
+        <span class="mm-label mm-label--flat">Free 7-day plan</span>
+        <h3 id="mmPlanTitle" class="mm-h3">Don’t let this fade by tomorrow</h3>
+        <p id="mmPlanLead"></p>
+        <form id="mmPlanForm" novalidate>
+          <div id="mmPlanPick" class="mm-field" hidden>
+            <label for="mmPlanFocus">Focus my plan on</label>
+            <select id="mmPlanFocus"></select>
+          </div>
+          <div class="mm-plan-row">
+            <div class="mm-field">
+              <label for="mmPlanName">First name <span class="mm-optional">(optional)</span></label>
+              <input id="mmPlanName" type="text" autocomplete="given-name" maxlength="60">
+            </div>
+            <div class="mm-field">
+              <label for="mmPlanEmail">Email</label>
+              <input id="mmPlanEmail" type="email" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="mm-hp" aria-hidden="true"><label for="mmPlanCompany">Company</label><input id="mmPlanCompany" type="text" tabindex="-1" autocomplete="off"></div>
+          <label class="mm-check" for="mmPlanDaily">
+            <input id="mmPlanDaily" type="checkbox">
+            <span>Also send me The Daily: one Scripture, one hard question and one step, every weekday morning.</span>
+          </label>
+          <button id="mmPlanBtn" class="mm-btn mm-btn-primary" type="submit">Email me my results</button>
+          <p class="mm-plan-fine">Your scores and the step you wrote are used to write your results email and aren’t stored. We keep only your email, first name and focus area to send the 7 days.</p>
+        </form>
+        <p id="mmPlanMsg" class="mm-plan-msg" role="status" aria-live="polite"></p>
+      </section>
 
       <div class="mm-nav mm-nav--wrap">
         <button id="mmPrint" class="mm-btn mm-btn-primary" type="button">Print / Save as PDF</button>
