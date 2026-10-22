@@ -1,11 +1,13 @@
 /* Are You Missing Your Moments? — private self-reflection.
-   Answers stay in this browser tab (sessionStorage) and are never sent anywhere.
-   Analytics only records that the reflection was started and finished. */
+   Answers stay in this browser tab (sessionStorage) and are never stored on a server.
+   Only if he asks for the email plan are his area scores and next step sent, once, to write
+   his results email (/reflection/send); the server keeps just email, name and focus area.
+   Analytics only records starts, finishes and sign-ups. */
 (function () {
   'use strict';
 
   var SECTIONS = [
-    { title: 'Pace & Presence', verse: 'Luke 10:38–42',
+    { key: 'pace', title: 'Pace & Presence', verse: 'Luke 10:38–42',
       questions: [
         'I often treat interruptions as obstacles before considering the person behind them.',
         'People close to me receive my leftover attention rather than my intentional presence.',
@@ -14,7 +16,7 @@
         'I rarely create unhurried space to listen, reflect, or pray.'
       ],
       prompt: 'Where has hurry displaced attentiveness? Choose one realistic opportunity to slow down.' },
-    { title: 'Attention & Awareness', verse: 'James 1:22–25',
+    { key: 'attention', title: 'Attention & Awareness', verse: 'James 1:22–25',
       questions: [
         'I frequently consume meaningful teaching without identifying what I will do differently.',
         'I reach for digital stimulation when I encounter uncomfortable thoughts or emotions.',
@@ -23,7 +25,7 @@
         'I find it difficult to be fully present without checking something else.'
       ],
       prompt: 'What truth have you heard repeatedly but not practiced? Choose one concrete application.' },
-    { title: 'Pride & Selective Obedience', verse: 'Philippians 2:3–8',
+    { key: 'pride', title: 'Pride & Selective Obedience', verse: 'Philippians 2:3–8',
       questions: [
         'I am more enthusiastic about visible contributions than unnoticed service.',
         'I resist correction when it comes from someone I do not particularly respect.',
@@ -32,7 +34,7 @@
         'I can defend my intentions instead of acknowledging the impact of my actions.'
       ],
       prompt: 'Where has recognition or self-protection become a condition of service?' },
-    { title: 'Fear & Avoidance', verse: 'Galatians 1:10',
+    { key: 'fear', title: 'Fear & Avoidance', verse: 'Galatians 1:10',
       questions: [
         'I postpone necessary conversations because I fear the reaction.',
         'I have allowed a relationship to deteriorate rather than initiate an uncomfortable repair.',
@@ -41,7 +43,7 @@
         'I often tell myself I will act later without choosing a specific time.'
       ],
       prompt: 'Which safe and appropriate conversation or action have you delayed out of fear?' },
-    { title: 'Comfort & Self-Preoccupation', verse: 'Philippians 2:4',
+    { key: 'comfort', title: 'Comfort & Self-Preoccupation', verse: 'Philippians 2:4',
       questions: [
         'I evaluate others’ needs primarily through how much they will disrupt my plans.',
         'When I am stressed, I become less curious about what others are experiencing.',
@@ -50,7 +52,7 @@
         'My own disappointments occupy so much attention that I overlook opportunities to encourage others.'
       ],
       prompt: 'How might you consider someone else’s legitimate need while maintaining wise boundaries?' },
-    { title: 'Honesty & Repentance', verse: 'Psalm 139:23–24; James 5:16',
+    { key: 'honesty', title: 'Honesty & Repentance', verse: 'Psalm 139:23–24; James 5:16',
       questions: [
         'When confronted, I usually explain myself before listening fully.',
         'I find it difficult to apologize without adding a defense or qualification.',
@@ -59,7 +61,7 @@
         'I avoid accountability when I suspect someone will challenge a cherished habit.'
       ],
       prompt: 'What would an unqualified apology, repair, or honest accountability look like?' },
-    { title: 'Dependence & Discernment', verse: 'John 15:4–5; Proverbs 3:5–6',
+    { key: 'dependence', title: 'Dependence & Discernment', verse: 'John 15:4–5; Proverbs 3:5–6',
       questions: [
         'I make important decisions without seriously considering biblical wisdom or prayer.',
         'I sometimes use spiritual language to justify a decision I have already made.',
@@ -189,7 +191,7 @@
     return SECTIONS.map(function (s, i) {
       var vals = state.answers.slice(i * PER, i * PER + PER);
       var score = vals.reduce(function (a, b) { return a + b; }, 0);
-      return { title: s.title, verse: s.verse, prompt: s.prompt, score: score, order: i };
+      return { key: s.key, title: s.title, verse: s.verse, prompt: s.prompt, score: score, order: i };
     }).sort(function (a, b) { return b.score - a.score || a.order - b.order; });
   }
 
@@ -236,13 +238,117 @@
         '<h3 class="mm-h3">' + (allEven ? 'Choose your starting point' : tied.length > 1 ? 'Your top areas' : 'Start with ' + esc(tied[0].title)) + '</h3>' +
         low + lead + focus +
         '<p class="mm-reflect"><strong>Reflect:</strong> What happened? What did I interpret? What desire or fear was active? What would wise, loving faithfulness require?</p>' +
-      '</div>';
+      '</div>' + strengthHtml(scored);
+
+    renderPlanForm(scored, tied);
 
     $('mmCommitment').value = state.commitment;
     $('mmPrintDate').textContent = 'Completed ' + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 
     if (state.screen !== 'results') track('moments_reflection_complete');
     show('results', 'mmResultsTitle');
+  }
+
+  // The one area he reported least often (only when it is clearly lowest).
+  function strengthOf(scored) {
+    var low = scored[scored.length - 1].score;
+    var lows = scored.filter(function (s) { return s.score === low; });
+    return (lows.length === 1 && low < scored[0].score) ? lows[0] : null;
+  }
+
+  function strengthHtml(scored) {
+    var st = strengthOf(scored);
+    if (!st) return '';
+    return '<div class="mm-strength">' +
+      '<span class="mm-label mm-label--flat">Where you’re steady</span>' +
+      '<h3 class="mm-h3">' + esc(st.title) + '</h3>' +
+      '<p>You reported these obstacles least often. Thank God for that, and consider how this steadiness could help another man.</p>' +
+      '</div>';
+  }
+
+  /* ---------- email results + 7-day plan ---------- */
+  var planFocus = null;
+
+  function renderPlanForm(scored, tied) {
+    planFocus = tied[0].key;
+    var picker = $('mmPlanPick');
+    if (tied.length > 1) {
+      picker.hidden = false;
+      $('mmPlanFocus').innerHTML = tied.map(function (s) {
+        return '<option value="' + s.key + '">' + esc(s.title) + '</option>';
+      }).join('');
+      $('mmPlanFocus').value = planFocus;
+      $('mmPlanLead').textContent = 'Get your results by email, plus a 7-day plan: one short reading, one question and one small step each morning. Stop anytime.';
+    } else {
+      picker.hidden = true;
+      $('mmPlanLead').textContent = 'Get your results by email, plus a 7-day plan for ' + tied[0].title + ': one short reading, one question and one small step each morning. Stop anytime.';
+    }
+    $('mmPlanMsg').textContent = '';
+    $('mmPlanMsg').className = 'mm-plan-msg';
+  }
+
+  function postJson(url, data) {
+    return fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (body) {
+        if (!r.ok || body.ok === false) throw new Error(body.error || 'Something went wrong. Please try again.');
+        return body;
+      });
+    });
+  }
+
+  function submitPlan(e) {
+    e.preventDefault();
+    var msg = $('mmPlanMsg');
+    var email = $('mmPlanEmail').value.trim();
+    var name = $('mmPlanName').value.trim();
+    var wantsDaily = $('mmPlanDaily').checked;
+    msg.className = 'mm-plan-msg';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      msg.textContent = 'Please enter a valid email address.';
+      msg.classList.add('is-error');
+      $('mmPlanEmail').focus();
+      return;
+    }
+    var scores = {};
+    scoreSections().forEach(function (s) { scores[s.key] = s.score; });
+    var btn = $('mmPlanBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    postJson('/reflection/send', {
+      email: email,
+      first_name: name,
+      scores: scores,
+      focus: $('mmPlanPick').hidden ? planFocus : $('mmPlanFocus').value,
+      next_step: $('mmCommitment').value,
+      company: $('mmPlanCompany').value
+    }).then(function () {
+      track('moments_plan_signup');
+      var note = 'Sent. Check your inbox for your results. Day 1 of your plan arrives tomorrow morning.';
+      if (!wantsDaily) return note;
+      return postJson('/email/subscribe', { email: email, first_name: name, source: 'one-verse-man', company: '' })
+        .then(function (r) {
+          track('moments_daily_signup');
+          return r && r.status === 'active'
+            ? note + ' You’re already on The Daily list.'
+            : note + ' We also sent a separate email to confirm The Daily.';
+        })
+        .catch(function () { return note + ' The Daily sign-up didn’t go through, but you can sign up on any Daily page.'; });
+    }).then(function (text) {
+      msg.textContent = text;
+      msg.classList.add('is-ok');
+      $('mmPlanForm').hidden = true;
+    }).catch(function (err) {
+      msg.textContent = err.message;
+      msg.classList.add('is-error');
+    }).then(function () {
+      btn.disabled = false;
+      btn.textContent = 'Email me my results';
+    });
   }
 
   function reportText() {
@@ -284,6 +390,8 @@
     clearStore();
     $('mmCommitment').value = '';
     $('mmResumeNote').hidden = true;
+    $('mmPlanForm').hidden = false;
+    $('mmPlanForm').reset();
     show('cover', 'mmCoverTitle');
   }
 
@@ -316,6 +424,7 @@
     show('quiz', 'mmSectionTitle');
   });
   $('mmRestart').addEventListener('click', restart);
+  $('mmPlanForm').addEventListener('submit', submitPlan);
   $('mmCommitment').addEventListener('input', function (e) { state.commitment = e.target.value; save(); });
 
   // Restore an in-progress reflection after a refresh (same tab only).
