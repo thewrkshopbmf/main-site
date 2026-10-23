@@ -1,4 +1,4 @@
-// Sends the next day of each 7-day email plan (One Verse Man reflection and Pattern Finder), once each morning.
+// Sends the next day of each 7-day email plan (One Verse Man reflection, Pattern Finder, Belief Project), once each morning.
 import { sendPlanDays } from '../shared/reflection-list.js';
 
 export default async () => {
@@ -11,6 +11,11 @@ export default async () => {
     console.log(JSON.stringify(await sendPlanDays({ tool: 'pattern-finder' })));
   } catch (err) {
     console.error('Pattern Finder plan sweep failed:', err);
+  }
+  try {
+    console.log(JSON.stringify(await sendPlanDays({ tool: 'belief' })));
+  } catch (err) {
+    console.error('Belief Project plan sweep failed:', err);
   }
   return new Response('ok');
 };

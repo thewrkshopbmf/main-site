@@ -7,13 +7,13 @@ import { PLANS } from '../shared/reflection-list.js';
 
 const PAGE = '/one-verse-man/diagnostic/';
 
-// The token belongs to one plan in one of the plan tables (the One Verse Man reflection or the Pattern Finder).
+// The token belongs to one plan in one of the plan tables (One Verse Man reflection, Pattern Finder or Belief Project).
 async function findPlan(supabase, token) {
   for (const tool of Object.keys(PLANS)) {
     const { data, error } = await supabase.from(PLANS[tool].table)
       .select('id, status').eq('unsub_token', token).maybeSingle();
     if (error) throw error;
-    if (data) return { ...data, table: PLANS[tool].table, page: PLANS[tool].page };
+    if (data) return { ...data, table: PLANS[tool].table, page: PLANS[tool].page, backText: PLANS[tool].backText };
   }
   return null;
 }
@@ -32,7 +32,7 @@ export default async (req) => {
     const supabase = db();
     const plan = await findPlan(supabase, token);
     if (!plan) return badLink();
-    const back = { buttonHref: plan.page, buttonText: plan.page === PAGE ? 'Back to the reflection' : 'Back to the Pattern Finder' };
+    const back = { buttonHref: plan.page, buttonText: plan.backText || 'Back to thewrkshop.com' };
 
     if (req.method === 'POST') {
       if (plan.status === 'active') {
