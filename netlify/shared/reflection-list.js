@@ -1,15 +1,18 @@
 // Server-side logic for the 7-day email plans (Netlify functions only):
 //   moments         → One Verse Man "Are You Missing Your Moments?" (table reflection_plans)
 //   pattern-finder  → The Pattern Finder (table pattern_plans)
+//   belief          → The Belief Project seven-day path (table belief_plans)
 // Stores only: email, optional first name, focus area, and send progress. Never answers or scores.
 import { db, FROM, sendEmail, newToken, centralNow } from './daily-list.js';
 import { SITE_URL } from './daily-email.js';
 import { dayEmail as momentsDay, TOTAL_DAYS as MOMENTS_DAYS } from './reflection-plan.js';
 import { patternDayEmail, PATTERN_DAYS } from './pattern-plan.js';
+import { beliefDayEmail, BELIEF_DAYS } from './belief-plan.js';
 
 export const PLANS = {
-  moments: { table: 'reflection_plans', dayEmail: momentsDay, totalDays: MOMENTS_DAYS, source: 'one-verse-man', page: '/one-verse-man/diagnostic/' },
-  'pattern-finder': { table: 'pattern_plans', dayEmail: patternDayEmail, totalDays: PATTERN_DAYS, source: 'pattern-finder', page: '/tools/pattern-finder/' }
+  moments: { table: 'reflection_plans', dayEmail: momentsDay, totalDays: MOMENTS_DAYS, source: 'one-verse-man', page: '/one-verse-man/diagnostic/', backText: 'Back to the reflection' },
+  'pattern-finder': { table: 'pattern_plans', dayEmail: patternDayEmail, totalDays: PATTERN_DAYS, source: 'pattern-finder', page: '/tools/pattern-finder/', backText: 'Back to the Pattern Finder' },
+  belief: { table: 'belief_plans', dayEmail: beliefDayEmail, totalDays: BELIEF_DAYS, source: 'belief', page: '/belief/', backText: 'Back to The Belief Project' }
 };
 export const PLAN_TABLE = PLANS.moments.table;
 const SEND_FROM_HOUR = 6;   // plan emails go out from 6 am Central…

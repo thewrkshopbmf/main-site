@@ -1,0 +1,149 @@
+// The Belief Project ("I Believe. Help My Unbelief.", Mark 9:24): all content in one place.
+// Used by scripts/belief/build-belief.mjs (static pages + /belief/belief-data.js for the browser)
+// and by netlify/shared/belief-plan.js (the optional 7-day email path).
+// Edit here, then run: node scripts/belief/build-belief.mjs
+
+export const THEMES = {
+  uncertainty: {
+    name: 'Uncertainty', verse: 'Proverbs 3:5–6',
+    prayer: 'Teach me to trust Your wisdom when I cannot see the outcome.',
+    practice: 'Name one responsibility you can carry faithfully and one outcome you must release.'
+  },
+  disappointment: {
+    name: 'Disappointment', verse: 'Psalm 73:21–26',
+    prayer: 'Help me bring disappointment to You without making pain my final conclusion about Your character.',
+    practice: 'Write down one painful fact and one interpretation you may need to revisit.'
+  },
+  control: {
+    name: 'Control', verse: 'Matthew 6:25–34',
+    prayer: 'Help me distinguish wise responsibility from trying to control what belongs to You.',
+    practice: 'Identify a wise action you can take, then pray about what you cannot control.',
+    related: { href: '/patterns/controller/', text: 'The Controller pattern' }
+  },
+  approval: {
+    name: 'Approval', verse: 'Galatians 1:10',
+    prayer: 'Give me courage to obey You without making others’ approval my master.',
+    practice: 'Practice one truthful, gracious response even if it is unpopular.',
+    related: { href: '/patterns/pleaser/', text: 'The Pleaser pattern' }
+  },
+  obedience: {
+    name: 'Obedience', verse: 'James 1:22–25',
+    prayer: 'Strengthen me to respond to Your Word in a concrete act of faithfulness.',
+    practice: 'Choose one small, specific step of obedience you have been postponing.'
+  },
+  prayer: {
+    name: 'Prayer', verse: 'Mark 9:24; Hebrews 4:14–16',
+    prayer: 'Help me come honestly to You when I feel weak instead of withdrawing.',
+    practice: 'Pray Mark 9:24 slowly and name one struggle without disguising it.'
+  }
+};
+export const THEME_IDS = Object.keys(THEMES);
+
+// 24 statements, four per theme. "How often did this describe you in the last 30 days?"
+export const QUESTIONS = [
+  ['uncertainty', 'When I cannot predict an outcome, I find it hard to entrust the situation to God.'],
+  ['uncertainty', 'I delay decisions until I feel guaranteed that nothing will go wrong.'],
+  ['uncertainty', 'Uncertainty leads me to assume God is absent or uninvolved.'],
+  ['uncertainty', 'I find it difficult to take a wise step without knowing how the story ends.'],
+  ['disappointment', 'When a prayer seems unanswered, I begin to wonder whether God cares.'],
+  ['disappointment', 'I allow one painful outcome to shape my overall view of God.'],
+  ['disappointment', 'I find it hard to bring disappointment honestly to God.'],
+  ['disappointment', 'I compare my situation with others and become resentful toward God.'],
+  ['control', 'I become preoccupied with outcomes beyond my responsibility.'],
+  ['control', 'I struggle to rest when I cannot personally fix a problem.'],
+  ['control', 'I confuse responsible planning with needing to guarantee a result.'],
+  ['control', 'I resist asking for help because I want to manage everything myself.'],
+  ['approval', 'Fear of criticism influences whether I do what I believe is right.'],
+  ['approval', 'I adjust my convictions to avoid disapproval.'],
+  ['approval', 'I become defensive when my reputation is challenged.'],
+  ['approval', 'I hesitate to acknowledge a mistake because I fear how others will see me.'],
+  ['obedience', 'When obedience becomes costly, I look for reasons to postpone it.'],
+  ['obedience', 'I can explain a biblical principle more readily than I put it into practice.'],
+  ['obedience', 'I sometimes justify a wrong response because my goal seems good.'],
+  ['obedience', 'I avoid a necessary conversation even when I believe it is the faithful next step.'],
+  ['prayer', 'When I feel spiritually weak, I withdraw from prayer.'],
+  ['prayer', 'I tend to pray only after my own efforts have failed.'],
+  ['prayer', 'I avoid telling God honestly what I fear or question.'],
+  ['prayer', 'Disappointment makes me reluctant to return to God in prayer.']
+];
+export const FREQUENCY = ['Rarely', 'Sometimes', 'Often', 'Almost always'];
+
+export const SCENARIOS = {
+  waiting: {
+    label: 'An important prayer remains unanswered', theme: 'disappointment',
+    intro: 'You have prayed for a significant need for months. The situation remains unresolved. You hear someone else describe an answer to a similar prayer.',
+    opts: { sad: 'I feel disappointed or deeply sad.', interpret: 'I start wondering whether God cares about me.', withdraw: 'I feel tempted to stop praying.', mixed: 'I am hopeful and hurting at the same time.' }
+  },
+  criticism: {
+    label: 'Someone challenges or criticizes me', theme: 'approval',
+    intro: 'Someone publicly questions a decision you made. You feel exposed and misunderstood.',
+    opts: { sad: 'I feel hurt and need time to process.', interpret: 'I assume I am being rejected or disrespected.', withdraw: 'I want to retaliate or withdraw.', mixed: 'I want to listen, but I also feel defensive.' }
+  },
+  financial: {
+    label: 'Financial security becomes uncertain', theme: 'control',
+    intro: 'A change in income or expenses disrupts your plans. You cannot immediately resolve the uncertainty.',
+    opts: { sad: 'I feel anxious about what might happen.', interpret: 'I conclude I am alone in handling this.', withdraw: 'I become consumed with trying to control everything.', mixed: 'I am taking responsible steps but still afraid.' }
+  },
+  relationship: {
+    label: 'Someone I love disappoints me', theme: 'disappointment',
+    intro: 'A person you love breaks an expectation or disappoints you. A difficult conversation may be necessary.',
+    opts: { sad: 'I feel hurt or grieved.', interpret: 'I assume this proves I cannot trust anyone.', withdraw: 'I want to punish, avoid, or shut down.', mixed: 'I want reconciliation but also need boundaries.' }
+  },
+  decision: {
+    label: 'Obedience could cost me something', theme: 'obedience',
+    intro: 'You recognize a course of action that appears consistent with Scripture, but it could cost you approval, comfort, or opportunity.',
+    opts: { sad: 'I feel fearful about the cost.', interpret: 'I assume obedience will ruin my future.', withdraw: 'I am tempted to delay or rationalize.', mixed: 'I want to obey but need wisdom about how.' }
+  },
+  grief: {
+    label: 'I am grieving a painful loss', theme: 'disappointment',
+    intro: 'You are carrying a significant loss. Faith and sorrow may coexist, and grief does not need to be explained away.',
+    opts: { sad: 'I feel sorrow and exhaustion.', interpret: 'I wonder whether God has abandoned me.', withdraw: 'I struggle to pray or connect with others.', mixed: 'I still trust God, but I am hurting.' }
+  }
+};
+// Where "Explore what may be underneath" sends each assessment theme.
+export const THEME_SCENARIO = { uncertainty: 'waiting', disappointment: 'waiting', control: 'financial', approval: 'criticism', obedience: 'decision', prayer: 'waiting' };
+
+export const FOLLOWUPS = {
+  sad: { text: 'Pain deserves compassion. What support, lament, or rest might you need?', refs: 'Psalm 13; Romans 12:15' },
+  interpret: { text: 'Separate the painful fact from the conclusion about God. What evidence supports that conclusion, and what does Scripture actually promise?', refs: 'Psalm 73; Proverbs 3:5–6' },
+  withdraw: { text: 'What is withdrawal protecting you from? Is there one safe, honest step toward prayer or community?', refs: 'Hebrews 4:14–16; Mark 9:24' },
+  mixed: { text: 'Mixed emotions do not make your faith insincere. What can you honestly bring to Jesus today?', refs: 'Mark 9:24; Psalm 62:8' }
+};
+
+export const CONVICTIONS = [
+  ['God is worthy of trust when the future is unclear.', 'uncertainty'],
+  ['God invites me to bring disappointment to Him.', 'disappointment'],
+  ['I am responsible for obedience, not control of every outcome.', 'control'],
+  ['Faithfulness matters more than universal approval.', 'approval'],
+  ['God’s Word should shape my choices, not merely my opinions.', 'obedience'],
+  ['I can approach God honestly when I feel weak.', 'prayer']
+];
+export const AFFIRM = ['Not sure yet', 'Somewhat', 'Strongly', 'Very strongly'];
+export const PRACTICE = ['Rarely', 'Sometimes', 'Often', 'Very consistently'];
+
+export const DAYS = [
+  { name: 'Name the struggle', read: 'Mark 9:14–29', reflect: 'Identify where your trust feels strained.', practice: 'Pray Mark 9:24 without pretending.' },
+  { name: 'Separate fact and story', read: 'Psalm 73:1–17', reflect: 'Name a painful fact and a conclusion you have attached to it.', practice: 'Ask God for truth and perspective.' },
+  { name: 'Recognize what matters', read: 'Proverbs 4:23; Matthew 6:19–24', reflect: 'Consider what you most fear losing.', practice: 'Offer that concern to God.' },
+  { name: 'Trust without guarantees', read: 'Daniel 3:16–18', reflect: 'Distinguish God’s ability from your desired outcome.', practice: 'Pray with honesty and surrender.' },
+  { name: 'Take one faithful step', read: 'James 1:22–25', reflect: 'Choose one action consistent with Scripture.', practice: 'Ask for courage to obey.' },
+  { name: 'Return instead of withdraw', read: 'Hebrews 4:14–16', reflect: 'Notice where you have avoided prayer or community.', practice: 'Reach toward God and safe support.' },
+  { name: 'Keep abiding', read: 'John 15:1–11', reflect: 'Review what you learned without grading yourself.', practice: 'Plan a sustainable rhythm of Scripture, prayer and fellowship.' }
+];
+
+export const SESSIONS = [
+  { title: 'I Believe; Help My Unbelief', texts: 'Mark 9:14–29', study: 'What does the father confess, and what does Jesus actually do?', question: 'When have you confused an uncertain outcome with a reason to withdraw from God?', practice: 'Pray honestly about one area of weak trust.' },
+  { title: 'When Experience Challenges Belief', texts: 'Psalm 73; Proverbs 3:5–6', study: 'How does Asaph’s perspective change across the psalm?', question: 'Where might an experience be shaping your interpretation of God?', practice: 'Write a lament that distinguishes facts from conclusions.' },
+  { title: 'What Am I Really Trusting?', texts: 'Matthew 6:19–34', study: 'How do treasure, masters, and anxiety relate in Jesus’ teaching?', question: 'What desire becomes especially powerful under pressure?', practice: 'Name one responsibility and one outcome to release.' },
+  { title: 'When Belief Becomes Costly', texts: 'James 1:22–25; Luke 6:46', study: 'What distinction do these passages draw between hearing and doing?', question: 'Where is an act of obedience difficult right now?', practice: 'Choose one small, wise action.' },
+  { title: 'Bring Your Unbelief to Jesus', texts: 'Mark 9:24; Hebrews 4:14–16', study: 'How does approaching Jesus differ from manufacturing certainty?', question: 'What have you been hesitant to pray honestly?', practice: 'Write a personal Mark 9:24 prayer.' },
+  { title: 'Faith That Keeps Growing', texts: 'John 15:1–11; Hebrews 12:1–3', study: 'What do abiding and endurance require?', question: 'Which practice will help you keep returning to Christ?', practice: 'Build a realistic ongoing rhythm.' }
+];
+
+export const FORMAT = [
+  ['Connect', 'Opening question and welcome', 5],
+  ['Word', 'Read Scripture in context and teach', 12],
+  ['Search', 'Small groups of 3–5, with permission to pass', 20],
+  ['Response', 'Private reflection and guided prayer', 8],
+  ['Send', 'One voluntary next step and blessing', 5]
+];
