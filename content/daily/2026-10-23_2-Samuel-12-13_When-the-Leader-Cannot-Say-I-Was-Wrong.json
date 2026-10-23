@@ -104,7 +104,7 @@
       "key": "the_surrender",
       "label": "The Surrender",
       "blocks": [
-        { "type": "paragraph", "text": "There may be someone who needs four words from you:" },
+        { "type": "paragraph", "text": "There may be someone who needs five words from you:" },
         { "type": "quote", "text": "“I WAS WRONG. I’M SORRY.”" },
         { "type": "lines", "items": ["No speech.", "No defense."] },
         { "type": "paragraph", "text": "No:" },
