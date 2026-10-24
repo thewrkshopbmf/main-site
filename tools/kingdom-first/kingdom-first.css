@@ -1,0 +1,55 @@
+/* What's Really First? Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.kf-verse { margin: 0 0 1.4rem; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.kf-verse p { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 2.6vw, 1.35rem); line-height: 1.45; color: var(--white); margin: 0 0 0.25rem; }
+.kf-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+
+.kf-facts { list-style: none; padding: 0 !important; margin: 1rem 0 !important; border: 1px solid var(--line); background: var(--bone); }
+.kf-facts li { padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); margin: 0 !important; }
+.kf-facts li:last-child { border-bottom: 0; }
+
+.kf-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 0 0 0.4rem; display: block; }
+.kf-prompt { font-size: 0.9rem; color: var(--steel); margin: 0 0 0.6rem; }
+button.pt-option.kf-notsure { color: var(--steel); border-style: dashed; }
+.kf-follow { min-height: 0.5rem; }
+
+.kf-result { border: 1px solid var(--line); border-left: 3px solid #9a8f84; padding: 1rem 1.15rem; margin: 0.75rem 0; background: var(--white); }
+.kf-result.is-top { border-left-color: var(--ember); background: var(--bone); }
+.kf-result h3 { font-family: 'Inter', sans-serif; font-size: 1.02rem; font-weight: 600; margin: 0 0 0.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.kf-result h3 span { font-family: 'Space Mono', monospace; font-weight: 400; font-size: 0.72rem; color: var(--steel); padding-top: 0.2rem; }
+.kf-result.is-top h3 span { color: var(--ember); }
+.kf-result p { margin: 0.5rem 0 0; }
+.kf-result .pt-label { margin-bottom: 0.15rem; }
+.kf-result .pt-bar { margin-top: 0.5rem; }
+.kf-result.is-top .pt-bar > div { background: var(--ember); }
+
+.kf-start { background: var(--ash); color: var(--parchment); padding: 1.35rem 1.4rem; margin: 1.5rem 0 0; }
+.kf-start .pt-label { color: #d6ad61; }
+.kf-start .pt-h3 { color: var(--white); margin-top: 0.3rem; }
+.kf-start p { margin: 0.3rem 0 0; }
+.pt-page .kf-start a { color: #e7c77c; }
+
+.kf-gap { margin-top: 2.25rem !important; }
+.pt-tool-card ol.kf-days { padding-left: 0; }
+.kf-days .pt-day-num { min-width: 3.4rem; }
+.kf-days a { position: relative; z-index: 1; }
+.kf-prayer { font-family: 'Playfair Display', serif; font-size: 1.1rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.25rem 1.4rem; margin: 2rem 0 0; }
+.kf-prayer .pt-label { font-family: 'Space Mono', monospace; }
+.kf-prayer p { margin: 0.5rem 0 0; }
+
+/* below-the-tool sections */
+.kf-group { margin-top: 2.5rem; }
+.kf-group ul, .kf-group ol { padding-left: 1.2rem; }
+.kf-group li { margin: 0.3rem 0; }
+.kf-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.kf-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.kf-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+@media print {
+  .pt-tool { padding: 0; }
+  .kf-result, .kf-days li, .kf-prayer, .kf-start { break-inside: avoid; }
+  .kf-start { background: #fff; color: #000; border: 1px solid #999; }
+  .kf-start .pt-h3, .kf-start .pt-label { color: #000; }
+  .kf-prayer { background: #fff; }
+  .pt-field textarea { border-color: #999; min-height: 0; }
+  body.kf-has-results .kf-group, body.kf-has-results .pt-note, body.kf-has-results .pt-hero .pt-lead, body.kf-has-results .kf-verse { display: none !important; }
+}
