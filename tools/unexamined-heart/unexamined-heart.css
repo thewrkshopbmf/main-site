@@ -1,0 +1,67 @@
+/* The Unexamined Heart (2 Kings 5). Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.uh-verse { margin: 0 0 1.4rem; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.uh-verse p { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 2.6vw, 1.35rem); line-height: 1.45; color: var(--white); margin: 0 0 0.25rem; }
+.uh-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+
+.uh-facts { list-style: none; padding: 0 !important; margin: 1rem 0 !important; border: 1px solid var(--line); background: var(--bone); }
+.uh-facts li { padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); margin: 0 !important; }
+.uh-facts li:last-child { border-bottom: 0; }
+.uh-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+.uh-two > div { border: 1px solid var(--line); background: var(--white); padding: 0.9rem 1rem; }
+.uh-two h3 { font-family: 'Inter', sans-serif; font-size: 0.98rem; font-weight: 600; margin: 0 0 0.3rem; }
+.uh-two p { margin: 0; font-size: 0.92rem; }
+
+.uh-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 0 0 0.4rem; display: block; }
+.uh-prompt { font-size: 0.9rem; color: var(--steel); margin: 0 0 0.6rem; }
+.uh-follow { min-height: 0.5rem; }
+
+.uh-result { border: 1px solid var(--line); border-left: 3px solid #9a8f84; padding: 1rem 1.15rem; margin: 0.75rem 0; background: var(--white); }
+.uh-result.is-top { border-left-color: var(--ember); background: var(--bone); }
+.uh-result h3 { font-family: 'Inter', sans-serif; font-size: 1.02rem; font-weight: 600; margin: 0 0 0.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.uh-result h3 span { font-family: 'Space Mono', monospace; font-weight: 400; font-size: 0.72rem; color: var(--steel); padding-top: 0.2rem; }
+.uh-result.is-top h3 span { color: var(--ember); }
+.uh-result p { margin: 0.5rem 0 0; }
+.uh-result .pt-bar { margin-top: 0.5rem; }
+.uh-result.is-top .pt-bar > div { background: var(--ember); }
+
+.uh-start { background: var(--ash); color: var(--parchment); padding: 1.35rem 1.4rem; margin: 1.5rem 0 0; }
+.uh-start .pt-label { color: #d6ad61; }
+.uh-start .pt-h3 { color: var(--white); margin-top: 0.3rem; }
+.uh-start p { margin: 0.3rem 0 0; }
+.pt-page .uh-start a { color: #e7c77c; }
+
+.uh-gap { margin-top: 2.25rem !important; }
+.pt-tool-card ol.uh-days, .pt-tool-card ul.uh-checks { padding-left: 0; }
+.uh-days .pt-day-num { min-width: 3.6rem; }
+.uh-days a { position: relative; z-index: 1; }
+.uh-scripture { font-family: 'Playfair Display', serif; font-size: 1.1rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.25rem 1.4rem; margin: 1.5rem 0 0; }
+.uh-scripture .pt-label { font-family: 'Space Mono', monospace; }
+.uh-scripture p { margin: 0.5rem 0 0; }
+.uh-scripture cite { display: block; font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); margin-top: 0.5rem; }
+.uh-safe { border-left-color: #5b7f78 !important; }
+
+/* below-the-tool sections */
+.uh-group { margin-top: 2.5rem; }
+.uh-group ul, .uh-group ol { padding-left: 1.2rem; }
+.uh-group li { margin: 0.3rem 0; }
+.uh-group details { border: 1px solid var(--line); background: var(--bone); padding: 0.8rem 1rem; margin: 0.5rem 0; }
+.uh-group summary { cursor: pointer; font-weight: 600; }
+.uh-group details p { margin: 0.5rem 0 0; }
+.uh-formats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin: 0.75rem 0 1.25rem; }
+.uh-formats > div { border: 1px solid var(--line); background: var(--white); padding: 0.9rem 1rem; }
+.uh-formats strong { display: block; font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); margin-bottom: 0.3rem; }
+.uh-formats p { margin: 0; font-size: 0.9rem; }
+
+@media (max-width: 700px) {
+  .uh-two, .uh-formats { grid-template-columns: 1fr; }
+}
+
+@media print {
+  .pt-tool { padding: 0; }
+  .uh-result, .uh-days li, .uh-scripture, .uh-start, .uh-group details { break-inside: avoid; }
+  .uh-start { background: #fff; color: #000; border: 1px solid #999; }
+  .uh-start .pt-h3, .uh-start .pt-label { color: #000; }
+  .uh-scripture { background: #fff; }
+  .pt-field textarea { border-color: #999; min-height: 0; }
+  body.uh-in-tool .uh-group, body.uh-in-tool .pt-note, body.uh-in-tool .pt-hero .pt-lead, body.uh-in-tool .uh-verse { display: none !important; }
+}
