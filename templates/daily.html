@@ -264,6 +264,11 @@
     .daily-flow-caption { margin: .6rem 0 0; color: #6b5b53; font-style: italic; font-size: .95rem; }
     .daily-flow-link { margin: .7rem 0 0; }
     .daily-flow-link a { color: #3e2c23; font-weight: 700; }
+    .daily-audio { margin: 1rem auto 1.25rem; text-align: center; }
+    .daily-audio-btn { display: inline-flex; align-items: center; gap: .55rem; background: #3e2c23; color: #f4f1ee; text-decoration: none; font-weight: 700; padding: .75rem 1.3rem; border-radius: 999px; box-shadow: 0 2px 6px rgba(62,44,35,.18); transition: background-color .2s ease, transform .1s ease; }
+    .daily-audio-btn:hover, .daily-audio-btn:focus-visible { background: #5b3a29; color: #fff; transform: translateY(-1px); }
+    .daily-audio-icon { font-size: 1.15rem; line-height: 1; }
+    .daily-audio-note { margin: .45rem 0 0; color: #6b5b53; font-size: .9rem; font-style: italic; }
   </style>
   <!-- Google Analytics (same GA4 property as the homepage's Firebase analytics) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
@@ -288,6 +293,7 @@
       {{SERIES_HTML}}
       <h1 class="daily-title"><span id="dTitle">{{TITLE}}</span> {{SUBTITLE_HTML}}</h1>
       {{TAGLINE_HTML}}
+      {{AUDIO_HTML}}
 
       <div class="verse-block" id="dVerseBlock">
         <div id="dVerse">{{VERSE_TEXT}}</div>
