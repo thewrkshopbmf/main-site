@@ -558,6 +558,13 @@ async function buildDailyPages(visible) {
           ? `<figure class="daily-hero-image" style="margin:1rem auto 1.25rem;max-width:480px;"><img src="${escapeHtml(cleanString(e.hero_image))}" alt="${escapeHtml(cleanString(e.hero_image_alt) || cleanString(e.headline) || e.title || '')}" style="display:block;width:100%;height:auto;border-radius:12px;" loading="eager"></figure>`
           : ''),
       AUDIO_HTML: (() => {
+        const file = cleanString(e.audio_file);
+        if (/^\/[A-Za-z0-9/_.-]+$/.test(file)) {
+          const label = cleanString(e.audio_label) || 'Listen to the Conversation';
+          const note = cleanString(e.audio_note) || 'An audio discussion of this post.';
+          const type = /\.mp3$/i.test(file) ? 'audio/mpeg' : 'audio/mp4';
+          return `<div class="daily-audio daily-audio--player"><p class="daily-audio-title"><span class="daily-audio-icon" aria-hidden="true">🎧</span> ${escapeHtml(label)}</p><audio class="daily-audio-player" controls preload="metadata" aria-label="${escapeHtml(label)}"><source src="${escapeHtml(file)}" type="${type}"><a href="${escapeHtml(file)}">Download the audio</a></audio><p class="daily-audio-note">${escapeHtml(note)}</p></div>`;
+        }
         const url = cleanString(e.audio_link);
         if (!/^https:\/\//i.test(url)) return '';
         const label = cleanString(e.audio_label) || 'Listen to the Conversation';
@@ -594,6 +601,7 @@ async function buildDailyPages(visible) {
 //   hero_image       – optional site path to an image shown under the title
 //   og_image         – site path to a 1200x630 social card (scripts/og/make-og-card.py)
 //   og_image_alt     – alt text for that card (og:image:alt / twitter:image:alt)
+//   audio_file       – optional site path to an audio file (e.g. /assets/audio/<slug>.m4a); shows a built-in player under the title
 //   audio_link       – optional https link to an audio version (e.g. a NotebookLM audio overview); shows a 🎧 button under the title
 //   audio_label / audio_note – optional button text / small line under it
 //   related_scriptures – extra passages the post discusses but doesn't quote up top (structured data only)
