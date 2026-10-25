@@ -52,6 +52,7 @@
 
   var openMenu = null;
   var pageUrl = '';
+  var shareBase = '';
 
   /* ---------- helpers ---------- */
 
@@ -74,8 +75,15 @@
 
   function clean(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
 
+  // Leave gems that already contain quotation marks as they are
   function quoted(text) {
-    return /^[“"]/.test(text) && /[”"]$/.test(text) ? text : '“' + text + '”';
+    return /[“”"]/.test(text) ? text : '“' + text + '”';
+  }
+
+  // Each gem and chart has its own page (/share/<key>/gem-N/) whose link
+  // preview shows just that piece. Without one, link to the day at #gem-N.
+  function itemUrl(id) {
+    return shareBase ? shareBase + id + '/' : pageUrl + '#' + id;
   }
 
   function copy(str) {
@@ -172,7 +180,8 @@
 
     if (navigator.share && !opts.image) {
       item('Share…', { method: 'native', onClick: function () {
-        navigator.share({ text: opts.text, url: opts.url }).catch(function () {});
+        // One message with the link inside, so apps can't keep the link and drop the quote
+        navigator.share({ text: body }).catch(function () {});
       } });
     }
     if (isTouch()) {
@@ -246,7 +255,7 @@
         type: 'hidden_gem',
         title: 'Share this gem',
         text: quoted(text) + ' — ' + BRAND,
-        url: pageUrl + '#' + el.id,
+        url: itemUrl(el.id),
         emailSubject: 'A Hidden Gem from ' + BRAND
       };
     });
@@ -273,7 +282,7 @@
     var text = sel.toString().trim();
     if (!text) return;
     var gem = node.closest('.gem-shareable');
-    var url = pageUrl + (gem ? '#' + gem.id : '');
+    var url = gem ? itemUrl(gem.id) : pageUrl;
     ev.clipboardData.setData('text/plain', text + '\n\n— ' + BRAND + '\n' + url);
     ev.clipboardData.setData('text/html',
       text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n/g, '<br>') +
@@ -511,7 +520,7 @@
         type: 'chart',
         title: 'Share this chart',
         text: chart.heading + ' — ' + BRAND,
-        url: pageUrl + '#' + fig.id,
+        url: itemUrl(fig.id),
         emailSubject: chart.heading + ' — ' + BRAND,
         image: function () { return cached || (cached = renderChartImage(chart)); }
       };
@@ -532,9 +541,11 @@
     setTimeout(function () { el.classList.remove('share-highlight'); }, 3000);
   }
 
-  function enhance(root, url) {
+  function enhance(root, url, base) {
     injectCss();
     pageUrl = (url || defaultUrl()).split('#')[0];
+    var meta = document.querySelector('meta[name="tws-share-base"]');
+    shareBase = base || (meta && meta.content) || '';
     root = root || document;
     Array.prototype.forEach.call(root.querySelectorAll(GEM_SECTIONS), function (section) {
       var gems = section.querySelectorAll('.daily-callout, blockquote');
@@ -558,7 +569,7 @@
   window.TWSGems = window.TWSShare; // older name
 
   if (window.__gemsPending) {
-    enhance(window.__gemsPending.root, window.__gemsPending.url);
+    enhance(window.__gemsPending.root, window.__gemsPending.url, window.__gemsPending.base);
     window.__gemsPending = null;
   } else if (!document.documentElement.hasAttribute('data-gems-manual')) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { enhance(); });

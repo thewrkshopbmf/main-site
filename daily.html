@@ -508,8 +508,9 @@
         {
           const gemUrl = raw.href ? new URL(raw.href, 'https://thewrkshop.com').href : 'https://thewrkshop.com/daily.html';
           const gemRoot = document.getElementById('dSections');
-          if (window.TWSGems) window.TWSGems.enhance(gemRoot, gemUrl);
-          else window.__gemsPending = { root: gemRoot, url: gemUrl };
+          const shareBase = raw.share_base || '';
+          if (window.TWSShare) window.TWSShare.enhance(gemRoot, gemUrl, shareBase);
+          else window.__gemsPending = { root: gemRoot, url: gemUrl, base: shareBase };
         }
 
         const actionSection = findSection(d, ['action_step', 'one_minute_win']);

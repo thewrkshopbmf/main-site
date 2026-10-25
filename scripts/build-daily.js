@@ -1,6 +1,6 @@
 // scripts/build-daily.js
 import fs from 'fs/promises';
-import { normalizeFlowBlock, flowPlainText, renderFlowHtml } from '../netlify/shared/flow-block.js';
+import { normalizeFlowBlock, flowPlainText, renderFlowHtml, FLOW_CSS } from '../netlify/shared/flow-block.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
@@ -489,6 +489,7 @@ async function writeLatestDailyJson(visible) {
   const dailyData = {
     date: todayEntry.date,
     href: pagePathFor(todayEntry),
+    share_base: `${SITE_URL}/share/${shareKeyFor(todayEntry)}/`,
     title: todayEntry.title || '',
     subtitle: todayEntry.subtitle || '',
     ...(cleanString(todayEntry.headline) ? { headline: cleanString(todayEntry.headline) } : {}),
@@ -579,7 +580,8 @@ async function buildDailyPages(visible) {
       ONE_MINUTE_WIN: actionSection ? sectionToPlainText(actionSection) : (e.one_minute_win || ''),
       DECLARATION: declarationSection ? sectionToPlainText(declarationSection) : (e.declaration || ''),
       PREV_HREF: prev ? pagePathFor(prev) : '#',
-      NEXT_HREF: next ? pagePathFor(next) : '#'
+      NEXT_HREF: next ? pagePathFor(next) : '#',
+      SHARE_BASE: escapeHtml(`${SITE_URL}/share/${shareKeyFor(e)}/`)
     });
 
     // Drop the Action Step / Declaration boxes when this daily doesn't have them
@@ -794,6 +796,142 @@ ${items}
   await fs.writeFile(path.join(DAILY_DIR, 'feed.xml'), xml, 'utf-8');
 }
 
+// ---------- Share pages for single gems and charts ----------
+// Sharing one Hidden Gem or one chart links to /share/<key>/gem-N/ (or chart-N/).
+// That page's preview card (assets/og/share/<key>/<id>.jpg, made by
+// scripts/og/make-share-cards.py) shows just that piece, so texts and social
+// posts show what was shared instead of the whole daily. Numbering must match
+// make-share-cards.py and assets/js/daily-share.js.
+
+const SHARE_DIR = path.join(ROOT, 'share');
+
+function shareKeyFor(e) {
+  return hasLeadershipPage(e) ? cleanString(e.slug) : e.date;
+}
+
+function shareItemsFor(e) {
+  const hidden = new Set(['action_step', 'one_minute_win', 'declaration']);
+  const gems = [];
+  const charts = [];
+  for (const s of e.sections || []) {
+    const key = cleanString(s.key).toLowerCase();
+    if (hidden.has(key)) continue;
+    const blocks = s.blocks || [];
+    if (key === 'hidden_gems' || key === 'gem') {
+      for (const b of blocks) {
+        if ((b.type === 'callout' || b.type === 'quote') && cleanString(b.text)) gems.push(cleanString(b.text));
+      }
+    }
+    for (const b of blocks) {
+      if (b.type === 'flow' && b.steps && b.steps.length >= 2) {
+        charts.push({ heading: cleanString(s.label) || cleanString(b.title) || 'Watch the Progression', block: b });
+      }
+    }
+  }
+  return { gems, charts };
+}
+
+function quotedGem(text) {
+  return /[“”"]/.test(text) ? text : `“${text}”`;
+}
+
+async function buildSharePages(visible) {
+  await fs.rm(SHARE_DIR, { recursive: true, force: true });
+  let count = 0;
+  for (const e of visible) {
+    const { gems, charts } = shareItemsFor(e);
+    if (!gems.length && !charts.length) continue;
+    const key = shareKeyFor(e);
+    const dayUrl = `${SITE_URL}${pagePathFor(e)}`;
+    const headline = displayTitle(e);
+    const fallbackImage = absoluteUrl(cleanString(e.og_image) || DEFAULT_OG_IMAGE);
+
+    const items = [
+      ...gems.map((text, i) => ({ id: `gem-${i + 1}`, kind: 'gem', text })),
+      ...charts.map((c, i) => ({ id: `chart-${i + 1}`, kind: 'chart', ...c }))
+    ];
+
+    for (const it of items) {
+      const cardRel = `assets/og/share/${key}/${it.id}.jpg`;
+      let image = fallbackImage;
+      try { await fs.access(path.join(ROOT, cardRel)); image = `${SITE_URL}/${cardRel}`; } catch {}
+      const shareUrl = `${SITE_URL}/share/${key}/${it.id}/`;
+      const target = `${dayUrl}#${it.id}`;
+      const isGem = it.kind === 'gem';
+      const title = isGem ? quotedGem(it.text) : `${it.heading} — ${headline}`;
+      const description = isGem
+        ? `A Hidden Gem from “${headline}.” Read the whole daily at TheWrkShop.com.`
+        : `A chart from “${headline}.” Read the whole daily at TheWrkShop.com.`;
+      const imageAlt = isGem ? `${it.text} — TheWrkShop.com` : `Chart: ${it.heading}, from ${headline}. TheWrkShop.com`;
+      const body = isGem
+        ? `<p class="share-kicker">Hidden Gem</p>\n      <blockquote class="share-gem">${escapeHtml(quotedGem(it.text))}</blockquote>`
+        : `<p class="share-kicker">${escapeHtml(headline)}</p>\n      <h1 class="share-chart-title">${escapeHtml(it.heading)}</h1>\n      ${renderFlowHtml(it.block, escapeHtml)}`;
+
+      const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>${escapeHtml(title)} | TheWrkShop</title>
+  <meta name="robots" content="noindex, follow"/>
+  <link rel="canonical" href="${escapeHtml(dayUrl)}"/>
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
+  <meta name="description" content="${escapeHtml(description)}"/>
+  <meta property="og:site_name" content="TheWrkShop"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="${escapeHtml(title)}"/>
+  <meta property="og:description" content="${escapeHtml(description)}"/>
+  <meta property="og:url" content="${escapeHtml(shareUrl)}"/>
+  <meta property="og:image" content="${escapeHtml(image)}"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="${escapeHtml(imageAlt)}"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="${escapeHtml(title)}"/>
+  <meta name="twitter:description" content="${escapeHtml(description)}"/>
+  <meta name="twitter:image" content="${escapeHtml(image)}"/>
+  <meta name="twitter:image:alt" content="${escapeHtml(imageAlt)}"/>
+  <style>
+    .share-wrap { max-width: 640px; margin: 0 auto; padding: 2rem 1.1rem 3rem; }
+    .share-card { background: #f4f1ee; border-radius: 16px; padding: 2rem 1.5rem; box-shadow: 0 6px 24px rgba(0,0,0,.08); text-align: center; }
+    .share-kicker { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; margin: 0 0 1rem; }
+    .share-gem { font-family: Georgia, serif; font-size: 1.7rem; font-weight: 700; line-height: 1.35; color: #3e2c23; margin: 0; border: 0; padding: 0; }
+    .share-chart-title { font-family: Georgia, serif; font-size: 1.6rem; color: #3e2c23; margin: 0 0 .5rem; }
+    .share-from { color: #6b5b53; margin: 1.5rem 0 1.25rem; }
+    .share-from strong { color: #3e2c23; }
+    .share-cta { display: inline-block; background: #3e2c23; color: #f4f1ee; font-weight: 700; text-decoration: none; border-radius: 999px; padding: .8rem 1.4rem; }
+    .share-cta:hover { background: #2c1f18; }
+    .share-alt { margin: 1rem 0 0; font-size: .95rem; }
+    .share-alt a { color: #3e2c23; }
+${FLOW_CSS}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N48478JV2Z');</script>
+</head>
+<body>
+  <div id="site-header"></div>
+  <main class="share-wrap">
+    <article class="share-card">
+      ${body}
+      <p class="share-from">From <strong>${escapeHtml(headline)}</strong> · <time datetime="${e.date}">${toHuman(e.date)}</time></p>
+      <a class="share-cta" href="${escapeHtml(target)}">Read the whole daily →</a>
+      <p class="share-alt"><a href="/daily.html">Get The Daily by email</a></p>
+    </article>
+  </main>
+  <script src="/script.js"></script>
+</body>
+</html>
+`;
+      const out = path.join(SHARE_DIR, key, it.id, 'index.html');
+      await fs.mkdir(path.dirname(out), { recursive: true });
+      await fs.writeFile(out, html, 'utf-8');
+      count++;
+    }
+  }
+  return count;
+}
+
 function guardAndMoveLines(visible, older, future) {
   return [
     // posts that moved to /leadership/<slug>/ keep their old daily link working
@@ -819,11 +957,12 @@ async function main() {
   await writeArchiveJson(visible);
   await writeLatestDailyJson(visible);
   await buildDailyPages(visible);
+  const shareCount = await buildSharePages(visible);
   const leadershipCount = await buildLeadershipHub(visible);
   await writeDailyFeed(visible);
 
   console.log(
-    `Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}. Leadership hub: ${leadershipCount} posts.`
+    `Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}. Leadership hub: ${leadershipCount} posts. Share pages: ${shareCount}.`
   );
 }
 
