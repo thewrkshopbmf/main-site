@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-gems-manual>
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -434,7 +434,7 @@
     function renderSection(section) {
       const blocks = (section.blocks || []).map(renderBlock).join('');
       return `
-        <section class="daily-section">
+        <section class="daily-section daily-section-${escapeHtml((section.key || 'section').toLowerCase())}">
           <h3>${escapeHtml(section.label || 'Section')}</h3>
           ${blocks}
         </section>
@@ -504,6 +504,15 @@
           document.getElementById('dSections').innerHTML = mainSections.map(renderSection).join('');
         }
 
+        // Hidden Gems share to the day's own page, not to /daily.html (which changes daily)
+        {
+          const gemUrl = raw.href ? new URL(raw.href, 'https://thewrkshop.com').href : 'https://thewrkshop.com/daily.html';
+          const gemRoot = document.getElementById('dSections');
+          const shareBase = raw.share_base || '';
+          if (window.TWSShare) window.TWSShare.enhance(gemRoot, gemUrl, shareBase);
+          else window.__gemsPending = { root: gemRoot, url: gemUrl, base: shareBase };
+        }
+
         const actionSection = findSection(d, ['action_step', 'one_minute_win']);
         const declarationSection = findSection(d, ['declaration']);
 
@@ -558,6 +567,7 @@
       } catch(e) {}
     })();
   </script>
+  <script src="/assets/js/daily-share.js"></script>
   <script src="/script.js"></script>
 </body>
 </html>

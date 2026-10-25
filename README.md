@@ -108,6 +108,16 @@ The build scripts use these files to generate static HTML + JSON archives automa
   "declaration": "My soul deserves better than endless scrolls."
 }
 ```
+#### Share cards for gems, charts and audits
+
+Every Hidden Gem, chart and Audit can be shared on its own. Each one gets a page at `/share/<slug or date>/gem-N/`, `chart-N/` or `audit-N/` (made by the build), and its link preview shows just that piece. After adding dailies, make their preview cards:
+
+```
+python3 scripts/og/make-share-cards.py
+```
+
+It only makes cards that don't exist yet. Use `--force` to remake them all (for example, after editing a gem's wording). If a card is missing, the share page uses the daily's own card.
+
 #### Visual progressions ("flow" blocks)
 
 Any section of a daily can include a progression drawn as a visual (on the page and in the email):
