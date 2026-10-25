@@ -10,6 +10,10 @@
  * closing line, logo, thewrkshop.com) that can be sent from the phone's
  * share sheet or saved, plus a link back to that day (#chart-N).
  *
+ * The Audit: a "Share this audit" button sends the whole audit (every
+ * question and line, in order) as one branded picture, or as text, with a
+ * link to its own page (#audit-N).
+ *
  * Static daily pages run this on load. The Daily page (/daily.html) renders
  * after fetching its content, so it calls TWSShare.enhance(root, url) once
  * the sections are on the page (or leaves window.__gemsPending for us).
@@ -117,7 +121,7 @@
 
   // opts: { type, title, text, url, image: function returning Promise<{blob, name}> }
   function buildMenu(opts) {
-    var body = opts.text + '\n' + opts.url;
+    var body = (opts.longText || opts.text) + '\n' + opts.url;
     var enc = encodeURIComponent;
     var menu = document.createElement('div');
     menu.className = 'share-menu';
@@ -450,16 +454,17 @@
     return y;
   }
 
-  function renderChartImage(chart) {
+  // Draws a tall branded picture: layoutFn(ctx, data, W, scale, draw) lays out the body.
+  function renderImage(layoutFn, data, name) {
     var W = 1080, FOOT = 190, MIN_H = 1350, MAX_H = 1920;
     return loadLogo().then(function (logo) {
       var c = document.createElement('canvas');
       var ctx = c.getContext('2d');
       ctx.textAlign = 'center';
-      // Shrink the type until the chart fits a tall phone-friendly picture.
+      // Shrink the type until everything fits a tall phone-friendly picture.
       var s = 1, contentH;
-      for (; s > 0.55; s -= 0.05) {
-        contentH = layoutChart(ctx, chart, W, s, false) + 70;
+      for (; s > 0.5; s -= 0.05) {
+        contentH = layoutFn(ctx, data, W, s, false) + 70;
         if (contentH + FOOT <= MAX_H) break;
       }
       var H = Math.max(MIN_H, Math.ceil(contentH + FOOT));
@@ -472,10 +477,9 @@
       ctx.strokeStyle = 'rgba(62,44,35,.15)'; ctx.lineWidth = 2;
       ctx.strokeRect(28, 28, W - 56, H - FOOT - 28);
 
-      // centre the chart in the space above the footer
       var offset = Math.max(0, (H - FOOT - contentH) / 2);
       ctx.save(); ctx.translate(0, offset);
-      layoutChart(ctx, chart, W, s, true);
+      layoutFn(ctx, data, W, s, true);
       ctx.restore();
 
       // footer band
@@ -495,10 +499,148 @@
 
       return new Promise(function (resolve, reject) {
         c.toBlob(function (blob) {
-          blob ? resolve({ blob: blob, name: 'thewrkshop-' + slugify(chart.heading) + '.png' }) : reject();
+          blob ? resolve({ blob: blob, name: 'thewrkshop-' + name + '.png' }) : reject();
         }, 'image/png');
       });
     });
+  }
+
+  function renderChartImage(chart) {
+    return renderImage(layoutChart, chart, slugify(chart.heading));
+  }
+
+  /* ---------- The Audit ---------- */
+
+  // An audit is kept in its written order: questions, the lines between them, and the closing question(s).
+  function readAudit(section) {
+    var parts = [];
+    Array.prototype.forEach.call(section.children, function (el) {
+      if (el.tagName === 'H3' || el.classList.contains('audit-share')) return;
+      if (el.tagName === 'UL' || el.tagName === 'OL') {
+        Array.prototype.forEach.call(el.querySelectorAll('li'), function (li) {
+          var t = clean(li.textContent);
+          if (t) parts.push({ kind: 'q', text: t });
+        });
+      } else if (el.classList.contains('daily-callout')) {
+        var c = el.cloneNode(true);
+        var first = c.firstElementChild;
+        if (first && first.tagName === 'SPAN') first.remove();
+        var t = clean(c.textContent);
+        if (t) parts.push({ kind: 'key', text: t });
+      } else if (el.classList.contains('daily-lines')) {
+        el.innerHTML.split(/<br\s*\/?>/i).forEach(function (h) {
+          var d = document.createElement('div');
+          d.innerHTML = h;
+          var t = clean(d.textContent);
+          if (t) parts.push({ kind: 'note', text: t });
+        });
+      } else if (el.tagName === 'P' || el.tagName === 'BLOCKQUOTE') {
+        var tt = clean(el.textContent);
+        if (tt) parts.push({ kind: 'note', text: tt });
+      }
+    });
+    var headline = document.getElementById('dTitle');
+    var h3 = section.querySelector('h3');
+    return {
+      heading: clean(h3 && h3.textContent) || 'The Audit',
+      eyebrow: clean(headline && headline.textContent),
+      parts: parts
+    };
+  }
+
+  function auditText(a) {
+    var lines = [a.heading + (a.eyebrow ? ' — ' + a.eyebrow : ''), ''];
+    var prev = null;
+    a.parts.forEach(function (p) {
+      if (prev && (prev === 'q') !== (p.kind === 'q')) lines.push('');
+      lines.push(p.kind === 'q' ? '• ' + p.text : p.text);
+      prev = p.kind;
+    });
+    lines.push('', '— ' + BRAND);
+    return lines.join('\n');
+  }
+
+  function layoutAudit(ctx, a, W, s, draw) {
+    var pad = 90, boxW = W - pad * 2 - 40, boxX = (W - boxW) / 2, innerW = boxW - 64;
+    var y = 96 * s;
+
+    ctx.font = '700 ' + Math.round(24 * s) + 'px ' + SANS;
+    wrap(ctx, (a.eyebrow || 'Leadership & Culture').toUpperCase(), W - pad * 2).forEach(function (l) {
+      if (draw) { ctx.fillStyle = '#8a6a52'; ctx.fillText(l, W / 2, y); }
+      y += 34 * s;
+    });
+    y += 16 * s;
+    ctx.font = '700 ' + Math.round(66 * s) + 'px ' + SERIF;
+    wrap(ctx, a.heading, W - pad * 2).forEach(function (l) {
+      y += 66 * s;
+      if (draw) { ctx.fillStyle = BROWN; ctx.fillText(l, W / 2, y); }
+      y += 12 * s;
+    });
+    y += 20 * s;
+    if (draw) { ctx.fillStyle = TAN; ctx.fillRect(W / 2 - 45, y, 90, 4); }
+    y += 40 * s;
+
+    var qSize = Math.round(29 * s), noteSize = Math.round(30 * s), prev = null;
+    a.parts.forEach(function (p) {
+      if (prev) y += (p.kind === 'note' || prev === 'note' ? 18 : 16) * s;
+      if (p.kind === 'note') {
+        ctx.font = 'italic ' + noteSize + 'px ' + SERIF;
+        wrap(ctx, p.text, W - pad * 2).forEach(function (l) {
+          y += noteSize;
+          if (draw) { ctx.fillStyle = '#6b5b53'; ctx.fillText(l, W / 2, y); }
+          y += noteSize * 0.35;
+        });
+      } else {
+        var key = p.kind === 'key';
+        ctx.font = '700 ' + qSize + 'px ' + SANS;
+        var ll = wrap(ctx, p.text, innerW);
+        var h = 24 * s * 2 + ll.length * qSize * 1.3;
+        if (draw) {
+          roundRect(ctx, boxX, y, boxW, h, 16);
+          ctx.fillStyle = key ? BROWN : '#ffffff'; ctx.fill();
+          ctx.strokeStyle = key ? BROWN : 'rgba(62,44,35,.22)'; ctx.lineWidth = 2; ctx.stroke();
+          ctx.fillStyle = key ? CREAM : BROWN;
+          var ty = y + 24 * s;
+          ll.forEach(function (l) { ty += qSize; ctx.fillText(l, W / 2, ty - qSize * 0.15); ty += qSize * 0.3; });
+        }
+        y += h;
+      }
+      prev = p.kind;
+    });
+    return y;
+  }
+
+  function isAuditSection(section) {
+    return /(^|\s)daily-section-[a-z_]*audit[a-z_]*(\s|$)/.test(section.className);
+  }
+
+  function enhanceAudit(section, index) {
+    if (section.dataset.auditReady) return;
+    var audit = readAudit(section);
+    if (!audit.parts.some(function (p) { return p.kind === 'q'; })) return;
+    section.dataset.auditReady = '1';
+    section.id = section.id || 'audit-' + (index + 1);
+
+    var wrapEl = document.createElement('div');
+    wrapEl.className = 'chart-share audit-share';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chart-share-btn';
+    btn.innerHTML = ICON + '<span>Share this audit</span>';
+    var cached = null;
+    wireButton(btn, wrapEl, function () {
+      return {
+        type: 'audit',
+        title: 'Share this audit',
+        text: audit.heading + (audit.eyebrow ? ': ' + audit.eyebrow : '') + ' — ' + BRAND,
+        longText: auditText(audit),
+        url: itemUrl(section.id),
+        emailSubject: audit.heading + (audit.eyebrow ? ': ' + audit.eyebrow : '') + ' — ' + BRAND,
+        image: function () { return cached || (cached = renderImage(layoutAudit, audit, slugify((audit.eyebrow || '') + ' ' + audit.heading))); }
+      };
+    });
+    wrapEl.appendChild(btn);
+    section.appendChild(wrapEl);
   }
 
   function enhanceChart(fig, index) {
@@ -533,7 +675,7 @@
 
   function highlightFromHash() {
     var id = (location.hash || '').slice(1);
-    if (!/^(gem|chart)-\d+$/.test(id)) return;
+    if (!/^(gem|chart|audit)-\d+$/.test(id)) return;
     var el = document.getElementById(id);
     if (!el) return;
     el.scrollIntoView({ block: 'center' });
@@ -554,6 +696,8 @@
       Array.prototype.forEach.call(gems, enhanceGem);
     });
     Array.prototype.forEach.call(root.querySelectorAll('.daily-flow'), enhanceChart);
+    var audits = Array.prototype.filter.call(root.querySelectorAll('section.daily-section'), isAuditSection);
+    audits.forEach(enhanceAudit);
     highlightFromHash();
   }
 
@@ -565,7 +709,10 @@
   });
   document.addEventListener('copy', onCopy);
 
-  window.TWSShare = { enhance: enhance, renderChartImage: renderChartImage, readChart: readChart };
+  window.TWSShare = {
+    enhance: enhance, renderChartImage: renderChartImage, readChart: readChart,
+    readAudit: readAudit, renderAuditImage: function (a) { return renderImage(layoutAudit, a, 'audit'); }
+  };
   window.TWSGems = window.TWSShare; // older name
 
   if (window.__gemsPending) {

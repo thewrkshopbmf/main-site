@@ -10,7 +10,7 @@ Usage (run after adding dailies, like make-og-card.py):
   python3 scripts/og/make-share-cards.py            # every daily, skips cards already made
   python3 scripts/og/make-share-cards.py --force    # remake all
 
-Writes assets/og/share/<key>/gem-N.jpg and chart-N.jpg (1200x630).
+Writes assets/og/share/<key>/gem-N.jpg, chart-N.jpg and audit-N.jpg (1200x630).
 <key> is the leadership slug when the post has one, otherwise its date.
 Keep the numbering in step with scripts/build-daily.js (shareItemsFor).
 Not part of the Netlify build: if a card is missing, the share page falls
@@ -73,7 +73,7 @@ def share_key(e):
 
 def share_items(e):
     """Gems and charts in page order, numbered the way the site numbers them."""
-    gems, charts = [], []
+    gems, charts, audits = [], [], []
     hidden = {'action_step', 'one_minute_win', 'declaration'}
     for s in e.get('sections') or []:
         key = clean(s.get('key')).lower()
@@ -94,7 +94,26 @@ def share_items(e):
                 if len(steps) >= 2:
                     charts.append({'heading': clean(s.get('label')) or clean(b.get('title')) or 'Watch the Progression',
                                    'steps': steps, 'caption': clean(b.get('caption'))})
-    return gems, charts
+        if 'audit' in key:
+            parts = audit_parts(blocks)
+            if any(k == 'q' for k, _ in parts):
+                audits.append({'heading': clean(s.get('label')) or 'The Audit', 'parts': parts})
+    return gems, charts, audits
+
+
+def audit_parts(blocks):
+    parts = []
+    for b in blocks:
+        t = b.get('type')
+        if t in ('bullet_list', 'numbered_list'):
+            parts += [('q', clean(i)) for i in b.get('items') or [] if clean(i)]
+        elif t == 'callout' and clean(b.get('text')):
+            parts.append(('key', clean(b['text'])))
+        elif t == 'lines':
+            parts += [('note', clean(i)) for i in b.get('items') or [] if clean(i)]
+        elif t in ('paragraph', 'quote', 'subhead') and clean(b.get('text')):
+            parts.append(('note', clean(b['text'])))
+    return parts
 
 
 def headline(e):
@@ -188,6 +207,33 @@ def chart_card(e, chart, out):
     img.save(out, 'JPEG', quality=86, optimize=True)
 
 
+def audit_card(e, audit, out):
+    img, d = base(headline(e))
+    pad, max_w = 80, W - 160
+    d.text((pad, 116), audit['heading'], font=font(SERIF, 46, 'Bold'), fill=CREAM)
+    qs = [t for k, t in audit['parts'] if k == 'q']
+    keys = [t for k, t in audit['parts'] if k == 'key']
+    d.text((pad, 186), f'{len(qs)} questions to ask yourself', font=font(SERIF_IT, 30, 'Italic'), fill=SOFT)
+    feature = keys[-1] if keys else qs[-1]
+    top, bottom = 250, H - 150
+    size = 44
+    while True:
+        f = font(SANS, size)
+        lines = wrap(d, feature, f, max_w - 40)
+        if len(lines) * size * 1.25 + 40 <= bottom - top or size <= 24:
+            break
+        size -= 2
+    box_h = len(lines) * size * 1.25 + 40
+    top = top + (bottom - top - box_h) / 2
+    d.rounded_rectangle([pad, top, W - pad, top + box_h], radius=14, fill=TAN)
+    y = top + 20
+    for line in lines:
+        d.text((pad + 20, y), line, font=f, fill=BROWN)
+        y += size * 1.25
+    footer(img, d)
+    img.save(out, 'JPEG', quality=86, optimize=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--force', action='store_true')
@@ -197,22 +243,20 @@ def main():
         e = json.load(open(path, encoding='utf-8'))
         if not e.get('date'):
             continue
-        gems, charts = share_items(e)
-        if not gems and not charts:
+        gems, charts, audits = share_items(e)
+        if not gems and not charts and not audits:
             continue
         out_dir = os.path.join(ROOT, 'assets/og/share', share_key(e))
         os.makedirs(out_dir, exist_ok=True)
         jobs = [(f'gem-{i + 1}.jpg', gem_card, g) for i, g in enumerate(gems)]
         jobs += [(f'chart-{i + 1}.jpg', chart_card, c) for i, c in enumerate(charts)]
+        jobs += [(f'audit-{i + 1}.jpg', audit_card, a) for i, a in enumerate(audits)]
         for name, fn, item in jobs:
             out = os.path.join(out_dir, name)
             if os.path.exists(out) and not a.force:
                 skipped += 1
                 continue
-            if fn is gem_card:
-                gem_card(e, item, out)
-            else:
-                chart_card(e, item, out)
+            fn(e, item, out)
             made += 1
     print(f'made {made} share cards, skipped {skipped} existing')
 

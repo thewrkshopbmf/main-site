@@ -797,7 +797,7 @@ ${items}
 }
 
 // ---------- Share pages for single gems and charts ----------
-// Sharing one Hidden Gem or one chart links to /share/<key>/gem-N/ (or chart-N/).
+// Sharing one Hidden Gem, chart or audit links to /share/<key>/gem-N/ (or chart-N/, audit-N/).
 // That page's preview card (assets/og/share/<key>/<id>.jpg, made by
 // scripts/og/make-share-cards.py) shows just that piece, so texts and social
 // posts show what was shared instead of the whole daily. Numbering must match
@@ -813,6 +813,7 @@ function shareItemsFor(e) {
   const hidden = new Set(['action_step', 'one_minute_win', 'declaration']);
   const gems = [];
   const charts = [];
+  const audits = [];
   for (const s of e.sections || []) {
     const key = cleanString(s.key).toLowerCase();
     if (hidden.has(key)) continue;
@@ -827,8 +828,29 @@ function shareItemsFor(e) {
         charts.push({ heading: cleanString(s.label) || cleanString(b.title) || 'Watch the Progression', block: b });
       }
     }
+    if (key.includes('audit')) {
+      const parts = auditParts(blocks);
+      if (parts.some(pt => pt.kind === 'q')) audits.push({ heading: cleanString(s.label) || 'The Audit', parts });
+    }
   }
-  return { gems, charts };
+  return { gems, charts, audits };
+}
+
+// The Audit in its written order: questions, the lines between them, the closing question(s).
+function auditParts(blocks) {
+  const parts = [];
+  for (const b of blocks || []) {
+    if (b.type === 'bullet_list' || b.type === 'numbered_list') {
+      for (const it of b.items || []) if (cleanString(it)) parts.push({ kind: 'q', text: cleanString(it) });
+    } else if (b.type === 'callout') {
+      if (cleanString(b.text)) parts.push({ kind: 'key', text: cleanString(b.text) });
+    } else if (b.type === 'lines') {
+      for (const it of b.items || []) if (cleanString(it)) parts.push({ kind: 'note', text: cleanString(it) });
+    } else if (b.type === 'paragraph' || b.type === 'quote' || b.type === 'subhead') {
+      if (cleanString(b.text)) parts.push({ kind: 'note', text: cleanString(b.text) });
+    }
+  }
+  return parts;
 }
 
 function quotedGem(text) {
@@ -839,8 +861,8 @@ async function buildSharePages(visible) {
   await fs.rm(SHARE_DIR, { recursive: true, force: true });
   let count = 0;
   for (const e of visible) {
-    const { gems, charts } = shareItemsFor(e);
-    if (!gems.length && !charts.length) continue;
+    const { gems, charts, audits } = shareItemsFor(e);
+    if (!gems.length && !charts.length && !audits.length) continue;
     const key = shareKeyFor(e);
     const dayUrl = `${SITE_URL}${pagePathFor(e)}`;
     const headline = displayTitle(e);
@@ -848,7 +870,8 @@ async function buildSharePages(visible) {
 
     const items = [
       ...gems.map((text, i) => ({ id: `gem-${i + 1}`, kind: 'gem', text })),
-      ...charts.map((c, i) => ({ id: `chart-${i + 1}`, kind: 'chart', ...c }))
+      ...charts.map((c, i) => ({ id: `chart-${i + 1}`, kind: 'chart', ...c })),
+      ...audits.map((a, i) => ({ id: `audit-${i + 1}`, kind: 'audit', ...a }))
     ];
 
     for (const it of items) {
@@ -858,14 +881,27 @@ async function buildSharePages(visible) {
       const shareUrl = `${SITE_URL}/share/${key}/${it.id}/`;
       const target = `${dayUrl}#${it.id}`;
       const isGem = it.kind === 'gem';
-      const title = isGem ? quotedGem(it.text) : `${it.heading} — ${headline}`;
+      const isAudit = it.kind === 'audit';
+      const qCount = isAudit ? it.parts.filter(pt => pt.kind === 'q').length : 0;
+      const title = isGem ? quotedGem(it.text) : `${it.heading}: ${headline}`;
       const description = isGem
         ? `A Hidden Gem from “${headline}.” Read the whole daily at TheWrkShop.com.`
-        : `A chart from “${headline}.” Read the whole daily at TheWrkShop.com.`;
-      const imageAlt = isGem ? `${it.text} — TheWrkShop.com` : `Chart: ${it.heading}, from ${headline}. TheWrkShop.com`;
+        : isAudit
+          ? `${qCount} questions to ask yourself, from “${headline}.” Read the whole daily at TheWrkShop.com.`
+          : `A chart from “${headline}.” Read the whole daily at TheWrkShop.com.`;
+      const imageAlt = isGem
+        ? `${it.text} — TheWrkShop.com`
+        : `${isAudit ? '' : 'Chart: '}${it.heading}, from ${headline}. TheWrkShop.com`;
+      const auditHtml = isAudit
+        ? `<div class="share-audit">${it.parts.map(pt => pt.kind === 'note'
+            ? `<p class="share-audit-note">${escapeHtml(pt.text)}</p>`
+            : `<p class="share-audit-q${pt.kind === 'key' ? ' share-audit-key' : ''}">${escapeHtml(pt.text)}</p>`).join('')}</div>`
+        : '';
       const body = isGem
         ? `<p class="share-kicker">Hidden Gem</p>\n      <blockquote class="share-gem">${escapeHtml(quotedGem(it.text))}</blockquote>`
-        : `<p class="share-kicker">${escapeHtml(headline)}</p>\n      <h1 class="share-chart-title">${escapeHtml(it.heading)}</h1>\n      ${renderFlowHtml(it.block, escapeHtml)}`;
+        : isAudit
+          ? `<p class="share-kicker">${escapeHtml(headline)}</p>\n      <h1 class="share-chart-title">${escapeHtml(it.heading)}</h1>\n      ${auditHtml}`
+          : `<p class="share-kicker">${escapeHtml(headline)}</p>\n      <h1 class="share-chart-title">${escapeHtml(it.heading)}</h1>\n      ${renderFlowHtml(it.block, escapeHtml)}`;
 
       const html = `<!DOCTYPE html>
 <html lang="en">
@@ -904,6 +940,10 @@ async function buildSharePages(visible) {
     .share-cta:hover { background: #2c1f18; }
     .share-alt { margin: 1rem 0 0; font-size: .95rem; }
     .share-alt a { color: #3e2c23; }
+    .share-audit { max-width: 480px; margin: 1rem auto 0; }
+    .share-audit-q { background: #fff; color: #3e2c23; border: 1px solid rgba(62,44,35,.2); border-radius: 10px; padding: .7rem .9rem; font-weight: 700; line-height: 1.35; margin: 0 0 .6rem; }
+    .share-audit-key { background: #3e2c23; color: #f4f1ee; border-color: #3e2c23; }
+    .share-audit-note { color: #6b5b53; font-style: italic; margin: .2rem 0 .6rem; }
 ${FLOW_CSS}
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
