@@ -8,6 +8,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 const ROOT       = path.resolve(__dirname, '..');
 const DATA_DIR   = path.join(ROOT, 'data');
+// Episodes hosted on the site itself (audio in /assets/audio/), one JSON file each.
+// Fields: title, pub_date, duration, audio_url, page_url, description_html, image (optional)
+const SITE_EPISODES_DIR = path.join(ROOT, 'content', 'podcasts');
 
 const RSS_URL = process.env.PODCAST_RSS_URL;
 
@@ -128,10 +131,31 @@ function mapAtomEntry(en) {
   };
 }
 
-async function main() {
-  if (!RSS_URL) throw new Error('Missing PODCAST_RSS_URL env var');
+async function loadSiteEpisodes() {
+  let files = [];
+  try { files = (await fs.readdir(SITE_EPISODES_DIR)).filter(f => f.endsWith('.json')); } catch { return []; }
+  const out = [];
+  for (const f of files) {
+    const ep = JSON.parse(await fs.readFile(path.join(SITE_EPISODES_DIR, f), 'utf-8'));
+    if (!ep.title || !(ep.audio_url || ep.page_url)) continue;
+    out.push({
+      title:            String(ep.title),
+      pub_date:         String(ep.pub_date || ''),
+      page_url:         String(ep.page_url || ep.audio_url || ''),
+      audio_url:        String(ep.audio_url || ''),
+      image:            String(ep.image || ''),
+      description_html: String(ep.description_html || ''),
+      duration:         String(ep.duration || '')
+    });
+  }
+  return out;
+}
 
-  await fs.mkdir(DATA_DIR, { recursive: true });
+async function fetchRssItems() {
+  if (!RSS_URL) {
+    console.warn('PODCAST_RSS_URL not set; using site-hosted episodes only.');
+    return [];
+  }
 
   const res = await fetch(RSS_URL, { cache: 'no-store' });
   if (!res.ok) throw new Error(`RSS fetch failed: ${res.status}`);
@@ -160,6 +184,16 @@ async function main() {
     const channel = doc?.rss?.channel || doc?.channel;
     if (channel?.item) items = toArray(channel.item).map(mapRssItem);
   }
+
+  return items;
+}
+
+async function main() {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+
+  const rssItems  = await fetchRssItems();
+  const siteItems = await loadSiteEpisodes();
+  let items = [...siteItems, ...rssItems];
 
   // Filter out truly empty
   items = items.filter(it =>
