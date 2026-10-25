@@ -1,0 +1,442 @@
+{
+  "date": "2026-10-29",
+  "title": "The Battle Before The Battle",
+  "subtitle": "When Loyalty Becomes Idolatry",
+  "tagline": "Loyalty is beautiful until faithfulness to a person requires unfaithfulness to the truth.",
+  "headline": "When Loyalty to a Leader Goes Too Far",
+  "headline_sub": "Can Someone Disagree and Still Belong?",
+  "slug": "when-loyalty-to-a-leader-goes-too-far",
+  "series": "The Battle Before the Battle",
+  "category": "Leadership & Culture",
+  "seo_title": "When Loyalty to a Leader Goes Too Far | TheWrkShop",
+  "seo_description": "Loyalty is beautiful until faithfulness to a person requires unfaithfulness to the truth. A biblical look at healthy loyalty at work, on teams and at home.",
+  "keywords": [
+    "leadership",
+    "loyalty",
+    "personality cults",
+    "healthy culture",
+    "honoring leaders",
+    "Christian leadership"
+  ],
+  "og_image": "/assets/og/when-loyalty-becomes-idolatry.png",
+  "og_image_alt": "When Loyalty to a Leader Goes Too Far: Loyalty is beautiful until faithfulness to a person requires unfaithfulness to the truth. TheWrkShop, Leadership & Culture.",
+  "scriptures": [
+    {
+      "ref": "Acts 5:29",
+      "text": "We must obey God rather than human beings!"
+    },
+    {
+      "ref": "1 Corinthians 3:5-7",
+      "text": "What, after all, is Apollos? And what is Paul? Only servants, through whom you came to believe…. So neither the one who plants nor the one who waters is anything, but only God, who makes things grow."
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_revelation",
+      "label": "The Revelation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Loyalty matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "Scripture honors:"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "faithfulness.",
+            "honor.",
+            "commitment.",
+            "submission to legitimate authority.",
+            "keeping covenant.",
+            "standing with people when things get difficult."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "But loyalty becomes dangerous when the question changes from:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“IS THIS TRUE?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "to:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“WHOSE SIDE ARE YOU ON?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "Now relationship begins replacing discernment."
+        },
+        {
+          "type": "paragraph",
+          "text": "And eventually:"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "disagreement feels like betrayal.",
+            "questions feel like rebellion.",
+            "correction feels like dishonor.",
+            "leaving feels like treason."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "That’s no longer healthy loyalty."
+        }
+      ]
+    },
+    {
+      "key": "the_lie",
+      "label": "The Lie",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "“IF I LOVE HIM, I MUST DEFEND HIM.”"
+        },
+        {
+          "type": "paragraph",
+          "text": "Not necessarily."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Sometimes love defends.",
+            "Sometimes love confronts.",
+            "Sometimes love asks questions.",
+            "Sometimes love refuses participation."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sometimes love says:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“BROTHER, I CANNOT FOLLOW YOU THERE.”"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Jonathan loved David.",
+            "Nathan confronted David.",
+            "Paul confronted Peter.",
+            "Samuel confronted Saul."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Biblical loyalty does not require moral blindness."
+        }
+      ]
+    },
+    {
+      "key": "the_truth",
+      "label": "The Truth",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "NO HUMAN LEADER GETS THE ALLEGIANCE THAT BELONGS TO CHRIST."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Pastors matter.",
+            "Fathers matter.",
+            "Mentors matter.",
+            "Executives matter.",
+            "Leaders matter."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "But all legitimate Christian authority remains:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "DERIVED AUTHORITY."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Nobody owns the throne.",
+            "Nobody becomes the final interpreter of truth.",
+            "Nobody receives unquestioned obedience."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Nobody gets to say:"
+        },
+        {
+          "type": "quote",
+          "text": "“If you disagree with me, you disagree with God.”"
+        },
+        {
+          "type": "paragraph",
+          "text": "That is dangerous territory."
+        }
+      ]
+    },
+    {
+      "key": "when_loyalty_crosses_the_line",
+      "label": "When Loyalty Crosses the Line",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Watch the progression:"
+        },
+        {
+          "type": "flow",
+          "steps": [
+            "Respect.",
+            "Trust.",
+            "Loyalty.",
+            "Identity becomes attached.",
+            "Questions feel threatening.",
+            "Leader becomes protected.",
+            "Dissent becomes betrayal.",
+            "Truth becomes secondary."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Now:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "LOYALTY HAS STOPPED SERVING TRUTH. TRUTH HAS STARTED SERVING LOYALTY."
+        },
+        {
+          "type": "paragraph",
+          "text": "Something has inverted."
+        }
+      ]
+    },
+    {
+      "key": "paul_refuses_personal_cults",
+      "label": "Paul Refuses Personal Cults",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Corinthians were dividing:"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "“I follow Paul.”",
+            "“I follow Apollos.”"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Paul dismantles the entire idea."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Who are we?",
+            "Servants."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "God gives the growth."
+        },
+        {
+          "type": "paragraph",
+          "text": "That’s powerful leadership."
+        },
+        {
+          "type": "paragraph",
+          "text": "Paul refuses to become what the people are tempted to make him."
+        },
+        {
+          "type": "paragraph",
+          "text": "Healthy leaders don’t cultivate dependence upon themselves."
+        },
+        {
+          "type": "paragraph",
+          "text": "They continually redirect allegiance toward Christ."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "A HEALTHY LEADER DOESN’T NEED TO BE THE CENTER OF EVERYBODY’S STORY."
+        }
+      ]
+    },
+    {
+      "key": "the_audit",
+      "label": "The Audit",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "IS QUESTIONING THE LEADER CONSIDERED DISLOYAL?",
+            "DO WE DEFEND PEOPLE BEFORE EXAMINING FACTS?",
+            "HAVE WE MADE “HONOR” MEAN SILENCE?",
+            "ARE PEOPLE FREE TO LEAVE WITHOUT BEING VILIFIED?",
+            "CAN SOMEONE DISAGREE AND STILL BELONG?",
+            "DO I NEED PEOPLE TO PROVE THEIR LOYALTY TO ME?"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Then:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "DOES OUR LOYALTY HELP PEOPLE FOLLOW CHRIST, OR FOLLOW US?"
+        }
+      ]
+    },
+    {
+      "key": "the_surrender",
+      "label": "The Surrender",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Honor people.",
+            "Love deeply.",
+            "Stay faithful."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "But keep allegiance ordered."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Christ first.",
+            "Truth above reputation.",
+            "Scripture above personality.",
+            "Kingdom above tribe."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "I CAN HONOR YOU WITHOUT WORSHIPING YOU."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "I CAN LOVE YOU WITHOUT FOLLOWING YOU INTO ERROR."
+        }
+      ]
+    },
+    {
+      "key": "take_it_with_you",
+      "label": "Take It With You",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "Loyalty is beautiful until faithfulness to a person requires unfaithfulness to the truth."
+        }
+      ]
+    },
+    {
+      "key": "the_prayer",
+      "label": "The Prayer",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Father,"
+        },
+        {
+          "type": "paragraph",
+          "text": "Teach me biblical loyalty."
+        },
+        {
+          "type": "paragraph",
+          "text": "Keep me from dishonor and cynicism."
+        },
+        {
+          "type": "paragraph",
+          "text": "But also keep me from giving human beings allegiance that belongs to Christ."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Give me courage to honor and question.",
+            "Love and discern.",
+            "Support and confront."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "And if I lead, never let me demand from people what belongs only to Jesus."
+        },
+        {
+          "type": "paragraph",
+          "text": "Christ alone is Lord."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "In Jesus name,",
+            "Amen."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hidden_gems",
+      "label": "Hidden Gems 💎",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Loyalty is beautiful until faithfulness to a person requires unfaithfulness to the truth."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "Biblical loyalty does not require moral blindness."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "No human leader gets the allegiance that belongs to Christ."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "Loyalty has stopped serving truth when truth starts serving loyalty."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "A healthy leader doesn’t need to be the center of everybody’s story."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "I can honor you without worshiping you. I can love you without following you into error."
+        },
+        {
+          "type": "paragraph",
+          "text": "-TheWrkShop"
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-10-29_acts-5-29_when-loyalty-becomes-idolatry|"
+}

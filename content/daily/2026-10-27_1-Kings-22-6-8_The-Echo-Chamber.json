@@ -1,0 +1,423 @@
+{
+  "date": "2026-10-27",
+  "title": "The Battle Before The Battle",
+  "subtitle": "The Echo Chamber",
+  "tagline": "When disagreement becomes expensive, agreement becomes unreliable.",
+  "headline": "When Leaders Live in an Echo Chamber",
+  "headline_sub": "Who Is Not in This Room?",
+  "slug": "when-leaders-live-in-an-echo-chamber",
+  "series": "The Battle Before the Battle",
+  "category": "Leadership & Culture",
+  "seo_title": "When Leaders Live in an Echo Chamber | TheWrkShop",
+  "seo_description": "When disagreement becomes expensive, agreement becomes unreliable. A biblical look at groupthink, dissent and honest counsel at work, on teams and at home.",
+  "keywords": [
+    "leadership",
+    "echo chamber",
+    "groupthink",
+    "dissent",
+    "decision making",
+    "Christian leadership"
+  ],
+  "og_image": "/assets/og/the-echo-chamber.png",
+  "og_image_alt": "When Leaders Live in an Echo Chamber: When disagreement becomes expensive, agreement becomes unreliable. TheWrkShop, Leadership & Culture.",
+  "scriptures": [
+    {
+      "ref": "1 Kings 22:6-8",
+      "text": "So the king of Israel brought together the prophets, about four hundred men, and asked them, “Shall I go to war against Ramoth Gilead, or shall I refrain?” “Go,” they answered…. But Jehoshaphat asked, “Is there no longer a prophet of the LORD here whom we can inquire of?”"
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_revelation",
+      "label": "The Revelation",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Four hundred voices.",
+            "Same answer.",
+            "Go."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Imagine how convincing that must have sounded."
+        },
+        {
+          "type": "paragraph",
+          "text": "Four hundred people agreeing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then Jehoshaphat asks essentially:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“IS THERE ANYBODY ELSE?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "That question matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "Because consensus can look like confirmation."
+        },
+        {
+          "type": "paragraph",
+          "text": "But sometimes:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "CONSENSUS IS WHAT REMAINS AFTER DISSENT BECOMES TOO EXPENSIVE."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Micaiah existed.",
+            "Truth existed."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "But truth wasn’t popular in Ahab’s court."
+        }
+      ]
+    },
+    {
+      "key": "the_lie",
+      "label": "The Lie",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "“EVERYBODY AGREES WITH ME.”"
+        },
+        {
+          "type": "paragraph",
+          "text": "Maybe."
+        },
+        {
+          "type": "paragraph",
+          "text": "But healthy leaders ask:"
+        },
+        {
+          "type": "paragraph",
+          "text": "Why?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Because agreement can come from:"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "conviction.",
+            "trust.",
+            "fear.",
+            "career preservation.",
+            "access.",
+            "exhaustion.",
+            "groupthink.",
+            "flattery."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Or:"
+        },
+        {
+          "type": "quote",
+          "text": "“They’ve already decided. Why bother?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "That’s why:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "AGREEMENT IS NOT ALWAYS EVIDENCE OF ALIGNMENT."
+        },
+        {
+          "type": "paragraph",
+          "text": "Sometimes it’s evidence that disagreement has stopped feeling useful."
+        }
+      ]
+    },
+    {
+      "key": "how_the_echo_chamber_forms",
+      "label": "How the Echo Chamber Forms",
+      "blocks": [
+        {
+          "type": "flow",
+          "steps": [
+            "Leader dislikes disagreement.",
+            "Dissent becomes uncomfortable.",
+            "Truth-tellers lose influence.",
+            "Agreeable people gain proximity.",
+            "Leader experiences more agreement.",
+            "Agreement reinforces confidence.",
+            "Confidence reduces curiosity.",
+            "Contrary information feels increasingly unreasonable."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Now the leader says:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“EVERYBODY I TRUST AGREES WITH ME.”"
+        },
+        {
+          "type": "paragraph",
+          "text": "But perhaps the system gradually changed:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "WHO WAS ALLOWED TO REMAIN TRUSTED."
+        },
+        {
+          "type": "paragraph",
+          "text": "That’s the danger."
+        }
+      ]
+    },
+    {
+      "key": "the_truth",
+      "label": "The Truth",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "WISE LEADERS DON’T ONLY ASK, “WHO AGREES?”"
+        },
+        {
+          "type": "paragraph",
+          "text": "They ask:"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "“Who sees this differently?”",
+            "“What am I missing?”",
+            "“What assumptions are we making?”",
+            "“What would make this fail?”",
+            "“Who will be affected that isn’t represented here?”",
+            "“What would somebody with nothing to lose tell us?”"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Not because dissent is automatically wise.",
+            "It isn’t."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "But because:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "CONFIDENCE SHOULD SURVIVE EXAMINATION."
+        }
+      ]
+    },
+    {
+      "key": "the_empty_chair",
+      "label": "The Empty Chair",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Before a major decision, imagine an empty chair."
+        },
+        {
+          "type": "paragraph",
+          "text": "Whose perspective is missing?"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Customer?",
+            "Employee?",
+            "Spouse?",
+            "Child?",
+            "Volunteer?",
+            "Minority voice?",
+            "Frontline worker?",
+            "Critic?",
+            "Person harmed by the decision?"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sometimes wisdom enters when we ask:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "WHO IS NOT IN THIS ROOM?"
+        }
+      ]
+    },
+    {
+      "key": "the_audit",
+      "label": "The Audit",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "WHO CONSISTENTLY DISAGREES WITH ME?"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If the answer is:"
+        },
+        {
+          "type": "paragraph",
+          "text": "“Nobody….”"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "don’t immediately celebrate.",
+            "Ask why."
+          ]
+        },
+        {
+          "type": "bullet_list",
+          "items": [
+            "HAVE MY CLOSEST ADVISORS BECOME TOO SIMILAR?",
+            "DO PEOPLE CHALLENGE ASSUMPTIONS OR ONLY EXECUTE THEM?",
+            "HAVE I MISTAKEN ACCESS FOR AGREEMENT?"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Then:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "WHAT TRUTH MIGHT HAVE LEFT THE ROOM BEFORE I NOTICED?"
+        }
+      ]
+    },
+    {
+      "key": "the_surrender",
+      "label": "The Surrender",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Invite a trusted person to argue the other side."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tell them:"
+        },
+        {
+          "type": "quote",
+          "text": "“DON’T PROTECT MY IDEA. TEST IT.”"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Then resist the urge to win.",
+            "Listen."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Because an idea that cannot survive honest examination probably should not govern people."
+        }
+      ]
+    },
+    {
+      "key": "take_it_with_you",
+      "label": "Take It With You",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "When disagreement becomes expensive, agreement becomes unreliable."
+        }
+      ]
+    },
+    {
+      "key": "the_prayer",
+      "label": "The Prayer",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Father,"
+        },
+        {
+          "type": "paragraph",
+          "text": "Protect me from surrounding myself with echoes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Give me people who love truth more than proximity."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Make me secure enough to be challenged.",
+            "Curious enough to listen.",
+            "Wise enough to discern.",
+            "And humble enough to change."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "In Jesus name,",
+            "Amen."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hidden_gems",
+      "label": "Hidden Gems 💎",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "When disagreement becomes expensive, agreement becomes unreliable."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "Consensus can be what remains after dissent becomes too expensive."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "Agreement is not always evidence of alignment."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "What truth might have left the room before I noticed?"
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "Don’t protect my idea. Test it."
+        },
+        {
+          "type": "paragraph",
+          "text": "-TheWrkShop"
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-10-27_1-kings-22-6-8_the-echo-chamber|"
+}
