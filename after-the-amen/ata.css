@@ -1,0 +1,63 @@
+/* After the Amen: interactive reflection. Built on the shared pt-page theme (patterns.css). */
+.ata-page .ata-wrap { max-width: 1000px; margin: 0 auto; padding: 1.75rem 1rem 1rem; }
+.ata-page .hidden { display: none !important; }
+.ata-page .pt-hero .pt-promise { font-size: .88rem; color: #b7aea3; margin: 0; }
+
+/* The site's global reset removes all margins and padding; restore reading rhythm inside the tool. */
+.ata-page .ata p { margin: .75rem 0; line-height: 1.65; }
+.ata-page .ata h2 { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: clamp(1.6rem, 4vw, 2.05rem); line-height: 1.2; margin: 0 0 .8rem; color: var(--ink); }
+.ata-page .ata h3 { font-size: 1.12rem; line-height: 1.35; margin: 1.3rem 0 .5rem; color: var(--ink); }
+.ata-page .ata ul, .ata-page .ata ol { padding-left: 1.4rem; margin: .5rem 0; line-height: 1.75; }
+.ata-page .ata li { margin-bottom: .2rem; }
+.ata-page .ata a { color: var(--ember); }
+
+/* Section tabs */
+.ata-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 1.1rem; scroll-margin-top: 110px; }
+.ata-page .ata button { font: inherit; cursor: pointer; border-radius: 10px; padding: 12px 16px; border: 1px solid #b9ada0; background: #fff; color: var(--ash); line-height: 1.4; }
+.ata-page .ata button:hover:not(:disabled) { border-color: var(--ash); }
+.ata-page .ata button:disabled { opacity: .45; cursor: not-allowed; }
+.ata-page .ata button.primary, .ata-tabs [aria-selected=true] { background: var(--ash); color: var(--white); border-color: var(--ash); }
+.ata-page .ata button.primary:hover { background: var(--ember); border-color: var(--ember); }
+.ata-page .ata :is(button, textarea, select, summary, a):focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.ata-page .ata h2:focus, .ata-page .ata h3:focus { outline: none; }
+
+/* Panels and blocks */
+.ata-panel { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: clamp(18px, 4vw, 36px); box-shadow: 0 8px 26px rgba(46, 41, 35, .06); }
+.ata-page .eyebrow { font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: .18em; color: var(--ember); font-size: .72rem; font-weight: 700; margin: 0 0 .6rem; }
+.ata-page .muted { color: #5f554c; }
+.ata-page .hint { font-weight: 400; color: #5f554c; font-size: .92rem; }
+.ata-page .options { display: grid; gap: 10px; margin: 1rem 0; }
+.ata-page .ata .option { width: 100%; text-align: left; line-height: 1.5; }
+.ata-page .ata .option[aria-pressed=true] { background: #f7efe6; border: 2px solid var(--ember); }
+.ata-page .note { background: #f7f1ea; border-left: 4px solid #b07a4f; padding: 16px; margin: 1rem 0; border-radius: 6px; }
+.ata-page .note p:first-child { margin-top: 0; } .ata-page .note p:last-child { margin-bottom: 0; }
+.ata-page .warning { background: #fff6e9; border-left: 4px solid #9a6c31; padding: 16px; margin: 1rem 0; border-radius: 6px; line-height: 1.6; }
+.ata-page .inline-msg { color: #8a3d12; font-weight: 600; }
+.ata-page .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.1rem; }
+.ata-page .ata textarea, .ata-page .ata select { display: block; width: 100%; padding: 12px; font: inherit; border: 1px solid #b9ada0; border-radius: 9px; background: #fff; color: inherit; }
+.ata-page .ata textarea { min-height: 100px; line-height: 1.55; }
+.ata-page .ata select { margin: .6rem 0; }
+.ata-page .ata label { display: block; font-weight: 650; margin-top: 1rem; }
+.ata-page .progress { height: 8px; background: #ece4da; border-radius: 10px; overflow: hidden; margin: 1rem 0; }
+.ata-page .progress span { display: block; height: 100%; width: 0; background: var(--ember); transition: width .2s; }
+.ata-page .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.ata-page .tile { border: 1px solid var(--line); border-radius: 12px; padding: 18px; background: #fcfaf7; }
+.ata-page .ata .tile h3 { margin-top: 0; }
+.ata-page .tile button { margin-top: 8px; }
+.ata-page .ata details { padding: 12px 0; border-bottom: 1px solid #e6ddd2; }
+.ata-page .ata summary { cursor: pointer; font-weight: 650; line-height: 1.5; }
+.ata-page .ata-fine { max-width: 1000px; margin: 0 auto; padding: .5rem 1rem 0; font-size: .86rem; color: #5f554c; }
+.ata-page .print-only { display: none; }
+
+@media (prefers-reduced-motion: reduce) { .ata-page .progress span { transition: none; } }
+
+@media print {
+  .ata-page #site-header, .ata-page footer, .ata-page .ata-tabs, .ata-page .actions, .ata-page .no-print { display: none !important; }
+  .ata-page, .ata-page .pt-hero { background: #fff !important; color: #000 !important; }
+  .ata-page .pt-hero { padding: 0 0 1rem; }
+  .ata-page .pt-hero::before, .ata-page .pt-crumbs, .ata-page .pt-promise { display: none; }
+  .ata-page .pt-hero .pt-h1, .ata-page .pt-hero .pt-lead { color: #000 !important; }
+  .ata-panel { box-shadow: none; border: 0; padding: 0; }
+  #path.print-prayer > *:not(.print-only) { display: none !important; }
+  #path.print-prayer .print-only { display: block; white-space: pre-wrap; font-family: Georgia, serif; font-size: 1.1rem; line-height: 1.6; }
+}
