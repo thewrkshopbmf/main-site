@@ -57,6 +57,7 @@ const RECURSIVE_PUBLIC_DIRS = [
   'infographics',
   'one-verse-man',
   'belief',
+  'prayer',
   'patterns',
   'tools'
 ];
