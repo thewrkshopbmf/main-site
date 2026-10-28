@@ -58,6 +58,7 @@ const RECURSIVE_PUBLIC_DIRS = [
   'one-verse-man',
   'belief',
   'prayer',
+  'after-the-amen',
   'patterns',
   'tools'
 ];
