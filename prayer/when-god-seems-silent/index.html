@@ -6,7 +6,7 @@
   <title>When God Seems Silent | TheWrkShop</title>
   <link rel="stylesheet" href="/style.css"/>
   <link rel="stylesheet" href="/patterns/patterns.css"/>
-  <link rel="stylesheet" href="/prayer/prayer.css?v=1"/>
+  <link rel="stylesheet" href="/prayer/prayer.css?v=4"/>
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
   <meta name="description" content="Feeling forsaken isn&#x27;t the same as being forsaken. Psalm 13, Psalm 88, Paul&#x27;s thorn and the cross give you words for unanswered prayer."/>
   <link rel="canonical" href="https://thewrkshop.com/prayer/when-god-seems-silent/"/>
@@ -29,9 +29,6 @@
   "image": "https://thewrkshop.com/assets/og/prayer-when-god-seems-silent.png",
   "inLanguage": "en-US",
   "isAccessibleForFree": true,
-  "author": {
-    "@id": "https://thewrkshop.com/#organization"
-  },
   "publisher": {
     "@id": "https://thewrkshop.com/#organization",
     "@type": "Organization",
@@ -40,14 +37,18 @@
   },
   "isPartOf": {
     "@id": "https://thewrkshop.com/#website"
+  },
+  "author": {
+    "@id": "https://thewrkshop.com/#organization"
   }
 }
   </script>
-  <!-- Google Analytics: page views only. -->
+  <!-- Google Analytics: page views only. The address is sent without anything after ? or #,
+       so tool choices (e.g. #path=silence) never reach analytics. -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N48478JV2Z');</script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N48478JV2Z',{page_location:location.origin+location.pathname});</script>
 </head>
-<body class="pt-page pr-page">
+<body class="pt-page pr-page pr-article-page">
   <div id="site-header"></div>
   <main>
     <section class="pt-hero">
@@ -225,7 +226,7 @@
 
       <h2>Keep Going</h2>
       <div class="pr-next">
-        <a href="/prayer/guided-prayer/?path=silence">Pray it: a guided lament</a>
+        <a href="/prayer/guided-prayer/#path=silence">Pray it: a guided lament</a>
         <a class="pr-ghost" href="/prayer/7-day/">Walk it out: seven days of prayer</a>
         <a class="pr-ghost" href="/prayer/for-groups/#session-4">Leading a group? Session 4 uses this article</a>
       </div>
