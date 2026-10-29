@@ -96,7 +96,7 @@
       font-weight: 700;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: #8a6a52;
+      color: #735640;
       text-decoration: none;
       margin-top: .25rem;
     }
@@ -254,7 +254,7 @@
     }
     /* Flow visuals (progressions); keep in sync with netlify/shared/flow-block.js */
     .daily-flow { margin: 1.25rem auto 1.4rem; max-width: 440px; text-align: center; }
-    .daily-flow-title { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; margin-bottom: .6rem; }
+    .daily-flow-title { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #735640; margin-bottom: .6rem; }
     .daily-flow-steps { list-style: none; margin: 0; padding: 0; }
     .daily-flow-step { margin: 0; padding: 0; }
     .daily-flow-step + .daily-flow-step::before { content: "↓"; display: block; color: #c9aa8c; font-size: 1.15rem; line-height: 1; margin: .3rem 0; }
@@ -336,6 +336,8 @@
       </div>
     </article>
 
+    {{NEXT_STEPS_HTML}}
+
     <section class="daily-signup" aria-labelledby="dailySignupTitle">
       <h3 id="dailySignupTitle">{{SIGNUP_TITLE}}</h3>
       <p>{{SIGNUP_TEXT}}</p>
@@ -359,8 +361,9 @@
         <a href="/library/">Library</a>
         <a href="/blog-archive.html">Blog</a>
         <a href="/podcasts.html">Podcast</a>
-        <a href="/products.html">Store</a>
+        <a href="/resources.html">Resources</a>
         <a href="/#contact">Contact</a>
+        <a href="/privacy/">Privacy</a>
       </nav>
       <div class="footer-logo"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop" width="233" height="180"></div>
       <p>&copy; 2026 <span class="sitename">TheWrkShop</span>. All rights reserved.</p>

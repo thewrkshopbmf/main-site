@@ -6,10 +6,10 @@
     "node": ">=22.12.0"
   },
   "dependencies": {
-  "@supabase/supabase-js": "^2.101.1",
-  "fast-xml-parser": "^4.4.1",
-  "firebase": "^12.2.1",
-  "firebase-admin": "^12.0.0"
+    "@supabase/supabase-js": "^2.101.1",
+    "fast-xml-parser": "^4.4.1",
+    "firebase": "^12.2.1",
+    "firebase-admin": "^12.0.0"
   },
   "devDependencies": {
     "vite": "^7.1.5"
@@ -23,7 +23,8 @@
     "build:web": "vite build",
     "build:sitemap": "node scripts/build-sitemap.js",
     "build:seasonal": "node scripts/build-seasonal.js",
-    "build:all": "npm run build:supabase && npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:library && npm run build:web && npm run build:seasonal && npm run build:sitemap",
-    "dev:web": "vite"
+    "build:all": "npm run build:supabase && npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:library && npm run build:home && npm run build:web && npm run build:seasonal && npm run build:sitemap",
+    "dev:web": "vite",
+    "build:home": "node scripts/build-home.js"
   }
 }

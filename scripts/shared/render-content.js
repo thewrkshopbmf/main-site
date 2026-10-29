@@ -1,4 +1,5 @@
 import { normalizeFlowBlock, flowPlainText, renderFlowHtml } from '../../netlify/shared/flow-block.js';
+import { nextStepsHtml } from './next-steps.js';
 // scripts/shared/render-content.js
 
 export function todayCentralISO() {
@@ -558,6 +559,7 @@ export function buildBlogPreviewHTML({ template, entry, prevHref = '#', nextHref
     AUTHOR: entry.author || '',
     READING_MIN: String(entry.reading_minutes || 0),
     BODY_HTML: buildBlogBodyHTML(entry),
+    NEXT_STEPS_HTML: nextStepsHtml(entry, 'blog'),
     PREV_HREF: prevHref,
     NEXT_HREF: nextHref
   });
@@ -575,6 +577,7 @@ export function buildDailyPreviewHTML({ template, entry, prevHref = '#', nextHre
     INSIGHT_HTML: buildDailyInsightHTML(e),
     ONE_MINUTE_WIN: buildDailyActionText(e),
     DECLARATION: buildDailyDeclarationText(e),
+    NEXT_STEPS_HTML: nextStepsHtml(e, 'daily'),
     PREV_HREF: prevHref,
     NEXT_HREF: nextHref
   });
