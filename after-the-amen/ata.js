@@ -293,8 +293,20 @@ const BRAND = 'TheWrkShop.com';
 const canonical = ((document.querySelector('link[rel=canonical]') || {}).href || location.href).split('#')[0];
 const pageUrl = /(^|\.)thewrkshop\.com$/.test(location.hostname) || location.protocol === 'file:'
   ? canonical : location.origin + new URL(canonical).pathname;
+const isPhone = !!(navigator.share && window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
 function shareButton(btn, getOpts) {
   if (!btn) return;
+  if (isPhone) {
+    // Phones: open the phone's own share sheet in one tap (Messages, Mail, contacts, Copy).
+    // The link goes inside the message so no app can keep the link and drop the words.
+    btn.addEventListener('click', ev => {
+      ev.stopPropagation();
+      const o = getOpts();
+      try { if (window.gtag) window.gtag('event', 'share', { content_type: o.type, method: 'native' }); } catch (e) {}
+      navigator.share({ text: o.text + '\n' + o.url }).catch(() => {});
+    });
+    return;
+  }
   if (window.TWSShare && window.TWSShare.button) { window.TWSShare.button(btn, btn.parentElement, getOpts); return; }
   // Fallback if the shared menu script did not load: the phone's share sheet, or copy the link.
   btn.addEventListener('click', () => {
