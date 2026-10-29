@@ -289,7 +289,10 @@ days.forEach((d, i) => {
 
 /* ---------- Sharing (the page and its days only; answers are never shared) ---------- */
 const BRAND = 'TheWrkShop.com';
-const pageUrl = ((document.querySelector('link[rel=canonical]') || {}).href || location.href).split('#')[0];
+// Share the live address; on staging or a preview, share that copy so testers land on the version they are testing.
+const canonical = ((document.querySelector('link[rel=canonical]') || {}).href || location.href).split('#')[0];
+const pageUrl = /(^|\.)thewrkshop\.com$/.test(location.hostname) || location.protocol === 'file:'
+  ? canonical : location.origin + new URL(canonical).pathname;
 function shareButton(btn, getOpts) {
   if (!btn) return;
   if (window.TWSShare && window.TWSShare.button) { window.TWSShare.button(btn, btn.parentElement, getOpts); return; }
