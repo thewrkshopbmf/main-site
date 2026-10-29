@@ -61,7 +61,8 @@ const RECURSIVE_PUBLIC_DIRS = [
   'after-the-amen',
   'patterns',
   'tools',
-  'privacy'
+  'privacy',
+  'questions'
 ];
 
 function toPosix(p) {
