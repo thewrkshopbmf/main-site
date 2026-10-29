@@ -27,3 +27,7 @@ Thumbs.db
 scripts/supabase/supabaseConfig.js
 supabase/assessment_attempts.sql
 Assesment.html
+
+# Questions answer pages (generated from content/questions by scripts/build-questions.js)
+/questions/*/
+/questions/index.html

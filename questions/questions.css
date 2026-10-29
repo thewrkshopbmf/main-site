@@ -1,0 +1,36 @@
+/* Questions section (/questions/) */
+.q-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
+.q-hero h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin:0 0 .4rem; line-height:1.2; }
+.q-hero p { max-width:720px; margin:0 auto; line-height:1.6; }
+.q-wrap { max-width:760px; margin:0 auto; padding:2rem 1rem 3rem; color:#2b2b2b; }
+.q-wrap article { background:#f4f1ee; border-radius:14px; padding:1.5rem 1.25rem; box-shadow:0 2px 6px rgba(0,0,0,.07); }
+.q-wrap h1 { color:#3e2c23; font-size:clamp(1.6rem,3.2vw,2.2rem); line-height:1.2; margin:.25rem 0 1rem; }
+.q-wrap h2 { color:#3e2c23; font-size:1.25rem; margin:1.75rem 0 .5rem; }
+.q-wrap p, .q-wrap li { line-height:1.7; }
+.q-wrap a { color:#3e2c23; font-weight:600; }
+.q-crumbs { font-size:.85rem; }
+.q-answer { font-size:1.12rem; background:#fff; border-left:4px solid #3e2c23; padding:.9rem 1rem; border-radius:8px; margin:0 0 1rem; }
+.q-scripture blockquote { margin:.75rem 0; padding:.75rem 1rem; background:#fff; border-radius:8px; }
+.q-scripture blockquote p { margin:0 0 .25rem; font-style:italic; }
+.q-scripture cite { font-style:normal; font-weight:700; color:#3e2c23; }
+.q-steps ol { padding-left:1.25rem; }
+.q-tool, .q-group { border-radius:12px; padding:1.25rem; margin:1.75rem 0; }
+.q-tool { background:#fff; border:2px solid #3e2c23; }
+.q-tool h2, .q-group h2 { margin-top:.25rem; }
+.q-tool-label { text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; font-weight:700; color:#735640; margin:0; }
+.q-group { background:#3e2c23; color:#f4f1ee; }
+.q-group h2, .q-group p { color:#f4f1ee; }
+.q-btn { display:inline-block; background:#3e2c23; color:#f4f1ee !important; padding:.6rem 1rem; border-radius:8px; text-decoration:none; }
+.q-btn--light { background:#f4f1ee; color:#3e2c23 !important; }
+.q-btn:hover, .q-btn:focus-visible { text-decoration:underline; }
+.q-faq details { background:#fff; border-radius:8px; padding:.75rem 1rem; margin:.5rem 0; }
+.q-faq summary { cursor:pointer; font-weight:700; color:#3e2c23; }
+.q-updated { font-size:.85rem; color:#5a4a42; margin-top:1.5rem; }
+.q-list { display:grid; gap:1rem; }
+.q-card { display:block; background:#f4f1ee; border-radius:14px; padding:1.25rem; text-decoration:none; color:#2b2b2b; box-shadow:0 2px 6px rgba(0,0,0,.07); }
+.q-card h2 { margin:0 0 .35rem; font-size:1.2rem; }
+.q-card:hover h2, .q-card:focus-visible h2 { text-decoration:underline; }
+.q-more { text-align:center; margin:1.5rem 0; }
+.q-wrap article p { margin:0 0 .85rem; }
+.q-wrap article ul, .q-wrap article ol { margin:0 0 1rem; padding-left:1.25rem; }
+.q-wrap .daily-signup h2 { color:#f4f1ee; margin-top:0; }
