@@ -1,0 +1,91 @@
+{
+  "date": "2026-06-25",
+  "title": "Slow Growth Is Still Growth",
+  "headline": "How to See What God Has Grown in You",
+  "headline_sub": "Slow Growth Is Not No Growth",
+  "tagline": "Most of the things you treasure most today required longer than you wanted.",
+  "seo_title": "Slow Spiritual Growth: How to See What God Has Grown in You | TheWrkShop",
+  "seo_description": "Most of the things you treasure today took longer than you wanted. A growth inventory and declaration for men who feel they're not growing fast enough.",
+  "keywords": [
+    "spiritual growth",
+    "patience",
+    "God's timing",
+    "Christian men"
+  ],
+  "verse_ref": "Philippians 1:6",
+  "verse_text": "He who began a good work in you will carry it on to completion until the day of Christ Jesus.",
+  "scriptures": [
+    {
+      "ref": "Philippians 1:6",
+      "text": "He who began a good work in you will carry it on to completion until the day of Christ Jesus."
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_practice_rep_growth_inventory",
+      "label": "The Practice Rep: Growth Inventory",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write down three things God has grown in you over the last five years."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Not achievements.",
+            "Formation."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Things like:",
+            "patience,",
+            "wisdom,",
+            "humility,",
+            "discernment,",
+            "faith."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Then ask:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "How long did that growth actually take?"
+        }
+      ]
+    },
+    {
+      "key": "hidden_gem",
+      "label": "Hidden Gem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most of the things you treasure most today required longer than you wanted."
+        }
+      ]
+    },
+    {
+      "key": "declaration",
+      "label": "Declaration",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "God is working even when I cannot see it.",
+            "I will not confuse slow growth with no growth.",
+            "I trust God’s timing.",
+            "I trust God’s process.",
+            "I trust God’s wisdom.",
+            "Jesus is the Way.",
+            "I will remain faithful in this season.",
+            "And I will trust Him for the harvest."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "date": "2026-08-07",
+  "title": "What Are You Remaining In?",
+  "headline": "What Are You Really Abiding In?",
+  "headline_sub": "Guilt, Fear, Shame or Christ?",
+  "tagline": "Freedom begins when agreement with lies ends and abiding in Christ begins.",
+  "seo_title": "What Are You Abiding In? A Shame and Grace Audit (John 15:5) | TheWrkShop",
+  "seo_description": "Some remain in guilt, fear or yesterday's failures. A short audit for men from John 15:5 and Colossians 3:1-2 on shame, repentance and grace.",
+  "keywords": [
+    "abiding in Christ",
+    "John 15:5",
+    "Colossians 3:1-2",
+    "shame",
+    "repentance"
+  ],
+  "verse_ref": "John 15:5",
+  "verse_text": "I am the vine; you are the branches…. apart from Me you can do nothing.",
+  "scriptures": [
+    {
+      "ref": "John 15:5",
+      "text": "I am the vine; you are the branches…. apart from Me you can do nothing."
+    },
+    {
+      "ref": "Colossians 3:2",
+      "text": "Set your minds on things above, not on earthly things."
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_audit",
+      "label": "The Audit",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "John 15 quietly asks every believer one question:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "What are you remaining in?"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Most people immediately answer, “Jesus.”",
+            "But if we’re honest, our thoughts, emotions and reactions often reveal something different."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Some remain in guilt.",
+            "Some remain in fear.",
+            "Some remain in comparison.",
+            "Some remain in yesterday’s failures.",
+            "Some remain in shame."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Whatever your heart repeatedly returns to….",
+            "will eventually shape what grows from your life."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Freedom isn’t found by remaining in your failure.",
+            "Freedom grows by remaining in Christ."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Attention is never neutral.",
+            "What occupies your mind influences your heart.",
+            "What shapes your heart shapes your character.",
+            "And what shapes your character shapes your life."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "rate_yourself_from_1_to_10",
+      "label": "Rate Yourself From 1 to 10",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "Do I carry shame?",
+            "Do I hide when I fail?",
+            "Do I truly believe God’s grace is enough for me?",
+            "Do I practice repentance quickly?",
+            "Do I walk in the freedom Christ purchased for me?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "heart_check",
+      "label": "Heart Check",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "What accusation have I been agreeing with?",
+            "What truth from God’s Word exposes that accusation as a lie?"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Conviction agrees with God’s truth.",
+            "Condemnation agrees with the enemy’s accusations."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hidden_gem",
+      "label": "Hidden Gem",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Your life is usually moving toward whatever consistently captures your attention.",
+            "Freedom begins when agreement with lies ends…. and abiding in Christ begins."
+          ]
+        }
+      ]
+    }
+  ]
+}
