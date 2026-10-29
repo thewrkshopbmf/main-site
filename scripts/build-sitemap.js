@@ -60,7 +60,8 @@ const RECURSIVE_PUBLIC_DIRS = [
   'prayer',
   'after-the-amen',
   'patterns',
-  'tools'
+  'tools',
+  'privacy'
 ];
 
 function toPosix(p) {

@@ -188,8 +188,9 @@ ${list.map(e => `        <li><a href="${esc(e.href)}">${esc(dailyName(e))}</a><s
         <a href="/library/">Library</a>
         <a href="/blog-archive.html">Blog</a>
         <a href="/podcasts.html">Podcast</a>
-        <a href="/products.html">Store</a>
+        <a href="/resources.html">Resources</a>
         <a href="/#contact">Contact</a>
+        <a href="/privacy/">Privacy</a>
       </nav>
       <div class="footer-logo"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop" width="233" height="180"></div>
       <p>&copy; 2026 <span class="sitename">TheWrkShop</span>. All rights reserved.</p>
