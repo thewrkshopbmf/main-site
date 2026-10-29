@@ -45,3 +45,14 @@
 [functions]
   node_bundler = "esbuild"
 
+
+# Two Dailies were stored with the wrong date (Oct 2026 fix); keep their old addresses working
+[[redirects]]
+  from = "/daily/2-Timothy-1-7_fear-is-a-thief_2025-09-18.html"
+  to = "/daily/2-Timothy-1-7_fear-is-a-thief_2025-09-30.html"
+  status = 301
+
+[[redirects]]
+  from = "/daily/2-Corinthians-5-7_faith-isnt-a-feeling_2025-09-18.html"
+  to = "/daily/2-Corinthians-5-7_faith-isnt-a-feeling_2025-10-01.html"
+  status = 301
