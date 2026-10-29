@@ -31,3 +31,4 @@ Assesment.html
 # Questions answer pages (generated from content/questions by scripts/build-questions.js)
 /questions/*/
 /questions/index.html
+/admin/social.html
