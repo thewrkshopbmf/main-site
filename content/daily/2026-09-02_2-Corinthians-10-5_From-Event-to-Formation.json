@@ -1,0 +1,137 @@
+{
+  "date": "2026-09-02",
+  "title": "From Event to Formation",
+  "headline": "Facts vs. Stories: How Events Shape You",
+  "headline_sub": "From Event to Formation",
+  "tagline": "The event happened once. Your interpretation may replay it a thousand times.",
+  "series": "The Battle Before the Battle",
+  "seo_title": "Facts vs. Stories: How One Event Shapes Who You Become | TheWrkShop",
+  "seo_description": "What happened matters, but so does what happens inside you afterward. A devotional for men on separating the event from the story you tell about it.",
+  "keywords": [
+    "interpretation",
+    "thought life",
+    "2 Corinthians 10:5",
+    "offense",
+    "Joseph"
+  ],
+  "verse_ref": "2 Corinthians 10:5",
+  "verse_text": "….we take captive every thought to make it obedient to Christ.",
+  "scriptures": [
+    {
+      "ref": "2 Corinthians 10:5",
+      "text": "….we take captive every thought to make it obedient to Christ."
+    },
+    {
+      "ref": "James 1:19-20",
+      "text": "Everyone should be quick to listen, slow to speak and slow to become angry…."
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_revelation",
+      "label": "The Revelation",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Something happened.",
+            "They said it.",
+            "You were overlooked.",
+            "You received criticism.",
+            "Someone offended you.",
+            "That is the event."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "But something can happen once externally and continue happening internally for hours, days, months or even years."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "The event happened once. Your interpretation may replay it a thousand times."
+        },
+        {
+          "type": "paragraph",
+          "text": "Every replay can become another opportunity for anger, fear, shame, bitterness, comparison…. or truth."
+        }
+      ]
+    },
+    {
+      "key": "1_the_event_what_actually_happened",
+      "label": "1. The Event: What Actually Happened?",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Someone doesn’t invite you. Fact: you weren’t invited.",
+            "Your boss corrects your work. Fact: you received correction.",
+            "Someone else succeeds. Fact: they succeeded."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Faithful interpretation is not optimistic editing.",
+            "If someone betrayed you, the betrayal matters.",
+            "If you failed, the failure matters."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Joseph did not deny the evil done to him. He said, “You intended to harm me….”",
+            "Then he expanded the frame: “….but God intended it for good.”",
+            "He named the harm without allowing the harm to become the whole story."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "2_the_interpretation_what_did_you_decide_it_meant",
+      "label": "2. The Interpretation: What Did You Decide It Meant?",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Someone doesn’t invite you. Story: “They don’t like me.”",
+            "Your boss corrects your work. Story: “They don’t respect me.”",
+            "Someone else succeeds. Story: “I’m falling behind.”"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Fact. Story.",
+            "The story may be correct.",
+            "But it must be tested."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Your first interpretation does not always deserve the final word.",
+            "Fear speaks quickly.",
+            "Shame speaks quickly.",
+            "Anger speaks quickly."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hidden_gems",
+      "label": "Hidden Gems",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "One painful moment should not be allowed to write a theology about everything.",
+            "A thought can enter without receiving permission to govern.",
+            "What happened does not automatically have the right to decide who you become.",
+            "Same event. Different agreement. Different direction."
+          ]
+        }
+      ]
+    }
+  ]
+}

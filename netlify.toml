@@ -56,3 +56,24 @@
   from = "/daily/2-Corinthians-5-7_faith-isnt-a-feeling_2025-09-18.html"
   to = "/daily/2-Corinthians-5-7_faith-isnt-a-feeling_2025-10-01.html"
   status = 301
+
+# Duplicate Dailies removed (Oct 2026); the later copies point to the originals
+[[redirects]]
+  from = "/daily/Proverbs-4-23_guard-the-well_2026-05-05.html"
+  to = "/daily/Proverbs-4-23_guard-the-well_2026-02-05.html"
+  status = 301
+
+[[redirects]]
+  from = "/daily/James-1-19_strength-that-listens_2026-05-06.html"
+  to = "/daily/James-1-19_strength-that-listens_2026-02-06.html"
+  status = 301
+
+[[redirects]]
+  from = "/daily/Psalm-46-10_become-still-enough_2026-05-07.html"
+  to = "/daily/Psalm-46-10_become-still-enough_2026-02-07.html"
+  status = 301
+
+[[redirects]]
+  from = "/daily/Luke-10-33-34_who-you-stop-for-reveals-who-you-are_2026-03-25.html"
+  to = "/daily/Luke-10-33-34_who-you-stop-for-reveals-who-you-are_2026-03-23.html"
+  status = 301
