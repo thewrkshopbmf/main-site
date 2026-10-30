@@ -582,7 +582,7 @@ footer {
   background:#f4f1ee; border:1px solid rgba(0,0,0,.08); border-radius:14px; padding:1rem;
   box-shadow: 0 2px 6px rgba(0,0,0,.07);
 }
-.mini-card h4 { color:#3e2c23; margin:0 0 .2rem; }
+.mini-card h3, .mini-card h4 { color:#3e2c23; margin:0 0 .2rem; font-size:1rem; }
 .mini-teaser { color:#2b2b2b; margin:0 0 .3rem; }
 
 /* Responsive */
@@ -899,7 +899,7 @@ body.products-theme .listen-btn:hover {
 
 .upstream-feature { max-width: 1000px; margin: 0 auto; }
 .uf-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; align-items: center; background: #f4f1ee; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 6px rgba(0,0,0,.07); }
-.uf-eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8a6a52; }
+.uf-eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #735640; }
 .upstream-feature h2 { text-align: left; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: .3rem 0 .75rem; }
 .uf-text p { line-height: 1.65; color: #2b2b2b; margin: 0 0 1.1rem; }
 .uf-btn { display: inline-block; background: #3e2c23; color: #f4f1ee; padding: .75rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 700; }
@@ -923,3 +923,15 @@ body.products-theme .listen-btn:hover {
 .newsletter-section .subscribe-form { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; max-width: 460px; margin: .75rem auto 0; }
 .newsletter-section .subscribe-form input { flex: 1 1 220px; padding: .7rem .85rem; border-radius: 8px; border: 1px solid rgba(0,0,0,.15); font: inherit; }
 .newsletter-section .subscribe-form button { padding: .7rem 1.1rem; border-radius: 8px; border: 0; background: #3e2c23; color: #f4f1ee; font: inherit; font-weight: 700; cursor: pointer; }
+
+
+/* ---- Site health pass (Oct 2026) ---- */
+/* Section "→" links were falling back to browser-default blue on the tan background. */
+a.cta, .df-cta { color:#3e2c23; font-weight:700; text-decoration:none; }
+a.cta:hover, a.cta:focus-visible, .df-cta:hover, .df-cta:focus-visible { text-decoration:underline; }
+/* Hold the header's space while it loads so the page doesn't jump (layout shift). */
+#site-header:empty { min-height:96px; background:#3e2c23; }
+/* "Go deeper" pathways under Daily, leadership and blog posts */
+.next-steps { max-width: 760px; margin: 2rem auto 1rem; padding: 0 1rem; }
+.next-steps-title { color:#3e2c23; font-size: clamp(1.25rem, 2.2vw, 1.6rem); margin: 0 0 .75rem; text-align:center; }
+.next-steps-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }

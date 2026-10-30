@@ -191,7 +191,7 @@
     if (isTouch()) {
       item('Text message', { method: 'sms', href: 'sms:?&body=' + enc(body) });
     }
-    item(opts.image ? 'Copy link' : 'Copy quote', { method: 'copy', keepOpen: true, onClick: function (ev, el) {
+    item(opts.copyLabel || (opts.image ? 'Copy link' : 'Copy quote'), { method: 'copy', keepOpen: true, onClick: function (ev, el) {
       copy(body).then(function () {
         el.textContent = 'Copied ✓';
         setTimeout(closeMenu, 900);
@@ -208,7 +208,7 @@
 
     var note = document.createElement('div');
     note.className = 'share-menu-note';
-    note.textContent = opts.image
+    note.textContent = opts.note ? opts.note : opts.image
       ? 'Posting the picture to Instagram or Facebook? Save it, then add it to your post. The link is copied for you on Facebook and LinkedIn.'
       : 'Facebook and LinkedIn: the quote is copied for you, so just paste it into your post.';
     menu.appendChild(note);
@@ -711,6 +711,9 @@
 
   window.TWSShare = {
     enhance: enhance, renderChartImage: renderChartImage, readChart: readChart,
+    // Other pages (e.g. /after-the-amen/) can put the same share menu on their own button.
+    // getOpts returns { type, title, text, url, emailSubject } plus optional copyLabel and note.
+    button: function (btn, host, getOpts) { injectCss(); wireButton(btn, host, getOpts); },
     readAudit: readAudit, renderAuditImage: function (a) { return renderImage(layoutAudit, a, 'audit'); }
   };
   window.TWSGems = window.TWSShare; // older name

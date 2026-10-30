@@ -10,6 +10,7 @@ import {
   dailyFileNameFor as fileNameFor
 } from './shared/render-content.js';
 import { SITE_URL, dailyBodyHtml } from '../netlify/shared/daily-email.js';
+import { nextStepsHtml } from './shared/next-steps.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -539,6 +540,7 @@ async function buildDailyPages(visible) {
       JSON_LD: jsonLdFor(e, seo),
       SERIES_HTML: eyebrowHtml(e),
       HERO_TITLE: hasLeadershipPage(e) ? 'Leadership &amp; Culture' : 'Daily',
+      NEXT_STEPS_HTML: nextStepsHtml(e, hasLeadershipPage(e) ? 'leadership' : 'daily'),
       SIGNUP_TITLE: hasLeadershipPage(e) ? 'Get posts like this in your inbox' : 'Get the Daily in your inbox',
       SIGNUP_TEXT: hasLeadershipPage(e)
         ? 'Leadership posts like this one come out as part of The Daily. Get each one by email the morning it comes out.'

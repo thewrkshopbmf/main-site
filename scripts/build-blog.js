@@ -1,5 +1,6 @@
 // scripts/build-blog.js
 import fs from 'fs/promises';
+import { nextStepsHtml } from './shared/next-steps.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
@@ -214,6 +215,7 @@ async function main() {
       AUTHOR: e.author || '',
       READING_MIN: String(e.reading_minutes || 0),
       BODY_HTML: bodyHTML,
+      NEXT_STEPS_HTML: nextStepsHtml(e, 'blog'),
       PREV_HREF: prev ? `../${path.dirname(fileNameFor(prev))}/` : '#',
       NEXT_HREF: next ? `../${path.dirname(fileNameFor(next))}/` : '#'
     });

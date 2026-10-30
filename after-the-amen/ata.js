@@ -279,6 +279,81 @@ days.forEach((d, i) => {
   const read = el('p'); read.append(el('strong', {}, 'Read: '), passageLink(d[1]));
   const ref = el('p'); ref.append(el('strong', {}, 'Reflect: '), d[2]);
   const pr = el('p'); pr.append(el('strong', {}, 'Practice: '), d[3]);
-  det.append(read, ref, pr); dayWrap.append(det);
+  det.id = 'day-' + (i + 1);
+  const share = el('div', { className: 'ata-share ata-day-share' });
+  const sb = el('button', { type: 'button', className: 'ata-share-btn' }, 'Share this day');
+  sb.dataset.day = String(i);
+  share.append(sb);
+  det.append(read, ref, pr, share); dayWrap.append(det);
 });
+
+/* ---------- Sharing (the page and its days only; answers are never shared) ---------- */
+const BRAND = 'TheWrkShop.com';
+// Share the live address; on staging or a preview, share that copy so testers land on the version they are testing.
+const canonical = ((document.querySelector('link[rel=canonical]') || {}).href || location.href).split('#')[0];
+const pageUrl = /(^|\.)thewrkshop\.com$/.test(location.hostname) || location.protocol === 'file:'
+  ? canonical : location.origin + new URL(canonical).pathname;
+const isPhone = !!(navigator.share && window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+function shareButton(btn, getOpts) {
+  if (!btn) return;
+  if (isPhone) {
+    // Phones: open the phone's own share sheet in one tap (Messages, Mail, contacts, Copy).
+    // The link goes inside the message so no app can keep the link and drop the words.
+    btn.addEventListener('click', ev => {
+      ev.stopPropagation();
+      const o = getOpts();
+      try { if (window.gtag) window.gtag('event', 'share', { content_type: o.type, method: 'native' }); } catch (e) {}
+      navigator.share({ text: o.text + '\n' + o.url }).catch(() => {});
+    });
+    return;
+  }
+  if (window.TWSShare && window.TWSShare.button) { window.TWSShare.button(btn, btn.parentElement, getOpts); return; }
+  // Fallback if the shared menu script did not load: the phone's share sheet, or copy the link.
+  btn.addEventListener('click', () => {
+    const o = getOpts(), body = o.text + '\n' + o.url;
+    if (navigator.share) navigator.share({ text: body }).catch(() => {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(body).then(() => { btn.textContent = 'Link copied ✓'; });
+  });
+}
+shareButton($('sharePage'), () => ({
+  type: 'after_the_amen', title: 'Share After the Amen',
+  text: 'After the Amen: what happens between the prayer you pray and the life you live afterward. A free, private reflection from ' + BRAND,
+  url: pageUrl, emailSubject: 'After the Amen, from ' + BRAND,
+  copyLabel: 'Copy link', note: 'Facebook and LinkedIn: the message is copied for you, so just paste it into your post.'
+}));
+shareButton($('shareGroup'), () => ({
+  type: 'after_the_amen_group', title: 'Send to your group',
+  text: 'For our group: After the Amen, a 45-minute gathering on trusting God after we pray. Nobody has to share anything private. From ' + BRAND,
+  url: pageUrl + '#group', emailSubject: 'For our group: After the Amen',
+  copyLabel: 'Copy link', note: 'Text it to your group before you meet. The link opens straight to the guide.'
+}));
+dayWrap.querySelectorAll('.ata-day-share .ata-share-btn').forEach(btn => {
+  const i = +btn.dataset.day, d = days[i];
+  shareButton(btn, () => ({
+    type: 'after_the_amen_day', title: 'Share Day ' + (i + 1),
+    text: '\u201c' + d[2] + '\u201d Day ' + (i + 1) + ' of After the Amen: ' + d[0] + ' \u00b7 ' + d[1] + ' \u2014 ' + BRAND,
+    url: pageUrl + '#day-' + (i + 1), emailSubject: 'Day ' + (i + 1) + ' of After the Amen: ' + d[0]
+  }));
+});
+
+/* ---------- Links straight to a section (#group) or a day (#day-3) ---------- */
+function openFromHash() {
+  const h = (location.hash || '').slice(1);
+  const day = /^day-([1-7])$/.exec(h);
+  if (day) {
+    showTab('journey', false);
+    const d = $('day-' + day[1]);
+    d.open = true;
+    d.scrollIntoView({ block: 'center' });
+    d.classList.add('share-highlight');
+    setTimeout(() => d.classList.remove('share-highlight'), 3000);
+    return;
+  }
+  if (['start', 'lab', 'mirror', 'path', 'journey', 'group'].includes(h)) {
+    showTab(h, false);
+    $('ataTabs').scrollIntoView({ block: 'start' });
+  }
+}
+openFromHash();
+window.addEventListener('hashchange', openFromHash);
 })();

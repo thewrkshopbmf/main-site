@@ -1,0 +1,102 @@
+{
+  "date": "2026-06-30",
+  "title": "Who Am I Performing For?",
+  "headline": "Are You Making Decisions for an Audience?",
+  "headline_sub": "Who Am I Performing For?",
+  "tagline": "The need for approval often hides behind the desire to “keep everyone happy.”",
+  "seo_title": "Are You Making Decisions for an Audience? A Mirror for Men | TheWrkShop",
+  "seo_description": "The need for approval often hides behind the desire to keep everyone happy. A reflection, prayer and declaration for men who live for others' reactions.",
+  "keywords": [
+    "people pleasing",
+    "approval",
+    "fear of criticism",
+    "identity in Christ"
+  ],
+  "verse_ref": "Galatians 1:10",
+  "verse_text": "Am I now trying to win the approval of human beings, or of God?",
+  "scriptures": [
+    {
+      "ref": "Galatians 1:10",
+      "text": "Am I now trying to win the approval of human beings, or of God?"
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_mirror",
+      "label": "The Mirror",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Think about your last week."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "What decisions were influenced by:",
+            "- fear of criticism,",
+            "- desire for approval,",
+            "- fear of disappointing someone?"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Now ask:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "If I wasn’t worried about their reaction…. would I make the same decision?"
+        }
+      ]
+    },
+    {
+      "key": "hidden_gem",
+      "label": "Hidden Gem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The need for approval often hides behind the desire to “keep everyone happy.”"
+        }
+      ]
+    },
+    {
+      "key": "daily_prayer",
+      "label": "Daily Prayer",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Jesus,",
+            "Forgive me for the ways I seek approval from people more than faithfulness to You.",
+            "I confess how often I fear criticism, rejection, misunderstanding, and disappointment.",
+            "Help me anchor my identity in what You say about me.",
+            "Teach me to love people without being controlled by them.",
+            "Give me courage to stand firm when conviction and popularity collide.",
+            "You are the Way.",
+            "Help me follow You even when the crowd chooses another direction.",
+            "Amen."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "declaration",
+      "label": "Declaration",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "I do not belong to the crowd.",
+            "I belong to Christ.",
+            "My identity is not determined by approval.",
+            "My worth is not determined by applause.",
+            "God’s opinion carries the greatest weight in my life.",
+            "I will not compromise conviction for acceptance.",
+            "Jesus is the Way.",
+            "And I will follow Him regardless of the crowd."
+          ]
+        }
+      ]
+    }
+  ]
+}

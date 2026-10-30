@@ -506,6 +506,7 @@ async function submitAssessment() {
   }
 
   state.currentResults = computeResults(state.answers);
+  if (!state.isComplete) { try { if (window.gtag) gtag('event', 'gifts_assessment_complete'); } catch (e) {} }
   state.isComplete = true;
   saveSnapshot();
   state.hasPendingSave = true;
@@ -560,6 +561,7 @@ async function handleSendResultsEmail() {
       throw new Error(payload.error || `Email send failed with status ${response.status}`);
     }
 
+    try { if (window.gtag) gtag('event', 'gifts_results_emailed'); } catch (e) {}
     state.resultEmail = email;
     state.resultEmailSentAt = new Date().toISOString();
     saveSnapshot();

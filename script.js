@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ api_key: apiKey, email })
         });
         if (response.ok) {
+          try { if (window.gtag) gtag('event', 'newsletter_signup', { source: location.pathname }); } catch (e) {}
           if (successMessage) successMessage.style.display = "block";
           form.reset();
         } else {
@@ -152,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
         f.reset();
+        try { if (window.gtag) gtag('event', 'daily_signup', { source: location.pathname, already_active: data.status === 'active' }); } catch (e) {}
         say(data.status === 'active'
           ? (data.message || "You're already on the list.")
           : "Almost done. Check your inbox and tap the confirm button, and the Daily will come to you.", true);
@@ -179,6 +181,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // --------- Daily Feature loader ----------
+// Cut long text at a word boundary so cards never end mid-word (matches scripts/build-home.js)
+function trimTeaser(text, max = 180) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const at = cut.lastIndexOf(' ');
+  return (at > 60 ? cut.slice(0, at) : cut).replace(/[\s,;:.–—-]+$/, '') + '…';
+}
 (async function loadDailyFeature(){
   const ctx = document.querySelector('.daily-feature');
   if (!ctx) return;
@@ -219,8 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (el.title && mainTitle) el.title.textContent = mainTitle;
     if (el.subtitle) { el.subtitle.textContent = subTitle; el.subtitle.hidden = !subTitle; }
     if (el.teaser) {
-      const teaser = d.insight_teaser || (Array.isArray(d.insight) ? d.insight[0] : (d.insight || ''));
-      el.teaser.textContent = (teaser || '').trim();
+      const teaser = d.tagline || d.insight_teaser || (Array.isArray(d.insight) ? d.insight[0] : (d.insight || ''));
+      el.teaser.textContent = trimTeaser(teaser);
     }
     if (el.ref && d.verse_ref) el.ref.textContent = d.verse_ref;
     if (el.snip && d.verse_text) el.snip.textContent = '“' + d.verse_text + '”';
@@ -636,4 +646,17 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('beforeunload', () => {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   });
+});
+
+// --------- Pathway click tracking ("Go deeper" cards, homepage resources) ----------
+document.addEventListener('click', (e) => {
+  const a = e.target.closest && e.target.closest('a[data-next-step], #resource-grid a.resource-card');
+  if (!a || !window.gtag) return;
+  try {
+    gtag('event', 'pathway_click', {
+      step: a.getAttribute('data-next-step') || 'home_resources',
+      destination: a.getAttribute('href'),
+      from_page: location.pathname
+    });
+  } catch (err) {}
 });

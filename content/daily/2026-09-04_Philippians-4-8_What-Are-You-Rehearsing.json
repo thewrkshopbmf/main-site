@@ -1,0 +1,142 @@
+{
+  "date": "2026-09-04",
+  "title": "What Are You Rehearsing?",
+  "headline": "How Replaying Hurt Shapes What You Believe",
+  "headline_sub": "What Are You Rehearsing?",
+  "tagline": "The original event may have lasted five minutes. Rehearsal can give it five years of influence.",
+  "series": "The Battle Before the Battle",
+  "seo_title": "How Replaying Hurt Shapes You: Philippians 4:8 for Men | TheWrkShop",
+  "seo_description": "One painful moment shouldn't write a theology about everybody. A devotional for men on rumination, generalizing hurt and Philippians 4:8.",
+  "keywords": [
+    "replaying hurt",
+    "rumination",
+    "Philippians 4:8",
+    "Psalm 1",
+    "offense",
+    "trust"
+  ],
+  "verse_ref": "Philippians 4:8",
+  "verse_text": "….whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable….think about such things.",
+  "scriptures": [
+    {
+      "ref": "Philippians 4:8",
+      "text": "….whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable….think about such things."
+    },
+    {
+      "ref": "Psalm 1:2",
+      "text": "….whose delight is in the law of the LORD, and who meditates on his law day and night."
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_revelation",
+      "label": "The Revelation",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "The conversation ended three hours ago.",
+            "But you’re still having it.",
+            "They aren’t in the car.",
+            "But you’re talking to them.",
+            "They aren’t beside you at 2:00 AM.",
+            "But you’re replaying what they said.",
+            "Again.",
+            "And again."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "The event happened once.",
+            "But internally, it keeps happening.",
+            "This is rehearsal."
+          ]
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "The original event may have lasted five minutes. Rehearsal can give it five years of influence."
+        }
+      ]
+    },
+    {
+      "key": "processing_or_rehearsing_a_verdict",
+      "label": "Processing or Rehearsing a Verdict?",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Reflection can produce wisdom.",
+            "Grieving requires remembering.",
+            "Testimony requires memory.",
+            "But there is a difference between processing…. and rehearsing a verdict."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "event_rehearsal_generalization_belief",
+      "label": "Event, Rehearsal, Generalization, Belief",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Event: someone betrayed you.",
+            "Rehearsal: “I can’t believe they did that.” Again. Again.",
+            "Generalization: “People always do this.”",
+            "Belief: “You can’t trust people.”"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Then someone new enters your life.",
+            "They have not betrayed you.",
+            "But they’re entering a story already written by someone else.",
+            "That’s how yesterday can start interpreting tomorrow."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "one_painful_moment_should_not_write_a_theology",
+      "label": "One Painful Moment Should Not Write a Theology",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "One person left: “Everyone leaves.”",
+            "One leader failed: “Leadership is corrupt.”",
+            "One church wounded you: “Church is fake.”",
+            "One relationship ended: “I’m unlovable.”",
+            "One unanswered prayer: “God doesn’t care.”"
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Specific event becomes universal conclusion.",
+            "That is why rehearsal matters."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hidden_gems",
+      "label": "Hidden Gems",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "History is formative. History is not sovereign.",
+            "Biblical meditation is deliberate rehearsal of truth in a world constantly rehearsing rival interpretations.",
+            "The time to furnish the mind with truth is before the storm asks the mind for an interpretation.",
+            "Don’t only starve the lie. Feed the truth.",
+            "Fear does not get final authorship."
+          ]
+        }
+      ]
+    }
+  ]
+}

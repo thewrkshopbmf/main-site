@@ -1,0 +1,103 @@
+{
+  "date": "2026-07-01",
+  "title": "Fear Wearing a Suit",
+  "headline": "When Wisdom Is Really Fear of People",
+  "headline_sub": "Where Am I Shrinking Back?",
+  "tagline": "Many men call it wisdom. Sometimes it’s fear wearing a suit.",
+  "seo_title": "When Wisdom Is Really Fear of Man: Men's Group Questions | TheWrkShop",
+  "seo_description": "Many men call it wisdom. Sometimes it's fear wearing a suit. Discussion questions for men's groups on approval, fear of man and conviction.",
+  "keywords": [
+    "fear of man",
+    "men's group discussion questions",
+    "approval",
+    "Joshua 24:15"
+  ],
+  "verse_ref": "Joshua 24:15",
+  "verse_text": "Choose for yourselves this day whom you will serve.",
+  "scriptures": [
+    {
+      "ref": "Joshua 24:15",
+      "text": "Choose for yourselves this day whom you will serve."
+    }
+  ],
+  "sections": [
+    {
+      "key": "before_you_gather",
+      "label": "Before You Gather",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Ask yourself:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Where am I shrinking back because I fear someone’s opinion?"
+        }
+      ]
+    },
+    {
+      "key": "hidden_gem",
+      "label": "Hidden Gem",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Many men call it wisdom.",
+            "Sometimes it’s fear wearing a suit."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "group_discussion",
+      "label": "Group Discussion",
+      "blocks": [
+        {
+          "type": "numbered_list",
+          "items": [
+            "Why do men crave approval?",
+            "Whose approval has had the greatest influence on your life?",
+            "How has fear of man shaped past decisions?",
+            "Where are you currently tempted to compromise conviction?",
+            "What is the difference between loving people and living for their approval?",
+            "What would change if God’s approval became enough?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "drop_the_mic",
+      "label": "Drop the Mic",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Every man serves something.",
+            "Some serve applause.",
+            "Some serve acceptance.",
+            "Some serve reputation.",
+            "Some serve comfort."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Joshua stood before Israel and said:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "“Choose this day whom you will serve.”"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "The question remains the same.",
+            "Will you live for the Kingdom….",
+            "or the crowd?"
+          ]
+        }
+      ]
+    }
+  ]
+}

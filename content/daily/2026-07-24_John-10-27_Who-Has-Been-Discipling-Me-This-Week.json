@@ -1,0 +1,112 @@
+{
+  "date": "2026-07-24",
+  "title": "Who Has Been Discipling Me This Week?",
+  "headline": "Who Is Discipling You This Week?",
+  "headline_sub": "Interesting or Interested?",
+  "tagline": "You become remarkably similar to the voices you repeatedly trust.",
+  "seo_title": "Who Is Discipling You? A Weekly Audit (John 10:27) | TheWrkShop",
+  "seo_description": "Every week someone disciples you: news, social media, fear or Jesus. A short audit for men on the voices shaping them, from John 10:27.",
+  "keywords": [
+    "discipleship",
+    "influence",
+    "John 10:27",
+    "listening",
+    "self-examination"
+  ],
+  "verse_ref": "John 10:27",
+  "verse_text": "My sheep hear My voice, and I know them, and they follow Me.",
+  "scriptures": [
+    {
+      "ref": "John 10:27",
+      "text": "My sheep hear My voice, and I know them, and they follow Me."
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_audit",
+      "label": "The Audit",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Every week someone disciples you.",
+            "Social media.",
+            "News.",
+            "Friends.",
+            "Fear.",
+            "Entertainment.",
+            "Your own thoughts.",
+            "Or Jesus."
+          ]
+        },
+        {
+          "type": "lines",
+          "items": [
+            "The question isn’t whether you’re being influenced.",
+            "The question is…. by whom?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "this_week",
+      "label": "This Week",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "What voice shaped my emotions most?",
+            "What voice occupied my attention most?",
+            "Which voice brought peace?",
+            "Which voice created anxiety?",
+            "Which voice sounded most like Jesus?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "personal_inventory_rate_1_10",
+      "label": "Personal Inventory (Rate 1–10)",
+      "blocks": [
+        {
+          "type": "bullet_list",
+          "items": [
+            "I pause before responding.",
+            "I ask questions before giving advice.",
+            "I remain teachable.",
+            "I create room for God.",
+            "I listen well."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "root_question",
+      "label": "Root Question",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Would those closest to me describe me as interesting…. or interested?"
+        }
+      ]
+    },
+    {
+      "key": "hidden_gem",
+      "label": "Hidden Gem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You become remarkably similar to the voices you repeatedly trust."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Disciples don’t merely hear information.",
+            "They learn to recognize the Shepherd’s voice."
+          ]
+        }
+      ]
+    }
+  ]
+}

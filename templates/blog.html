@@ -27,8 +27,8 @@
     .blog-head{margin:2rem 0 1.25rem}
     .blog-head h1{margin:.25rem 0 .35rem;line-height:1.15}
     .badge{display:inline-block;font-size:.75rem;font-weight:700;background:#3e2c23;color:#f4f1ee;padding:.2rem .6rem;border-radius:999px;letter-spacing:.02em}
-    .meta{display:flex;gap:.6rem;align-items:center;color:#6b5b53}
-    .excerpt{color:#4b3f39;margin-top:.5rem}
+    .meta{display:flex;gap:.6rem;align-items:center;color:#3e2c23}
+    .excerpt{color:#3e2c23;margin-top:.5rem}
 
     /* Sections */
     .section{margin:1.25rem 0}
@@ -80,10 +80,24 @@
         <a class="btn" id="nextLink" href="{{NEXT_HREF}}">Next →</a>
       </nav>
     </article>
+
+    {{NEXT_STEPS_HTML}}
   </main>
 
   <footer>
     <div class="footer-content">
+      <nav class="footer-links" aria-label="Browse">
+        <a href="/upstream/">Start Here</a>
+        <a href="/daily.html">The Daily</a>
+        <a href="/leadership/">Leadership</a>
+        <a href="/get-known.html">Groups</a>
+        <a href="/library/">Library</a>
+        <a href="/blog-archive.html">Blog</a>
+        <a href="/podcasts.html">Podcast</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/#contact">Contact</a>
+        <a href="/privacy/">Privacy</a>
+      </nav>
       <div class="footer-logo"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop" width="233" height="180"></div>
       <p>&copy; 2026 <span class="sitename"></span>. All rights reserved.</p>
     </div>

@@ -1,0 +1,101 @@
+{
+  "date": "2026-06-24",
+  "title": "Why God Works Slower Than We Prefer",
+  "headline": "Why Does God Work Slower Than We Want?",
+  "headline_sub": "What Is He Developing While You Wait?",
+  "tagline": "Many blessings arrive later because the man receiving them is still being prepared.",
+  "seo_title": "Why Does God Make Us Wait? A Devotional for Men | TheWrkShop",
+  "seo_description": "Many blessings arrive later because the man receiving them is still being prepared. Questions for men in a season of waiting, plus a prayer.",
+  "keywords": [
+    "waiting on God",
+    "God's timing",
+    "patience",
+    "men's group questions"
+  ],
+  "verse_ref": "Galatians 6:9",
+  "verse_text": "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.",
+  "scriptures": [
+    {
+      "ref": "Galatians 6:9",
+      "text": "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up."
+    }
+  ],
+  "sections": [
+    {
+      "key": "before_you_gather",
+      "label": "Before You Gather",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Think about a season where God took much longer than you wanted."
+        },
+        {
+          "type": "paragraph",
+          "text": "Now ask:"
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "Looking back, what was He developing that could not have been developed faster?"
+        }
+      ]
+    },
+    {
+      "key": "hidden_gem",
+      "label": "Hidden Gem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Many blessings arrive later because the man receiving them is still being prepared."
+        }
+      ]
+    },
+    {
+      "key": "group_discussion",
+      "label": "Group Discussion",
+      "blocks": [
+        {
+          "type": "numbered_list",
+          "items": [
+            "Why do men struggle with waiting?",
+            "What season of waiting are you currently experiencing?",
+            "How do you know when waiting is wisdom versus passivity?",
+            "What has God produced in previous waiting seasons?",
+            "What are you tempted to rush right now?",
+            "How might hurry be revealing a trust issue?"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "daily_prayer",
+      "label": "Daily Prayer",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Jesus,",
+            "Forgive me for measuring growth only by what I can see.",
+            "Forgive me for demanding fruit while neglecting the process that produces it.",
+            "Help me trust Your timing.",
+            "Help me remain faithful when progress feels slow.",
+            "Strengthen my patience.",
+            "Deepen my roots."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "And teach me to trust that You are working beneath the surface even when I cannot see immediate results."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "You are the Way.",
+            "And I choose to walk Your pace instead of demanding my own.",
+            "Amen."
+          ]
+        }
+      ]
+    }
+  ]
+}
