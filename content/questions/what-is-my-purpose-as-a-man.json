@@ -46,15 +46,15 @@
     }
   ],
   "steps": [
-    "Make a list called \"What's in my hand\": your skills, experiences, relationships, resources and the hard things you've survived.",
+    "Take the private [What's in Your Hand?](/tools/whats-in-your-hand/) inventory: your skills, resources, story, scars, relationships and the hard things you've survived.",
     "Circle the one you've been dismissing as \"not enough.\" Ask God what He might want to do with it.",
     "Take the free [Spiritual Gifts Assessment](/assessment.html) to see how God has wired you to serve.",
     "This week, use one thing on your list to serve one person, without being asked and without telling anyone."
   ],
   "tool": {
-    "href": "/assessment.html",
-    "title": "Spiritual Gifts Assessment",
-    "text": "A free assessment that helps you see how God has gifted you to serve, with your results sent to you by email."
+    "href": "/tools/whats-in-your-hand/",
+    "title": "What's in Your Hand? A Private Purpose Inventory",
+    "text": "See what God has already put in your hands, name the excuse you've been using, and take one step this week. About 10 minutes. Nothing is saved or sent."
   },
   "related": [
     {
