@@ -1,4 +1,6 @@
-// 12:01 am Central: if a Daily or a weekend blog post is dated today but isn't live yet, release it.
+// 12:01 am Central: if a Daily is dated today but isn't live yet, release it.
+// 2:01 pm Central: if a Weekend 4-3-2-1 blog post is dated today but isn't live yet, release it
+// (build-blog.js keeps a post dated today hidden until 2 pm Central).
 // It does this by adding an empty "Release daily" commit to main, which makes Netlify
 // rebuild the site. When that deploy finishes, deploy-succeeded emails it to the list.
 import { centralNow, fetchLiveDaily, SITE_URL } from '../shared/daily-list.js';
@@ -34,25 +36,28 @@ async function gh(path, options = {}) {
 export default async () => {
   const { date: today, hour } = centralNow();
 
-  // Two schedules run (05:01 and 06:01 UTC) so one of them is 12:01 am Central in summer and winter.
-  if (hour !== 0) return new Response(`Not midnight in Chicago (hour ${hour}); nothing to do.`);
+  // Schedules run at 05:01/06:01 UTC and 19:01/20:01 UTC so that, in summer and winter alike,
+  // one lands at 12:01 am Central (Dailies) and one at 2:01 pm Central (weekend blog posts).
+  const isDailyRun = hour === 0;
+  const isBlogRun = hour === 14;
+  if (!isDailyRun && !isBlogRun) return new Response(`Not a release hour in Chicago (hour ${hour}); nothing to do.`);
   if (!TOKEN || !OWNER || !REPO) {
     console.error('daily-release: missing GITHUB_TOKEN / GITHUB_REPO_OWNER / GITHUB_REPO_NAME');
     return new Response('Missing GitHub settings', { status: 500 });
   }
 
   try {
-    // Something dated today that isn't live yet: a Daily (Mon–Fri) or a weekend blog post (Saturday 4-3-2-1).
+    // Something dated today that isn't live yet: a Daily (12:01 am run) or a Weekend 4-3-2-1 post (2:01 pm run).
     const toRelease = [];
 
-    const dailyFiles = await gh(`/contents/content/daily?ref=${encodeURIComponent(BRANCH)}`);
+    const dailyFiles = isDailyRun ? await gh(`/contents/content/daily?ref=${encodeURIComponent(BRANCH)}`) : [];
     const todaysDaily = (Array.isArray(dailyFiles) ? dailyFiles : []).filter(f => f.name.startsWith(`${today}_`));
     if (todaysDaily.length) {
       const live = await fetchLiveDaily().catch(() => null);
       if (!(live && live.date === today)) toRelease.push(`daily ${todaysDaily[0].name.replace(/\.json$/, '')}`);
     }
 
-    const blogFiles = await gh(`/contents/content/blog?ref=${encodeURIComponent(BRANCH)}`).catch(() => []);
+    const blogFiles = isBlogRun ? await gh(`/contents/content/blog?ref=${encodeURIComponent(BRANCH)}`).catch(() => []) : [];
     const todaysBlog = (Array.isArray(blogFiles) ? blogFiles : []).filter(f => f.name.startsWith(`${today}_`));
     if (todaysBlog.length) {
       const liveBlog = await fetchLiveBlog().catch(() => null);
@@ -87,4 +92,4 @@ export default async () => {
   }
 };
 
-export const config = { schedule: '1 5,6 * * *' };
+export const config = { schedule: '1 5,6,19,20 * * *' };
