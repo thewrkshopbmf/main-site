@@ -370,6 +370,7 @@ def overview():
 
 KITS = [
     ('/studies/reflex-vs-response/', 'One session · Luke 6:45', 'The Reflex vs. the Response', 'What comes out of you first under pressure, and how Jesus forms new reflexes. Leader guide, handout and a 7-day Reflex Journal.'),
+    ('/studies/doing-vs-dwelling/', 'Four sessions · John 15', 'The Doing vs. the Dwelling', 'Why many men are busy for God but rarely with Him. Activity vs. abiding, service vs. surrender, ministry vs. the Master, fruit vs. effort.'),
     ('/studies/spotting-leaders/', 'Leader guide · For group leaders and coaches', 'Spotting Leaders: What’s in His Hand?', 'Use the What’s in Your Hand? inventory in intake calls and groups to see which men God is raising up: micro-signals, an invitation ladder and a tracker.'),
 ]
 

@@ -62,3 +62,5 @@
   .pdf-mode .st-print-brand { display:none; }
   .pdf-mode .st-rights { display:none; }
 }
+.st-sessions li { grid-template-columns: 1.6rem 1fr; }
+.st-sessions span strong { font-family: inherit; font-size: 1rem; letter-spacing: 0; color: var(--ink); }
