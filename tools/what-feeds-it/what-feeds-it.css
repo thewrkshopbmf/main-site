@@ -1,0 +1,65 @@
+/* What’s Feeding It? Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.wf-verse { margin: 0 0 1.4rem; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.wf-verse p { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 2.6vw, 1.35rem); line-height: 1.45; color: var(--white); margin: 0 0 0.25rem; }
+.wf-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+
+.wf-facts { list-style: none; padding: 0 !important; margin: 1rem 0 !important; border: 1px solid var(--line); background: var(--bone); }
+.wf-facts li { padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); margin: 0 !important; }
+.wf-facts li:last-child { border-bottom: 0; }
+
+.wf-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 0 0 0.4rem; display: block; }
+.wf-prompt { font-size: 0.9rem; color: var(--steel); margin: 0 0 0.6rem; }
+button.pt-option.wf-notsure { color: var(--steel); border-style: dashed; }
+.wf-follow { min-height: 0.5rem; }
+
+.wf-result { border: 1px solid var(--line); border-left: 3px solid #9a8f84; padding: 1rem 1.15rem; margin: 0.75rem 0; background: var(--white); }
+.wf-result.is-top { border-left-color: var(--ember); background: var(--bone); }
+.wf-result h3 { font-family: 'Inter', sans-serif; font-size: 1.02rem; font-weight: 600; margin: 0 0 0.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.wf-result h3 span { font-family: 'Space Mono', monospace; font-weight: 400; font-size: 0.72rem; color: var(--steel); padding-top: 0.2rem; }
+.wf-result.is-top h3 span { color: var(--ember); }
+.wf-result p { margin: 0.5rem 0 0; }
+.wf-result .pt-label { margin-bottom: 0.15rem; }
+.wf-result .pt-bar { margin-top: 0.5rem; }
+.wf-result.is-top .pt-bar > div { background: var(--ember); }
+
+.wf-start { background: var(--ash); color: var(--parchment); padding: 1.35rem 1.4rem; margin: 1.5rem 0 0; }
+.wf-start .pt-label { color: #d6ad61; }
+.wf-start .pt-h3 { color: var(--white); margin-top: 0.3rem; }
+.wf-start p { margin: 0.3rem 0 0; }
+.pt-page .wf-start a { color: #e7c77c; }
+
+.wf-gap { margin-top: 2.25rem !important; }
+.pt-tool-card ol.wf-days { padding-left: 0; }
+.wf-days .pt-day-num { min-width: 3.4rem; }
+.wf-days a { position: relative; z-index: 1; }
+.wf-prayer { font-family: 'Playfair Display', serif; font-size: 1.1rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.25rem 1.4rem; margin: 2rem 0 0; }
+.wf-prayer .pt-label { font-family: 'Space Mono', monospace; }
+.wf-prayer p { margin: 0.5rem 0 0; }
+
+/* below-the-tool sections */
+.wf-group { margin-top: 2.5rem; }
+.wf-group ul, .wf-group ol { padding-left: 1.2rem; }
+.wf-group li { margin: 0.3rem 0; }
+.wf-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.wf-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.wf-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+@media print {
+  .pt-tool { padding: 0; }
+  .wf-result, .wf-days li, .wf-prayer, .wf-start { break-inside: avoid; }
+  .wf-start { background: #fff; color: #000; border: 1px solid #999; }
+  .wf-start .pt-h3, .wf-start .pt-label { color: #000; }
+  .wf-prayer { background: #fff; }
+  .pt-field textarea { border-color: #999; min-height: 0; }
+  body.wf-has-results .wf-group, body.wf-has-results .pt-note, body.wf-has-results .pt-hero .pt-lead, body.wf-has-results .wf-verse { display: none !important; }
+}
+.wf-check { display:flex; gap:0.75rem; align-items:flex-start; padding:0.7rem 0.9rem; border:1px solid var(--line); background:var(--white); margin:0.45rem 0; cursor:pointer; }
+.wf-check input { margin-top:0.25rem; width:1.1rem; height:1.1rem; accent-color: var(--ember); flex:0 0 auto; }
+.wf-window { border-left:3px solid var(--gold); padding:0.6rem 0.9rem; margin:0.5rem 0; background:var(--bone); }
+.wf-window strong { display:block; }
+.wf-deep dt { font-family:'Space Mono', monospace; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ember); margin-top:0.7rem; }
+.wf-deep dd { margin:0.2rem 0 0; }
+.wf-help { border:2px solid var(--ember); padding:1rem 1.15rem; margin:2rem 0 0; background:var(--white); }
+.wf-help ul { padding-left:1.1rem; margin:0.4rem 0 0; }
+.wf-roots { columns: 2; column-gap: 1.5rem; padding-left:1.2rem; }
+@media (max-width: 560px) { .wf-roots { columns: 1; } }
