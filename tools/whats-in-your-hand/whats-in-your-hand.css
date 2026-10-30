@@ -1,0 +1,82 @@
+/* What’s in Your Hand? Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.wh-verse { margin: 0 0 1.4rem; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.wh-verse p { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 2.6vw, 1.35rem); line-height: 1.45; color: var(--white); margin: 0 0 0.25rem; }
+.wh-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+
+.wh-facts { list-style: none; padding: 0 !important; margin: 1rem 0 !important; border: 1px solid var(--line); background: var(--bone); }
+.wh-facts li { padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); margin: 0 !important; }
+.wh-facts li:last-child { border-bottom: 0; }
+
+.wh-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 0 0 0.4rem; display: block; }
+.wh-prompt { font-size: 0.9rem; color: var(--steel); margin: 0 0 0.6rem; }
+button.pt-option.wh-notsure { color: var(--steel); border-style: dashed; }
+.wh-follow { min-height: 0.5rem; }
+
+.wh-result { border: 1px solid var(--line); border-left: 3px solid #9a8f84; padding: 1rem 1.15rem; margin: 0.75rem 0; background: var(--white); }
+.wh-result.is-top { border-left-color: var(--ember); background: var(--bone); }
+.wh-result h3 { font-family: 'Inter', sans-serif; font-size: 1.02rem; font-weight: 600; margin: 0 0 0.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.wh-result h3 span { font-family: 'Space Mono', monospace; font-weight: 400; font-size: 0.72rem; color: var(--steel); padding-top: 0.2rem; }
+.wh-result.is-top h3 span { color: var(--ember); }
+.wh-result p { margin: 0.5rem 0 0; }
+.wh-result .pt-label { margin-bottom: 0.15rem; }
+.wh-result .pt-bar { margin-top: 0.5rem; }
+.wh-result.is-top .pt-bar > div { background: var(--ember); }
+
+.wh-start { background: var(--ash); color: var(--parchment); padding: 1.35rem 1.4rem; margin: 1.5rem 0 0; }
+.wh-start .pt-label { color: #d6ad61; }
+.wh-start .pt-h3 { color: var(--white); margin-top: 0.3rem; }
+.wh-start p { margin: 0.3rem 0 0; }
+.pt-page .wh-start a { color: #e7c77c; }
+
+.wh-gap { margin-top: 2.25rem !important; }
+.pt-tool-card ol.wh-days { padding-left: 0; }
+.wh-days .pt-day-num { min-width: 3.4rem; }
+.wh-days a { position: relative; z-index: 1; }
+.wh-prayer { font-family: 'Playfair Display', serif; font-size: 1.1rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.25rem 1.4rem; margin: 2rem 0 0; }
+.wh-prayer .pt-label { font-family: 'Space Mono', monospace; }
+.wh-prayer p { margin: 0.5rem 0 0; }
+
+/* below-the-tool sections */
+.wh-group { margin-top: 2.5rem; }
+.wh-group ul, .wh-group ol { padding-left: 1.2rem; }
+.wh-group li { margin: 0.3rem 0; }
+.wh-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.wh-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.wh-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+@media print {
+  .pt-tool { padding: 0; }
+  .wh-result, .wh-days li, .wh-prayer, .wh-start { break-inside: avoid; }
+  .wh-start { background: #fff; color: #000; border: 1px solid #999; }
+  .wh-start .pt-h3, .wh-start .pt-label { color: #000; }
+  .wh-prayer { background: #fff; }
+  .pt-field textarea { border-color: #999; min-height: 0; }
+  body.wh-has-results .wh-group, body.wh-has-results .pt-note, body.wh-has-results .pt-hero .pt-lead, body.wh-has-results .wh-verse { display: none !important; }
+}
+.wh-item { border:1px solid var(--line); background:var(--white); padding:.9rem 1rem; margin:.7rem 0; }
+.wh-item h3 { font-family:'Inter', sans-serif; font-size:1rem; margin:0; }
+.wh-item .wh-ref { font-family:'Space Mono', monospace; font-size:.7rem; letter-spacing:.12em; color:var(--ember); text-transform:uppercase; }
+.wh-item p { margin:.3rem 0 .5rem; font-size:.92rem; color:var(--steel); }
+.wh-item textarea { min-height:70px !important; }
+.wh-chips { display:flex; flex-wrap:wrap; gap:.45rem; margin:.5rem 0 .8rem; }
+.wh-chips button { font:inherit; font-size:.9rem; padding:.45rem .8rem; border:1px solid var(--line); background:var(--white); border-radius:999px; cursor:pointer; color:var(--ink); }
+.wh-chips button[aria-pressed="true"] { background:var(--ash); color:var(--white); border-color:var(--ash); }
+.wh-step { border-top:1px solid var(--line); padding-top:1rem; margin-top:1.25rem; }
+.wh-num { font-family:'Space Mono', monospace; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ember); display:block; }
+.wh-card { background:var(--bone); border:1px solid var(--line); padding:1rem 1.15rem; margin:.75rem 0; }
+.wh-card p { margin:.35rem 0 0; }
+.wh-gem { font-family:'Playfair Display', serif; font-size:1.2rem; line-height:1.5; text-align:center; padding:1.2rem 1rem; margin:1.75rem 0; border-top:2px solid var(--gold); border-bottom:2px solid var(--gold); }
+.wh-pattern dt { font-weight:700; margin-top:.9rem; }
+.wh-pattern dt span { font-family:'Space Mono', monospace; font-weight:400; font-size:.72rem; letter-spacing:.1em; color:var(--ember); margin-left:.35rem; }
+.wh-pattern dd { margin:.2rem 0 0; }
+.wh-says { font-style:italic; }
+/* Print branding */
+.wh-print-brand, .wh-print-rights { display:none; }
+@media print {
+  .wh-print-brand { display:flex !important; align-items:center; justify-content:space-between; border-bottom:2px solid #3e2c23; padding-bottom:.5rem; margin-bottom:1rem; }
+  .wh-print-brand img { height:44px; width:auto; }
+  .wh-print-brand span { font-family:'Space Mono', monospace; font-size:.8rem; letter-spacing:.08em; }
+  .wh-print-rights { display:block !important; font-size:.75rem; color:#555; border-top:1px solid #999; margin-top:1.5rem; padding-top:.5rem; }
+  body.wh-has-results .wh-learn { display:none !important; }
+}
+.so-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
