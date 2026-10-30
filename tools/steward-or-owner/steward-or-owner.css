@@ -1,0 +1,77 @@
+/* Steward or Owner? Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.so-verse { margin: 0 0 1.4rem; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.so-verse p { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 2.6vw, 1.35rem); line-height: 1.45; color: var(--white); margin: 0 0 0.25rem; }
+.so-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+
+.so-facts { list-style: none; padding: 0 !important; margin: 1rem 0 !important; border: 1px solid var(--line); background: var(--bone); }
+.so-facts li { padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); margin: 0 !important; }
+.so-facts li:last-child { border-bottom: 0; }
+
+.so-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 0 0 0.4rem; display: block; }
+.so-prompt { font-size: 0.9rem; color: var(--steel); margin: 0 0 0.6rem; }
+button.pt-option.so-notsure { color: var(--steel); border-style: dashed; }
+.so-follow { min-height: 0.5rem; }
+
+.so-result { border: 1px solid var(--line); border-left: 3px solid #9a8f84; padding: 1rem 1.15rem; margin: 0.75rem 0; background: var(--white); }
+.so-result.is-top { border-left-color: var(--ember); background: var(--bone); }
+.so-result h3 { font-family: 'Inter', sans-serif; font-size: 1.02rem; font-weight: 600; margin: 0 0 0.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.so-result h3 span { font-family: 'Space Mono', monospace; font-weight: 400; font-size: 0.72rem; color: var(--steel); padding-top: 0.2rem; }
+.so-result.is-top h3 span { color: var(--ember); }
+.so-result p { margin: 0.5rem 0 0; }
+.so-result .pt-label { margin-bottom: 0.15rem; }
+.so-result .pt-bar { margin-top: 0.5rem; }
+.so-result.is-top .pt-bar > div { background: var(--ember); }
+
+.so-start { background: var(--ash); color: var(--parchment); padding: 1.35rem 1.4rem; margin: 1.5rem 0 0; }
+.so-start .pt-label { color: #d6ad61; }
+.so-start .pt-h3 { color: var(--white); margin-top: 0.3rem; }
+.so-start p { margin: 0.3rem 0 0; }
+.pt-page .so-start a { color: #e7c77c; }
+
+.so-gap { margin-top: 2.25rem !important; }
+.pt-tool-card ol.so-days { padding-left: 0; }
+.so-days .pt-day-num { min-width: 3.4rem; }
+.so-days a { position: relative; z-index: 1; }
+.so-prayer { font-family: 'Playfair Display', serif; font-size: 1.1rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.25rem 1.4rem; margin: 2rem 0 0; }
+.so-prayer .pt-label { font-family: 'Space Mono', monospace; }
+.so-prayer p { margin: 0.5rem 0 0; }
+
+/* below-the-tool sections */
+.so-group { margin-top: 2.5rem; }
+.so-group ul, .so-group ol { padding-left: 1.2rem; }
+.so-group li { margin: 0.3rem 0; }
+.so-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.so-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.so-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+@media print {
+  .pt-tool { padding: 0; }
+  .so-result, .so-days li, .so-prayer, .so-start { break-inside: avoid; }
+  .so-start { background: #fff; color: #000; border: 1px solid #999; }
+  .so-start .pt-h3, .so-start .pt-label { color: #000; }
+  .so-prayer { background: #fff; }
+  .pt-field textarea { border-color: #999; min-height: 0; }
+  body.so-has-results .so-group, body.so-has-results .pt-note, body.so-has-results .pt-hero .pt-lead, body.so-has-results .so-verse { display: none !important; }
+}
+.so-pair { display:grid; gap:0.6rem; margin:0.5rem 0 1rem; }
+.so-pair p { margin:0; padding:0.75rem 0.95rem; border:1px solid var(--line); background:var(--white); }
+.so-pair p strong { font-family:'Space Mono', monospace; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ember); display:block; margin-bottom:0.2rem; }
+.so-chips { display:flex; flex-wrap:wrap; gap:0.45rem; margin:0.5rem 0 0.8rem; }
+.so-chips button { font:inherit; font-size:0.9rem; padding:0.45rem 0.8rem; border:1px solid var(--line); background:var(--white); border-radius:999px; cursor:pointer; }
+.so-chips button[aria-pressed="true"] { background:var(--ash); color:var(--white); border-color:var(--ash); }
+.so-step { border-top:1px solid var(--line); padding-top:1rem; margin-top:1.25rem; }
+.so-step h3 { margin:0 0 0.35rem; }
+.so-num { font-family:'Space Mono', monospace; font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--ember); display:block; }
+.so-gem { font-family:'Playfair Display', serif; font-size:1.2rem; line-height:1.5; text-align:center; padding:1.2rem 1rem; margin:1.75rem 0; border-top:2px solid var(--gold); border-bottom:2px solid var(--gold); }
+.so-deep dt { font-family:'Space Mono', monospace; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ember); margin-top:0.7rem; }
+.so-deep dd { margin:0.2rem 0 0; }
+.so-card { background:var(--bone); border:1px solid var(--line); padding:1rem 1.15rem; margin:0.75rem 0; }
+.so-card p { margin:0.35rem 0 0; }
+.so-help { border:2px solid var(--ember); padding:1rem 1.15rem; margin:2rem 0 0; background:var(--white); }
+.so-says { font-style:italic; }
+.so-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+.so-page .pt-field input[type="text"] {
+  width: 100%; font: inherit; color: var(--ink); background: var(--white); border: 1px solid #b9b0a3; padding: 0.75rem 0.85rem; border-radius: 0;
+}
+.so-page .pt-field input[type="text"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--ink); }
