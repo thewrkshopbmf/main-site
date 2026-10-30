@@ -371,7 +371,6 @@ def overview():
 KITS = [
     ('/studies/reflex-vs-response/', 'One session · Luke 6:45', 'The Reflex vs. the Response', 'What comes out of you first under pressure, and how Jesus forms new reflexes. Leader guide, handout and a 7-day Reflex Journal.'),
     ('/studies/doing-vs-dwelling/', 'Eight sessions · John 15', 'The Doing vs. the Dwelling', 'Why many men are busy for God but rarely with Him, and how abiding leads to being sent. Hands-on activities and a phone quick check in Sessions 5–8.'),
-    ('/studies/spotting-leaders/', 'Leader guide · For group leaders and coaches', 'Spotting Leaders: What’s in His Hand?', 'Use the What’s in Your Hand? inventory in intake calls and groups to see which men God is raising up: micro-signals, an invitation ladder and a tracker.'),
 ]
 
 
@@ -400,9 +399,7 @@ def write(rel, content):
     print('wrote', rel)
 
 
-def make_pdfs(pages=None):
-    pages = pages or [(f'studies/{SLUG}/leader-guide/', f'downloads/{SLUG}-leader-guide.pdf'),
-                      (f'studies/{SLUG}/handout/', f'downloads/{SLUG}-handout.pdf')]
+def make_pdfs():
     import http.server
     import socketserver
     import threading
@@ -426,7 +423,8 @@ def make_pdfs(pages=None):
                       'border-top:1px solid #c9aa8c;padding-top:4px;font-family:Helvetica,Arial,sans-serif;font-size:8px;color:#6b5b53;">'
                       f'<span>{html.escape(RIGHTS)}</span>'
                       '<span style="white-space:nowrap;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>')
-            for src, out in pages:
+            for src, out in [(f'studies/{SLUG}/leader-guide/', f'downloads/{SLUG}-leader-guide.pdf'),
+                             (f'studies/{SLUG}/handout/', f'downloads/{SLUG}-handout.pdf')]:
                 pg.goto(f'http://127.0.0.1:{port}/{src}', wait_until='networkidle')
                 pg.emulate_media(media='print')
                 pg.evaluate("document.body.classList.add('pdf-mode')")
