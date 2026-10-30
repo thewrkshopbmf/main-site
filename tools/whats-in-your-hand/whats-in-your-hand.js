@@ -6,10 +6,9 @@
    Google Analytics receives start/finish counts only, never answers. */
 (function () {
   'use strict';
+  var KEY = 'tws.inyourhand.v1';
   var app = document.getElementById('whApp');
   if (!app) return;
-  var FIXED = app.getAttribute('data-aud') || '';
-  var KEY = FIXED ? 'tws.inyourhand.' + FIXED + '.v1' : 'tws.inyourhand.v1';
 
   /* ---------- content ---------- */
   var CATS = [
@@ -104,49 +103,6 @@
         ['Proverbs 27:17', 'Ask an older man you respect to grab a meal or coffee with you.'],
         ['Psalm 119:9', 'Look back on the week: what did you learn about what God can use?']],
       help: 'If you’re going through something heavy and need to talk to someone now, call or text 988 (US), and tell a parent, pastor or another adult you trust.' },
-    'leaders': { label: 'Leaders & teams', secular: true, commit: true, url: 'thewrkshop.com/tools/use-what-you-have/',
-      title: 'Most leaders start with what they don’t have.',
-      lead: 'Not enough budget, headcount, time or authority. The best leaders start somewhere else: with what’s already in their hands. This private inventory helps you see the assets you’ve been overlooking, name the excuse you’ve been using, and put one to work this week.',
-      names: { staff: 'Your skills', oil: 'Your resources', sling: 'Your hard-won experience', voice: 'Your influence', story: 'Your story', scars: 'Your setbacks', people: 'Your team & network', yes: 'Your capacity' },
-      cats: {
-        staff: ['What can you do better than most people around you?', 'Negotiating, simplifying complex problems, building trust fast, running a tight meeting…'],
-        oil: ['What resources do you already control or have access to, even small ones?', 'A modest budget, a tool nobody uses well, a meeting slot, a quiet hour each morning…'],
-        sling: ['What did a past role, setback or side project train into you that you’ve stopped noticing?', 'Turning around a failing team, sales from the ground up, managing through layoffs…'],
-        voice: ['Where do people already listen to you, with or without a title?', 'My peers, the new hires, a client who trusts me, an industry group…'],
-        story: ['What have you lived through that would help someone on your team?', 'Starting over in my 40s, getting fired and recovering, building something from nothing…'],
-        scars: ['What failure or setback taught you something you couldn’t have learned another way?', 'A launch that flopped, a hire I got wrong, a year I burned out…'],
-        people: ['Who is already on your team or in your network that you haven’t fully tapped?', 'A quiet analyst with big ideas, a former boss, a peer in another department…'],
-        yes: ['Where do you actually have capacity, if you protected it?', 'Friday afternoons, the first hour of the day, one lunch a week…'] },
-      onlyExcuses: [
-        { says: 'We don’t have the budget.', ref: 'John 6:9', answer: 'Constraints aren’t the end of the plan. They’re often the start of a better one. Five loaves and two fish looked ridiculous for a crowd of thousands, and it was enough.' },
-        { says: 'I don’t have the title or authority.', ref: 'Nehemiah 2:1–8', answer: 'Influence comes before position. Nehemiah was a cupbearer, not a governor, when he started rebuilding a city. He used the access he already had.' },
-        { says: 'My team isn’t strong enough.', ref: 'Judges 7:2–7', answer: 'Gideon’s army was cut from 32,000 to 300 before the win. A smaller, committed team that knows what it has often outperforms a bigger one that doesn’t.' },
-        { says: 'I don’t have time.', ref: 'Ephesians 5:15–16', answer: 'You don’t find time. You decide what it’s for. Protect one hour this week for the thing only you can do.' },
-        { says: 'I’m not experienced enough.', ref: '1 Samuel 17:34–40', answer: 'David didn’t fight in borrowed armor. He used what he’d practiced when nobody was watching. Your unusual background may be your edge.' },
-        { says: 'We tried that and it failed.', ref: 'Luke 5:4–6', answer: 'Peter had fished all night and caught nothing. One more try, in a different way, filled the nets. A past failure is data, not a verdict.' }],
-      text: {
-        s3h: 'What are you holding back?',
-        s3p: 'Leaders often hoard what would make their team better: information, credit, access, a skill they’ve never taught. What are you holding that would multiply if you gave it away?',
-        s3ph: 'Credit for wins, a client relationship, how I really make decisions, my calendar…',
-        s4h: 'Who needs what you have?',
-        s4p: 'Name one person on your team, or one problem in front of you, that what’s in your hands could help right now.',
-        s4ph: 'A new manager who’s drowning, the handoff between sales and operations…',
-        s5h: 'Commit to one step',
-        s5say: 'Say it out loud:',
-        s5check: 'I said it',
-        s5ph: 'For example: spend Friday’s first hour teaching Maria how I build forecasts…',
-        startHere: 'Start right here.',
-        daysIntro: 'One action a day. Each one is rooted in a principle as old as Moses’ staff; the reference is there if you want to read it.',
-        keepGoing: 'use the <a href="/studies/spotting-leaders/">Spotting Leaders</a> guide to see who on your team is ready for more, or read TheWrkShop’s <a href="/leadership/">leadership writing</a>.',
-        summaryTitle: 'USE WHAT YOU HAVE' },
-      days: [['Exodus 4:2', 'Write down the one asset you’ve been underusing. Decide one way to use it this week.'],
-        ['John 6:9–11', 'Pick one constraint you’ve been complaining about. Ask your team, “What could we do with only what we have?”'],
-        ['Nehemiah 2:4–5', 'Use the access you already have: make one request you’ve been waiting for permission to make.'],
-        ['Matthew 25:14–30', 'Name one thing you’ve buried out of fear of failing. Take the first small step on it.'],
-        ['2 Timothy 2:2', 'Teach one skill to someone on your team that you’ve been doing yourself.'],
-        ['Luke 10:33–35', 'Notice one person who’s struggling. Stop and ask how you can help.'],
-        ['Luke 16:10', 'Look back on the week: what happened when you used what you already had?']],
-      principle: 'Every leader faces the same question Moses did: “What is that in your hand?” God almost never starts with what we don’t have. He starts with what’s already there, and multiplies what’s offered. What you keep shrinks. What you pour out multiplies.' },
     'couples': { label: 'Couples', we: true,
       title: 'What’s in your house?',
       lead: 'Elisha asked a struggling widow, “What do you have in your house?” She had a little oil, and God filled every jar she could find. Priscilla and Aquila opened their home, and a church met there. Take this inventory together: what has God already put in your house?',
@@ -180,19 +136,10 @@
   if (!st || typeof st !== 'object' || !st.inv) st = fresh();
   if (!st.done) st.done = {};
   if (!AUD[st.aud]) st.aud = '';
-  if (FIXED && AUD[FIXED]) st.aud = FIXED;
-  else (function () { var h = (location.hash || '').replace('#', ''); if (AUD[h] && h && AUD_KEYS.indexOf(h) > -1) st.aud = h; })();
+  (function () { var h = (location.hash || '').replace('#', ''); if (AUD[h] && h) st.aud = h; })();
   function A() { return AUD[st.aud] || AUD['']; }
   function we() { return !!A().we; }
-  function excuses() { return A().onlyExcuses || (A().excuses || []).concat(EXCUSES); }
-  function nameFor(c) { return (A().names && A().names[c.id]) || c.name; }
-  function refLabel(c) { return A().secular ? 'Rooted in ' + c.ref : c.ref; }
-  function tx(k, d) { var t = A().text && A().text[k]; return t != null ? t : d; }
-  function prayTail(long) {
-    if (A().commit) return '';
-    if (we()) return long ? 'It doesn’t look like enough to us. We put it in Your hands. Use it for Your glory and for the people in front of us.' : 'It doesn’t look like enough to us. We put it in Your hands.';
-    return long ? 'It doesn’t look like enough to me. I put it in Your hands. Use it for Your glory and for the people in front of me.' : 'It doesn’t look like enough to me. I put it in Your hands.';
-  }
+  function excuses() { return (A().excuses || []).concat(EXCUSES); }
   function days() { return A().days || DAYS; }
   function promptFor(c) { var o = A().cats && A().cats[c.id]; return o ? o[0] : c.prompt; }
   function phFor(c) { var o = A().cats && A().cats[c.id]; return o ? o[1] : c.ph; }
@@ -208,7 +155,6 @@
   }
   function prayerStart() {
     var l = dismissedLabel();
-    if (A().commit) return l ? 'This week I’ll put this to work: ' + l + '.' : 'This week I’ll put what’s already in my hands to work.';
     if (we()) return l ? 'Lord, what’s in our hands is this: ' + l + '.' : 'Lord, here’s what’s in our hands.';
     return l ? 'Lord, what’s in my hand is this: ' + l + '.' : 'Lord, here’s what’s in my hand.';
   }
@@ -222,7 +168,7 @@
   function intro() {
     var resume = filled().length > 0;
     var a = A();
-    var chooser = FIXED ? '' : '<p class="pt-small"><strong>Who’s this for?</strong></p><div class="wh-chips" role="group" aria-label="Who is this for?">' +
+    var chooser = '<p class="pt-small"><strong>Who’s this for?</strong></p><div class="wh-chips" role="group" aria-label="Who is this for?">' +
       AUD_KEYS.map(function (k) { return '<button type="button" data-a="aud" data-v="' + k + '" aria-pressed="' + (st.aud === k) + '">' + esc(AUD[k].label) + '</button>'; }).join('') + '</div>';
     return chooser + (a.title ? '<h2 class="pt-h2">' + esc(a.title) + '</h2><p>' + esc(a.lead) + '</p>' :
       '<h2 class="pt-h2">God almost never starts with what you don’t have.</h2>' +
@@ -240,9 +186,9 @@
       '<h2 class="pt-h2">' + (we() ? 'What’s in your house?' : 'What’s in your hand?') + '</h2>' +
       '<p class="pt-muted">Fill in the ones that fit. A few honest words is enough. Skip any that don’t.</p>' +
       CATS.map(function (c) {
-        return '<div class="wh-item"><span class="wh-ref">' + esc(refLabel(c)) + '</span><h3>' + esc(nameFor(c)) + (A().secular ? '' : ': ' + esc(c.what)) + '</h3>' +
+        return '<div class="wh-item"><span class="wh-ref">' + esc(c.ref) + '</span><h3>' + esc(c.name) + ': ' + esc(c.what) + '</h3>' +
           '<p>' + esc(promptFor(c)) + '</p>' +
-          '<div class="pt-field"><label class="so-sr" for="wh_' + c.id + '">' + esc(nameFor(c)) + '</label><textarea id="wh_' + c.id + '" data-inv="' + c.id + '" maxlength="500" placeholder="' + esc(phFor(c)) + '">' + esc(st.inv[c.id] || '') + '</textarea></div></div>';
+          '<div class="pt-field"><label class="so-sr" for="wh_' + c.id + '">' + esc(c.name) + '</label><textarea id="wh_' + c.id + '" data-inv="' + c.id + '" maxlength="500" placeholder="' + esc(phFor(c)) + '">' + esc(st.inv[c.id] || '') + '</textarea></div></div>';
       }).join('') +
       '<p class="pt-feedback" id="whNeed" aria-live="polite"></p>' +
       '<div class="pt-actions">' +
@@ -258,24 +204,23 @@
       '<h2 class="pt-h2">From “not enough” to open hands</h2>' +
       '<div class="wh-step"><span class="wh-num">Step 2</span><h3 class="pt-h3">Which one have you dismissed as “not enough”?</h3>' +
         '<div class="wh-chips" role="group" aria-label="What have you dismissed?">' + f.map(function (c) {
-          return '<button type="button" data-a="dismiss" data-v="' + c.id + '" aria-pressed="' + (st.dismissed === c.id) + '">' + esc(nameFor(c)) + '</button>';
+          return '<button type="button" data-a="dismiss" data-v="' + c.id + '" aria-pressed="' + (st.dismissed === c.id) + '">' + esc(c.name) + '</button>';
         }).join('') + '</div>' +
         '<p>What do you usually tell yourself about it?</p>' +
         '<div class="wh-chips" role="group" aria-label="Your excuse">' + excuses().map(function (e, i) {
           return '<button type="button" data-a="excuse" data-v="' + i + '" aria-pressed="' + (st.excuse === i) + '">' + esc(e.says) + '</button>';
         }).join('') + '</div>' +
         '<div id="whAnswer" aria-live="polite">' + (ex ? '<div class="pt-callout"><p><strong>' + refLink(ex.ref) + '</strong> · ' + esc(ex.answer) + '</p></div>' : '') + '</div></div>' +
-      '<div class="wh-step"><span class="wh-num">Step 3</span><h3 class="pt-h3">' + tx('s3h', 'What are you holding back?') + '</h3>' +
-        '<p class="pt-small pt-muted">' + tx('s3p', 'The woman broke her alabaster jar and poured it all out. The rich young ruler walked away sad because he couldn’t let go. What are you gripping that God may be asking you to open?') + '</p>' +
-        '<div class="pt-field"><label class="so-sr" for="whHold">What I’m holding back</label><textarea id="whHold" data-field="holding" maxlength="1000" placeholder="' + tx('s3ph', 'My time, my money, my comfort, a dream I’ve kept to myself…') + '">' + esc(st.holding) + '</textarea></div></div>' +
-      '<div class="wh-step"><span class="wh-num">Step 4</span><h3 class="pt-h3">' + tx('s4h', 'Who’s in front of you?') + '</h3>' +
-        '<p class="pt-small pt-muted">' + tx('s4p', 'The Samaritan didn’t go looking for a mission. He stopped for the man on his road. Name one person or need you already see.') + '</p>' +
-        '<div class="pt-field"><label class="so-sr" for="whPerson">One person or need</label><textarea id="whPerson" data-field="person" maxlength="500" placeholder="' + tx('s4ph', 'A coworker who’s struggling, a single mom next door, the youth group…') + '">' + esc(st.person) + '</textarea></div></div>' +
-      '<div class="wh-step"><span class="wh-num">Step 5</span><h3 class="pt-h3">' + tx('s5h', 'Open your hands') + '</h3>' +
-        '<p>' + tx('s5say', 'Pray it out loud:') + ' <span class="wh-says">“<span id="whDis">' + esc(prayerStart()) + '</span>' + (prayTail(true) ? ' ' + prayTail(true) : '') + '”</span></p>' +
-        (A().commit ? '<p class="pt-small pt-muted">If you pray: “God, this is what’s in my hand. Use it.”</p>' : '') +
-        '<label class="pt-small"><input type="checkbox" data-prayed' + (st.prayed ? ' checked' : '') + '> ' + tx('s5check', 'I prayed this') + '</label>' +
-        '<div class="pt-field"><label for="whStep">One step I’ll take this week</label><textarea id="whStep" data-field="step" maxlength="1000" placeholder="' + tx('s5ph', 'For example: offer to help Mike move on Saturday…') + '">' + esc(st.step) + '</textarea></div></div>' +
+      '<div class="wh-step"><span class="wh-num">Step 3</span><h3 class="pt-h3">What are you holding back?</h3>' +
+        '<p class="pt-small pt-muted">The woman broke her alabaster jar and poured it all out. The rich young ruler walked away sad because he couldn’t let go. What are you gripping that God may be asking you to open?</p>' +
+        '<div class="pt-field"><label class="so-sr" for="whHold">What I’m holding back</label><textarea id="whHold" data-field="holding" maxlength="1000" placeholder="My time, my money, my comfort, a dream I’ve kept to myself…">' + esc(st.holding) + '</textarea></div></div>' +
+      '<div class="wh-step"><span class="wh-num">Step 4</span><h3 class="pt-h3">Who’s in front of you?</h3>' +
+        '<p class="pt-small pt-muted">The Samaritan didn’t go looking for a mission. He stopped for the man on his road. Name one person or need you already see.</p>' +
+        '<div class="pt-field"><label class="so-sr" for="whPerson">One person or need</label><textarea id="whPerson" data-field="person" maxlength="500" placeholder="A coworker who’s struggling, a single mom next door, the youth group…">' + esc(st.person) + '</textarea></div></div>' +
+      '<div class="wh-step"><span class="wh-num">Step 5</span><h3 class="pt-h3">Open your hands</h3>' +
+        '<p>Pray it out loud: <span class="wh-says">“<span id="whDis">' + esc(prayerStart()) + '</span> ' + (we() ? 'It doesn’t look like enough to us. We put it in Your hands. Use it for Your glory and for the people in front of us.' : 'It doesn’t look like enough to me. I put it in Your hands. Use it for Your glory and for the people in front of me.') + '”</span></p>' +
+        '<label class="pt-small"><input type="checkbox" data-prayed' + (st.prayed ? ' checked' : '') + '> I prayed this</label>' +
+        '<div class="pt-field"><label for="whStep">One step I’ll take this week</label><textarea id="whStep" data-field="step" maxlength="1000" placeholder="For example: offer to help Mike move on Saturday…">' + esc(st.step) + '</textarea></div></div>' +
       '<div class="pt-actions">' +
         '<button type="button" class="pt-btn pt-btn--ghost" data-a="toInv">← Back</button>' +
         '<button type="button" class="pt-btn pt-btn--ember" data-a="finish">See my reflection →</button>' +
@@ -288,32 +233,31 @@
       '<h2 class="pt-h2">' + (we() ? 'What’s already in your house' : 'What’s already in your hand') + '</h2>' +
       '<p class="pt-muted">You came in thinking you might not have enough. Look at the list.</p>';
     html += f.length ? f.map(function (c) {
-      return '<div class="wh-result' + (c.id === st.dismissed ? ' is-top' : '') + '"><h3>' + esc(nameFor(c)) + '<span>' + esc(refLabel(c)) + '</span></h3><p>' + esc(st.inv[c.id].trim()) + '</p>' +
-        (c.id === st.dismissed ? '<p class="pt-small"><strong>You called this “not enough.”</strong> ' + tx('startHere', 'God usually starts right here.') + '</p>' : '') + '</div>';
+      return '<div class="wh-result' + (c.id === st.dismissed ? ' is-top' : '') + '"><h3>' + esc(c.name) + '<span>' + esc(c.ref) + '</span></h3><p>' + esc(st.inv[c.id].trim()) + '</p>' +
+        (c.id === st.dismissed ? '<p class="pt-small"><strong>You called this “not enough.”</strong> God usually starts right here.</p>' : '') + '</div>';
     }).join('') : '<div class="pt-callout"><p>You didn’t list anything yet. Go back and write even one small thing. God starts with what you have.</p></div>';
 
     if (ex) html += '<div class="wh-card"><strong>The excuse: “' + esc(ex.says) + '”</strong><p>' + esc(ex.answer) + ' (' + refLink(ex.ref) + ')</p></div>';
     html += '<h3 class="pt-h3 wh-gap">Your next step</h3><div class="wh-card">' +
       '<p><strong>Holding back:</strong> ' + (esc(st.holding.trim()) || '<em>Not written yet</em>') + '</p>' +
       '<p><strong>In front of me:</strong> ' + (esc(st.person.trim()) || '<em>Not written yet</em>') + '</p>' +
-      '<p><strong>' + (A().commit ? 'My commitment' : we() ? 'Our prayer' : 'My prayer') + ':</strong> “' + esc(prayerStart()) + (prayTail(false) ? ' ' + prayTail(false) : '') + '”' + (st.prayed ? ' ✓' : '') + '</p>' +
+      '<p><strong>' + (we() ? 'Our prayer' : 'My prayer') + ':</strong> “' + esc(prayerStart()) + ' ' + (we() ? 'It doesn’t look like enough to us. We put it in Your hands.' : 'It doesn’t look like enough to me. I put it in Your hands.') + '”' + (st.prayed ? ' ✓' : '') + '</p>' +
       '<p><strong>One step this week:</strong> ' + (esc(st.step.trim()) || '<em>Not written yet</em>') + '</p></div>';
     html += '<div class="wh-gem">What you keep shrinks. What you pour out multiplies.</div>';
     html += '<h3 class="pt-h3 wh-gap">A seven-day path</h3>' +
-      '<p class="pt-muted pt-small">' + tx('daysIntro', 'One day at a time. Read the passage, pray honestly and take the step. Check off a day when it’s done.') + '</p>' +
+      '<p class="pt-muted pt-small">One day at a time. Read the passage, pray honestly and take the step. Check off a day when it’s done.</p>' +
       '<ol class="pt-days wh-days">' + days().map(function (d, i) {
         return '<li><label><input type="checkbox" data-day="' + i + '"' + (st.done[i] ? ' checked' : '') + '><span class="pt-day-num">Day ' + (i + 1) + '</span>' +
           '<span class="pt-day-text"><strong>' + refLink(d[0]) + '</strong><br>' + esc(d[1]) + '</span></label></li>';
       }).join('') + '</ol>' +
       '<p class="pt-progress" id="whDaysDone" aria-live="polite">' + Object.keys(st.done).length + ' of 7 days done</p>';
-    if (A().principle) html += '<div class="wh-prayer"><span class="pt-label">The principle underneath</span><p>' + esc(A().principle) + '</p></div>';
-    else html += '<div class="wh-prayer"><span class="pt-label">A prayer</span><p>Father, I’ve spent so much time looking at what I don’t have. Open my eyes to what You’ve already put in my hands. Forgive me for burying what You gave me out of fear. Here is my staff, my story, my scars and my yes. They don’t look like much to me, but they’re Yours. Multiply what I give, and lead me to the people You want me to serve. Amen.</p></div>';
+    html += '<div class="wh-prayer"><span class="pt-label">A prayer</span><p>Father, I’ve spent so much time looking at what I don’t have. Open my eyes to what You’ve already put in my hands. Forgive me for burying what You gave me out of fear. Here is my staff, my story, my scars and my yes. They don’t look like much to me, but they’re Yours. Multiply what I give, and lead me to the people You want me to serve. Amen.</p></div>';
     if (A().help) html += '<div class="wh-help"><p>' + esc(A().help) + '</p></div>';
     html += '<div class="pt-actions pt-no-print">' +
         '<button type="button" class="pt-btn" data-a="copy">Copy my reflection</button>' +
         '<button type="button" class="pt-btn pt-btn--ghost" data-a="print">Print / save as PDF</button>' +
       '</div><p class="pt-feedback pt-no-print" id="whFb" aria-live="polite"></p>' +
-      '<div class="pt-callout pt-no-print"><p><strong>Keep going:</strong> ' + tx('keepGoing', 'see how God has gifted you to serve with the <a href="/assessment.html">Spiritual Gifts Assessment</a>, read <a href="/questions/what-is-my-purpose-as-a-man/">What is my purpose as a man?</a>, or <a href="/get-known.html">get known</a> and join a group of men who’ll walk it out with you.') + '</p></div>' +
+      '<div class="pt-callout pt-no-print"><p><strong>Keep going:</strong> see how God has gifted you to serve with the <a href="/assessment.html">Spiritual Gifts Assessment</a>, read <a href="/questions/what-is-my-purpose-as-a-man/">What is my purpose as a man?</a>, or <a href="/get-known.html">get known</a> and join a group of men who’ll walk it out with you.</p></div>' +
       '<div class="pt-actions pt-no-print">' +
         '<button type="button" class="pt-btn pt-btn--ghost" data-a="toInv">Edit my answers</button>' +
         '<button type="button" class="pt-btn pt-btn--ghost" data-a="clear">Clear my answers</button>' +
@@ -323,11 +267,11 @@
 
   function summaryText() {
     var f = filled(), ex = st.excuse != null ? excuses()[st.excuse] : null;
-    var lines = [tx('summaryTitle', 'WHAT’S IN YOUR HAND?') + ' · ' + (we() ? 'OUR' : 'MY') + ' PRIVATE REFLECTION' + (st.aud && !FIXED ? ' · ' + A().label.toUpperCase() : ''), 'TheWrkShop · ' + (A().url || ('thewrkshop.com/tools/whats-in-your-hand/' + (st.aud ? '#' + st.aud : ''))), ''];
-    f.forEach(function (c) { lines.push(nameFor(c).toUpperCase() + (c.id === st.dismissed ? ' (the one I called “not enough”)' : '') + ': ' + st.inv[c.id].trim()); });
+    var lines = ['WHAT’S IN YOUR HAND? · ' + (we() ? 'OUR' : 'MY') + ' PRIVATE REFLECTION' + (st.aud ? ' · ' + A().label.toUpperCase() : ''), 'TheWrkShop · thewrkshop.com/tools/whats-in-your-hand/' + (st.aud ? '#' + st.aud : ''), ''];
+    f.forEach(function (c) { lines.push(c.name.toUpperCase() + (c.id === st.dismissed ? ' (the one I called “not enough”)' : '') + ': ' + st.inv[c.id].trim()); });
     if (ex) lines.push('', 'My excuse: “' + ex.says + '”', 'God’s answer (' + ex.ref + '): ' + ex.answer);
     lines.push('', 'Holding back: ' + (st.holding.trim() || '(not written)'), 'In front of me: ' + (st.person.trim() || '(not written)'),
-      (A().commit ? 'Commitment: ' : 'Prayer: ') + prayerStart() + (prayTail(false) ? ' ' + prayTail(false) : ''),
+      'Prayer: ' + prayerStart() + ' ' + (we() ? 'It doesn’t look like enough to us. We put it in Your hands.' : 'It doesn’t look like enough to me. I put it in Your hands.'),
       'One step this week: ' + (st.step.trim() || '(not written)'), '', 'What you keep shrinks. What you pour out multiplies.', '© 2026 TheWrkShop · thewrkshop.com');
     return lines.join('\n');
   }
@@ -412,7 +356,7 @@
 
   window.addEventListener('hashchange', function () {
     var h = (location.hash || '').replace('#', '');
-    if (!FIXED && AUD[h] && AUD_KEYS.indexOf(h) > -1 && h !== st.aud) { st.aud = h; st.excuse = null; render(false); }
+    if (AUD[h] && h !== st.aud) { st.aud = h; st.excuse = null; render(false); }
   });
 
   render(false);
