@@ -98,16 +98,25 @@ async function main() {
 
   entries.sort((a, b) => a.date.localeCompare(b.date));
   // On the staging preview, show weekend posts up to a week ahead so the Friday draft can be reviewed
-  // before it goes live. Production (thewrkshop.com) still only shows posts dated today or earlier.
+  // before it goes live. Production (thewrkshop.com) only shows posts dated before today, plus a post
+  // dated today once it is 2 pm Central (the Weekend 4-3-2-1 goes live Fridays at 2 pm; see
+  // netlify/functions/daily-release.mjs, which triggers the 2 pm rebuild).
+  const BLOG_RELEASE_HOUR = 14;
   const isStagingPreview = process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging';
   const today = isStagingPreview
     ? new Date(new Date(todayCentralISO() + 'T12:00:00Z').getTime() + 7 * 864e5).toISOString().slice(0, 10)
     : todayCentralISO();
+  const centralHour = Number(new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago', hour: '2-digit', hourCycle: 'h23'
+  }).format(new Date()));
+  const releasedToday = isStagingPreview || centralHour >= BLOG_RELEASE_HOUR;
   if (isStagingPreview) console.log(`[blog] staging preview: showing posts dated through ${today}`);
+  else if (!releasedToday) console.log(`[blog] before 2 pm Central: posts dated ${today} stay hidden until the 2 pm release`);
 
+  const isVisible = e => e.date < today || (e.date === today && releasedToday);
   const allowed = entries.filter(e => e.date >= START_DATE);
-  const visible = allowed.filter(e => e.date <= today);
-  const future = allowed.filter(e => e.date > today);
+  const visible = allowed.filter(isVisible);
+  const future = allowed.filter(e => !isVisible(e));
   const older = entries.filter(e => e.date < START_DATE);
 
   try {
