@@ -1,0 +1,48 @@
+/* Group Studies. Builds on /patterns/patterns.css (same palette and type as the site's tools). */
+.st-section { padding: 2.5rem 0; }
+.st-card { background: var(--white); border: 1px solid var(--line); padding: 1.4rem 1.5rem; margin: 1.25rem 0; }
+.st-card h2, .st-card h3 { margin-top: 0; }
+.st-time { list-style: none; padding: 0; margin: 0.75rem 0 0; }
+.st-time li { display: grid; grid-template-columns: 4.6rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); }
+.st-time li:last-child { border-bottom: 0; }
+.st-time strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ember); }
+.st-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 0; }
+.st-guide h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin: 2.5rem 0 0.25rem; padding-top: 1.25rem; border-top: 2px solid var(--gold); }
+.st-guide h3 { font-family: 'Inter', sans-serif; font-size: 1.05rem; margin: 1.5rem 0 0.4rem; }
+.st-guide .st-min { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); display: block; }
+.st-say { border-left: 3px solid var(--gold); background: var(--bone); padding: 0.85rem 1.1rem; margin: 0.75rem 0; font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.6; }
+.st-say p { margin: 0.35rem 0; }
+.st-ask { border-left: 3px solid var(--ember); padding: 0.6rem 1rem; margin: 0.75rem 0; background: var(--white); }
+.st-ask strong { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); display: block; }
+.st-verse { margin: 0.75rem 0; padding: 0.75rem 1rem; background: var(--white); border: 1px solid var(--line); }
+.st-verse cite { display: block; font-style: normal; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--steel); margin-top: 0.3rem; }
+.st-flow { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin: 1rem 0; }
+.st-flow span { border: 2px solid var(--ash); padding: 0.45rem 0.8rem; background: var(--white); }
+.st-flow i { font-style: normal; color: var(--ember); }
+.st-table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; background: var(--white); }
+.st-table th, .st-table td { border: 1px solid var(--line); padding: 0.5rem 0.7rem; text-align: left; }
+.st-table th { background: var(--ash); color: var(--white); font-weight: 600; }
+.st-lines { border-bottom: 1px solid #b9b0a3; height: 1.9rem; }
+.st-journal { border: 1px solid var(--line); padding: 0.8rem 1rem; margin: 0.6rem 0; background: var(--white); break-inside: avoid; }
+.st-journal h4 { margin: 0 0 0.3rem; font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; color: var(--ember); }
+.st-journal p { margin: 0.4rem 0 0; font-size: 0.92rem; }
+.st-gem { font-family: 'Playfair Display', serif; font-size: 1.25rem; text-align: center; padding: 1.1rem; margin: 2rem 0; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
+.st-kits { display: grid; gap: 1rem; }
+.st-kit { display: block; background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--ember); padding: 1.2rem 1.35rem; text-decoration: none; color: var(--ink) !important; }
+.st-kit h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin: 0.2rem 0 0.35rem; }
+.st-kit p { margin: 0; }
+@media print {
+  #site-header, footer, .pt-no-print, .daily-signup { display: none !important; }
+  .pt-hero { background: #fff !important; color: #000 !important; padding: 0 0 1rem !important; }
+  .pt-hero .pt-h1, .pt-hero .pt-lead, .pt-hero .pt-eyebrow { color: #000 !important; }
+  .pt-hero::before { display: none; }
+  body { background: #fff; }
+  .st-say, .st-ask, .st-verse, .st-journal { break-inside: avoid; }
+  .pt-crumbs { display: none !important; }
+  .st-section { padding-top: 0.5rem; }
+  .st-guide h2 { break-before: auto; break-after: avoid; }
+  a { color: #000 !important; text-decoration: none; }
+}
+.st-steps li { margin: 0.45rem 0; }
+.st-card p, .st-guide > p { margin: 0.7rem 0 0; }
+.st-card ul { margin: 0.6rem 0 0; }
