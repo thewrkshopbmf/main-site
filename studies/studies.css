@@ -62,3 +62,44 @@
   .pdf-mode .st-print-brand { display:none; }
   .pdf-mode .st-rights { display:none; }
 }
+.st-sessions li { grid-template-columns: 1.6rem 1fr; }
+.st-sessions span strong { font-family: inherit; font-size: 1rem; letter-spacing: 0; color: var(--ink); }
+/* Sessions 5–8: activities, quick check, activity sheets */
+.st-act { background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--gold); padding: 1rem 1.2rem; margin: 0.9rem 0; break-inside: avoid; }
+.st-act h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; margin: 0.15rem 0 0.4rem; }
+.st-act p { margin: 0.45rem 0 0; }
+.st-act-meta { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); }
+.st-act-debrief { border-top: 1px dashed var(--line); padding-top: 0.45rem; }
+.st-check { background: var(--white); border: 1px solid var(--line); border-top: 4px solid var(--ember); padding: 1rem 1.2rem; margin: 1rem 0; }
+.st-check h3 { margin: 0 0 0.3rem; }
+.st-check-intro { margin: 0 0 0.6rem; font-size: 0.95rem; color: var(--steel); }
+.st-check ol { margin: 0; padding-left: 1.3rem; }
+.st-check li { margin: 0 0 0.8rem; }
+.st-check-opts { display: grid; gap: 0.35rem; }
+.st-check-opts button { font: inherit; font-size: 0.95rem; text-align: left; line-height: 1.35; color: var(--ink); background: #faf7f3; border: 1px solid rgba(62,44,35,.25); border-radius: 10px; padding: 0.6rem 0.8rem; cursor: pointer; min-height: 44px; }
+.st-check-opts button[aria-pressed="true"] { background: #3e2c23; border-color: #3e2c23; color: #fff; }
+.st-check-or { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); padding-left: 0.8rem; }
+.st-check-result { font-weight: 700; margin: 0.4rem 0 0; min-height: 1.2em; }
+.st-check-reset { font: inherit; font-size: 0.85rem; background: none; border: 0; color: var(--ember); text-decoration: underline; cursor: pointer; padding: 0.3rem 0; }
+.st-sheet { border: 1px solid var(--line); padding: 1rem 1.2rem; margin: 1rem 0; background: var(--white); }
+.st-sheet h4 { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); margin: 0.9rem 0 0.3rem; }
+.st-sheet h4:first-child { margin-top: 0; }
+.st-sheet p { margin: 0.4rem 0 0; }
+.st-two td { height: 2.2rem; width: 50%; }
+.st-pace { display: flex; justify-content: space-between; border-top: 3px solid #3e2c23; padding-top: 0.4rem; font-size: 0.85rem; }
+.st-commission { font-family: 'Playfair Display', serif; font-size: 1.1rem; text-align: center; margin-top: 1rem !important; }
+@media print {
+  .st-check { break-inside: avoid; padding: 0.7rem 1rem; }
+  .st-guide h2.st-newpage { break-before: page; }
+  .st-sheet h4 { break-after: avoid; }
+  .st-sheet table, .st-pace { break-inside: avoid; }
+  .st-check li { margin: 0 0 0.35rem; }
+  .st-check-opts { gap: 0; }
+  .st-check-opts button { background: transparent !important; box-shadow: none; }
+  .st-check-intro { font-size: 0; }
+  .st-check-intro::after { content: 'For each pair, check the one that’s more true of you right now.'; font-size: 0.9rem; }
+  .st-check-opts button { background: #fff !important; color: #000 !important; border: 0; padding: 0.15rem 0; min-height: 0; }
+  .st-check-opts button::before { content: '☐  '; }
+  .st-check-or { display: none; }
+  .st-check-result, .st-check-reset { display: none; }
+}

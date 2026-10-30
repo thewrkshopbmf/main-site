@@ -49,7 +49,7 @@ FOOTER = """  <footer>
   </footer>
 
   <script src="/script.js"></script>
-  <script src="/studies/studies.js?v=1"></script>"""
+  <script src="/studies/studies.js?v=2"></script>"""
 
 
 def page(path, title, desc, body, og='/assets/og/reflex-vs-response.png', schema_type='Article'):
@@ -62,7 +62,7 @@ def page(path, title, desc, body, og='/assets/og/reflex-vs-response.png', schema
   <title>{html.escape(title)} | TheWrkShop</title>
   <link rel="stylesheet" href="/style.css"/>
   <link rel="stylesheet" href="/patterns/patterns.css"/>
-  <link rel="stylesheet" href="/studies/studies.css?v=1"/>
+  <link rel="stylesheet" href="/studies/studies.css?v=2"/>
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
   <meta name="description" content="{html.escape(desc)}"/>
   <link rel="canonical" href="{url}"/>
@@ -370,6 +370,7 @@ def overview():
 
 KITS = [
     ('/studies/reflex-vs-response/', 'One session · Luke 6:45', 'The Reflex vs. the Response', 'What comes out of you first under pressure, and how Jesus forms new reflexes. Leader guide, handout and a 7-day Reflex Journal.'),
+    ('/studies/doing-vs-dwelling/', 'Eight sessions · John 15', 'The Doing vs. the Dwelling', 'Why many men are busy for God but rarely with Him, and how abiding leads to being sent. Hands-on activities and a phone quick check in Sessions 5–8.'),
 ]
 
 
