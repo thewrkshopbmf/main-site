@@ -63,3 +63,12 @@ button.pt-option.wf-notsure { color: var(--steel); border-style: dashed; }
 .wf-help ul { padding-left:1.1rem; margin:0.4rem 0 0; }
 .wf-roots { columns: 2; column-gap: 1.5rem; padding-left:1.2rem; }
 @media (max-width: 560px) { .wf-roots { columns: 1; } }
+
+/* Print branding: logo at the top and a copyright line at the end of every printout. */
+.wf-print-brand, .wf-print-rights { display:none; }
+@media print {
+  .wf-print-brand { display:flex !important; align-items:center; justify-content:space-between; border-bottom:2px solid #3e2c23; padding-bottom:.5rem; margin-bottom:1rem; }
+  .wf-print-brand img { height:44px; width:auto; }
+  .wf-print-brand span { font-family:'Space Mono', monospace; font-size:.8rem; letter-spacing:.08em; }
+  .wf-print-rights { display:block !important; font-size:.75rem; color:#555; border-top:1px solid #999; margin-top:1.5rem; padding-top:.5rem; }
+}
