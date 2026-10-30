@@ -48,7 +48,8 @@ FOOTER = """  <footer>
     </div>
   </footer>
 
-  <script src="/script.js"></script>"""
+  <script src="/script.js"></script>
+  <script src="/studies/studies.js?v=1"></script>"""
 
 
 def page(path, title, desc, body, og='/assets/og/reflex-vs-response.png', schema_type='Article'):
@@ -82,6 +83,7 @@ def page(path, title, desc, body, og='/assets/og/reflex-vs-response.png', schema
 <body class="pt-page st-page">
   <div id="site-header"></div>
   <main>
+    <div class="pt-narrow">{PRINT_BRAND}</div>
 {body}
   </main>
 
@@ -105,6 +107,31 @@ def hero(crumbs, eyebrow, h1, lead):
         <p class="pt-lead">{lead}</p>
       </div>
     </section>"""
+
+
+RIGHTS = '© 2026 TheWrkShop · thewrkshop.com. Free to copy and use in your church or men’s group. Please don’t sell, edit or republish it without permission.'
+
+
+def share_bar(path, title, pdf=None, pdf_label='Download PDF'):
+    from urllib.parse import quote
+    url = f'{SITE}/{path}'
+    t, u = quote(title), quote(url)
+    pdf_btn = f'<a class="st-share-pdf" href="{pdf}">{pdf_label}</a>' if pdf else ''
+    return (f'<div class="st-share" data-url="{url}" data-title="{html.escape(title)}" aria-label="Share or print">'
+            f'<span class="st-share-label">Share</span>'
+            f'<button type="button" data-share="native">Share…</button>'
+            f'<button type="button" data-share="copy">Copy link</button>'
+            f'<a href="sms:?&amp;body={t}%20{u}">Text</a>'
+            f'<a href="mailto:?subject={t}&amp;body={u}">Email</a>'
+            f'<button type="button" data-share="print">Print</button>{pdf_btn}</div>')
+
+
+PRINT_BRAND = ('<div class="st-print-brand"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop">'
+               '<span>thewrkshop.com</span></div>')
+
+
+def rights():
+    return f'<p class="st-rights">{RIGHTS}</p>'
 
 
 def say(*lines):
@@ -156,10 +183,7 @@ def leader_guide():
     body += f"""
     <section class="st-section">
       <div class="pt-narrow st-guide">
-        <div class="st-actions pt-no-print">
-          <a class="pt-btn" href="/downloads/reflex-vs-response-leader-guide.pdf">Download the PDF</a>
-          <a class="pt-btn pt-btn--ghost" href="/studies/reflex-vs-response/handout/">Participant handout</a>
-        </div>
+        {share_bar(f'studies/{SLUG}/leader-guide/', f'{TITLE}: Leader Guide', '/downloads/reflex-vs-response-leader-guide.pdf', 'Leader guide PDF')}
 
         <div class="st-card"><h3>The big idea</h3>
           <p>Character isn’t revealed in calm moments. It’s revealed in interruption, because interruption bypasses performance. Pressure doesn’t create what’s in a man. It reveals it. Tonight isn’t about behavior modification. It’s about discovering what each man’s soul has been practicing underneath the surface, and inviting Jesus to form new reflexes.</p>
@@ -246,6 +270,7 @@ def leader_guide():
           <p>Men can practice the pause privately in the <a href="/tools/interruption-lab/">Pattern Interruption Lab</a>, find their pattern with the <a href="/tools/pattern-finder/">Pattern Finder</a>, and read <a href="/questions/how-to-control-anger-as-a-christian-man/">How do I control my anger as a Christian man?</a></p>
           <p class="pt-small pt-muted">If a man shares that his anger is frightening his family, or that anyone is unsafe, follow up privately that week, involve your pastor, and encourage a licensed counselor. If anyone is in danger, call 911.</p>
         </div>
+        {rights()}
       </div>
     </section>"""
     return page(f'studies/{SLUG}/leader-guide/', f'{TITLE}: Leader Guide', 'A complete leader guide for a 60–90 minute men’s Bible study on Luke 6:45: what comes out of you first under pressure, and how Jesus forms new reflexes. Free to print and use.', body)
@@ -260,7 +285,7 @@ def handout():
     body += f"""
     <section class="st-section">
       <div class="pt-narrow st-guide">
-        <div class="st-actions pt-no-print"><a class="pt-btn" href="/downloads/reflex-vs-response-handout.pdf">Download the PDF</a></div>
+        {share_bar(f'studies/{SLUG}/handout/', f'{TITLE}: Participant Handout', '/downloads/reflex-vs-response-handout.pdf', 'Handout PDF')}
         <div class="st-card">
           <p><strong>Read this out loud:</strong> Your first reaction reveals what your soul has practiced most.</p>
           {verse(*LUKE645)}
@@ -288,7 +313,8 @@ def handout():
         <p>Each time pressure hits this week, catch your first reflex once and write it down.</p>
         {days}
         <div class="st-gem">Your reflexes reveal what your soul trusts most under pressure.</div>
-        <p class="pt-small pt-muted">TheWrkShop · thewrkshop.com · Practice the pause anytime in the free Pattern Interruption Lab: thewrkshop.com/tools/interruption-lab/</p>
+        <p class="pt-small pt-muted">Practice the pause anytime in the free Pattern Interruption Lab: thewrkshop.com/tools/interruption-lab/</p>
+        {rights()}
       </div>
     </section>"""
     return page(f'studies/{SLUG}/handout/', f'{TITLE}: Participant Handout', 'Participant notes for the Reflex vs. Response men’s study, with the 3-Second Reflex Interrupt and a 7-day Reflex Journal. Free to print.', body)
@@ -302,6 +328,7 @@ def overview():
     body += f"""
     <section class="st-section">
       <div class="pt-narrow">
+        {share_bar(f'studies/{SLUG}/', f'{TITLE}: A Men’s Group Study')}
         <div class="st-card">
           <h2 class="pt-h3">The teaching</h2>
           <p>It happened fast. Someone cut you off, disrespected you, ignored you or pressed you, and before you could think, something came out: frustration, defensiveness, sarcasm, anger, withdrawal, fear or control. Not planned. Automatic. Afterward you wonder, “Why did I react like that?”</p>
@@ -335,6 +362,7 @@ def overview():
           <p>Want a group to run this with? <a href="/get-known.html">Get known</a> and we’ll help you find one.</p>
         </div>
         <div class="st-gem">Pressure reveals what your soul has been practicing all along.</div>
+        {rights()}
       </div>
     </section>"""
     return page(f'studies/{SLUG}/', f'{TITLE}: A Men’s Group Study on Luke 6:45', 'A free, ready-to-run men’s Bible study on what comes out of you first under pressure: leader guide, participant handout and a 7-day Reflex Journal, from Luke 6:45.', body)
@@ -384,12 +412,24 @@ def make_pdfs():
         with sync_playwright() as pw:
             b = pw.chromium.launch()
             pg = b.new_page()
+            import base64
+            logo = base64.b64encode(open(os.path.join(ROOT, 'assets/images/thewrkshop-logo-transparent-trimmed.png'), 'rb').read()).decode()
+            header = ('<div style="width:100%;margin:0 0.6in;display:flex;justify-content:space-between;align-items:center;'
+                      'border-bottom:1px solid #c9aa8c;padding-bottom:4px;font-family:Helvetica,Arial,sans-serif;font-size:9px;color:#3e2c23;">'
+                      f'<img src="data:image/png;base64,{logo}" style="height:42px;width:auto;">'
+                      '<span style="letter-spacing:1px;">THEWRKSHOP.COM</span></div>')
+            footer = ('<div style="width:100%;margin:0 0.6in;display:flex;justify-content:space-between;gap:12px;'
+                      'border-top:1px solid #c9aa8c;padding-top:4px;font-family:Helvetica,Arial,sans-serif;font-size:8px;color:#6b5b53;">'
+                      f'<span>{html.escape(RIGHTS)}</span>'
+                      '<span style="white-space:nowrap;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>')
             for src, out in [(f'studies/{SLUG}/leader-guide/', f'downloads/{SLUG}-leader-guide.pdf'),
                              (f'studies/{SLUG}/handout/', f'downloads/{SLUG}-handout.pdf')]:
                 pg.goto(f'http://127.0.0.1:{port}/{src}', wait_until='networkidle')
                 pg.emulate_media(media='print')
+                pg.evaluate("document.body.classList.add('pdf-mode')")
                 pg.pdf(path=os.path.join(ROOT, out), format='Letter', print_background=True,
-                       margin={'top': '0.6in', 'bottom': '0.6in', 'left': '0.6in', 'right': '0.6in'})
+                       display_header_footer=True, header_template=header, footer_template=footer,
+                       margin={'top': '1in', 'bottom': '0.8in', 'left': '0.6in', 'right': '0.6in'})
                 print('wrote', out)
             b.close()
         httpd.shutdown()
