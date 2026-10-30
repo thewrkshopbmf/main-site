@@ -80,3 +80,5 @@ button.pt-option.wh-notsure { color: var(--steel); border-style: dashed; }
   body.wh-has-results .wh-learn { display:none !important; }
 }
 .so-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.wh-help { border:2px solid var(--ember); padding:.85rem 1rem; margin:1.5rem 0 0; background:var(--white); }
+.wh-help p { margin:0; }
