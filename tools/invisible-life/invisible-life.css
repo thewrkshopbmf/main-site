@@ -1,0 +1,111 @@
+/* The Invisible Life. Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.il-verse { margin: 1rem 0; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.il-verse p { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.55; margin: 0 0 0.25rem; }
+.il-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); }
+.pt-hero .il-verse p { color: var(--white); font-size: clamp(1.1rem, 2.6vw, 1.35rem); }
+.pt-hero .il-verse cite { color: var(--gold); }
+.pt-h3[tabindex]:focus, .il-scene p:focus { outline: none; }
+
+.il-big { font-family: 'Playfair Display', serif; font-size: 1.15rem; line-height: 1.6; margin: 0.4rem 0 0.8rem; }
+.il-parts li { margin: 0.4rem 0; }
+.il-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 0 0 1.1rem; }
+.il-steps span { height: 4px; background: var(--parchment); }
+.il-steps span.is-done { background: var(--ink); }
+.il-steps span.is-here { background: var(--ember); }
+
+.il-q { border-top: 1px solid var(--line); padding: 0.8rem 0 0.2rem; }
+.il-q p { margin: 0; font-weight: 600; }
+.il-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0 0.7rem; }
+.il-chips button { font: inherit; font-size: 0.9rem; padding: 0.45rem 0.8rem; border: 1px solid #b9b0a3; background: var(--white); color: var(--ink); border-radius: 999px; cursor: pointer; min-height: 40px; }
+.il-chips button[aria-pressed="true"] { background: var(--ash); color: var(--white); border-color: var(--ash); }
+
+.il-screen { background: #14110f; color: #e9e2d6; border: 8px solid #2a231e; border-radius: 10px; padding: 0.9rem 1rem 1rem; margin: 1.2rem 0; font-family: 'Space Mono', monospace; font-size: 0.82rem; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+.il-screen-top { display: flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: #a89e90; margin-bottom: 0.6rem; }
+.il-rec { width: 9px; height: 9px; border-radius: 50%; background: #d0482a; animation: il-blink 1.6s infinite; }
+@keyframes il-blink { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .il-rec { animation: none; } }
+.il-screen p { display: flex; justify-content: space-between; gap: 0.75rem; margin: 0.35rem 0; border-bottom: 1px dashed rgba(255,255,255,.12); padding-bottom: 0.35rem; }
+.il-screen span { color: #a89e90; }
+.il-screen b { font-weight: 400; color: #fff; text-align: right; }
+.il-screen b.is-god { color: #e7c77c; }
+.il-screen-empty { color: #a89e90; display: block !important; border: 0 !important; }
+
+.il-scene { background: var(--ash); color: var(--parchment); padding: 1.1rem 1.2rem; margin: 0.4rem 0 1rem; }
+.il-scene p { font-family: 'Playfair Display', serif; font-size: 1.15rem; line-height: 1.55; color: var(--white); margin: 0.35rem 0 0; }
+.il-feel { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: #e7c77c; }
+.il-legend { font-size: 1rem; color: var(--steel); font-weight: 500; }
+.il-truth { margin-top: 0.8rem; }
+
+.il-roots .pt-option { font-size: 0.95rem; }
+.il-roots .pt-option:disabled { opacity: 0.4; cursor: not-allowed; }
+.il-ref { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--steel); margin-left: 0.3rem; white-space: nowrap; }
+.il-tree { display: block; width: 100%; max-width: 420px; height: auto; margin: 1rem auto; }
+.il-soil { fill: #6b4f3a; opacity: 0.12; }
+.il-ground { stroke: #6b4f3a; stroke-width: 2; }
+.il-trunk { fill: #6b4f3a; transition: d .4s; }
+.il-crown { fill: #7f9a5e; opacity: 0.85; transition: r .4s, cy .4s; }
+.il-crown.is-bare { fill: #b9b0a3; opacity: 0.5; }
+.il-fruit { fill: var(--ember); stroke: #fff; stroke-width: 1.5; }
+.il-root { fill: none; stroke: #6b4f3a; stroke-width: 4; stroke-linecap: round; }
+.il-t-small { font-family: 'Space Mono', monospace; font-size: 10px; fill: #6b5f55; letter-spacing: 0.05em; }
+.il-t-light { fill: #8a7d72; }
+.il-rootdot { fill: #6b4f3a; }
+.il-t-num { font-family: 'Space Mono', monospace; font-size: 11px; fill: #fff; font-weight: 700; }
+.il-rootlist { max-width: 420px; margin: 0 auto 1rem !important; }
+.il-center { text-align: center; }
+
+.il-search { background: var(--bone); border-left: 3px solid var(--gold); padding: 1rem 1.1rem; margin: 1.4rem 0 0; }
+.il-search-v { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.55; margin: 0.4rem 0 0.8rem; }
+.il-search p { margin-bottom: 0; }
+
+.il-profile { background: var(--bone); border: 1px solid var(--line); border-left: 4px solid var(--ember); padding: 1.1rem 1.25rem; margin: 0.8rem 0; }
+.il-profile.is-christ { border-left-color: var(--gold); }
+.il-profile p { margin: 0.5rem 0 0; }
+.il-gap { margin-top: 2.25rem !important; }
+.il-runrow { border: 1px solid var(--line); border-left: 3px solid #9a8f84; background: var(--white); padding: 0.8rem 1rem; margin: 0.6rem 0; }
+.il-runrow.is-christ { border-left-color: var(--gold); }
+.il-runrow .il-feel { color: var(--ember); }
+.il-runrow p { margin: 0.25rem 0 0; }
+.il-quote { font-family: 'Playfair Display', serif; font-style: italic; border-left: 3px solid var(--line); padding-left: 0.9rem; }
+.il-rootlist { padding-left: 1.2rem; }
+.il-card { background: var(--bone); border: 1px solid var(--line); padding: 0.9rem 1.1rem; margin: 0.8rem 0; }
+.il-card p { margin: 0.35rem 0 0; }
+.il-link { font: inherit; background: none; border: 0; padding: 0; color: var(--ember); text-decoration: underline; cursor: pointer; }
+.pt-tool-card ol.il-days { padding-left: 0; }
+.il-days a { position: relative; z-index: 1; }
+.il-gems { border: 2px solid var(--ink); padding: 1rem 1.2rem; margin: 2rem 0 0; }
+.il-gems ul { padding-left: 1.1rem; margin: 0.4rem 0 0; }
+.il-gems li { margin: 0.3rem 0; font-family: 'Playfair Display', serif; font-size: 1.05rem; }
+.il-gem { font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.5; text-align: center; padding: 1.2rem 1rem; margin: 1.75rem 0; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
+.il-prayer { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.1rem 1.25rem; margin: 1.5rem 0 0; }
+.il-prayer .pt-label { font-family: 'Space Mono', monospace; }
+.il-prayer p { margin: 0.4rem 0 0; }
+
+.il-group { margin-top: 2.5rem; }
+.il-group ul, .il-group ol { padding-left: 1.2rem; }
+.il-group li { margin: 0.3rem 0; }
+.il-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.il-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.il-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+.il-share { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1.25rem; }
+.il-share span { font-weight: 700; margin-right: 0.25rem; }
+.il-share a, .il-share button { font: inherit; font-size: 0.9rem; color: var(--ink) !important; background: var(--white); border: 1px solid rgba(62,44,35,.25); border-radius: 999px; padding: 0.35rem 0.8rem; cursor: pointer; text-decoration: none; }
+.il-share a:hover, .il-share button:hover { background: var(--parchment); }
+
+.il-print-brand, .il-print-rights { display: none; }
+@media print {
+  .il-print-brand { display: flex !important; align-items: center; justify-content: space-between; border-bottom: 2px solid #3e2c23; padding-bottom: .5rem; margin-bottom: 1rem; }
+  .il-print-brand img { height: 44px; width: auto; }
+  .il-print-brand span { font-family: 'Space Mono', monospace; font-size: .8rem; letter-spacing: .08em; }
+  .il-print-rights { display: block !important; font-size: .75rem; color: #555; border-top: 1px solid #999; margin-top: 1.5rem; padding-top: .5rem; }
+  .pt-tool { padding: 0; }
+  .il-share, .pt-actions, .pt-crumbs, #site-header, footer { display: none !important; }
+  .il-screen { background: #fff; color: #000; border: 2px solid #333; box-shadow: none; }
+  .il-screen span, .il-screen-top { color: #555; } .il-screen b { color: #000; } .il-screen b.is-god { color: #000; font-weight: 700; }
+  .il-scene { background: #fff; color: #000; border: 1px solid #999; } .il-scene p { color: #000; }
+  .il-profile, .il-runrow, .il-card, .il-gems, .il-prayer, .il-tree, .pt-days li, .il-screen { break-inside: avoid; }
+  .il-profile, .il-prayer, .il-card { background: #fff; }
+  .il-tree { max-width: 300px; }
+  body.il-has-results .il-group, body.il-has-results .pt-note, body.il-has-results .pt-hero .pt-lead, body.il-has-results .pt-hero .il-verse { display: none !important; }
+}
