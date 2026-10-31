@@ -1,0 +1,84 @@
+/* The Filter Lens. Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.fl-verse { margin: 1.1rem 0 0.4rem; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.fl-verse p { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.55; margin: 0 0 0.25rem; }
+.fl-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); }
+.pt-hero .fl-verse p { color: var(--white); font-size: clamp(1.1rem, 2.6vw, 1.35rem); }
+.pt-hero .fl-verse cite { color: var(--gold); }
+
+.fl-q { font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 3.6vw, 1.75rem); line-height: 1.3; margin: 0.25rem 0 0.6rem; }
+.fl-q:focus, .pt-h3[tabindex]:focus { outline: none; }
+
+.fl-gems { display: grid; gap: 0.6rem; margin: 1.1rem 0; }
+.fl-gems p { margin: 0; padding: 0.75rem 0.95rem; background: var(--bone); border-left: 3px solid var(--ember); font-weight: 600; }
+.fl-gems p + p { border-left-color: var(--gold); font-weight: 400; }
+.fl-gems .pt-label { margin-bottom: 0.2rem; }
+
+.fl-step { border-top: 1px solid var(--line); padding-top: 1.1rem; margin-top: 1.4rem; }
+.fl-num { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ember); display: block; margin-bottom: 0.35rem; }
+.fl-step .pt-field label:first-child { margin-top: 0.6rem; }
+.fl-prayer { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.6; background: var(--bone); border-left: 3px solid var(--gold); padding: 0.9rem 1.1rem; margin: 0.4rem 0 0; }
+
+.fl-deep { margin-top: 1rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-left: 4px solid var(--ember); background: var(--white); }
+.fl-deep .pt-option { padding: 0.7rem 0.9rem; }
+.fl-legend-sm { font-size: 1.05rem; margin-bottom: 0.4rem; }
+.fl-beneath { margin-top: 0.9rem; padding: 0.9rem 1rem; background: var(--bone); border-left: 3px solid var(--gold); }
+.fl-beneath-q { font-family: 'Playfair Display', serif; font-size: 1.15rem; line-height: 1.45; margin: 0.25rem 0 0; }
+.fl-small-btn { padding: 0.55rem 0.9rem; font-size: 0.9rem; }
+
+.fl-dots { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 1rem; }
+.fl-dots button { font: inherit; font-family: 'Space Mono', monospace; font-size: 0.8rem; min-width: 2.2rem; height: 2.2rem; border: 1px solid #b9b0a3; background: var(--white); color: var(--ink); cursor: pointer; padding: 0 0.4rem; }
+.fl-dots button.is-done { background: var(--bone); border-color: var(--ink); }
+.fl-dots button.is-here { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.fl-dots .fl-dot-wide { padding: 0 0.7rem; }
+
+.fl-dse { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin: 1rem 0; }
+.fl-dse div { background: var(--bone); border-top: 3px solid var(--ember); padding: 0.7rem 0.75rem; font-size: 0.9rem; line-height: 1.4; }
+.fl-dse strong { display: block; font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); margin-bottom: 0.2rem; }
+.fl-dse-tag { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); margin-right: 0.3rem; }
+@media (max-width: 520px) { .fl-dse { grid-template-columns: 1fr; } }
+
+.fl-keep { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.92rem; margin: 1.1rem 0 0; cursor: pointer; }
+.fl-keep input { accent-color: var(--ember); width: 18px; height: 18px; flex: none; margin-top: 0.2rem; }
+.fl-finder { margin-top: 1.5rem; }
+.fl-arrow { margin-left: auto; font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--ember); white-space: nowrap; padding-left: 0.6rem; }
+.fl-link { font: inherit; background: none; border: 0; padding: 0; color: var(--ember); text-decoration: underline; cursor: pointer; }
+
+.fl-entry { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1.25rem; }
+.fl-entry h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; line-height: 1.35; margin: 0.15rem 0 0.4rem; }
+.fl-entry p { margin: 0.4rem 0 0; }
+.fl-entry-gem { font-style: italic; color: var(--steel); }
+.fl-review { background: var(--bone); border: 1px solid var(--line); padding: 1.1rem 1.25rem; margin: 2rem 0 0; }
+.fl-review ol { padding-left: 1.3rem; }
+.fl-review li { margin: 0.6rem 0; }
+.fl-lines { border-bottom: 1px solid #b9b0a3; height: 1.7rem; display: none; }
+.fl-gem { font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.5; text-align: center; padding: 1.2rem 1rem; margin: 1.75rem 0; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
+
+/* below-the-tool sections */
+.fl-group { margin-top: 2.5rem; }
+.fl-group ul, .fl-group ol { padding-left: 1.2rem; }
+.fl-group li { margin: 0.3rem 0; }
+.fl-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.fl-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.fl-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+/* Share row */
+.fl-share { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1.25rem; }
+.fl-share span { font-weight: 700; margin-right: 0.25rem; }
+.fl-share a, .fl-share button { font: inherit; font-size: 0.9rem; color: var(--ink) !important; background: var(--white); border: 1px solid rgba(62,44,35,.25); border-radius: 999px; padding: 0.35rem 0.8rem; cursor: pointer; text-decoration: none; }
+.fl-share a:hover, .fl-share button:hover { background: var(--parchment); }
+
+/* Print branding */
+.fl-print-brand, .fl-print-rights { display: none; }
+@media print {
+  .fl-print-brand { display: flex !important; align-items: center; justify-content: space-between; border-bottom: 2px solid #3e2c23; padding-bottom: .5rem; margin-bottom: 1rem; }
+  .fl-print-brand img { height: 44px; width: auto; }
+  .fl-print-brand span { font-family: 'Space Mono', monospace; font-size: .8rem; letter-spacing: .08em; }
+  .fl-print-rights { display: block !important; font-size: .75rem; color: #555; border-top: 1px solid #999; margin-top: 1.5rem; padding-top: .5rem; }
+  .pt-tool { padding: 0; }
+  .fl-dots, .fl-share, .fl-keep, .pt-actions, .fl-small-btn, .pt-crumbs, #site-header, footer { display: none !important; }
+  .fl-step, .fl-entry, .fl-deep, .fl-verse, .fl-gems p, .fl-prayer { break-inside: avoid; }
+  .fl-gems p, .fl-prayer, .fl-beneath, .fl-review, .fl-dse div { background: #fff !important; }
+  .pt-field textarea { border-color: #999; min-height: 0; }
+  .fl-lines { display: block; }
+  body.fl-printing-journal .fl-group, body.fl-printing-journal .pt-note, body.fl-printing-journal .pt-hero .pt-lead, body.fl-printing-journal .pt-hero .fl-verse { display: none !important; }
+}
