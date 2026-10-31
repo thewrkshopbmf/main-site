@@ -203,6 +203,76 @@ SESSIONS += [
          gem='Transformation that stops with you was never the goal.'),
 ]
 
+# Activities and quick checks for Sessions 1–4 (Sessions 5–8 carry theirs inline).
+EXTRA = {
+    1: dict(
+        activities=[
+            ('Two branches', '5 minutes', 'Two small leafy branches: one cut three or four days ahead and left on the counter, one cut the day of.',
+             'Pass both around. Say: “Both are branches. Both have leaves. One is still living off what it had. It just doesn’t know it yet. The other is still drawing life.” Then read John 15:4 aloud.',
+             'Which branch feels more like your last month? What told you?'),
+            ('The drift test', '5 minutes', 'A few coins or paper clips per man.',
+             'Each man puts the coins in his left hand. For three minutes, in silence, he keeps his attention on Jesus and John 15:4. Every time he notices his mind has drifted, he moves one coin to his right hand and turns back to Jesus.',
+             'How many times did you return? Noticing the drift isn’t failure. Each coin is a return, and that’s what abiding is.'),
+            ('Same list, two engines', '8 minutes', 'Handouts or index cards.',
+             'Each man lists the spiritual things he does in a normal week: prayer, church, group, serving, reading. Next to each, he marks D (doing it for God) or W (doing it with God). Share one D with a partner.',
+             'The list doesn’t have to change. What would turn one D into a W this week?'),
+        ],
+        check=[('I judge a good day by how much I got done.', 'I judge a good day by how near I stayed to Jesus.'),
+               ('I think about Jesus mostly at set times.', 'I return to Jesus throughout the day.'),
+               ('When I’m busy, prayer is the first thing to go.', 'When I’m busy, I pray more, not less.'),
+               ('I mostly ask, “What should I do today?”', 'I mostly ask, “Where is Jesus leading today?”')]),
+    2: dict(
+        activities=[
+            ('Busy hands', '6 minutes', 'A simple task for half the room: chairs to set up, a stack of papers to sort, cups to stack.',
+             'Split the room. Give one half the task and tell them to keep working. The other half just sits and listens. Read Luke 10:38–42 aloud, slowly. Then ask each half what they heard.',
+             'What did the busy men miss? Where in your life are you working while Jesus is talking?'),
+            ('The applause test', '6 minutes', 'Index cards.',
+             'Each man writes the place he serves most. Underneath, he answers privately: “If no one ever noticed or thanked me, would I still do it the same way?” Share only if willing.',
+             'What does approval do to your serving? When did you last serve where no one could see?'),
+            ('Open hands', '3 minutes', 'Nothing.',
+             'Everyone stands with hands open, palms up. Read Romans 12:1 slowly, twice. In silence, each man names to God what he’s holding onto and offers himself first, before his work.',
+             'Close with a short prayer of surrender. No debrief needed.'),
+        ],
+        check=[('I’d rather be doing something than sitting still with God.', 'I can sit with Jesus without needing to be useful.'),
+               ('I notice when no one thanks me for serving.', 'I serve the same whether or not I’m noticed.'),
+               ('My worship mostly happens through serving.', 'My serving flows out of worship.'),
+               ('I offer God my work.', 'I offer God myself, then my work.')]),
+    3: dict(
+        activities=[
+            ('Good thing, best thing', '5 minutes', 'Nothing.',
+             'Read the exchange slowly, one pair at a time: Bible knowledge or knowing God; church attendance or walking with God; serving or surrender; leadership or lordship; ministry or intimacy; doing or abiding. After each pair, any man who has let the first quietly replace the second stands up, then sits.',
+             'Which pair got you to your feet? What made it so easy to miss?'),
+            ('First love line', '8 minutes', 'Handouts or index cards.',
+             'Each man draws a line from the year he came to faith to today. He marks the high point of his love for Jesus and what he was doing then, and where it started to cool. Share with a partner.',
+             'What did you do back then that you don’t do now? Revelation 2:5 says, “Do the things you did at first.”'),
+            ('A letter from Jesus', '10 minutes', 'Handouts and pens.',
+             'Each man writes a short letter to himself in the shape of Revelation 2: “I know your deeds…” (what Jesus would honestly praise), “Yet I hold this against you…” and “Remember… return… do the things you did at first.”',
+             'Read one line aloud, whichever you choose.'),
+        ],
+        check=[('I know more about God than I did a year ago, but I’m not closer.', 'I’m closer to God than I was a year ago.'),
+               ('My time with God is mostly preparing to teach, lead or serve.', 'I spend time with God just to be with Him.'),
+               ('My faith feels like a job.', 'My faith feels like a relationship.'),
+               ('I’d struggle to name something Jesus has said to me lately.', 'I can name something Jesus has said to me lately.')]),
+    4: dict(
+        activities=[
+            ('The seed count', '5 minutes', 'An apple and a knife.',
+             'Cut the apple crosswise to show the star of seeds. Count them out loud. Say: “You can count the seeds in an apple. Only God can count the apples in a seed.”',
+             'What has God grown in you that’s meant to be planted in someone else?'),
+            ('Where I see Christ in you', '12 minutes', 'Groups of three or four.',
+             'One man at a time sits quietly while the others each name one fruit of the Spirit they’ve seen in him, with a quick, specific example. He only says “thank you.” Then rotate.',
+             'What was it like to hear it? Which one surprised you?'),
+            ('Fruit inventory', '5 minutes', 'Handouts.',
+             'Each man marks the nine fruit (Galatians 5:22–23) as strong, growing or hard to see. He circles one to ask God for, by abiding, not by trying harder.',
+             'Which one did you circle? What would abiding look like there?'),
+        ],
+        check=[('When I fall short, I try harder.', 'When I fall short, I stay closer to Jesus.'),
+               ('I measure fruit by results I can see.', 'I measure fruit by Christ’s character in me.'),
+               ('What I’m learning mostly stays with me.', 'What I’m learning gets passed on to another man.'),
+               ('I’m patient only when I force myself to be.', 'I see patience growing in me that I didn’t force.')]),
+}
+for _s in SESSIONS:
+    _s.update(EXTRA.get(_s['n'], {}))
+
 
 def pair(title):
     """'The Performance vs. the Presence' -> ('Performance', 'Presence')."""
@@ -254,11 +324,32 @@ SHEETS = {
        <p class="st-commission">“As the Father has sent me, I am sending you.” (John 20:21)</p></div>""",
 }
 
+FRUIT = ('Love', 'Joy', 'Peace', 'Forbearance', 'Kindness', 'Goodness', 'Faithfulness', 'Gentleness', 'Self-control')
+SHEETS.update({
+    1: """<div class="st-sheet"><h4>The drift test</h4><p>Times I returned in three minutes: ______</p>
+       <h4>Same list, two engines</h4><table class="st-table st-de"><thead><tr><th>What I do in a normal week</th><th>D</th><th>W</th></tr></thead><tbody>"""
+       + '<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>' * 5 + """</tbody></table>
+       <p><strong>One D I could turn into a W this week:</strong></p><div class="st-lines"></div></div>""",
+    2: """<div class="st-sheet"><h4>The applause test</h4><p><strong>Where I serve most:</strong></p><div class="st-lines"></div>
+       <p><strong>If no one ever noticed or thanked me, would I still do it the same way?</strong></p><div class="st-lines"></div>
+       <h4>Open hands</h4><p><strong>What I’m holding onto, and offering to God first:</strong></p><div class="st-lines"></div></div>""",
+    3: """<div class="st-sheet"><h4>First love line</h4><p>Mark the high point of your love for Jesus, and where it started to cool.</p>
+       <p class="st-pace"><span>The year I came to faith</span><span>Today</span></p>
+       <p><strong>What I did back then that I don’t do now:</strong></p><div class="st-lines"></div>
+       <h4>A letter from Jesus</h4><p><strong>“I know your deeds…”</strong></p><div class="st-lines"></div><div class="st-lines"></div>
+       <p><strong>“Yet I hold this against you…”</strong></p><div class="st-lines"></div><div class="st-lines"></div>
+       <p><strong>“Remember… return… do the things you did at first.”</strong></p><div class="st-lines"></div></div>""",
+    4: """<div class="st-sheet"><h4>Fruit inventory</h4><table class="st-table st-fruit"><thead><tr><th>Galatians 5:22–23</th><th>Strong</th><th>Growing</th><th>Hard to see</th></tr></thead><tbody>"""
+       + ''.join(f'<tr><td>{f}</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>' for f in FRUIT) + """</tbody></table>
+       <p><strong>Where others see Christ in me:</strong></p><div class="st-lines"></div>
+       <p><strong>Who my fruit might feed this season:</strong></p><div class="st-lines"></div></div>""",
+})
+
 
 def leader_guide():
     out = S.hero(f'<a href="/resources.html">Resources</a> / <a href="/studies/">Group Studies</a> / <a href="/studies/{SLUG}/">The Doing vs. the Dwelling</a> / Leader guide',
                  'Leader guide · Eight sessions · 60–75 minutes each', f'{TITLE}: <em>leader guide</em>',
-                 'All eight sessions, with what to say, what to ask, Scripture and a practice for each week. Sessions 5–8 add hands-on activities and a quick check on the phone. Print it, or open it on your phone while you lead.')
+                 'All eight sessions, with what to say, what to ask, Scripture and a practice for each week. Every session has hands-on activities and a quick check on the phone. Print it, or open it on your phone while you lead.')
     out += f"""
     <section class="st-section">
       <div class="pt-narrow st-guide">
@@ -270,13 +361,15 @@ def leader_guide():
           <ul class="st-time">
             <li><strong>5 min</strong><span>Welcome and the read-out-loud line</span></li>
             <li><strong>10 min</strong><span>Icebreaker and check-in on last week’s practice</span></li>
-            <li><strong>20 min</strong><span>Scripture and teaching</span></li>
-            <li><strong>20 min</strong><span>Discussion, as one group or in threes and fours</span></li>
+            <li><strong>15 min</strong><span>Scripture and teaching</span></li>
+            <li><strong>15 min</strong><span>One or two activities</span></li>
+            <li><strong>5 min</strong><span>Quick check on the handout</span></li>
+            <li><strong>15 min</strong><span>Discussion, as one group or in threes and fours</span></li>
             <li><strong>5 min</strong><span>This week’s practice</span></li>
             <li><strong>5 min</strong><span>Prayer</span></li>
           </ul>
-          <h3>Sessions 5–8 are hands-on</h3>
-          <p>The second half moves from listening to doing. Each session has a short <strong>quick check</strong> (four statements men tap through on the handout, on their phones or on paper) and two or three <strong>room activities</strong>. Pick one or two activities and trim the discussion to fit. Check the “You’ll need” lines a few days ahead.</p>
+          <h3>Every session is hands-on</h3>
+          <p>Men learn by doing. Each session has a short <strong>quick check</strong> (four statements men tap through on the handout, on their phones or on paper) and two or three <strong>room activities</strong>. Pick one or two activities and trim the discussion to fit. Check the “You’ll need” lines a few days ahead.</p>
           <h3>Before you start</h3>
           <ul><li>Print the participant handout for each man, or text the link: thewrkshop.com/studies/{SLUG}/handout/</li><li>Read John 15:1–17 several times this week yourself.</li><li>Practice the Return yourself for a few days before Session 1, so you can talk about it honestly.</li></ul>
         </div>"""
@@ -316,7 +409,7 @@ def handout():
     ret = ''.join(f'<li><strong>{a},</strong> {b}</li>' for a, b in RETURN)
     log = ''.join(f'<tr><td>Day {d}</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>' for d in range(1, 8))
     out = S.hero(f'<a href="/resources.html">Resources</a> / <a href="/studies/">Group Studies</a> / <a href="/studies/{SLUG}/">The Doing vs. the Dwelling</a> / Handout',
-                 'Participant handout · Eight sessions', 'Busy for God, or <em>with</em> Him?', 'Your notes for each session, quick checks and activity sheets for Sessions 5–8, and the Return log for the weeks in between.')
+                 'Participant handout · Eight sessions', 'Busy for God, or <em>with</em> Him?', 'Your notes for each session, a quick check and activity sheet for every session, and the Return log for the weeks in between.')
     out += f"""
     <section class="st-section">
       <div class="pt-narrow st-guide">
@@ -353,7 +446,7 @@ def overview():
     rows = ''.join(f'<li><strong>{s["n"]}</strong><span><strong>{s["title"]}</strong> · {s["ref"]}<br>{s["big"]}</span></li>' for s in SESSIONS)
     out = S.hero('<a href="/resources.html">Resources</a> / <a href="/studies/">Group Studies</a> / The Doing vs. the Dwelling',
                  'Group study · Eight sessions · John 15', 'The Doing vs. the Dwelling: <em>busy for God, or with Him?</em>',
-                 'A ready-to-run eight-week men’s study that moves from abiding in Jesus to being sent by Him. Hands-on activities in the second half. Free for any men’s group or church.')
+                 'A ready-to-run eight-week men’s study that moves from abiding in Jesus to being sent by Him, with hands-on activities every week. Free for any men’s group or church.')
     out += f"""
     <section class="st-section">
       <div class="pt-narrow">
@@ -366,7 +459,7 @@ def overview():
         <div class="st-card">
           <h2 class="pt-h3">The eight sessions</h2>
           <ul class="st-time st-sessions">{rows}</ul>
-          <p>Sessions 1–4 dwell on John 15. Sessions 5–8 are hands-on: silence, prayer walks, object lessons, a commissioning circle and a quick check men take on their phones.</p>
+          <p>Every session is hands-on: object lessons, silence, prayer walks, affirmation rounds, a commissioning circle and a quick check men take on their phones.</p>
         </div>
         <div class="st-card">
           <h2 class="pt-h3">What’s in the kit</h2>
