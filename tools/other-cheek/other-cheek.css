@@ -1,0 +1,99 @@
+/* The Other Cheek. Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.oc-verse { margin: 1rem 0; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.oc-verse p { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.55; margin: 0 0 0.25rem; }
+.oc-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); }
+.pt-hero .oc-verse p { color: var(--white); font-size: clamp(1.1rem, 2.6vw, 1.35rem); }
+.pt-hero .oc-verse cite { color: var(--gold); }
+.pt-h3[tabindex]:focus, .oc-scene p:focus { outline: none; }
+.oc-parts li { margin: 0.4rem 0; }
+.oc-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 0 0 1.1rem; }
+.oc-steps span { height: 4px; background: var(--parchment); }
+.oc-steps span.is-done { background: var(--ink); }
+.oc-steps span.is-here { background: var(--ember); }
+
+.oc-myth { border: 1px solid var(--line); border-left: 4px solid #b9b0a3; background: var(--white); padding: 0.85rem 1rem; margin: 0.7rem 0; }
+.oc-myth.is-ok { border-left-color: #4f6b3a; }
+.oc-myth.is-miss { border-left-color: var(--ember); }
+.oc-stmt { font-weight: 600; margin: 0; }
+.oc-mt { display: flex; gap: 0.4rem; margin: 0.55rem 0 0; }
+.oc-mt button { font: inherit; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 1rem; border: 1px solid #b9b0a3; background: var(--white); color: var(--ink); cursor: pointer; min-height: 40px; }
+.oc-mt button[aria-pressed="true"] { background: var(--ash); color: var(--white); border-color: var(--ash); }
+.oc-ans { background: var(--bone); padding: 0.7rem 0.85rem; margin: 0.6rem 0 0; font-size: 0.95rem; animation: oc-in .3s ease; }
+@keyframes oc-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.oc-ref { white-space: nowrap; font-size: 0.85rem; }
+
+.oc-scene { background: var(--ash); color: var(--parchment); padding: 1.1rem 1.2rem; margin: 0.4rem 0 1rem; }
+.oc-scene p { font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.5; color: var(--white); margin: 0.35rem 0 0; }
+.oc-tag { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: #e7c77c; }
+.oc-legend { font-size: 1rem; color: var(--steel); font-weight: 500; }
+button.pt-option.is-ok { border-color: #4f6b3a; background: #eef3e8; font-weight: 600; }
+button.pt-option.is-miss { border-color: var(--ember); background: #f8ece6; }
+button.pt-option:disabled { cursor: default; }
+.oc-lesson { border: 2px solid var(--ink); padding: 0.9rem 1rem; margin: 1rem 0 0; }
+.oc-lesson p { margin: 0; }
+
+.oc-q { border-top: 1px solid var(--line); padding: 0.8rem 0 0.2rem; }
+.oc-q p { margin: 0; }
+.oc-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0 0.4rem; }
+.oc-chips button { font: inherit; font-size: 0.9rem; padding: 0.45rem 0.85rem; border: 1px solid #b9b0a3; background: var(--white); color: var(--ink); border-radius: 999px; cursor: pointer; min-height: 40px; }
+.oc-chips button[aria-pressed="true"] { background: var(--ash); color: var(--white); border-color: var(--ash); }
+.oc-note { font-size: 0.9rem; color: var(--steel); margin: 0.3rem 0 0.4rem !important; }
+.oc-safety { border: 2px solid var(--ember); background: var(--white); padding: 0.9rem 1rem; margin: 0.9rem 0; }
+.oc-six { border: 1px solid var(--line); border-left: 4px solid var(--gold); background: var(--white); padding: 0.8rem 1rem; margin: 0.6rem 0; }
+.oc-six.oc-his { border-left-color: #9a8f84; }
+.oc-six.oc-both, .oc-six.oc-time { border-left-color: #6b7f8c; }
+.oc-six p { margin: 0.3rem 0 0; }
+.oc-six-head { display: flex; justify-content: space-between; gap: 0.75rem; align-items: baseline; }
+.oc-whose { font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ember); white-space: nowrap; }
+.oc-big { font-family: 'Playfair Display', serif; font-size: 1.12rem; line-height: 1.5; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); padding: 0.8rem 0.2rem; margin: 1.2rem 0; }
+
+.oc-score { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin: 1rem 0; }
+.oc-score div { background: var(--bone); border: 1px solid var(--line); padding: 0.8rem; text-align: center; }
+.oc-score b { display: block; font-family: 'Playfair Display', serif; font-size: 2rem; line-height: 1; }
+.oc-score small { font-size: 1rem; color: var(--steel); }
+.oc-score span { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); }
+.oc-gap { margin-top: 2.25rem !important; }
+.oc-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+@media (max-width: 520px) { .oc-two { grid-template-columns: 1fr; } }
+.oc-col { background: var(--bone); padding: 0.9rem 1rem; }
+.oc-col ul { padding-left: 1.1rem; margin: 0.4rem 0 0; }
+.oc-aulist { list-style: none; padding: 0 !important; }
+.oc-aulist li { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.35rem 0; border-bottom: 1px dashed var(--line); font-size: 0.95rem; }
+.oc-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; margin-top: 0.45rem; }
+.oc-d0 { background: #4f6b3a; } .oc-d1 { background: var(--gold); } .oc-d2 { background: var(--ember); }
+.oc-card { border: 2px solid var(--ink); background: var(--white); padding: 1rem 1.2rem; margin: 2rem 0 0; }
+.oc-card ol { padding-left: 1.2rem; margin: 0.5rem 0 0.3rem; }
+.oc-card li { margin: 0.4rem 0; }
+.oc-link { font: inherit; background: none; border: 0; padding: 0; color: var(--ember); text-decoration: underline; cursor: pointer; }
+.pt-tool-card ol.oc-days { padding-left: 0; }
+.oc-days a { position: relative; z-index: 1; }
+.oc-gem { font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.5; text-align: center; padding: 1.2rem 1rem; margin: 1.75rem 0; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
+.oc-prayer { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.1rem 1.25rem; margin: 1.5rem 0 0; }
+.oc-prayer .pt-label { font-family: 'Space Mono', monospace; }
+.oc-prayer p { margin: 0.4rem 0 0; }
+
+.oc-group { margin-top: 2.5rem; }
+.oc-group ul, .oc-group ol { padding-left: 1.2rem; }
+.oc-group li { margin: 0.3rem 0; }
+.oc-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.oc-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.oc-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+.oc-share { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1.25rem; }
+.oc-share span { font-weight: 700; margin-right: 0.25rem; }
+.oc-share a, .oc-share button { font: inherit; font-size: 0.9rem; color: var(--ink) !important; background: var(--white); border: 1px solid rgba(62,44,35,.25); border-radius: 999px; padding: 0.35rem 0.8rem; cursor: pointer; text-decoration: none; }
+.oc-share a:hover, .oc-share button:hover { background: var(--parchment); }
+
+.oc-print-brand, .oc-print-rights { display: none; }
+@media print {
+  .oc-print-brand { display: flex !important; align-items: center; justify-content: space-between; border-bottom: 2px solid #3e2c23; padding-bottom: .5rem; margin-bottom: 1rem; }
+  .oc-print-brand img { height: 44px; width: auto; }
+  .oc-print-brand span { font-family: 'Space Mono', monospace; font-size: .8rem; letter-spacing: .08em; }
+  .oc-print-rights { display: block !important; font-size: .75rem; color: #555; border-top: 1px solid #999; margin-top: 1.5rem; padding-top: .5rem; }
+  .pt-tool { padding: 0; }
+  .oc-share, .pt-actions, .pt-crumbs, #site-header, footer { display: none !important; }
+  .oc-scene { background: #fff; color: #000; border: 1px solid #999; } .oc-scene p { color: #000; }
+  .oc-card, .oc-prayer, .oc-two, .oc-score, .pt-days li, .oc-safety { break-inside: avoid; }
+  .oc-prayer, .oc-col, .oc-score div { background: #fff; }
+  body.oc-has-results .oc-group, body.oc-has-results .pt-note, body.oc-has-results .pt-hero .pt-lead, body.oc-has-results .pt-hero .oc-verse { display: none !important; }
+}
