@@ -1,0 +1,95 @@
+/* Don't Look Back: Salt or Shine? Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.lw-verse { margin: 1rem 0; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.lw-verse p { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.55; margin: 0 0 0.25rem; }
+.lw-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); }
+.pt-hero .lw-verse p { color: var(--white); font-size: clamp(1.1rem, 2.6vw, 1.35rem); }
+.pt-hero .lw-verse cite { color: var(--gold); }
+.pt-h3[tabindex]:focus { outline: none; }
+
+.lw-scenes { background: var(--ash); color: var(--parchment); padding: 1rem 1.2rem; margin: 1.1rem 0; }
+.lw-scenes p { margin: 0.25rem 0; }
+.lw-scenes-end { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--white); margin-top: 0.7rem !important; }
+.lw-parts li { margin: 0.4rem 0; }
+
+.lw-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 0 0 1.1rem; }
+.lw-steps span { height: 4px; background: var(--parchment); }
+.lw-steps span.is-done { background: var(--ink); }
+.lw-steps span.is-here { background: var(--ember); }
+
+.lw-q { border-top: 1px solid var(--line); padding: 0.8rem 0 0.2rem; }
+.lw-q p { margin: 0; font-weight: 600; }
+.lw-q.is-done p { color: var(--steel); font-weight: 500; }
+.lw-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0 0.6rem; }
+.lw-chips button { font: inherit; font-size: 0.9rem; padding: 0.45rem 0.8rem; border: 1px solid #b9b0a3; background: var(--white); color: var(--ink); border-radius: 999px; cursor: pointer; min-height: 40px; }
+.lw-chips button[aria-pressed="true"] { background: var(--ash); color: var(--white); border-color: var(--ash); }
+
+.lw-coins { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 1rem 0 0.6rem; max-width: 26rem; }
+.lw-coin { aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f2d58f, #c9a24c 65%, #9a7a2e); box-shadow: inset 0 -2px 0 rgba(0,0,0,.18); transition: background .3s, transform .3s; }
+.lw-coin.is-salt { background: radial-gradient(circle at 35% 35%, #ffffff, #e4e0d8 65%, #c9c3b8); transform: scale(0.9); }
+.lw-left { margin: 0.2rem 0 1rem; }
+.lw-drains { border-top: 1px solid var(--line); }
+.lw-drain { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
+.lw-drain.is-on span { font-weight: 600; }
+.lw-step { display: flex; align-items: center; gap: 0.4rem; flex: none; }
+.lw-step button { font: inherit; font-size: 1.15rem; width: 40px; height: 40px; border: 1px solid #b9b0a3; background: var(--white); color: var(--ink); cursor: pointer; }
+.lw-step button:disabled { opacity: 0.3; cursor: not-allowed; }
+.lw-step b { font-family: 'Space Mono', monospace; min-width: 1.2rem; text-align: center; }
+.lw-give { background: var(--bone); border-left: 3px solid var(--gold); padding: 0.9rem 1rem; margin: 1.2rem 0 0; }
+.lw-give p { margin: 0.3rem 0; }
+.lw-givebtn { margin-top: 0.4rem; }
+.lw-gem-sm { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.5; margin: 1rem 0 0; }
+.lw-drainline { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line); margin: 0.2rem 0; padding: 0.25rem 0; font-size: 0.95rem; }
+.lw-drainline b { font-family: 'Space Mono', monospace; color: var(--ember); }
+
+.lw-mstep { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1.2rem; }
+.lw-mstep .pt-field label { margin-top: 0.5rem; }
+.lw-num { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ember); display: block; margin-bottom: 0.25rem; }
+.lw-seals .pt-option { align-items: flex-start; font-size: 0.95rem; }
+
+.lw-profile { background: var(--bone); border: 1px solid var(--line); border-left: 4px solid var(--ember); padding: 1.1rem 1.25rem; margin: 0.8rem 0; }
+.lw-profile.is-shine { border-left-color: var(--gold); }
+.lw-profile p { margin: 0.5rem 0 0; }
+.lw-line { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-top: 0 !important; }
+.lw-gap { margin-top: 2.25rem !important; }
+.lw-shine .pt-bar > div { background: var(--gold) !important; }
+.lw-card { border: 2px solid var(--ink); background: var(--white); padding: 1.1rem 1.25rem; margin: 0.8rem 0; }
+.lw-card p { margin: 0.45rem 0 0; }
+.lw-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.lw-two > div { background: var(--bone); padding: 0.9rem 1rem; }
+.lw-two ul { padding-left: 1.1rem; margin: 0.4rem 0 0; }
+@media (max-width: 520px) { .lw-two { grid-template-columns: 1fr; } }
+.pt-tool-card ol.lw-days { padding-left: 0; }
+.lw-days a { position: relative; z-index: 1; }
+.lw-gem { font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.5; text-align: center; padding: 1.2rem 1rem; margin: 1.75rem 0; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
+.lw-prayer { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.1rem 1.25rem; margin: 1.5rem 0 0; }
+.lw-prayer .pt-label { font-family: 'Space Mono', monospace; }
+.lw-prayer p { margin: 0.4rem 0 0; }
+
+/* below-the-tool sections */
+.lw-group { margin-top: 2.5rem; }
+.lw-group ul, .lw-group ol { padding-left: 1.2rem; }
+.lw-group li { margin: 0.3rem 0; }
+.lw-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.lw-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.lw-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+.lw-share { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1.25rem; }
+.lw-share span { font-weight: 700; margin-right: 0.25rem; }
+.lw-share a, .lw-share button { font: inherit; font-size: 0.9rem; color: var(--ink) !important; background: var(--white); border: 1px solid rgba(62,44,35,.25); border-radius: 999px; padding: 0.35rem 0.8rem; cursor: pointer; text-decoration: none; }
+.lw-share a:hover, .lw-share button:hover { background: var(--parchment); }
+
+.lw-print-brand, .lw-print-rights { display: none; }
+@media print {
+  .lw-print-brand { display: flex !important; align-items: center; justify-content: space-between; border-bottom: 2px solid #3e2c23; padding-bottom: .5rem; margin-bottom: 1rem; }
+  .lw-print-brand img { height: 44px; width: auto; }
+  .lw-print-brand span { font-family: 'Space Mono', monospace; font-size: .8rem; letter-spacing: .08em; }
+  .lw-print-rights { display: block !important; font-size: .75rem; color: #555; border-top: 1px solid #999; margin-top: 1.5rem; padding-top: .5rem; }
+  .pt-tool { padding: 0; }
+  .lw-share, .pt-actions, .pt-crumbs, #site-header, footer { display: none !important; }
+  .lw-scenes { background: #fff; color: #000; border: 1px solid #999; }
+  .lw-scenes-end { color: #000; }
+  .lw-profile, .lw-card, .lw-two, .lw-prayer, .pt-days li, .lw-verse { break-inside: avoid; }
+  .lw-profile, .lw-prayer, .lw-two > div { background: #fff; }
+  .lw-coin, .lw-coin.is-salt { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body.lw-has-results .lw-group, body.lw-has-results .pt-note, body.lw-has-results .pt-hero .pt-lead, body.lw-has-results .pt-hero .lw-verse { display: none !important; }
+}
