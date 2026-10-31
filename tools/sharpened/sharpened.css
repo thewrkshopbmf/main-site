@@ -1,0 +1,125 @@
+/* Sharpened, Not Sheltered. Builds on /patterns/patterns.css (same palette, type and tool styles as the site's other tools). */
+.sh-verse { margin: 1rem 0; padding: 0 0 0 1rem; border-left: 3px solid var(--gold); }
+.sh-verse p { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.55; margin: 0 0 0.25rem; }
+.sh-verse cite { font-family: 'Space Mono', monospace; font-style: normal; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); }
+.pt-hero .sh-verse p { color: var(--white); font-size: clamp(1.1rem, 2.6vw, 1.35rem); }
+.pt-hero .sh-verse cite { color: var(--gold); }
+
+.sh-room { font-size: 1.05rem; line-height: 1.7; margin: 0.4rem 0 1rem; }
+.sh-read { font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.5; background: var(--bone); border-left: 3px solid var(--ember); padding: 0.9rem 1.1rem; margin: 1rem 0; }
+.sh-read .pt-label { font-family: 'Space Mono', monospace; margin-bottom: 0.3rem; }
+.sh-parts li { margin: 0.4rem 0; }
+
+.sh-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 0 0 1.1rem; }
+.sh-steps span { height: 4px; background: var(--parchment); }
+.sh-steps span.is-done { background: var(--ink); }
+.sh-steps span.is-here { background: var(--ember); }
+.sh-moment { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 3.6vw, 1.6rem); line-height: 1.35; margin: 0.3rem 0 1rem; }
+.sh-moment:focus, .pt-h3[tabindex]:focus { outline: none; }
+.sh-legend { font-size: 1rem; color: var(--steel); font-weight: 500; }
+
+.sh-ego .pt-option { align-items: flex-start; }
+.sh-box { width: 18px; height: 18px; border: 2px solid #b9b0a3; flex: none; margin-top: 0.15rem; position: relative; }
+.sh-ego button[aria-pressed="true"] .sh-box { background: var(--ember); border-color: var(--ember); }
+.sh-ego button[aria-pressed="true"] .sh-box::after { content: '✓'; color: #fff; font-size: 0.75rem; position: absolute; left: 2px; top: -2px; }
+
+.sh-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.5rem 0 0.8rem; }
+.sh-chips button { font: inherit; font-size: 0.92rem; padding: 0.5rem 0.85rem; border: 1px solid #b9b0a3; background: var(--white); color: var(--ink); border-radius: 999px; cursor: pointer; min-height: 40px; }
+.sh-chips button[aria-pressed="true"] { background: var(--ash); color: var(--white); border-color: var(--ash); }
+.sh-rate { border-top: 1px solid var(--line); padding-top: 0.8rem; margin-top: 0.8rem; }
+.sh-rate p { margin: 0; font-weight: 600; }
+
+.sh-loop { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 1rem; font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.sh-loop span { padding: 0.3rem 0.5rem; border: 1px solid var(--line); background: var(--white); color: var(--steel); }
+.sh-loop span.is-done { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.sh-loop span.is-here { border-color: var(--ember); color: var(--ember); }
+.sh-loop i { font-style: normal; color: var(--steel); }
+.sh-lstep { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1.2rem; }
+.sh-lstep > p { margin: 0.2rem 0; }
+.sh-num { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ember); display: block; margin-bottom: 0.3rem; }
+.sh-pray { font-style: italic; }
+
+.sh-profile { background: var(--bone); border: 1px solid var(--line); border-left: 4px solid var(--ember); padding: 1.1rem 1.25rem; margin: 0.8rem 0; }
+.sh-profile p { margin: 0.5rem 0 0; }
+.sh-who { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ember); }
+.sh-sounds { font-style: italic; color: var(--steel); }
+.sh-gap { margin-top: 2.25rem !important; }
+.sh-list { padding-left: 1.2rem; }
+.sh-card { background: var(--bone); border: 1px solid var(--line); padding: 1rem 1.15rem; margin: 0.75rem 0; }
+.sh-card p { margin: 0.35rem 0 0; }
+.sh-link { font: inherit; background: none; border: 0; padding: 0; color: var(--ember); text-decoration: underline; cursor: pointer; }
+
+.sh-chart { border: 1px solid var(--line); background: var(--white); font-size: 0.9rem; }
+.sh-chart-h, .sh-chart-r { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 0.6rem; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); }
+.sh-chart-h { background: var(--ash); color: var(--white); font-weight: 600; }
+.sh-chart-r:last-child { border-bottom: 0; }
+.sh-chart-r span:first-child { font-weight: 600; }
+.sh-chart-r span:last-child { color: var(--ink); }
+@media (max-width: 560px) {
+  .sh-chart-h { display: none; }
+  .sh-chart-r { grid-template-columns: 1fr; gap: 0.2rem; }
+  .sh-chart-r span:nth-child(2)::before { content: 'Old: '; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--steel); }
+  .sh-chart-r span:nth-child(3)::before { content: 'New: '; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--ember); }
+}
+
+.sh-window { background: var(--ash); color: var(--parchment); padding: 1.35rem 1.4rem; margin: 2.25rem 0 0; }
+.sh-window .pt-label { color: #d6ad61; }
+.sh-window .pt-h3 { color: var(--white); margin-top: 0.3rem; }
+.sh-window .pt-btn--ember { border-color: var(--ember); }
+.sh-w-steps { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.8rem 0; }
+.sh-w-steps span { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.5rem; border: 1px solid rgba(255,255,255,.25); color: rgba(255,255,255,.65); }
+.sh-w-steps span.is-done { background: rgba(255,255,255,.12); color: var(--white); }
+.sh-w-steps span.is-here { background: var(--ember); border-color: var(--ember); color: var(--white); }
+.sh-w-body { min-height: 7.5rem; background: rgba(0,0,0,.18); padding: 0.9rem 1rem; }
+.sh-w-body p { margin: 0.3rem 0; }
+.sh-w-title { font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; color: #e7c77c; }
+.sh-w-big { font-family: 'Playfair Display', serif; font-size: 1.25rem; line-height: 1.45; color: var(--white); }
+.sh-window .sh-chips button { background: transparent; color: var(--white); border-color: rgba(255,255,255,.35); }
+.sh-window .sh-chips button[aria-pressed="true"] { background: var(--ember); border-color: var(--ember); }
+.sh-clock { font-family: 'Space Mono', monospace; font-size: 1.4rem; color: var(--white); align-self: center; }
+.sh-breathe { width: 56px; height: 56px; border-radius: 50%; background: rgba(231,199,124,.35); margin: 0.6rem 0; animation: sh-breathe 10s ease-in-out infinite; }
+@keyframes sh-breathe { 0% { transform: scale(0.6); } 40% { transform: scale(1.15); } 100% { transform: scale(0.6); } }
+@media (prefers-reduced-motion: reduce) { .sh-breathe { animation: none; } }
+.sh-w-print { display: none; }
+
+.sh-page .pt-field input[type="text"] { width: 100%; font: inherit; color: var(--ink); background: var(--white); border: 1px solid #b9b0a3; padding: 0.75rem 0.85rem; border-radius: 0; }
+.sh-text { background: var(--bone); border: 1px dashed #b9b0a3; padding: 0.9rem 1rem; margin: 0.6rem 0 0; }
+.sh-days a { position: relative; z-index: 1; }
+.pt-tool-card ol.sh-days { padding-left: 0; }
+.sh-declare { font-family: 'Playfair Display', serif; font-size: 1.15rem; line-height: 1.7; border: 2px solid var(--ink); padding: 1.1rem 1.25rem; margin: 2rem 0 0; }
+.sh-declare .pt-label { font-family: 'Space Mono', monospace; }
+.sh-declare p { margin: 0.4rem 0 0; }
+.sh-gem { font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.5; text-align: center; padding: 1.2rem 1rem; margin: 1.75rem 0; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
+.sh-prayer { font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.7; background: var(--bone); border-left: 3px solid var(--gold); padding: 1.1rem 1.25rem; margin: 1.5rem 0 0; }
+.sh-prayer .pt-label { font-family: 'Space Mono', monospace; }
+.sh-prayer p { margin: 0.4rem 0 0; }
+
+/* below-the-tool sections */
+.sh-group { margin-top: 2.5rem; }
+.sh-group ul, .sh-group ol { padding-left: 1.2rem; }
+.sh-group li { margin: 0.3rem 0; }
+.sh-format { list-style: none; padding: 0 !important; margin: 0.5rem 0 1rem !important; }
+.sh-format li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); margin: 0 !important; }
+.sh-format strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; color: var(--ember); }
+
+.sh-share { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1.25rem; }
+.sh-share span { font-weight: 700; margin-right: 0.25rem; }
+.sh-share a, .sh-share button { font: inherit; font-size: 0.9rem; color: var(--ink) !important; background: var(--white); border: 1px solid rgba(62,44,35,.25); border-radius: 999px; padding: 0.35rem 0.8rem; cursor: pointer; text-decoration: none; }
+.sh-share a:hover, .sh-share button:hover { background: var(--parchment); }
+
+.sh-print-brand, .sh-print-rights { display: none; }
+@media print {
+  .sh-print-brand { display: flex !important; align-items: center; justify-content: space-between; border-bottom: 2px solid #3e2c23; padding-bottom: .5rem; margin-bottom: 1rem; }
+  .sh-print-brand img { height: 44px; width: auto; }
+  .sh-print-brand span { font-family: 'Space Mono', monospace; font-size: .8rem; letter-spacing: .08em; }
+  .sh-print-rights { display: block !important; font-size: .75rem; color: #555; border-top: 1px solid #999; margin-top: 1.5rem; padding-top: .5rem; }
+  .pt-tool { padding: 0; }
+  .sh-share, .pt-actions, .pt-crumbs, #site-header, footer, .sh-w-steps, .sh-w-body, .sh-clock { display: none !important; }
+  .sh-w-print { display: block; font-weight: 600; }
+  .sh-window { background: #fff; color: #000; border: 1px solid #999; }
+  .sh-window .pt-h3, .sh-window .pt-label { color: #000; }
+  .sh-profile, .sh-card, .sh-window, .sh-declare, .sh-prayer, .sh-chart-r, .pt-days li { break-inside: avoid; }
+  .sh-chart-h { background: #eee; color: #000; }
+  .sh-profile, .sh-card, .sh-prayer, .sh-text { background: #fff; }
+  body.sh-has-results .sh-group, body.sh-has-results .pt-note, body.sh-has-results .pt-hero .pt-lead, body.sh-has-results .pt-hero .sh-verse { display: none !important; }
+}
