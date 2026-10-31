@@ -103,3 +103,5 @@
   .st-check-or { display: none; }
   .st-check-result, .st-check-reset { display: none; }
 }
+.st-de th:not(:first-child), .st-de td:not(:first-child), .st-fruit th:not(:first-child), .st-fruit td:not(:first-child) { width: 3.2rem; text-align: center; }
+.st-fruit th:not(:first-child) { width: 4.6rem; }
