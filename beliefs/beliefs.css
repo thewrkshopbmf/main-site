@@ -1,0 +1,55 @@
+/* What We Believe (/beliefs/): TheWrkShop's foundational identity statement.
+   Builds on patterns.css (pt-*) and prayer.css (pr-guide). */
+.bl-page .pt-hero .bl-conviction { font-family: 'Playfair Display', serif; font-size: clamp(1.15rem, 2.6vw, 1.45rem); line-height: 1.45; color: var(--parchment); margin: 0 0 .9rem; }
+.bl-page .pt-hero .bl-conviction strong { color: var(--gold); font-weight: 700; }
+
+.bl-toc { background: var(--white); border: 1px solid var(--line); padding: 1.1rem 1.35rem; margin: 0 0 1rem; }
+.bl-toc ol { margin: .4rem 0 0; padding-left: 1.3rem; columns: 2; column-gap: 2rem; }
+.bl-toc li { margin: .25rem 0; break-inside: avoid; }
+.bl-toc a { color: var(--ink); }
+
+.bl-refs { font-family: 'Space Mono', monospace; font-size: .78rem; letter-spacing: .04em; color: var(--steel); margin: .4rem 0 0; }
+.bl-tagline { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.3rem; line-height: 1.35; margin: 0 0 .75rem; }
+
+.bl-values { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 1rem; }
+.bl-values li { background: var(--white); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 0; }
+.bl-values h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin: 0 0 .35rem; }
+.bl-values p { margin: 0; }
+
+.bl-verse { border-left: 3px solid var(--ember); background: var(--parchment); padding: 1rem 1.25rem; margin: 1.2rem 0; font-family: 'Playfair Display', serif; font-size: 1.25rem; }
+.bl-verse cite { display: block; font-family: 'Space Mono', monospace; font-style: normal; font-size: .78rem; color: var(--steel); margin-top: .4rem; }
+
+.bl-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0; }
+.bl-compare > div { padding: 1.2rem 1.25rem; border: 1px solid var(--line); background: var(--white); }
+.bl-compare .bl-christ { background: var(--ash); color: var(--parchment); border-color: var(--ash); }
+.bl-compare .pt-eyebrow { margin-bottom: .5rem; }
+.bl-compare .bl-christ .pt-eyebrow { color: var(--gold); }
+.bl-compare .bl-source { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.35rem; margin: 0 0 .5rem; }
+.bl-compare p:last-child { margin-bottom: 0; }
+
+.bl-summary { list-style: none; padding: 0; margin: 1rem 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; }
+.bl-summary li { margin: 0; text-align: center; padding: .8rem .5rem; background: var(--parchment); font-size: .95rem; }
+.bl-summary li strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.05rem; }
+.bl-summary li.bl-sum-christ { background: var(--ink); color: var(--parchment); }
+
+.bl-close { background: var(--ash); color: var(--parchment); padding: 3rem 0; text-align: center; }
+.bl-close .bl-conviction { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; }
+.bl-close .pt-btn { margin: .3rem; }
+.bl-page .bl-close a.pt-btn--ghost { color: var(--parchment); border-color: var(--parchment); }
+.bl-page .bl-close a.pt-btn--ghost:hover { color: var(--ink); background: var(--parchment); }
+
+@media (max-width: 640px) {
+  .bl-toc ol { columns: 1; }
+  .bl-compare { grid-template-columns: 1fr; }
+  .bl-summary { grid-template-columns: 1fr 1fr; }
+}
+@media print {
+  .bl-close .pt-btn, #site-header, footer { display: none; }
+}
+
+/* paragraph rhythm */
+.bl-page .pr-guide p { margin: 0 0 1rem; }
+.bl-page .pr-guide .bl-refs { margin-top: -.25rem; margin-bottom: 0; }
+.bl-page .bl-values li p { margin: 0; }
+.bl-page .bl-values li .bl-refs { margin-top: .4rem; }
+.bl-page .bl-compare p { margin: 0 0 .5rem; }

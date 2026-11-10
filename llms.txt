@@ -9,6 +9,7 @@ TheWrkShop publishes The Daily (a short Scripture-based devotional every weekday
 - [The Upstream Formation Framework](https://thewrkshop.com/upstream/): A teaching model (trigger, interpretation, agreement, response, formation) for how what a man believes in the moment shapes who he becomes. Includes Scripture, a worked example, a worksheet and a Q&A. It is a proposed teaching model, not a neurological claim or a quotation of Scripture.
 - [The Daily](https://thewrkshop.com/daily.html): Today's devotional. One Scripture, one hard question and one step, released at 12:01 am Central on weekdays.
 - [Leadership & Culture](https://thewrkshop.com/leadership/): Studies on how leaders shape culture: what they reward, tolerate and model, and how they respond to disagreement, success and the need to be liked.
+- [What We Believe](https://thewrkshop.com/beliefs/): TheWrkShop's foundational identity: who we are, mission, vision, values, and the belief that Christ, not willpower, is the source of real transformation (John 15:4-5, Philippians 2:12-13).
 - [Get Known](https://thewrkshop.com/get-known.html): For men who want to join an online group. A short form followed by a 20-minute phone call or Google Meet.
 
 <!-- topics:start -->

@@ -97,7 +97,7 @@ function enhanceSiteNavigation() {
   if (footer) {
     footer.replaceChildren();
     const destinations = [{label:'The Daily', href:'/daily.html'}, ...Object.values(siteSections),
-      {label:'Our Story', href:'/#about'}, {label:'Contact', href:'/#contact'}, {label:'Privacy', href:'/privacy/'}];
+      {label:'Our Story', href:'/#about'}, {label:'What We Believe', href:'/beliefs/'}, {label:'Contact', href:'/#contact'}, {label:'Privacy', href:'/privacy/'}];
     destinations.forEach(destination => {
       const link = document.createElement('a');
       link.href = destination.href; link.textContent = destination.label;
