@@ -53,5 +53,6 @@
 /netlify.toml   /404.html   404!
 /vite.config.js   /404.html   404!
 /README.md   /404.html   404!
+/CLAUDE.md   /404.html   404!
 /docs/*   /404.html   404!
 /.gitignore   /404.html   404!
