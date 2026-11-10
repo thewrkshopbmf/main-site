@@ -625,6 +625,8 @@ async function writeEntryPage(tpl, e, prev, next, opts = {}) {
     let cleaned = html
       .replace(/\s*<section class="daily-section">\s*<h3>Action Step<\/h3>\s*<div class="action-step" id="dActionStep">\s*<\/div>\s*<\/section>/, '')
       .replace(/\s*<section class="daily-section">\s*<h3>Declaration<\/h3>\s*<p class="declaration-text" id="dDeclaration">\s*<\/p>\s*<\/section>/, '');
+    // First/newest post: grey out the missing Previous/Next instead of leaving a live "#" link
+    cleaned = cleaned.replace(/<a href="#" id="(prevDay|nextDay)">/g, '<a href="#" id="$1" class="is-disabled" aria-disabled="true" tabindex="-1">');
     // A standalone piece has no previous/next Daily: link back to the leadership hub instead
     if (opts.feature) {
       cleaned = cleaned.replace(/<div class="nav-archive">[\s\S]*?<\/div>/,

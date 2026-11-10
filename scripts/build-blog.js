@@ -234,8 +234,9 @@ async function main() {
       BODY_HTML: bodyHTML,
       TOPICS_HTML: topicsLineHtml(topicsFor(e)),
       NEXT_STEPS_HTML: nextStepsHtml(e, 'blog'),
-      PREV_HREF: prev ? `../${path.dirname(fileNameFor(prev))}/` : '#',
-      NEXT_HREF: next ? `../${path.dirname(fileNameFor(next))}/` : '#'
+      // Root-relative links: blog pages carry <base href="/">, so "../" would resolve to the site root (404)
+      PREV_HREF: prev ? `/blog/${path.dirname(fileNameFor(prev))}/` : '#',
+      NEXT_HREF: next ? `/blog/${path.dirname(fileNameFor(next))}/` : '#'
     });
 
     const outPath = path.join(BLOG_DIR, fileNameFor(e));
