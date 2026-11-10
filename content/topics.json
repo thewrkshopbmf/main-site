@@ -1,0 +1,255 @@
+{
+  "_about": "Topic hubs for search (thewrkshop.com/topics/<slug>/). Each Daily, blog post, leadership piece and Question lists its topics in a \"topics\" field using these slugs. name = the words shown on the site; title = the Google title; description = the Google snippet; intro = the opening paragraph, written in the plain words people search for; search_phrases = what a man would type into Google; match = words used to suggest topics for a post that has none yet; resources = tools and studies to point to first. See docs/SEARCH-SYSTEM.md.",
+  "topics": [
+    {
+      "slug": "accountability",
+      "name": "Accountability",
+      "title": "Accountability and Ownership: Devotionals for Men and Leaders",
+      "description": "Biblical devotionals on accountability and ownership at work, in church and between brothers: why problems belong to no one, and how to own the next step.",
+      "intro": "Accountability isn't a policy. It's someone willing to own the next step. These devotionals look at accountability and ownership through Scripture: why problems get passed around until nobody owns them, what leaders tolerate and reward, why truth-tellers get blamed, and what real accountability between men looks like when one of us falls.",
+      "search_phrases": ["accountability", "lack of accountability", "ownership", "accountability at work", "accountability in the church", "accountability partner", "biblical accountability"],
+      "match": ["accountab", "ownership", "owns it", "responsibility", "say-do", "walk the talk", "follow-through", "follow through", "speak-up culture", "what leaders tolerate", "admitting mistakes", "admit they were wrong", "shooting the messenger", "confess"],
+      "resources": ["/sub-pages/resources/starter-kit.html", "/tools/who-gets-access/", "/tools/sharpened/", "/leadership/how-power-distorts-reality-in-leaders/"]
+    },
+    {
+      "slug": "leadership",
+      "name": "Christian Leadership",
+      "title": "Christian Leadership and Culture: Devotionals for Leaders",
+      "description": "Biblical leadership for managers, pastors, coaches and parents: culture, power, feedback, accountability and character, one short devotional at a time.",
+      "intro": "Every leader shapes a culture, whether he means to or not. What you reward, tolerate and model becomes the room around you. These devotionals apply Scripture to leadership at work, in the church, on the team and at home: psychological safety, admitting you were wrong, power, mission drift and the say-do gap.",
+      "search_phrases": ["Christian leadership", "biblical leadership", "leadership devotional", "servant leadership", "team culture", "church leadership"],
+      "match": ["leader", "leadership", "team culture", "organizational culture", "workplace", "psychological safety", "managers"],
+      "resources": ["/leadership/", "/leadership/how-power-distorts-reality-in-leaders/", "/infographics/", "/upstream/"]
+    },
+    {
+      "slug": "approval",
+      "name": "People-Pleasing",
+      "title": "People-Pleasing and the Fear of Man: Devotionals for Men",
+      "description": "Why do I need everyone's approval? Biblical devotionals for men on people-pleasing, the fear of man and living for an audience of One (Galatians 1:10).",
+      "intro": "People-pleasing looks like kindness from the outside. Underneath it is usually the fear of man: the need to be liked, approved of and never criticized. These devotionals walk through Galatians 1:10, John 12:43 and more to help you stop living for an audience and start living for an audience of One.",
+      "search_phrases": ["people pleasing", "fear of man", "need for approval", "how to stop people pleasing", "approval addiction"],
+      "match": ["approval", "people pleasing", "people-pleasing", "fear of man", "audience", "need to be liked", "peer pressure", "peer influence", "act differently around"],
+      "resources": ["/patterns/pleaser/", "/tools/pattern-finder/", "/patterns/prover/"]
+    },
+    {
+      "slug": "identity",
+      "name": "Identity in Christ",
+      "title": "Identity in Christ and Self-Worth: Devotionals for Men",
+      "description": "Who are you when the title, the paycheck and the praise are gone? Biblical devotionals for men on identity in Christ, self-worth and feeling not good enough.",
+      "intro": "Most men build their identity on what they do, what they earn or what others think. Then something shifts and the ground moves. These devotionals look at identity in Christ: worth that isn't earned, can't be lost and doesn't depend on the next win.",
+      "search_phrases": ["identity in Christ", "self-worth", "not good enough", "who am I in Christ", "finding your identity"],
+      "match": ["identity", "self-worth", "worth", "not enough", "good enough", "image-bearer", "who you are"],
+      "resources": ["/patterns/prover/", "/tools/built-for-more/", "/tools/whats-in-your-hand/"]
+    },
+    {
+      "slug": "anger",
+      "name": "Anger and Reactions",
+      "title": "Anger, Defensiveness and Your Words: Devotionals for Men",
+      "description": "Biblical devotionals for men on anger, defensiveness and the words we can't take back. Quick to listen, slow to speak, slow to anger (James 1:19).",
+      "intro": "Anger rarely starts where it shows up. It starts upstream, in the story you told yourself a second before you reacted. These devotionals deal with anger, defensiveness, replaying hurt and the power of your words, and give you one step to practice the next time it rises.",
+      "search_phrases": ["anger", "how to control anger as a Christian", "defensiveness", "quick to listen slow to speak", "power of words"],
+      "match": ["anger", "angry", "temper", "defensive", "quick to listen", "slow to speak", "reaction", "disagreement", "offense", "replaying hurt", "tongue", "power of words"],
+      "resources": ["/patterns/reactor/", "/patterns/protector/", "/tools/interruption-lab/", "/studies/reflex-vs-response/", "/tools/growth-journal/", "/upstream/"]
+    },
+    {
+      "slug": "difficult-people",
+      "name": "Difficult People and Forgiveness",
+      "title": "Difficult People and Forgiveness: Devotionals for Men",
+      "description": "How do you love someone who frustrates you or forgive someone who hurt you? Biblical devotionals for men on difficult people, forgiveness and bitterness.",
+      "intro": "Everyone has someone who gets under his skin. Scripture doesn't ask you to pretend they don't, but it does ask you to see them as image-bearers, to honor them and to forgive. These devotionals cover difficult people, forgiveness, bitterness and what Jesus meant by turning the other cheek.",
+      "search_phrases": ["how to forgive someone who hurt you", "difficult people", "forgiveness", "bitterness", "love your enemies"],
+      "match": ["difficult people", "forgiv", "hurt you", "enemies", "bitterness", "overcome evil", "frustrates you", "loving others", "judging others", "other cheek"],
+      "resources": ["/tools/other-cheek/", "/tools/sharpened/", "/patterns/avoider/"]
+    },
+    {
+      "slug": "pride-humility",
+      "name": "Pride and Humility",
+      "title": "Pride and Humility: Devotionals for Christian Men",
+      "description": "Biblical devotionals for men on pride, humility and success: admitting you were wrong, celebrating others and staying humble when things go well.",
+      "intro": "Pride rarely looks like arrogance. More often it looks like never admitting you were wrong, quietly resenting someone else's success or forgetting who gave you what you have. These devotionals look at pride and humility in everyday life, at work and in leadership.",
+      "search_phrases": ["pride", "humility", "how to be humble", "pride vs humility", "admitting you were wrong"],
+      "match": ["pride", "proud", "humility", "humble", "ego", "success is a spiritual test", "entitlement", "gets low", "envy"],
+      "resources": ["/tools/unexamined-heart/", "/patterns/protector/"]
+    },
+    {
+      "slug": "fear-doubt",
+      "name": "Fear, Worry and Doubt",
+      "title": "Fear, Worry and Doubt: Devotionals for Christian Men",
+      "description": "Biblical devotionals for men on fear, anxiety, worry and doubt: what to do when faith feels weak and courage is hard to find (2 Timothy 1:7).",
+      "intro": "Fear and doubt don't mean your faith is fake. They mean you're human, and Scripture is full of men who said, \"I believe; help my unbelief.\" These devotionals cover fear, worry, anxiety and doubt, and how to take the next faithful step anyway.",
+      "search_phrases": ["fear", "worry", "anxiety", "doubt", "overcoming fear", "how to stop worrying", "courage"],
+      "match": ["fear", "anxiety", "anxious", "worry", "doubt", "afraid", "courage", "comfort zone"],
+      "resources": ["/belief/", "/tools/belief-under-pressure/", "/belief/trust-diagnostic/"]
+    },
+    {
+      "slug": "trusting-god",
+      "name": "Trusting God",
+      "title": "Trusting God and Letting Go of Control: Devotionals for Men",
+      "description": "Biblical devotionals for men on trusting God, surrender and letting go of control: what's yours to carry and what belongs to Him (Proverbs 3:5-6).",
+      "intro": "Control feels like responsibility until it starts crushing you. These devotionals are about trusting God and surrender: sorting what's yours to carry from what belongs to Him, trusting Him to provide and letting go of outcomes you were never meant to hold.",
+      "search_phrases": ["trusting God", "letting go of control", "surrender to God", "how to trust God", "give it to God"],
+      "match": ["trusting god", "trust god", "letting go of control", "control", "surrender", "let go", "provide", "provision", "jehovah jireh", "carrying what belongs"],
+      "resources": ["/tools/steward-or-owner/", "/prayer/surrender/", "/after-the-amen/", "/patterns/controller/", "/tools/kingdom-first/"]
+    },
+    {
+      "slug": "waiting-on-god",
+      "name": "Waiting on God",
+      "title": "Waiting on God and Unanswered Prayer: Devotionals for Men",
+      "description": "Why does God make us wait? Biblical devotionals for men on waiting on God, His timing, unanswered prayer and what to do while you wait.",
+      "intro": "Waiting is where most of formation happens, and it's the part no one asks for. These devotionals look at waiting on God, His timing, unanswered prayer and what to do when God says no or not yet.",
+      "search_phrases": ["waiting on God", "God's timing", "unanswered prayer", "why does God make us wait", "when God says no"],
+      "match": ["waiting on god", "wait on god", "god's timing", "make us wait", "while you wait", "unanswered prayer", "when god says no", "god's pace", "at your pace"],
+      "resources": ["/prayer/when-waiting-begins-to-define-you/", "/prayer/when-god-seems-silent/", "/after-the-amen/"]
+    },
+    {
+      "slug": "prayer",
+      "name": "Prayer",
+      "title": "Prayer: Devotionals and Tools for Christian Men",
+      "description": "How do I pray, and what do I do when God feels silent? Biblical devotionals and free tools for men on prayer, stillness and private prayer.",
+      "intro": "Prayer isn't a technique for getting God to act. It's how a man stays honest with his Father. These devotionals cover private prayer, being still, praying when God feels silent and what to pray for, with free guided tools to go deeper.",
+      "search_phrases": ["prayer", "how to pray", "when God is silent", "be still", "prayer for men"],
+      "match": ["prayer", "pray", "god feels silent", "god is silent", "be still", "quiet time"],
+      "resources": ["/prayer/", "/prayer/what-is-biblical-prayer/", "/prayer/guided-prayer/", "/prayer/how-do-i-know-what-to-pray-for/", "/prayer/7-day/"]
+    },
+    {
+      "slug": "listening",
+      "name": "Listening",
+      "title": "Listening and Hearing God's Voice: Devotionals for Men",
+      "description": "How do you hear God's voice, and why is listening so hard? Biblical devotionals for men on listening to God and becoming a better listener to others.",
+      "intro": "Most men are better at talking than listening, to God and to the people around them. These devotionals look at how to hear God's voice, why listening takes humility and how listening to God makes you a better listener at home, at work and in your group.",
+      "search_phrases": ["how to hear God's voice", "listening to God", "how to be a better listener", "quick to listen"],
+      "match": ["listening", "listen", "better listener", "hear god", "hearing god", "bad news", "echo chamber"],
+      "resources": ["/prayer/guided-prayer/", "/one-verse-man/diagnostic/", "/tools/filter-lens/"]
+    },
+    {
+      "slug": "purpose",
+      "name": "Purpose and Calling",
+      "title": "Purpose and Calling: Devotionals for Christian Men",
+      "description": "What is my purpose as a man? Biblical devotionals on calling, spiritual gifts and using what's already in your hand (Exodus 4:2, Ephesians 2:10).",
+      "intro": "God almost never starts with what you don't have. He starts with what's already in your hand. These devotionals are about purpose and calling: spiritual gifts, the parable of the talents, good works prepared in advance and why being saved means being sent.",
+      "search_phrases": ["purpose", "calling", "what is my purpose", "God's calling", "spiritual gifts"],
+      "match": ["purpose", "calling", "spiritual gifts", "talents", "good works", "in your hand", "saved and sent", "mission drift", "your why"],
+      "resources": ["/tools/whats-in-your-hand/", "/assessment.html", "/tools/built-for-more/"]
+    },
+    {
+      "slug": "temptation",
+      "name": "Temptation and Purity",
+      "title": "Temptation, Lust and Purity: Devotionals for Christian Men",
+      "description": "Biblical devotionals for men on temptation, lust, purity and the sin you keep going back to: guard your heart, walk by the Spirit, put off and put on.",
+      "intro": "Temptation is rarely won in the moment. It's won upstream, in what you agree with before you act. These devotionals deal honestly with temptation, lust and purity, and with what replaces the sin you're trying to stop.",
+      "search_phrases": ["temptation", "how to resist temptation", "lust", "purity", "guard your heart", "same sin"],
+      "match": ["temptation", "tempt", "lust", "purity", "negotiating with sin", "overcoming sin", "flesh", "guard your heart", "same sin", "put off"],
+      "resources": ["/tools/what-feeds-it/", "/tools/invisible-life/"]
+    },
+    {
+      "slug": "thought-life",
+      "name": "Your Thought Life",
+      "title": "Taking Thoughts Captive: Devotionals on Your Thought Life",
+      "description": "Biblical devotionals for men on the battle of the mind: taking every thought captive (2 Corinthians 10:5), the lies we believe and the stories we tell ourselves.",
+      "intro": "The battle starts before the behavior. These devotionals are about your thought life: taking every thought captive, telling facts from the stories you tell yourself, recognizing the lies you've agreed with and renewing your mind.",
+      "search_phrases": ["taking thoughts captive", "battle of the mind", "negative thoughts", "renewing your mind", "thought life"],
+      "match": ["thought", "battle of the mind", "mind", "enemy's lies", "lies we believe", "facts vs. stories", "replaying", "spiritual warfare"],
+      "resources": ["/upstream/", "/tools/filter-lens/", "/tools/dont-look-back/"]
+    },
+    {
+      "slug": "shame-grace",
+      "name": "Shame and Grace",
+      "title": "Shame, Failure and Grace: Devotionals for Christian Men",
+      "description": "Biblical devotionals for men after failure: conviction vs. condemnation, shame, repentance and how Jesus restores men who fall (John 21).",
+      "intro": "After you fail, shame tells you to hide until you've fixed yourself. Grace tells you to run home. These devotionals cover shame, conviction vs. condemnation, repentance, restoration and what Jesus did with Peter after he fell.",
+      "search_phrases": ["shame", "conviction vs condemnation", "after failure", "grace", "repentance", "restoration"],
+      "match": ["shame", "condemnation", "after you fail", "failure", "grace", "repentance", "restores", "restoration", "returning to god", "prodigal", "fix yourself", "letting go of the past"],
+      "resources": ["/studies/simon-peter-shepherd/", "/tools/dont-look-back/"]
+    },
+    {
+      "slug": "brotherhood",
+      "name": "Brotherhood",
+      "title": "Brotherhood and Men's Groups: Devotionals for Christian Men",
+      "description": "Why do men feel so alone, and why do we hide our struggles? Biblical devotionals on brotherhood, men's groups, friendship and asking for help.",
+      "intro": "Most men are surrounded by people and known by almost none of them. These devotionals are about brotherhood: why men hide their struggles, why it's so hard to ask for help, what to do when a brother falls and how to build a men's group that tells the truth.",
+      "search_phrases": ["brotherhood", "men's group", "Christian brotherhood", "men and loneliness", "isolation", "Christian friendship"],
+      "match": ["brotherhood", "brother", "men's group", "isolation", "community", "hide their struggles", "ask for help", "confesses", "friendship", "alone"],
+      "resources": ["/sub-pages/resources/starter-kit.html", "/get-known.html", "/tools/who-gets-access/", "/tools/sharpened/", "/studies/"]
+    },
+    {
+      "slug": "spiritual-growth",
+      "name": "Spiritual Growth",
+      "title": "Spiritual Growth and Formation: Devotionals for Men",
+      "description": "How do you actually grow spiritually? Biblical devotionals for men on spiritual formation, discipleship, abiding in Christ and becoming like Jesus.",
+      "intro": "Christianity isn't self-improvement. It's Christ formed in you. These devotionals are about spiritual growth and formation: abiding in Christ, discipleship, what forms you in ordinary moments and how to keep growing when you still struggle.",
+      "search_phrases": ["spiritual growth", "spiritual formation", "discipleship", "abide in Christ", "how to grow spiritually"],
+      "match": ["spiritual growth", "spiritual formation", "discipleship", "disciple", "maturity", "abide", "abiding", "christlike", "self-improvement"],
+      "resources": ["/studies/doing-vs-dwelling/", "/studies/simon-peter-shepherd/", "/upstream/", "/tools/invisible-life/"]
+    },
+    {
+      "slug": "integrity",
+      "name": "Integrity and Character",
+      "title": "Integrity and Character: Devotionals for Christian Men",
+      "description": "Biblical devotionals for men on integrity and character: your private life, the say-do gap and the person you are when no one is watching (Luke 6:45).",
+      "intro": "Your public life is built by your private one. These devotionals are about integrity and character: the say-do gap, who you are when no one is watching and how ordinary moments form the man you are becoming.",
+      "search_phrases": ["integrity", "character", "integrity in leadership", "say-do gap", "who you are when no one is watching"],
+      "match": ["integrity", "character", "private life", "hypocrisy", "say-do", "values aren", "rules don"],
+      "resources": ["/tools/invisible-life/", "/tools/unexamined-heart/"]
+    },
+    {
+      "slug": "gratitude",
+      "name": "Gratitude",
+      "title": "Gratitude and Contentment: Devotionals for Christian Men",
+      "description": "Biblical devotionals for men on gratitude, thankfulness and contentment, including gratitude in hard seasons and Thanksgiving devotionals.",
+      "intro": "Gratitude isn't a mood. It's a practice of remembering what God has done. These devotionals cover gratitude, contentment, complaining and comparison, gratitude in hard seasons and how gratitude turns into generosity.",
+      "search_phrases": ["gratitude", "thankfulness", "contentment", "Thanksgiving devotional", "gratitude in hard times"],
+      "match": ["gratitude", "grateful", "thankful", "thanksgiving", "thank you", "contentment", "complaining", "blessings"],
+      "resources": ["/tools/kingdom-first/", "/tools/built-for-more/"]
+    },
+    {
+      "slug": "money",
+      "name": "Money and Priorities",
+      "title": "Money, Priorities and Generosity: Devotionals for Men",
+      "description": "Biblical devotionals for men on money, greed, generosity and priorities: seek first the Kingdom (Matthew 6:33) and you cannot serve two masters.",
+      "intro": "What you do with money shows what's on the throne. These devotionals look at money, priorities and generosity: putting God first, treasures in heaven, serving two masters and how money can quietly write the message.",
+      "search_phrases": ["money and faith", "seek first the kingdom", "priorities", "generosity", "greed", "stewardship"],
+      "match": ["money", "greed", "wealth", "treasure", "generosity", "debt", "two masters", "riches", "seek first", "putting god first", "priorities"],
+      "resources": ["/tools/kingdom-first/", "/sub-pages/resources/seek-first-plan.html", "/tools/steward-or-owner/"]
+    },
+    {
+      "slug": "trials",
+      "name": "Trials and Hard Seasons",
+      "title": "Trials and Hard Seasons: Devotionals for Christian Men",
+      "description": "Why does God allow trials? Biblical devotionals for men on suffering, weakness, perseverance and finding God as a refuge in hard seasons.",
+      "intro": "Trials don't mean God has left. They're often where He does His deepest work. These devotionals are for hard seasons: suffering, weakness, perseverance and finding God as a refuge in the storm.",
+      "search_phrases": ["trials", "suffering", "hard times", "why does God allow suffering", "perseverance"],
+      "match": ["trials", "suffering", "pain", "hard times", "hard seasons", "storm", "refuge", "weak", "perseverance", "still struggle", "when life is dark"],
+      "resources": ["/prayer/when-god-seems-silent/", "/belief/", "/after-the-amen/"]
+    },
+    {
+      "slug": "rest-distraction",
+      "name": "Rest and Distraction",
+      "title": "Rest, Hurry and Distraction: Devotionals for Busy Men",
+      "description": "Biblical devotionals for busy men on rest, Sabbath, hurry, burnout, social media and distraction. Who has your attention?",
+      "intro": "Busy isn't a badge. These devotionals are for men running too fast: rest and Sabbath, hurry, burnout, social media and distraction, and the question underneath all of them: who has your attention?",
+      "search_phrases": ["rest", "Sabbath", "busyness", "burnout", "distraction", "social media and faith"],
+      "match": ["social media", "distraction", "busy", "busyness", "hurry", "sabbath", "attention", "burnout", "slowing down", "scroll"],
+      "resources": ["/one-verse-man/diagnostic/", "/one-verse-man/", "/prayer/guided-prayer/"]
+    },
+    {
+      "slug": "legacy",
+      "name": "Legacy",
+      "title": "Legacy and What You Pass On: Devotionals for Men",
+      "description": "Biblical devotionals for men on legacy, fatherhood and mentoring: what the next generation inherits from you and the patterns you choose to end.",
+      "intro": "Every man passes something on. These devotionals are about legacy: what was passed to you, the patterns you inherited, mentoring the next generation and what keeps forming people after you're gone.",
+      "search_phrases": ["legacy", "leaving a legacy", "fatherhood", "mentoring", "generational patterns"],
+      "match": ["legacy", "next generation", "fatherhood", "passed", "inherit", "after you're gone", "mentoring", "investing in"],
+      "resources": ["/tools/filter-lens/", "/tools/whats-in-your-hand/"]
+    },
+    {
+      "slug": "serving",
+      "name": "Serving Others",
+      "title": "Serving Others: Devotionals for Christian Men",
+      "description": "Biblical devotionals for men on serving others, compassion and hospitality: the Good Samaritan, hidden service and a seat at the table.",
+      "intro": "Jesus measured greatness by service. These devotionals are about serving others: compassion in action, hidden service no one sees, hospitality and making room at the table.",
+      "search_phrases": ["serving others", "compassion", "servant heart", "hospitality", "Good Samaritan"],
+      "match": ["serving", "serve", "compassion", "good samaritan", "hospitality", "seat at the table", "hidden service"],
+      "resources": ["/assessment.html", "/tools/whats-in-your-hand/"]
+    }
+  ]
+}

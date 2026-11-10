@@ -9,6 +9,7 @@
   "series": "Give Thanks",
   "seo_title": "A Thanksgiving Prayer for the Table",
   "seo_description": "A short Thanksgiving prayer for men to pray over the meal with family and friends, and one question to ask around the table before the plates are passed.",
+  "search_phrase": "Thanksgiving prayer",
   "keywords": [
     "Thanksgiving prayer",
     "Thanksgiving table prayer",
@@ -16,6 +17,10 @@
     "Psalm 107:1",
     "gratitude",
     "Christian men"
+  ],
+  "topics": [
+    "gratitude",
+    "prayer"
   ],
   "og_image": "/assets/og/a-prayer-for-the-table.png",
   "og_image_alt": "A Prayer for the Table: One prayer for the meal, and one question to ask before the plates are passed. TheWrkShop.",
@@ -36,7 +41,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Just a prayer you can pray over the table, and one question to ask before the plates are passed."
+          "text": "Just a short Thanksgiving prayer you can pray over the table, and one question to ask before the plates are passed."
         }
       ]
     },

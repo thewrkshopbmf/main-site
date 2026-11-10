@@ -11,6 +11,7 @@ import {
 } from './shared/render-content.js';
 import { SITE_URL, dailyBodyHtml } from '../netlify/shared/daily-email.js';
 import { nextStepsHtml } from './shared/next-steps.js';
+import { topicsFor, topicsLineHtml, topicNames } from './shared/search-topics.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -479,7 +480,9 @@ async function writeArchiveJson(visible) {
       href: pagePathFor(e),
       ...(cleanString(e.headline) ? { headline: cleanString(e.headline) } : {}),
       ...(cleanString(e.category) ? { category: cleanString(e.category) } : {}),
-      ...(cleanString(e.tagline) ? { tagline: cleanString(e.tagline) } : {})
+      ...(cleanString(e.tagline) ? { tagline: cleanString(e.tagline) } : {}),
+      topics: topicsFor(e),
+      topic_names: topicNames(topicsFor(e))
     }));
 
   await fs.writeFile(
@@ -524,7 +527,8 @@ async function writeLatestDailyJson(visible) {
     insight: todayEntry.sections.map(sectionToPlainText).filter(Boolean),
     insight_teaser: teaser,
     one_minute_win: actionSection ? sectionToPlainText(actionSection) : '',
-    declaration: declarationSection ? sectionToPlainText(declarationSection) : ''
+    declaration: declarationSection ? sectionToPlainText(declarationSection) : '',
+    topics: topicsFor(todayEntry)
   };
 
   await fs.writeFile(
@@ -583,6 +587,7 @@ async function writeEntryPage(tpl, e, prev, next, opts = {}) {
         const sub = cleanString(e.headline) ? cleanString(e.headline_sub) : cleanString(e.subtitle);
         return sub ? `<span class="daily-subtitle" id="dSubtitle">${escapeHtml(sub)}</span>` : '';
       })(),
+      TOPICS_HTML: topicsLineHtml(topicsFor(e)),
       SERIES_NOTE_HTML: cleanString(e.series)
         ? `<p class="daily-series-note">Part of the series <em>${escapeHtml(cleanString(e.series))}</em></p>`
         : '',
@@ -620,6 +625,8 @@ async function writeEntryPage(tpl, e, prev, next, opts = {}) {
     let cleaned = html
       .replace(/\s*<section class="daily-section">\s*<h3>Action Step<\/h3>\s*<div class="action-step" id="dActionStep">\s*<\/div>\s*<\/section>/, '')
       .replace(/\s*<section class="daily-section">\s*<h3>Declaration<\/h3>\s*<p class="declaration-text" id="dDeclaration">\s*<\/p>\s*<\/section>/, '');
+    // First/newest post: grey out the missing Previous/Next instead of leaving a live "#" link
+    cleaned = cleaned.replace(/<a href="#" id="(prevDay|nextDay)">/g, '<a href="#" id="$1" class="is-disabled" aria-disabled="true" tabindex="-1">');
     // A standalone piece has no previous/next Daily: link back to the leadership hub instead
     if (opts.feature) {
       cleaned = cleaned.replace(/<div class="nav-archive">[\s\S]*?<\/div>/,
@@ -731,7 +738,11 @@ function jsonLdFor(e, seo) {
     isPartOf: { '@id': 'https://thewrkshop.com/#website' }
   };
   if (cleanString(e.category)) data.articleSection = cleanString(e.category);
-  if (Array.isArray(e.keywords) && e.keywords.length) data.keywords = e.keywords.join(', ');
+  // Keywords plus the post's topic names (the plain words people search for)
+  const keywordList = [...(Array.isArray(e.keywords) ? e.keywords : []), ...topicNames(topicsFor(e))]
+    .map(cleanString).filter(Boolean)
+    .filter((k, i, all) => all.findIndex(x => x.toLowerCase() === k.toLowerCase()) === i);
+  if (keywordList.length) data.keywords = keywordList.join(', ');
   const refs = [
     ...(e.scriptures || []).map(s => s.ref),
     ...(Array.isArray(e.related_scriptures) ? e.related_scriptures : [])
@@ -880,6 +891,25 @@ async function buildLeadershipHub(visible, features = []) {
   });
   await fs.writeFile(path.join(outDir, 'index.html'), html, 'utf-8');
   return posts.length + features.length;
+}
+
+// ---------- Topic hubs (scripts/build-topics.js reads this) ----------
+
+async function writeTopicEntriesJson(visible, features = []) {
+  const items = [...features, ...visible].map(e => {
+    const seo = seoFor(e);
+    return {
+      kind: e.kind === 'feature' ? 'feature' : (hasLeadershipPage(e) ? 'leadership' : 'daily'),
+      date: e.date,
+      title: cleanString(e.headline) || cleanString(e.subtitle) || cleanString(e.title) || 'Daily',
+      subtitle: cleanString(e.headline_sub),
+      description: seo.description,
+      verse_ref: cleanString(e.verse_ref) || cleanString((e.scriptures || [])[0]?.ref),
+      href: pagePathFor(e),
+      topics: topicsFor(e)
+    };
+  });
+  await fs.writeFile(path.join(DATA_DIR, 'topic-entries.json'), JSON.stringify(items, null, 2));
 }
 
 // ---------- Email feed (Kit RSS-to-email reads this) ----------
@@ -1133,6 +1163,7 @@ async function main() {
   const shareCount = await buildSharePages([...visible, ...features]);
   const leadershipCount = await buildLeadershipHub(visible, features);
   await writeDailyFeed(visible);
+  await writeTopicEntriesJson(visible, features);
 
   console.log(
     `Built ${visible.length} daily pages in [${START_DATE}..${today}]. Older blocked: ${older.length}. Future blocked: ${future.length}. Leadership hub: ${leadershipCount} posts. Share pages: ${shareCount}.`

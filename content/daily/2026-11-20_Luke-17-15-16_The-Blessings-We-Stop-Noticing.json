@@ -7,15 +7,20 @@
   "headline_sub": "When Familiarity Makes Grace Invisible",
   "slug": "the-blessings-we-stop-noticing",
   "series": "Give Thanks",
-  "seo_title": "The Blessings We Stop Noticing: Luke 17 and Gratitude",
-  "seo_description": "Ten men were healed. One came back to say thank you, and he was a Samaritan. A Thanksgiving devotional for men on the ordinary grace we stop seeing.",
+  "seo_title": "Taking Blessings for Granted: The Ten Lepers in Luke 17",
+  "seo_description": "Ten men were healed. One came back to say thank you. A Thanksgiving devotional for men on taking blessings for granted and the grace we stop seeing.",
+  "search_phrase": "taking blessings for granted",
   "keywords": [
+    "taking blessings for granted",
     "gratitude",
     "ten lepers",
     "Luke 17",
     "Thanksgiving devotional for men",
     "noticing blessings",
     "thankfulness"
+  ],
+  "topics": [
+    "gratitude"
   ],
   "og_image": "/assets/og/the-blessings-we-stop-noticing.png",
   "og_image_alt": "The Blessings We Stop Noticing: A blessing doesn’t become ordinary because it happens every day. TheWrkShop.",
@@ -176,6 +181,10 @@
           "type": "callout",
           "prefix": "👉",
           "text": "ALL TEN WERE HEALED. ONLY ONE HEARD, “YOUR FAITH HAS MADE YOU WELL.”"
+        },
+        {
+          "type": "paragraph",
+          "text": "This is what taking blessings for granted looks like: the gift stays, and the gratitude fades."
         },
         {
           "type": "paragraph",

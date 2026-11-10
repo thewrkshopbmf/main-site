@@ -8,8 +8,9 @@
   "slug": "what-keeps-forming-people-after-youre-gone",
   "series": "The Battle Before the Battle",
   "category": "Leadership & Culture",
-  "seo_title": "What Keeps Forming People After You’re Gone?",
-  "seo_description": "The final study in The Battle Before the Battle. Every system starts in someone’s heart. What your leadership will keep forming in people after you leave the room.",
+  "seo_title": "Leadership Legacy: What Keeps Forming People After You Leave",
+  "seo_description": "Your leadership legacy is what keeps forming people after you leave the room. The final leadership study: every system starts in someone’s heart.",
+  "search_phrase": "leadership legacy",
   "keywords": [
     "leadership legacy",
     "Christian leadership",
@@ -17,6 +18,10 @@
     "stewardship",
     "2 Corinthians 3",
     "servant leadership"
+  ],
+  "topics": [
+    "leadership",
+    "legacy"
   ],
   "og_image": "/assets/og/what-keeps-forming-people-after-youre-gone.png",
   "og_image_alt": "What Keeps Forming People After You’re Gone?: The true legacy of leadership is what continues forming people when you are no longer in the room. TheWrkShop, Leadership & Culture.",
@@ -196,6 +201,10 @@
           "type": "callout",
           "prefix": "👉",
           "text": "WE ARE STEWARDS OF WHAT WE BUILD, NOT OWNERS OF THE PEOPLE IT FORMS."
+        },
+        {
+          "type": "paragraph",
+          "text": "That is your real leadership legacy: what keeps forming people after you are gone."
         },
         {
           "type": "paragraph",

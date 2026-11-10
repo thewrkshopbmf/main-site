@@ -111,7 +111,7 @@
     <div><p class="browse-eyebrow">Latest devotional</p><h2 id="latest-reading-title">A moment in Scripture. A step forward.</h2><p id="latest-reading-description">One Scripture, one honest question, and one faithful step.</p><a class="button-primary" id="latest-reading-link" href="/daily.html">Read the latest devotional →</a></div>
     <a class="browse-library-link" href="#devotional-library">Browse all devotionals ↓</a>
   </section>
-  <div class="browse-container library-heading" id="devotional-library"><h2>All devotionals</h2><p>Find a reading by topic, title, or Scripture.</p></div>
+  <div class="browse-container library-heading" id="devotional-library"><h2>All devotionals</h2><p>Find a reading by topic, title, or Scripture. Or <a href="/topics/">browse every topic →</a></p></div>
   <section class="toolbar browse-container" aria-label="Filter devotionals">
     <select id="topicSel" class="select" aria-label="Filter by topic"><option value="all">All topics</option></select>
     <select id="yearSel" class="select" aria-label="Filter by year"></select>
@@ -238,7 +238,7 @@
         const q = (search.value || '').trim().toLowerCase();
 
         let filtered = all.slice();
-        if (topicSel.value !== 'all') filtered = filtered.filter(e => e.category === topicSel.value);
+        if (topicSel.value !== 'all') filtered = filtered.filter(e => e.topics.includes(topicSel.value));
 
         if (y !== 'all') filtered = filtered.filter(e => (e.date || '').startsWith(y));
         if (m !== 'all') filtered = filtered.filter(e => (e.date || '').slice(5,7) === m);
@@ -309,11 +309,12 @@
               category: x.category || 'Daily Formation',
               subtitle: x.headline ? (x.tagline || '') : '',
               verse: x.verse_ref || '',
+              topics: Array.isArray(x.topic_names) ? x.topic_names : (x.category ? [x.category] : []),
               href: (x.href && x.href.startsWith('/')) ? x.href : ('/' + (x.href || '').replace(/^\/+/, ''))
             }))
             .filter(x => x.date && x.date <= today);
 
-          [...new Set(all.map(e => e.category))].sort().forEach(topic => {
+          [...new Set(all.flatMap(e => e.topics))].sort().forEach(topic => {
             const option = document.createElement('option'); option.value = topic; option.textContent = topic; topicSel.append(option);
           });
           const latest = [...all].sort((a,b) => b.date.localeCompare(a.date))[0];

@@ -7,8 +7,9 @@
   "headline_sub": "Thanking God Without Pretending Everything Is Good",
   "slug": "gratitude-when-life-is-unfinished",
   "series": "Give Thanks",
-  "seo_title": "Gratitude When Life Is Unfinished: Thanks in Hard Seasons",
-  "seo_description": "Give thanks in all circumstances does not mean calling every circumstance good. A Thanksgiving devotional for men carrying something unresolved this season.",
+  "seo_title": "Gratitude in Hard Times: When Life Is Unfinished",
+  "seo_description": "Give thanks in all circumstances doesn’t mean calling every circumstance good. A Thanksgiving devotional for men on gratitude in hard times.",
+  "search_phrase": "gratitude in hard times",
   "keywords": [
     "gratitude in hard times",
     "give thanks in all circumstances",
@@ -16,6 +17,10 @@
     "lament and thanksgiving",
     "1 Thessalonians 5:18",
     "Habakkuk 3:17"
+  ],
+  "topics": [
+    "gratitude",
+    "trials"
   ],
   "og_image": "/assets/og/gratitude-when-life-is-unfinished.png",
   "og_image_alt": "Gratitude When Life Is Unfinished: Gratitude does not require a finished story. TheWrkShop.",
@@ -188,6 +193,10 @@
           "type": "callout",
           "prefix": "👉",
           "text": "THANKSGIVING AND LAMENT CAN EXIST IN THE SAME PRAYER."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gratitude in hard times is not pretending. It is thanking God for what is true while you wait for what is not finished."
         },
         {
           "type": "paragraph",

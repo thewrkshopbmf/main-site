@@ -76,6 +76,11 @@ Netlify deploy previews for pull requests are turned off, so the staging address
 
 ## 📥 Adding Content
 
+> **Before publishing any Daily, leadership post, weekend post or Question**, follow the search checklist in
+> [`docs/SEARCH-SYSTEM.md`](docs/SEARCH-SYSTEM.md): a `search_phrase`, a plain-word `seo_title` and
+> `seo_description`, the phrase said once on the page, and 1–3 `topics` from `content/topics.json`.
+> Run `npm run check:search` to check upcoming posts. Topic hubs build to `/topics/`.
+
 Both **Daily Devotionals** and **Weekly Blogs** are stored as JSON in the `content/` folder.  
 The build scripts use these files to generate static HTML + JSON archives automatically.
 

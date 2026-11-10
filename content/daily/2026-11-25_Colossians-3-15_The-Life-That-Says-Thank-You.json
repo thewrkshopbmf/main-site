@@ -7,15 +7,20 @@
   "headline_sub": "When Gratitude Becomes a Way of Living",
   "slug": "the-life-that-says-thank-you",
   "series": "Give Thanks",
-  "seo_title": "The Life That Says Thank You: Colossians 3:17",
-  "seo_description": "Whatever you do, give thanks. A Thanksgiving Eve devotional for men on gratitude as a way of living, and telling what God has done at your Thanksgiving table.",
+  "seo_title": "Living a Life of Gratitude: Colossians 3:17",
+  "seo_description": "Whatever you do, give thanks. A Thanksgiving Eve devotional for men on living a life of gratitude and telling what God has done at your table.",
+  "search_phrase": "living a life of gratitude",
   "keywords": [
+    "living a life of gratitude",
     "gratitude as a lifestyle",
     "Colossians 3:17",
     "Thanksgiving devotional for men",
     "Thanksgiving table",
     "thankfulness",
     "Christian living"
+  ],
+  "topics": [
+    "gratitude"
   ],
   "og_image": "/assets/og/the-life-that-says-thank-you.png",
   "og_image_alt": "The Life That Says Thank You: What we do with what we’ve received is the loudest thank-you we’ll ever say. TheWrkShop.",
@@ -195,6 +200,10 @@
           "type": "callout",
           "prefix": "👉",
           "text": "THE GOAL IS NOT SIMPLY TO BECOME MORE GRATEFUL PEOPLE. IT IS TO BECOME PEOPLE WHO LIVE MORE FAITHFULLY BEFORE CHRIST."
+        },
+        {
+          "type": "paragraph",
+          "text": "Living a life of gratitude means the thank-you doesn’t end when the meal does."
         },
         {
           "type": "paragraph",
