@@ -32,6 +32,7 @@
     "build:social": "node scripts/build-social.js",
     "build:content": "npm run build:daily && npm run build:blog && npm run build:podcasts && npm run build:library && npm run build:home && npm run build:questions && npm run build:topics",
     "predev:web": "npm run build:content",
-    "check:links": "node scripts/check-links.js"
+    "check:links": "node scripts/check-links.js",
+    "search:fill": "node scripts/search-fill.js"
   }
 }

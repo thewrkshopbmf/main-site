@@ -40,6 +40,27 @@ it never blocks a release.
 "topics": ["accountability", "leadership"],
 ```
 
+## Drafting a new Daily (paste this block at the top of every draft)
+
+Whoever drafts a Daily (you, Claude or any other tool) fills these in with the post, before it goes
+into `insert_content/input/`:
+
+```json
+"seo_title": "<the topic or search phrase first, then the hook; about 60 characters>",
+"seo_description": "<the problem in plain words plus the promise; 140–160 characters>",
+"search_phrase": "<what a man would type into Google about this, in readers' words>",
+"keywords": ["<search_phrase first>", "<2–4 related phrases>", "<Scripture reference>"],
+"topics": ["<1–3 slugs from content/topics.json>"],
+```
+
+And one plain sentence in The Truth that says the search phrase, e.g.
+*"This is what an accountability gap looks like: everyone sees the problem, and no one owns the next step."*
+
+**Safety net:** `insert_content/daily_insert.py` now runs `scripts/search-fill.js` on every Daily it
+creates. It fills a missing `search_phrase` (from the first keyword), `topics` and `seo_title`, and
+its report in `insert_content/output.txt` lists any post that still needs the plain-words sentence.
+To run it by hand on everything scheduled: `npm run search:fill -- --upcoming`.
+
 ## What the site does automatically
 
 | What | Where | Why it helps |

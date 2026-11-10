@@ -410,10 +410,28 @@ def ensure_dirs():
     DAILY_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
+def run_search_fill(paths: List[Path]) -> List[str]:
+    import shutil
+    import subprocess
+    node = shutil.which("node")
+    script = BASE_DIR.parent / "scripts" / "search-fill.js"
+    if not node or not script.exists():
+        return ["Search check skipped (Node not found). Run: npm run search:fill -- --upcoming"]
+    try:
+        res = subprocess.run([node, str(script), *[str(p) for p in paths]],
+                             cwd=str(BASE_DIR.parent), capture_output=True, text=True, timeout=60)
+        out = (res.stdout or "").strip().splitlines()
+        if res.returncode != 0:
+            out.append(f"Search check failed: {(res.stderr or '').strip()[:300]}")
+        return ["", "Search check:"] + out
+    except Exception as e:
+        return [f"Search check skipped: {e}"]
+
 def main():
     ensure_dirs()
     report_lines: List[str] = []
     created_count = 0
+    created_paths: List[Path] = []
 
     blob = read_all_input_text()
 
@@ -470,6 +488,7 @@ def main():
                 f.write("\n")
             report_lines.append(f'Created: "{filename}"')
             created_count += 1
+            created_paths.append(target_path)
 
             if vkey:
                 dup_index.setdefault(vkey, set()).add((front, back))
@@ -478,6 +497,12 @@ def main():
             report_lines.append(f'Error: Failed to write "{filename}" — {e}')
 
     report_lines.append(f"Given {len(entries)} files, created {created_count} files")
+
+    # Make every new Daily search-ready: fill search_phrase / topics / seo_title it's missing,
+    # and list any post that still needs its search phrase said once in plain words.
+    # See docs/SEARCH-SYSTEM.md. Skipped quietly if Node isn't installed.
+    if created_paths:
+        report_lines.extend(run_search_fill(created_paths))
     OUTPUT_FILE.write_text("\n".join(report_lines) + "\n", encoding="utf-8")
 
 if __name__ == "__main__":
