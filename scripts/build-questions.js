@@ -12,6 +12,7 @@
 //   related: [{ href, title }]                  (Dailies and studies on the same topic)
 //   faqs: [{ q, a }]                             (short follow-up questions)
 // Inline [text](/path) links are allowed in paragraphs, list items, steps and faq answers.
+import { topicsFor, topicsLineHtml, topicNames } from './shared/search-topics.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -101,7 +102,8 @@ function page(q) {
         author: { '@id': `${SITE}/#organization` },
         publisher: { '@id': `${SITE}/#organization` },
         isPartOf: { '@id': `${SITE}/#website` },
-        about: (q.scriptures || []).map((s) => s.ref)
+        about: (q.scriptures || []).map((s) => s.ref),
+        ...(topicNames(topicsFor(q)).length ? { keywords: topicNames(topicsFor(q)).join(', ') } : {})
       },
       {
         '@type': 'FAQPage',
@@ -184,6 +186,7 @@ ${tool}
       </aside>
 ${related}
 ${faqs}
+      ${topicsLineHtml(topicsFor(q))}
       <p class="q-updated">Updated <time datetime="${esc(q.updated)}">${esc(q.updated)}</time> · Scripture quotations are from the NIV unless noted.</p>
     </article>
 ${SIGNUP}

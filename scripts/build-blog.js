@@ -1,6 +1,7 @@
 // scripts/build-blog.js
 import fs from 'fs/promises';
 import { nextStepsHtml } from './shared/next-steps.js';
+import { topicsFor, topicsLineHtml, topicNames } from './shared/search-topics.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
@@ -134,7 +135,9 @@ async function main() {
       excerpt: e.excerpt || '',
       author: e.author || '',
       reading_minutes: e.reading_minutes || 0,
-      href: `/blog/${path.dirname(fileNameFor(e))}/`
+      href: `/blog/${path.dirname(fileNameFor(e))}/`,
+      description: String(e.seo_description || e.excerpt || '').replace(/\s+/g, ' ').trim(),
+      topics: topicsFor(e)
     }));
 
   await fs.writeFile(
@@ -203,6 +206,11 @@ async function main() {
       inLanguage: 'en-US',
       ...(e.category ? { articleSection: e.category } : {}),
       ...(e.reading_minutes ? { timeRequired: `PT${Number(e.reading_minutes)}M` } : {}),
+      ...(() => {
+        const kw = [...(Array.isArray(e.keywords) ? e.keywords : []), ...topicNames(topicsFor(e))]
+          .filter((k, i, all) => k && all.findIndex(x => x.toLowerCase() === k.toLowerCase()) === i);
+        return kw.length ? { keywords: kw.join(', ') } : {};
+      })(),
       author: { '@id': 'https://thewrkshop.com/#organization' },
       publisher: { '@id': 'https://thewrkshop.com/#organization' },
       isPartOf: { '@id': 'https://thewrkshop.com/#website' }
@@ -224,6 +232,7 @@ async function main() {
       AUTHOR: e.author || '',
       READING_MIN: String(e.reading_minutes || 0),
       BODY_HTML: bodyHTML,
+      TOPICS_HTML: topicsLineHtml(topicsFor(e)),
       NEXT_STEPS_HTML: nextStepsHtml(e, 'blog'),
       PREV_HREF: prev ? `../${path.dirname(fileNameFor(prev))}/` : '#',
       NEXT_HREF: next ? `../${path.dirname(fileNameFor(next))}/` : '#'

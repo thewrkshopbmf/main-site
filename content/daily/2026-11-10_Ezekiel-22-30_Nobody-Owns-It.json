@@ -8,8 +8,9 @@
   "slug": "nobody-owns-it",
   "series": "The Battle Before the Battle",
   "category": "Leadership & Culture",
-  "seo_title": "Nobody Owns It: When a Problem Belongs to No One",
-  "seo_description": "Everyone sees the problem. No one takes the next step. A biblical look at ownership, accountability gaps and why concerns get lost between handoffs at work and church.",
+  "seo_title": "Nobody Owns It: The Accountability Gap at Work and Church",
+  "seo_description": "Everyone sees the problem. No one takes the next step. A biblical look at ownership, accountability gaps and concerns lost between handoffs at work and church.",
+  "search_phrase": "accountability",
   "keywords": [
     "lack of ownership",
     "diffusion of responsibility",
@@ -17,6 +18,10 @@
     "bystander effect at work",
     "Ezekiel 22:30",
     "Christian leadership"
+  ],
+  "topics": [
+    "accountability",
+    "leadership"
   ],
   "og_image": "/assets/og/nobody-owns-it.png",
   "og_image_alt": "Nobody Owns It: A problem can be visible to everyone and still belong to no one. TheWrkShop, Leadership & Culture.",
