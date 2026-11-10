@@ -1949,3 +1949,8 @@ footer {
 .topic-links a { color: #6b4a36; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 .topic-links a:hover { color: #3e2c23; }
 .topic-links-all { margin-left: .4rem; font-weight: 400 !important; white-space: nowrap; }
+
+/* Homepage: defining conviction under Who We Are, linking to /beliefs/ */
+.home-page .about-conviction { text-align: center; max-width: 720px; margin: 2.5rem auto 0; }
+.home-page .about-conviction-line { font-size: clamp(1.2rem, 2.6vw, 1.5rem); font-weight: 700; line-height: 1.35; color: var(--ink, #1a1612); margin: 0 0 1rem; }
+.home-page .about-section .card p + p { margin-top: .6rem; }

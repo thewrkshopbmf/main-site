@@ -63,6 +63,7 @@ const RECURSIVE_PUBLIC_DIRS = [
   'patterns',
   'tools',
   'privacy',
+  'beliefs',
   'questions',
   'topics'
 ];
