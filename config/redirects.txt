@@ -18,3 +18,37 @@
 
 # /tools/ has no index page yet; send it to Resources (temporary, so a future /tools/ page can take over)
 /tools   /resources.html   302
+
+# Behind-the-scenes files: the whole repo is published, so hide the parts that aren't web pages.
+# Scheduled devotionals, blog/question sources, build code, templates and settings return "not found".
+# (Added Nov 2026.) /scripts/supabase/ stays public: the login and admin pages load it in the browser.
+/content/*   /404.html   404!
+/templates/*   /404.html   404!
+/insert_content/*   /404.html   404!
+/config/*   /404.html   404!
+/netlify/*   /404.html   404!
+/scripts/belief/*   /404.html   404!
+/scripts/firebase/*   /404.html   404!
+/scripts/infographics/*   /404.html   404!
+/scripts/og/*   /404.html   404!
+/scripts/patterns/*   /404.html   404!
+/scripts/pdf/*   /404.html   404!
+/scripts/prayer/*   /404.html   404!
+/scripts/shared/*   /404.html   404!
+/scripts/studies/*   /404.html   404!
+/scripts/build-blog.js   /404.html   404!
+/scripts/build-daily.js   /404.html   404!
+/scripts/build-home.js   /404.html   404!
+/scripts/build-library.js   /404.html   404!
+/scripts/build-podcasts.js   /404.html   404!
+/scripts/build-questions.js   /404.html   404!
+/scripts/build-seasonal.js   /404.html   404!
+/scripts/build-sitemap.js   /404.html   404!
+/scripts/build-social.js   /404.html   404!
+/scripts/validate-blog-dates.js   /404.html   404!
+/package.json   /404.html   404!
+/package-lock.json   /404.html   404!
+/netlify.toml   /404.html   404!
+/vite.config.js   /404.html   404!
+/README.md   /404.html   404!
+/.gitignore   /404.html   404!
