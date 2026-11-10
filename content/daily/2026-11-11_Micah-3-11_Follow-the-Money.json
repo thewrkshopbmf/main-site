@@ -8,9 +8,11 @@
   "slug": "follow-the-money",
   "series": "The Battle Before the Battle",
   "category": "Leadership & Culture",
-  "seo_title": "Follow the Money: When Money Writes the Message",
-  "seo_description": "Micah 3 confronts leaders who taught for a price. How financial dependence on donors, clients or approval can quietly reshape what a church or business is willing to say.",
+  "seo_title": "Follow the Money: Money and Integrity in Leadership",
+  "seo_description": "Micah 3 confronts leaders who taught for a price. How dependence on donors, clients or approval tests money and integrity in a church or business.",
+  "search_phrase": "money and integrity",
   "keywords": [
+    "money and integrity",
     "misaligned incentives",
     "money and ministry",
     "donor influence",
@@ -193,6 +195,10 @@
           "type": "callout",
           "prefix": "👉",
           "text": "RESOURCES SHOULD SERVE THE MISSION. THE MISSION MUST NOT BECOME CAPTIVE TO ITS RESOURCES."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is where money and integrity collide: not in one dramatic choice, but in what slowly becomes too costly to say."
         },
         {
           "type": "paragraph",

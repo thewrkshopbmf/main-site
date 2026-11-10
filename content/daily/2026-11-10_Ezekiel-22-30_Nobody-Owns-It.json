@@ -12,9 +12,9 @@
   "seo_description": "Everyone sees the problem. No one takes the next step. A biblical look at ownership, accountability gaps and concerns lost between handoffs at work and church.",
   "search_phrase": "accountability",
   "keywords": [
+    "accountability",
     "lack of ownership",
     "diffusion of responsibility",
-    "accountability",
     "bystander effect at work",
     "Ezekiel 22:30",
     "Christian leadership"
@@ -178,6 +178,10 @@
           "type": "callout",
           "prefix": "👉",
           "text": "RESPONSIBILITY MUST BE MATCHED WITH AUTHORITY, WISDOM, AND FOLLOW-THROUGH."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is what an accountability gap looks like: everyone sees the problem, and no one owns the next step."
         },
         {
           "type": "paragraph",

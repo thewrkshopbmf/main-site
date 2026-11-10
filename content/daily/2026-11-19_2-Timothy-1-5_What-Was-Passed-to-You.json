@@ -8,11 +8,12 @@
   "slug": "what-was-passed-to-you",
   "series": "Give Thanks",
   "seo_title": "What Was Passed to You? Gratitude Begins With Remembering",
-  "seo_description": "Timothy’s faith lived first in his grandmother Lois and his mother Eunice. A Thanksgiving devotional for men on remembering the people and grace that shaped you.",
+  "seo_description": "Timothy’s faith lived first in Lois and Eunice. A Thanksgiving devotional for men on the faith passed down to you and the people God used to shape you.",
+  "search_phrase": "faith passed down",
   "keywords": [
+    "faith passed down",
     "gratitude",
     "Thanksgiving devotional for men",
-    "faith passed down",
     "remembering God's faithfulness",
     "2 Timothy 1:5",
     "Psalm 78"
@@ -182,6 +183,10 @@
           "type": "callout",
           "prefix": "👉",
           "text": "REMEMBERING GOD’S FAITHFULNESS REORDERS OUR PERSPECTIVE."
+        },
+        {
+          "type": "paragraph",
+          "text": "Before you count what you have built, remember the faith passed down to you."
         },
         {
           "type": "paragraph",
