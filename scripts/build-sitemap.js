@@ -63,7 +63,8 @@ const RECURSIVE_PUBLIC_DIRS = [
   'patterns',
   'tools',
   'privacy',
-  'questions'
+  'questions',
+  'topics'
 ];
 
 function toPosix(p) {
@@ -115,7 +116,7 @@ async function loadContentDates() {
   const byUrl = new Map();
   let newestAll = '';
   let newestLeadership = '';
-  for (const file of ['daily-archive.json', 'blog-archive.json']) {
+  for (const file of ['daily-archive.json', 'blog-archive.json', 'topic-archive.json']) {
     try {
       const list = JSON.parse(await fs.readFile(path.join(ROOT, 'data', file), 'utf-8'));
       for (const item of Array.isArray(list) ? list : []) {

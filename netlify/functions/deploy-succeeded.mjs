@@ -1,7 +1,9 @@
 // Netlify runs this automatically after every successful deploy.
-// When a production deploy puts a new Daily live, email it to the list, but never
+// When a production deploy puts a new Daily live, ping IndexNow (netlify/shared/indexnow.js) and
+// email it to the list, but never
 // before 5:30 am Central (the 12:01 am release waits for the 5:30 scheduled send).
 import { sendTodaysDaily } from '../shared/daily-list.js';
+import { pingIndexNow } from '../shared/indexnow.js';
 
 export const handler = async (event) => {
   let deploy = {};
@@ -12,11 +14,19 @@ export const handler = async (event) => {
     return { statusCode: 200, body: `Skipped: ${context} deploy` };
   }
 
+  // Tell Bing and other IndexNow search engines about today's new pages. It runs alongside the
+  // email (not before it), and a failed ping never affects the email.
+  const pinging = pingIndexNow()
+    .then((ping) => console.log('IndexNow:', JSON.stringify(ping)))
+    .catch((err) => console.error('IndexNow ping failed:', err));
+
   try {
     const result = await sendTodaysDaily({ reason: 'deploy-succeeded' });
+    await pinging;
     return { statusCode: 200, body: JSON.stringify(result) };
   } catch (err) {
     console.error('Daily email after deploy failed:', err);
+    await pinging;
     return { statusCode: 200, body: `Error: ${err.message}` };
   }
 };

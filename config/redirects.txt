@@ -45,10 +45,13 @@
 /scripts/build-seasonal.js   /404.html   404!
 /scripts/build-sitemap.js   /404.html   404!
 /scripts/build-social.js   /404.html   404!
+/scripts/build-topics.js   /404.html   404!
+/scripts/check-search.js   /404.html   404!
 /scripts/validate-blog-dates.js   /404.html   404!
 /package.json   /404.html   404!
 /package-lock.json   /404.html   404!
 /netlify.toml   /404.html   404!
 /vite.config.js   /404.html   404!
 /README.md   /404.html   404!
+/docs/*   /404.html   404!
 /.gitignore   /404.html   404!
