@@ -1,18 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
 /* Same palette and type as the Spiritual Gifts Assessment, so the two tools feel like a set. */
 body.moments-page {
-  --ink: #1a1612;
-  --ash: #2e2923;
-  --bone: #f2ede6;
-  --parchment: #e8e0d4;
-  --ember: #c4501a;
-  --gold: #b8932a;
-  --steel: #6b7280;
-  --white: #fafaf8;
+  --ink: #243d37;
+  --ash: #3d524b;
+  --bone: #fffefa;
+  --parchment: #edf0e7;
+  --ember: #3f6f5c;
+  --gold: #557265;
+  --steel: #59655f;
+  --white: #ffffff;
   background: var(--bone);
   color: var(--ink);
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
   font-size: 16px;
   line-height: 1.6;
   min-height: 100vh;
@@ -31,7 +30,7 @@ body.moments-page {
 /* ---------- cover ---------- */
 .mm-cover {
   min-height: calc(100vh - 72px);
-  background: var(--ash);
+  background: #f3f3ed;
   text-align: center;
   padding: 3rem 1.5rem;
   position: relative;
@@ -41,26 +40,27 @@ body.moments-page {
 .mm-cover::before {
   content: '';
   position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px);
+  background: none;
   pointer-events: none;
 }
 .mm-cover > * { position: relative; }
 .mm-brand {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.75rem;
-  letter-spacing: 0.3em;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--gold);
   margin: 0 0 2.5rem;
 }
 .mm-cover-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: clamp(2.6rem, 7vw, 5.2rem);
-  font-weight: 900;
-  color: var(--white);
+  font-weight: 600;
+  color: var(--ink);
   line-height: 1.05;
   max-width: 820px;
   margin: 0;
+  letter-spacing: -.03em;
 }
 .mm-cover-title em { font-style: normal; color: var(--ember); }
 .mm-cover-title:focus { outline: none; }
@@ -68,7 +68,7 @@ body.moments-page {
 .mm-cover-sub {
   font-weight: 300;
   font-size: 1.1rem;
-  color: var(--parchment);
+  color: var(--steel);
   max-width: 540px;
   margin: 0 auto 2.75rem;
   line-height: 1.75;
@@ -77,22 +77,24 @@ body.moments-page {
   background: var(--ember);
   color: var(--white);
   border: none;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  text-transform: none;
   padding: 1rem 2.5rem;
   cursor: pointer;
   transition: background 0.2s, transform 0.15s;
+  border-radius: 5px;
+  font-weight: 600;
 }
-.mm-btn-start:hover { background: #d4601f; transform: translateY(-1px); }
+.mm-btn-start:hover { background: #426b60; transform: translateY(-1px); }
 .mm-cover-note {
   font-size: 0.8rem;
-  color: #a7a29b;
+  color: #59655f;
   margin-top: 1.5rem;
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
 }
-.mm-resume { color: var(--parchment); font-size: 0.95rem; margin-top: 1.25rem; }
+.mm-resume { color: var(--steel); font-size: 0.95rem; margin-top: 1.25rem; }
 .mm-link-btn {
   background: none; border: 0; padding: 0; cursor: pointer;
   color: var(--gold); font: inherit; text-decoration: underline;
@@ -100,9 +102,9 @@ body.moments-page {
 
 /* ---------- shared type ---------- */
 .mm-label {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.7rem;
-  letter-spacing: 0.35em;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--ember);
   display: block;
@@ -110,14 +112,15 @@ body.moments-page {
 }
 .mm-label--flat { margin-bottom: 0.35rem; }
 .mm-h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: clamp(1.8rem, 5vw, 2.4rem);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2;
   margin: 0 0 1rem;
+  letter-spacing: -.03em;
 }
 .mm-h2:focus { outline: none; }
-.mm-h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; line-height: 1.25; margin: 0 0 0.75rem; }
+.mm-h3 { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 1.5rem; line-height: 1.25; margin: 0 0 0.75rem; letter-spacing: -.03em; }
 .mm-body p, .mm-body-text { color: var(--ash); line-height: 1.8; margin: 0 0 1rem; }
 
 .mm-scale-card {
@@ -128,7 +131,7 @@ body.moments-page {
 }
 .mm-scale-row { display: flex; gap: 1rem; margin-bottom: 0.5rem; color: var(--ash); }
 .mm-scale-row:last-child { margin-bottom: 0; }
-.mm-scale-num { font-family: 'Space Mono', monospace; font-weight: 700; color: var(--ember); min-width: 20px; }
+.mm-scale-num { font-family: inherit; font-weight: 700; color: var(--ember); min-width: 20px; }
 
 .mm-privacy {
   background: var(--white);
@@ -143,14 +146,16 @@ body.moments-page {
 .mm-nav { display: flex; justify-content: space-between; gap: 0.75rem; margin-top: 2.25rem; }
 .mm-nav--wrap { flex-wrap: wrap; justify-content: flex-start; }
 .mm-btn {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  text-transform: none;
   padding: 0.95rem 1.4rem;
   cursor: pointer;
   border: 1px solid var(--ink);
   transition: background 0.2s, color 0.2s;
+  border-radius: 5px;
+  font-weight: 600;
 }
 .mm-btn-primary { background: var(--ink); color: var(--white); }
 .mm-btn-primary:hover { background: var(--ember); border-color: var(--ember); }
@@ -171,7 +176,7 @@ body.moments-page {
   border-bottom: 1px solid var(--parchment);
 }
 .mm-progress-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
-.mm-count { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--steel); }
+.mm-count { font-family: inherit; font-size: 0.75rem; color: var(--steel); }
 .mm-progress-track { height: 4px; background: var(--parchment); margin-top: 0.4rem; }
 .mm-progress-fill { height: 100%; width: 0; background: var(--ember); transition: width 0.3s ease; }
 .mm-verse { font-style: italic; color: var(--steel); margin: -0.25rem 0 1rem; }
@@ -179,7 +184,7 @@ body.moments-page {
 .mm-q { border: 0; margin: 0; padding: 1.4rem 0; border-bottom: 1px solid var(--parchment); min-width: 0; }
 .mm-q:last-child { border-bottom: 0; }
 .mm-q legend { font-weight: 500; font-size: 1.02rem; line-height: 1.55; padding: 0; color: var(--ink); }
-.mm-q-num { font-family: 'Space Mono', monospace; color: var(--ember); font-size: 0.85rem; margin-right: 0.15rem; }
+.mm-q-num { font-family: inherit; color: var(--ember); font-size: 0.85rem; margin-right: 0.15rem; }
 .mm-q.is-missing legend { color: var(--ember); }
 .mm-q.is-missing .mm-choice { border-color: var(--ember); }
 
@@ -188,10 +193,10 @@ body.moments-page {
   position: relative;
   display: flex; align-items: center; justify-content: center;
   height: 48px;
-  border: 1px solid #b9b0a3;
+  border: 1px solid #c9cfc6;
   background: var(--white);
   cursor: pointer;
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-weight: 700;
   transition: background 0.15s, border-color 0.15s;
 }
@@ -213,19 +218,21 @@ body.moments-page {
 .mm-score { margin-bottom: 1.1rem; }
 .mm-score-head { margin-bottom: 0.35rem; }
 .mm-score-head strong { display: block; }
-.mm-score-head span { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--steel); }
+.mm-score-head span { font-family: inherit; font-size: 0.75rem; color: var(--steel); }
 .mm-bar { height: 10px; background: var(--parchment); }
 .mm-fill { height: 100%; background: var(--steel); }
 .mm-score.is-top .mm-fill { background: var(--ember); }
 
-.mm-focus { background: var(--ash); color: var(--parchment); padding: 1.75rem 1.5rem; margin-bottom: 2rem; }
+.mm-focus { background: #f3f3ed; color: var(--ink); padding: 1.75rem 1.5rem; margin-bottom: 2rem;
+  border-radius: 6px;
+}
 .mm-focus .mm-label { color: var(--gold); }
-.mm-focus .mm-h3 { color: var(--white); }
+.mm-focus .mm-h3 { color: var(--ink); }
 .mm-focus p { line-height: 1.75; }
 .mm-focus-item { border-left: 2px solid var(--ember); padding-left: 1rem; margin: 1.25rem 0; }
-.mm-focus-item h4 { color: var(--white); font-size: 1.05rem; margin: 0 0 0.35rem; }
+.mm-focus-item h4 { color: var(--ink); font-size: 1.05rem; margin: 0 0 0.35rem; }
 .mm-focus-item p { margin: 0 0 0.5rem; }
-.mm-focus-verse strong, .mm-reflect strong { color: var(--white); }
+.mm-focus-verse strong, .mm-reflect strong { color: var(--ink); }
 .mm-reflect { margin: 1.25rem 0 0; }
 
 .mm-commit p { color: var(--ash); }
@@ -233,7 +240,7 @@ body.moments-page {
 .mm-commit textarea {
   display: block; width: 100%;
   background: var(--white); color: var(--ink);
-  border: 1px solid #b9b0a3;
+  border: 1px solid #c9cfc6;
   padding: 0.85rem 1rem;
   font: inherit; line-height: 1.6;
   resize: vertical;
@@ -267,7 +274,7 @@ body.moments-page {
 .mm-optional { font-weight: 400; color: var(--steel); }
 .mm-field input, .mm-field select {
   width: 100%; font: inherit; color: var(--ink); background: var(--white);
-  border: 1px solid #b9b0a3; padding: 0.7rem 0.8rem; border-radius: 0;
+  border: 1px solid #c9cfc6; padding: 0.7rem 0.8rem; border-radius: 0;
 }
 .mm-field input:focus, .mm-field select:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--ink); }
 .mm-check { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.92rem; color: var(--ash); margin: 0.25rem 0 1.1rem; cursor: pointer; }
