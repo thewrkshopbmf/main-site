@@ -19,10 +19,10 @@
   <meta property="og:image:height" content="630"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <style>
-    .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
+    .page-hero { background:#edf0e7; color:#243d37; padding:3rem 1rem; text-align:center; }
     .page-hero h1 { font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom:.4rem; }
     .daily-wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
-    .daily-meta { display:flex; gap:.5rem; align-items:center; color:#6b5b53; margin-bottom: .75rem; flex-wrap:wrap; }
+    .daily-meta { display:flex; gap:.5rem; align-items:center; color:#59655f; margin-bottom: .75rem; flex-wrap:wrap; }
 
     .daily-card {
       background:#f4f1ee;
@@ -33,21 +33,21 @@
       box-shadow:0 2px 6px rgba(0,0,0,.07);
     }
 
-    .daily-card h2 { color:#3e2c23; margin:.25rem 0 .35rem; }
-    .daily-subtitle { color:#6b4a36; font-size:1.2rem; font-weight:600; margin:0 0 .5rem; }
-    .daily-tagline { color:#3e2c23; font-style:italic; line-height:1.6; margin:.25rem 0 .75rem; }
+    .daily-card h2 { color:#243d37; margin:.25rem 0 .35rem; }
+    .daily-subtitle { color:#3f6f5c; font-size:1.2rem; font-weight:600; margin:0 0 .5rem; }
+    .daily-tagline { color:#243d37; font-style:italic; line-height:1.6; margin:.25rem 0 .75rem; }
 
     .verse-block {
       margin:.75rem 0;
       padding:.8rem 1rem;
-      border-left:4px solid #3e2c23;
+      border-left:4px solid #243d37;
       background:#fff;
       color:#2b2b2b;
       border-radius: 8px;
     }
 
     .daily-section { margin-top: 1rem; }
-    .daily-section h3 { color:#3e2c23; margin:1rem 0 .4rem; }
+    .daily-section h3 { color:#243d37; margin:1rem 0 .4rem; }
     .daily-section p { margin:.55rem 0; line-height:1.65; }
     .daily-section ul,
     .daily-section ol {
@@ -58,7 +58,7 @@
 
     .daily-callout {
       font-weight:600;
-      color:#3e2c23;
+      color:#243d37;
     }
     .daily-section p.daily-lines { line-height:1.75; }
 
@@ -74,7 +74,7 @@
 
     .declaration-text {
       font-weight:700;
-      color:#3e2c23;
+      color:#243d37;
       line-height:1.65;
       white-space:pre-line;
     }
@@ -89,7 +89,7 @@
 
     .nav-archive a {
       text-decoration:none;
-      color:#3e2c23;
+      color:#243d37;
       font-weight:600;
     }
 
@@ -102,24 +102,24 @@
       margin:.75rem 0;
       padding:.85rem 1rem;
       background:#fff;
-      border-left:4px solid #3e2c23;
+      border-left:4px solid #243d37;
       border-radius:8px;
       font-style:italic;
-      color:#3e2c23;
+      color:#243d37;
     }
     /* Flow visuals (progressions); keep in sync with netlify/shared/flow-block.js */
     .daily-flow { margin: 1.25rem auto 1.4rem; max-width: 440px; text-align: center; }
-    .daily-flow-title { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; margin-bottom: .6rem; }
+    .daily-flow-title { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #4b665a; margin-bottom: .6rem; }
     .daily-flow-steps { list-style: none; margin: 0; padding: 0; }
     .daily-flow-step { margin: 0; padding: 0; }
-    .daily-flow-step + .daily-flow-step::before { content: "↓"; display: block; color: #c9aa8c; font-size: 1.15rem; line-height: 1; margin: .3rem 0; }
+    .daily-flow-step + .daily-flow-step::before { content: "↓"; display: block; color: #a5b4a2; font-size: 1.15rem; line-height: 1; margin: .3rem 0; }
     .daily-flow-box { display: block; border: 1px solid; border-radius: 10px; padding: .6rem .9rem; }
     .daily-flow-label { display: block; font-weight: 700; line-height: 1.35; }
     .daily-flow-note { display: block; font-size: .92rem; font-style: italic; line-height: 1.4; margin-top: .2rem; }
-    .daily-flow-loop { margin: .7rem 0 0; color: #6b4a36; font-weight: 600; font-size: .95rem; }
-    .daily-flow-caption { margin: .6rem 0 0; color: #6b5b53; font-style: italic; font-size: .95rem; }
+    .daily-flow-loop { margin: .7rem 0 0; color: #3f6f5c; font-weight: 600; font-size: .95rem; }
+    .daily-flow-caption { margin: .6rem 0 0; color: #59655f; font-style: italic; font-size: .95rem; }
     .daily-flow-link { margin: .7rem 0 0; }
-    .daily-flow-link a { color: #3e2c23; font-weight: 700; }
+    .daily-flow-link a { color: #243d37; font-weight: 700; }
   </style>
   <!-- Google Analytics (same GA4 property as the homepage's Firebase analytics) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
@@ -391,10 +391,10 @@
 
     // Flow visuals: browser copy of renderFlowHtml in netlify/shared/flow-block.js (keep in sync)
     function flowShade(i, n) {
-      if (i === n - 1) return { bg: '#3e2c23', fg: '#f4f1ee', note: '#e8dccf', border: '#3e2c23' };
+      if (i === n - 1) return { bg: '#243d37', fg: '#f3f3ed', note: '#d6e2da', border: '#243d37' };
       const t = n <= 2 ? 0 : i / (n - 2);
-      const c = [255, 255, 255].map((f, k) => Math.round(f + ([234, 217, 200][k] - f) * t));
-      return { bg: `rgb(${c.join(',')})`, fg: '#3e2c23', note: '#6b5b53', border: 'rgba(62,44,35,.18)' };
+      const c = [255, 255, 255].map((f, k) => Math.round(f + ([221, 232, 222][k] - f) * t));
+      return { bg: `rgb(${c.join(',')})`, fg: '#243d37', note: '#59655f', border: 'rgba(36,61,55,.18)' };
     }
     function renderFlow(block) {
       const steps = Array.isArray(block.steps) ? block.steps : [];

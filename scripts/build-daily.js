@@ -327,9 +327,9 @@ function renderBlock(block) {
 
   if (block.type === 'source') {
     const label = block.href
-      ? `<a href="${escapeHtml(block.href)}" target="_blank" rel="noopener" style="color:#6b4a36;">${escapeHtml(block.text)}</a>`
+      ? `<a href="${escapeHtml(block.href)}" target="_blank" rel="noopener" style="color:#3f6f5c;">${escapeHtml(block.text)}</a>`
       : escapeHtml(block.text);
-    return `<p class="daily-source-note" style="font-size:.85rem;color:#6b5b53;margin:-.25rem 0 1rem;">Source: ${label}</p>`;
+    return `<p class="daily-source-note" style="font-size:.85rem;color:#59655f;margin:-.25rem 0 1rem;">Source: ${label}</p>`;
   }
 
   return '';
@@ -799,10 +799,10 @@ function biggerPictureMap(features) {
 function biggerPictureHtml(features = []) {
   if (!features || !features.length) return '';
   return features.map(f => `
-    <aside class="daily-bigger-picture" style="margin:1.5rem 0;padding:1rem 1.15rem;border-left:4px solid #b08a5a;background:#f4f1ee;border-radius:10px;">
-      <p style="margin:0 0 .3rem;font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#735640;">Part of a bigger picture</p>
-      <p style="margin:0;"><a href="${pagePathFor(f)}" style="color:#3e2c23;font-weight:700;">${escapeHtml(cleanString(f.headline) || f.title)} →</a></p>
-      ${cleanString(f.tagline) ? `<p style="margin:.3rem 0 0;font-style:italic;color:#3e2c23;">${escapeHtml(cleanString(f.tagline))}</p>` : ''}
+    <aside class="daily-bigger-picture" style="margin:1.5rem 0;padding:1rem 1.15rem;border-left:4px solid #7d947f;background:#f4f1ee;border-radius:10px;">
+      <p style="margin:0 0 .3rem;font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4b665a;">Part of a bigger picture</p>
+      <p style="margin:0;"><a href="${pagePathFor(f)}" style="color:#243d37;font-weight:700;">${escapeHtml(cleanString(f.headline) || f.title)} →</a></p>
+      ${cleanString(f.tagline) ? `<p style="margin:.3rem 0 0;font-style:italic;color:#243d37;">${escapeHtml(cleanString(f.tagline))}</p>` : ''}
     </aside>`).join('\n');
 }
 
@@ -818,14 +818,14 @@ function featureExtrasHtml(f) {
     html += `
     <section class="daily-section daily-section-keep-reading">
       <h3 class="daily-section-title">Keep Reading</h3>
-      <ul>${related.map(r => `<li><a href="${r.href}" style="color:#3e2c23;font-weight:600;">${escapeHtml(r.title)}</a>${r.note ? ` <span style="color:#6b5b53;">· ${escapeHtml(r.note)}</span>` : ''}</li>`).join('')}</ul>
+      <ul>${related.map(r => `<li><a href="${r.href}" style="color:#243d37;font-weight:600;">${escapeHtml(r.title)}</a>${r.note ? ` <span style="color:#59655f;">· ${escapeHtml(r.note)}</span>` : ''}</li>`).join('')}</ul>
     </section>`;
   }
   if (sources.length) {
     html += `
     <section class="daily-section daily-section-sources">
       <h3 class="daily-section-title">Sources</h3>
-      <ul style="font-size:.9rem;">${sources.map(x => `<li>${x.href ? `<a href="${x.href}" target="_blank" rel="noopener" style="color:#6b4a36;">${escapeHtml(x.label)}</a>` : escapeHtml(x.label)}</li>`).join('')}</ul>
+      <ul style="font-size:.9rem;">${sources.map(x => `<li>${x.href ? `<a href="${x.href}" target="_blank" rel="noopener" style="color:#3f6f5c;">${escapeHtml(x.label)}</a>` : escapeHtml(x.label)}</li>`).join('')}</ul>
     </section>`;
   }
   return html;
@@ -877,7 +877,7 @@ async function buildLeadershipHub(visible, features = []) {
   };
 
   const featured = features.map(e => `
-      <article class="lead-card lead-card--featured" style="border:2px solid #b08a5a;">
+      <article class="lead-card lead-card--featured" style="border:2px solid #7d947f;">
         <p class="lead-series">Start here</p>
         <h2><a href="${pagePathFor(e)}">${escapeHtml(cleanString(e.headline) || e.title)}</a></h2>
         ${cleanString(e.headline_sub) ? `<p class="lead-sub">${escapeHtml(cleanString(e.headline_sub))}</p>` : ''}
@@ -1086,19 +1086,19 @@ async function buildSharePages(visible) {
   <style>
     .share-wrap { max-width: 640px; margin: 0 auto; padding: 2rem 1.1rem 3rem; }
     .share-card { background: #f4f1ee; border-radius: 16px; padding: 2rem 1.5rem; box-shadow: 0 6px 24px rgba(0,0,0,.08); text-align: center; }
-    .share-kicker { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; margin: 0 0 1rem; }
-    .share-gem { font-family: Georgia, serif; font-size: 1.7rem; font-weight: 700; line-height: 1.35; color: #3e2c23; margin: 0; border: 0; padding: 0; }
-    .share-chart-title { font-family: Georgia, serif; font-size: 1.6rem; color: #3e2c23; margin: 0 0 .5rem; }
-    .share-from { color: #6b5b53; margin: 1.5rem 0 1.25rem; }
-    .share-from strong { color: #3e2c23; }
-    .share-cta { display: inline-block; background: #3e2c23; color: #f4f1ee; font-weight: 700; text-decoration: none; border-radius: 999px; padding: .8rem 1.4rem; }
+    .share-kicker { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #4b665a; margin: 0 0 1rem; }
+    .share-gem { font-family: Georgia, serif; font-size: 1.7rem; font-weight: 700; line-height: 1.35; color: #243d37; margin: 0; border: 0; padding: 0; }
+    .share-chart-title { font-family: Georgia, serif; font-size: 1.6rem; color: #243d37; margin: 0 0 .5rem; }
+    .share-from { color: #59655f; margin: 1.5rem 0 1.25rem; }
+    .share-from strong { color: #243d37; }
+    .share-cta { display: inline-block; background: #243d37; color: #f4f1ee; font-weight: 700; text-decoration: none; border-radius: 999px; padding: .8rem 1.4rem; }
     .share-cta:hover { background: #2c1f18; }
     .share-alt { margin: 1rem 0 0; font-size: .95rem; }
-    .share-alt a { color: #3e2c23; }
+    .share-alt a { color: #243d37; }
     .share-audit { max-width: 480px; margin: 1rem auto 0; }
-    .share-audit-q { background: #fff; color: #3e2c23; border: 1px solid rgba(62,44,35,.2); border-radius: 10px; padding: .7rem .9rem; font-weight: 700; line-height: 1.35; margin: 0 0 .6rem; }
-    .share-audit-key { background: #3e2c23; color: #f4f1ee; border-color: #3e2c23; }
-    .share-audit-note { color: #6b5b53; font-style: italic; margin: .2rem 0 .6rem; }
+    .share-audit-q { background: #fff; color: #243d37; border: 1px solid rgba(36,61,55,.2); border-radius: 10px; padding: .7rem .9rem; font-weight: 700; line-height: 1.35; margin: 0 0 .6rem; }
+    .share-audit-key { background: #243d37; color: #f4f1ee; border-color: #243d37; }
+    .share-audit-note { color: #59655f; font-style: italic; margin: .2rem 0 .6rem; }
 ${FLOW_CSS}
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>

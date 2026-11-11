@@ -133,22 +133,22 @@ ${list.map(e => `        <li><a href="${esc(e.href)}">${esc(dailyName(e))}</a><s
   <meta name="twitter:card" content="summary_large_image"/>
   <script type="application/ld+json">${jsonLd}</script>
   <style>
-    .page-hero { background:#3e2c23; color:#f4f1ee; padding:3rem 1rem; text-align:center; }
+    .page-hero { background:#edf0e7; color:#243d37; padding:3rem 1rem; text-align:center; }
     .page-hero h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin:0 0 .4rem; line-height:1.2; }
-    .page-hero p { opacity:.95; max-width:720px; margin:0 auto; line-height:1.6; }
+    .page-hero p { color:#59655f; max-width:720px; margin:0 auto; line-height:1.6; }
     .lib-wrap { max-width:860px; margin:0 auto; padding:2rem 1rem 3rem; }
     .lib-jump { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1.5rem; }
-    .lib-jump a { color:#3e2c23; background:#f4f1ee; border:1px solid rgba(62,44,35,.25); border-radius:999px; padding:.35rem .9rem; text-decoration:none; font-weight:600; }
+    .lib-jump a { color:#243d37; background:#f4f1ee; border:1px solid rgba(36,61,55,.25); border-radius:999px; padding:.35rem .9rem; text-decoration:none; font-weight:600; }
     .lib-section { background:#f4f1ee; color:#2b2b2b; border:1px solid rgba(0,0,0,.08); border-radius:14px; padding:1.25rem; box-shadow:0 2px 6px rgba(0,0,0,.07); margin:0 0 1.25rem; }
-    .lib-section h2 { color:#3e2c23; margin:0 0 .75rem; }
-    .lib-section h3 { color:#6b4a36; font-size:1rem; margin:1.25rem 0 .4rem; text-transform:uppercase; letter-spacing:.06em; }
+    .lib-section h2 { color:#243d37; margin:0 0 .75rem; }
+    .lib-section h3 { color:#3f6f5c; font-size:1rem; margin:1.25rem 0 .4rem; text-transform:uppercase; letter-spacing:.06em; }
     .lib-list { list-style:none; margin:0; padding:0; }
     .lib-list li { padding:.45rem 0; border-bottom:1px solid rgba(0,0,0,.06); line-height:1.45; }
     .lib-list li:last-child { border-bottom:0; }
-    .lib-list a { color:#3e2c23; font-weight:600; text-decoration:none; }
+    .lib-list a { color:#243d37; font-weight:600; text-decoration:none; }
     .lib-list a:hover { text-decoration:underline; }
-    .lib-note { display:block; color:#6b5b53; font-size:.88rem; }
-    .lib-more { color:#3e2c23; font-weight:700; }
+    .lib-note { display:block; color:#59655f; font-size:.88rem; }
+    .lib-more { color:#243d37; font-weight:700; }
     /* Native accordions remain usable with a keyboard and without JavaScript. */
     .page-hero { background:var(--wash); color:var(--ink); padding:56px 24px; }
     .lib-jump a { background:transparent; color:var(--ink); border-color:var(--line); border-radius:4px; font-size:13px; }

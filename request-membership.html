@@ -12,9 +12,7 @@
     .request-page {
       min-height: 100vh;
       background:
-        radial-gradient(circle at top, rgba(255,255,255,0.22), transparent 34%),
-        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(62,44,35,0.05)),
-        #d89d61;
+        #edf0e7;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -24,11 +22,11 @@
     .request-card {
       width: 100%;
       max-width: 760px;
-      background: #f4f1ee;
-      border-radius: 24px;
+      background: #fffefa;
+      border-radius: 8px;
       border: 1px solid rgba(0,0,0,.08);
       box-shadow:
-        0 18px 50px rgba(62,44,35,.16),
+        0 18px 50px rgba(36,61,55,.16),
         0 4px 14px rgba(0,0,0,.08);
       padding: 2.2rem 1.6rem;
       text-align: center;
@@ -39,13 +37,13 @@
       font-size: .8rem;
       letter-spacing: .12em;
       text-transform: uppercase;
-      color: #6b5b53;
+      color: #59655f;
       margin-bottom: .7rem;
       font-weight: 700;
     }
 
     .request-card h1 {
-      color: #3e2c23;
+      color: #243d37;
       font-size: clamp(2rem, 4vw, 3rem);
       line-height: 1.06;
       margin: 0 0 .8rem;
@@ -53,7 +51,7 @@
     }
 
     .request-card p {
-      color: #6b5b53;
+      color: #59655f;
       line-height: 1.7;
       max-width: 42rem;
       margin: 0 auto 1rem;
@@ -62,9 +60,9 @@
     .request-note {
       margin: 1.3rem auto 0;
       max-width: 38rem;
-      background: #efe7e1;
-      border: 1px solid rgba(62,44,35,.08);
-      color: #5d4a40;
+      background: #f3f3ed;
+      border: 1px solid rgba(36,61,55,.08);
+      color: #3d524b;
       border-radius: 14px;
       padding: 1rem;
       line-height: 1.55;
@@ -83,21 +81,21 @@
       align-items: center;
       justify-content: center;
       padding: .9rem 1.1rem;
-      border-radius: 12px;
+      border-radius: 5px;
       text-decoration: none;
       font-weight: 700;
       transition: transform .15s ease, background-color .15s ease;
     }
 
     .request-btn.primary {
-      background: linear-gradient(180deg, #5c4539 0%, #3e2c23 100%);
-      color: #f4f1ee;
+      background: #243d37;
+      color: #fff;
     }
 
     .request-btn.secondary {
-      background: #eadfd5;
-      color: #3e2c23;
-      border: 1px solid rgba(62,44,35,.10);
+      background: #f3f3ed;
+      color: #243d37;
+      border: 1px solid rgba(36,61,55,.10);
     }
 
     .request-btn:hover {

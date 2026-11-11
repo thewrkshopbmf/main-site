@@ -25,31 +25,31 @@
   var GEM_SECTIONS = '.daily-section-hidden_gems, .daily-section-gem';
   var LOGO_SRC = '/assets/images/thewrkshop-logo-share.png';
 
-  var BROWN = '#3e2c23', CREAM = '#f4f1ee', TAN = '#c9aa8c';
+  var BROWN = '#243d37', CREAM = '#f3f3ed', TAN = '#a5b4a2';
   var SERIF = 'Georgia, "Times New Roman", serif';
   var SANS = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
 
   var CSS = [
     '.gem-shareable{position:relative;padding-right:2.6rem;border-radius:8px;transition:background .3s}',
-    '.share-highlight{background:#f3e7d8;border-radius:10px;transition:background .3s}',
+    '.share-highlight{background:#edf0e7;border-radius:10px;transition:background .3s}',
     '.gem-share-btn{position:absolute;top:50%;right:0;transform:translateY(-50%);width:2.1rem;height:2.1rem;',
-    'display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(62,44,35,.25);',
-    'border-radius:999px;background:#fff;color:#3e2c23;cursor:pointer;padding:0}',
-    '.gem-share-btn:hover,.gem-share-btn[aria-expanded="true"],.chart-share-btn:hover,.chart-share-btn[aria-expanded="true"]{background:#ece5df}',
+    'display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(36,61,55,.25);',
+    'border-radius:999px;background:#fff;color:#243d37;cursor:pointer;padding:0}',
+    '.gem-share-btn:hover,.gem-share-btn[aria-expanded="true"],.chart-share-btn:hover,.chart-share-btn[aria-expanded="true"]{background:#edf0e7}',
     '.gem-share-btn svg,.chart-share-btn svg{width:1rem;height:1rem;flex:none}',
-    '.gem-share-hint{font-size:.85rem;color:#6b5b53;margin:-.25rem 0 .75rem}',
+    '.gem-share-hint{font-size:.85rem;color:#59655f;margin:-.25rem 0 .75rem}',
     '.chart-share{position:relative;display:flex;justify-content:center;margin:.85rem 0 0}',
-    '.chart-share-btn{display:inline-flex;align-items:center;gap:.45rem;font:inherit;font-size:.9rem;color:#3e2c23;',
-    'background:#fff;border:1px solid rgba(62,44,35,.25);border-radius:999px;padding:.4rem .9rem;cursor:pointer}',
+    '.chart-share-btn{display:inline-flex;align-items:center;gap:.45rem;font:inherit;font-size:.9rem;color:#243d37;',
+    'background:#fff;border:1px solid rgba(36,61,55,.25);border-radius:999px;padding:.4rem .9rem;cursor:pointer}',
     '.share-menu{position:absolute;z-index:50;right:0;top:calc(100% + .35rem);min-width:13.5rem;max-width:calc(100vw - 2rem);background:#fff;',
-    'border:1px solid rgba(62,44,35,.18);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:.4rem;',
+    'border:1px solid rgba(36,61,55,.18);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:.4rem;',
     'display:flex;flex-direction:column;font-weight:400;font-style:normal;text-transform:none;letter-spacing:normal;text-align:left}',
     '.chart-share .share-menu{right:auto;left:50%;transform:translateX(-50%)}',
-    '.share-menu-title{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:#8a7466;padding:.35rem .6rem .25rem}',
-    '.share-menu a,.share-menu button{font:inherit;font-size:.92rem;text-align:left;color:#3e2c23;background:none;border:0;',
+    '.share-menu-title{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:#59655f;padding:.35rem .6rem .25rem}',
+    '.share-menu a,.share-menu button{font:inherit;font-size:.92rem;text-align:left;color:#243d37;background:none;border:0;',
     'border-radius:8px;padding:.5rem .6rem;cursor:pointer;text-decoration:none}',
-    '.share-menu a:hover,.share-menu button:hover{background:#f4f1ee}',
-    '.share-menu-note{font-size:.8rem;color:#6b5b53;padding:.25rem .6rem .4rem}'
+    '.share-menu a:hover,.share-menu button:hover{background:#f3f3ed}',
+    '.share-menu-note{font-size:.8rem;color:#59655f;padding:.25rem .6rem .4rem}'
   ].join('');
 
   var ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg>';
@@ -320,11 +320,11 @@
   }
 
   function shade(i, n) {
-    if (i === n - 1) return { bg: BROWN, fg: CREAM, note: '#e8dccf', border: BROWN };
+    if (i === n - 1) return { bg: BROWN, fg: CREAM, note: '#d6e2da', border: BROWN };
     var t = n <= 2 ? 0 : i / (n - 2);
-    var from = [255, 255, 255], to = [234, 217, 200];
+    var from = [255, 255, 255], to = [221, 232, 222];
     var c = from.map(function (f, k) { return Math.round(f + (to[k] - f) * t); });
-    return { bg: 'rgb(' + c.join(',') + ')', fg: BROWN, note: '#6b5b53', border: 'rgba(62,44,35,.22)' };
+    return { bg: 'rgb(' + c.join(',') + ')', fg: BROWN, note: '#59655f', border: 'rgba(36,61,55,.22)' };
   }
 
   function wrap(ctx, text, maxW) {
@@ -371,7 +371,7 @@
     var eyebrow = (chart.eyebrow || 'Leadership & Culture').toUpperCase();
     var eyeLines = wrap(ctx, eyebrow, W - pad * 2);
     eyeLines.forEach(function (l) {
-      if (draw) { ctx.fillStyle = '#8a6a52'; ctx.fillText(l, W / 2, y); }
+      if (draw) { ctx.fillStyle = '#4b665a'; ctx.fillText(l, W / 2, y); }
       y += 34 * s;
     });
     y += 16 * s;
@@ -387,7 +387,7 @@
       ctx.font = 'italic ' + Math.round(30 * s) + 'px ' + SERIF;
       wrap(ctx, chart.subtitle, W - pad * 2).forEach(function (l) {
         y += 34 * s;
-        if (draw) { ctx.fillStyle = '#6b5b53'; ctx.fillText(l, W / 2, y); }
+        if (draw) { ctx.fillStyle = '#59655f'; ctx.fillText(l, W / 2, y); }
         y += 6 * s;
       });
     }
@@ -438,7 +438,7 @@
       ctx.font = '700 ' + Math.round(30 * s) + 'px ' + SANS;
       wrap(ctx, '↻ ' + chart.loop.replace(/^↻\s*/, ''), W - pad * 2).forEach(function (l) {
         y += 32 * s;
-        if (draw) { ctx.fillStyle = '#6b4a36'; ctx.fillText(l, W / 2, y); }
+        if (draw) { ctx.fillStyle = '#3f6f5c'; ctx.fillText(l, W / 2, y); }
         y += 10 * s;
       });
     }
@@ -447,7 +447,7 @@
       ctx.font = 'italic ' + Math.round(34 * s) + 'px ' + SERIF;
       wrap(ctx, chart.caption, W - pad * 2).forEach(function (l) {
         y += 36 * s;
-        if (draw) { ctx.fillStyle = '#6b5b53'; ctx.fillText(l, W / 2, y); }
+        if (draw) { ctx.fillStyle = '#59655f'; ctx.fillText(l, W / 2, y); }
         y += 12 * s;
       });
     }
@@ -474,7 +474,7 @@
       ctx.textBaseline = 'alphabetic';
 
       ctx.fillStyle = CREAM; ctx.fillRect(0, 0, W, H);
-      ctx.strokeStyle = 'rgba(62,44,35,.15)'; ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(36,61,55,.15)'; ctx.lineWidth = 2;
       ctx.strokeRect(28, 28, W - 56, H - FOOT - 28);
 
       var offset = Math.max(0, (H - FOOT - contentH) / 2);
@@ -493,7 +493,7 @@
       ctx.fillStyle = TAN;
       ctx.font = '700 40px ' + SANS;
       ctx.fillText('thewrkshop.com', W - 80, H - FOOT / 2 + 4);
-      ctx.fillStyle = '#e8dccf';
+      ctx.fillStyle = '#d6e2da';
       ctx.font = 'italic 26px ' + SERIF;
       ctx.fillText('Read the whole daily there', W - 80, H - FOOT / 2 + 44);
 
@@ -566,7 +566,7 @@
 
     ctx.font = '700 ' + Math.round(24 * s) + 'px ' + SANS;
     wrap(ctx, (a.eyebrow || 'Leadership & Culture').toUpperCase(), W - pad * 2).forEach(function (l) {
-      if (draw) { ctx.fillStyle = '#8a6a52'; ctx.fillText(l, W / 2, y); }
+      if (draw) { ctx.fillStyle = '#4b665a'; ctx.fillText(l, W / 2, y); }
       y += 34 * s;
     });
     y += 16 * s;
@@ -587,7 +587,7 @@
         ctx.font = 'italic ' + noteSize + 'px ' + SERIF;
         wrap(ctx, p.text, W - pad * 2).forEach(function (l) {
           y += noteSize;
-          if (draw) { ctx.fillStyle = '#6b5b53'; ctx.fillText(l, W / 2, y); }
+          if (draw) { ctx.fillStyle = '#59655f'; ctx.fillText(l, W / 2, y); }
           y += noteSize * 0.35;
         });
       } else {
@@ -598,7 +598,7 @@
         if (draw) {
           roundRect(ctx, boxX, y, boxW, h, 16);
           ctx.fillStyle = key ? BROWN : '#ffffff'; ctx.fill();
-          ctx.strokeStyle = key ? BROWN : 'rgba(62,44,35,.22)'; ctx.lineWidth = 2; ctx.stroke();
+          ctx.strokeStyle = key ? BROWN : 'rgba(36,61,55,.22)'; ctx.lineWidth = 2; ctx.stroke();
           ctx.fillStyle = key ? CREAM : BROWN;
           var ty = y + 24 * s;
           ll.forEach(function (l) { ty += qSize; ctx.fillText(l, W / 2, ty - qSize * 0.15); ty += qSize * 0.3; });
