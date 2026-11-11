@@ -806,39 +806,39 @@ body.products-theme .listen-btn:hover {
 
 /* Daily email signup */
 .daily-signup {
-  background: #3e2c23;
-  color: #f4f1ee;
+  background: #e9eee5;
+  color: #243d37;
   border-radius: 14px;
   padding: 1.25rem;
   margin-top: 1.25rem;
   box-shadow: 0 2px 6px rgba(0,0,0,.07);
 }
-.daily-signup h3 { margin: 0 0 .35rem; color: #f4f1ee; font-size: 1.25rem; }
+.daily-signup h3 { margin: 0 0 .35rem; color: #243d37; font-size: 1.25rem; }
 .daily-signup p { margin: 0 0 .85rem; line-height: 1.5; opacity: .92; }
 .daily-signup form { display: flex; flex-wrap: wrap; gap: .5rem; }
 .daily-signup input {
   flex: 1 1 180px;
   min-height: 44px;
   padding: .6rem .8rem;
-  border: none;
-  border-radius: 6px;
+  border: 1px solid #c9cfc6;
+  border-radius: 5px;
   font-size: 1rem;
 }
 .daily-signup button {
   flex: 0 0 auto;
   min-height: 44px;
   padding: .6rem 1.1rem;
-  background: #d4b49c;
-  color: #3e2c23;
+  background: #243d37;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  font-weight: 700;
+  border-radius: 5px;
+  font-weight: 600;
   cursor: pointer;
 }
-.daily-signup button:hover:not(:disabled) { background: #e6cdb9; }
+.daily-signup button:hover:not(:disabled) { background: #426b60; }
 .daily-signup button:disabled { opacity: .6; cursor: default; }
 .daily-signup .daily-signup-msg { margin: .75rem 0 0; font-weight: 600; min-height: 1.2em; }
-.daily-signup .daily-signup-msg.is-error { color: #ffcfbf; }
+.daily-signup .daily-signup-msg.is-error { color: #a33b2b; }
 .daily-signup .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 @media (max-width: 480px) { .daily-signup button { flex: 1 1 100%; } }
 
