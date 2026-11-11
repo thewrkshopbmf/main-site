@@ -1,21 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
-  --ink: #1a1612;
-  --ash: #2e2923;
-  --bone: #f2ede6;
-  --parchment: #e8e0d4;
-  --ember: #c4501a;
-  --gold: #b8932a;
-  --steel: #6b7280;
-  --white: #fafaf8;
+  --ink: #243d37;
+  --ash: #3d524b;
+  --bone: #fffefa;
+  --parchment: #edf0e7;
+  --ember: #3f6f5c;
+  --gold: #557265;
+  --steel: #59655f;
+  --white: #ffffff;
   --green: #2d6a4f;
 }
 
 body.assessment-page {
   background: var(--bone);
   color: var(--ink);
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
   font-size: 16px;
   line-height: 1.6;
   min-height: 100vh;
@@ -35,7 +34,7 @@ body.assessment-page {
 
 #cover {
   min-height: calc(100vh - 72px);
-  background: var(--ash);
+  background: #edf0e7;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,13 +49,13 @@ body.assessment-page {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px);
+  background: none;
 }
 
 .brand-mark {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.75rem;
-  letter-spacing: 0.3em;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 3rem;
@@ -64,13 +63,14 @@ body.assessment-page {
 }
 
 .cover-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: clamp(2.8rem, 7vw, 5.5rem);
-  font-weight: 900;
-  color: var(--white);
+  font-weight: 600;
+  color: var(--ink);
   line-height: 1.05;
   max-width: 800px;
   position: relative;
+  letter-spacing: -.03em;
 }
 
 .cover-title em {
@@ -81,7 +81,7 @@ body.assessment-page {
 .cover-sub {
   font-weight: 300;
   font-size: 1.1rem;
-  color: var(--parchment);
+  color: var(--steel);
   max-width: 520px;
   margin: 1.5rem auto 3rem;
   line-height: 1.75;
@@ -100,18 +100,20 @@ body.assessment-page {
   background: var(--ember);
   color: var(--white);
   border: none;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  text-transform: none;
   padding: 1rem 2.5rem;
   cursor: pointer;
   position: relative;
   transition: background 0.2s, transform 0.15s;
+  border-radius: 5px;
+  font-weight: 600;
 }
 
 .btn-start:hover {
-  background: #d4601f;
+  background: #426b60;
   transform: translateY(-1px);
 }
 
@@ -119,7 +121,7 @@ body.assessment-page {
   font-size: 0.8rem;
   color: var(--steel);
   margin-top: 1.5rem;
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   position: relative;
 }
 
@@ -131,9 +133,9 @@ body.assessment-page {
 }
 
 .section-label {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.7rem;
-  letter-spacing: 0.35em;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--ember);
   display: block;
@@ -141,11 +143,12 @@ body.assessment-page {
 }
 
 .instr-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 2.4rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2;
   margin-bottom: 1.5rem;
+  letter-spacing: -.03em;
 }
 
 .instr-body p {
@@ -173,7 +176,7 @@ body.assessment-page {
 }
 
 .scale-num {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--ember);
@@ -210,7 +213,7 @@ body.assessment-page {
 }
 
 .progress-label {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -227,7 +230,7 @@ body.assessment-page {
 .progress-count,
 .save-status,
 .progress-support {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.75rem;
 }
 
@@ -280,7 +283,7 @@ body.assessment-page {
 }
 
 .q-number {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.65rem;
   color: var(--steel);
   letter-spacing: 0.2em;
@@ -307,7 +310,7 @@ body.assessment-page {
   border: 1px solid var(--parchment);
   background: transparent;
   cursor: pointer;
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.85rem;
   color: var(--steel);
   transition: all 0.15s;
@@ -334,7 +337,7 @@ body.assessment-page {
 .rating-label-text {
   font-size: 0.65rem;
   color: var(--steel);
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
 }
 
 .nav-row {
@@ -345,14 +348,16 @@ body.assessment-page {
 }
 
 .btn {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  text-transform: none;
   padding: 0.8rem 2rem;
   cursor: pointer;
   transition: all 0.15s;
   border: none;
+  border-radius: 5px;
+  font-weight: 600;
 }
 
 .btn-primary {
@@ -361,7 +366,7 @@ body.assessment-page {
 }
 
 .btn-primary:hover {
-  background: #d4601f;
+  background: #426b60;
 }
 
 .btn-secondary {
@@ -376,7 +381,7 @@ body.assessment-page {
 
 .warning-msg {
   color: var(--ember);
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.7rem;
   text-align: right;
   margin-top: 0.5rem;
@@ -395,11 +400,12 @@ body.assessment-page {
 }
 
 .results-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 900;
+  font-weight: 600;
   line-height: 1.1;
   margin-bottom: 0.75rem;
+  letter-spacing: -.03em;
 }
 
 .results-sub {
@@ -410,12 +416,13 @@ body.assessment-page {
 }
 
 .primary-gift-card {
-  background: var(--ash);
-  color: var(--white);
+  background: #f3f3ed;
+  color: var(--ink);
   padding: 2.5rem;
   margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
+  border-radius: 6px;
 }
 
 .primary-gift-card::before {
@@ -429,24 +436,25 @@ body.assessment-page {
 }
 
 .pg-eyebrow {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.65rem;
-  letter-spacing: 0.35em;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 0.75rem;
 }
 
 .pg-name {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 2.6rem;
-  font-weight: 900;
-  color: var(--white);
+  font-weight: 600;
+  color: var(--ink);
   margin-bottom: 0.5rem;
+  letter-spacing: -.03em;
 }
 
 .pg-score {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.85rem;
   color: var(--ember);
   margin-bottom: 1rem;
@@ -454,7 +462,7 @@ body.assessment-page {
 
 .pg-desc {
   font-size: 0.95rem;
-  color: var(--parchment);
+  color: var(--steel);
   line-height: 1.75;
   max-width: 560px;
 }
@@ -464,10 +472,11 @@ body.assessment-page {
 }
 
 .rankings-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.4rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 1.25rem;
+  letter-spacing: -.03em;
 }
 
 .gift-bar-row {
@@ -487,7 +496,7 @@ body.assessment-page {
 }
 
 .gift-bar-pct {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.75rem;
   color: var(--steel);
 }
@@ -523,16 +532,17 @@ body.assessment-page {
 }
 
 .scripture-text {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.05rem;
   font-style: italic;
   color: var(--ash);
   line-height: 1.7;
   margin-bottom: 0.5rem;
+  letter-spacing: -.03em;
 }
 
 .scripture-ref {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.7rem;
   color: var(--steel);
   letter-spacing: 0.15em;
@@ -543,10 +553,11 @@ body.assessment-page {
 }
 
 .shadow-section-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.4rem;
+  letter-spacing: -.03em;
 }
 
 .shadow-section-sub {
@@ -557,15 +568,16 @@ body.assessment-page {
 }
 
 .shadow-primary-panel {
-  background: var(--ash);
+  background: #f3f3ed;
   padding: 2rem;
   margin-bottom: 1rem;
   position: relative;
+  border-radius: 6px;
 }
 
 .shadow-primary-panel::after {
   content: '↓ UNLOCKS';
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   color: var(--ember);
@@ -579,25 +591,26 @@ body.assessment-page {
 }
 
 .sg-eyebrow {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.65rem;
-  letter-spacing: 0.35em;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 0.4rem;
 }
 
 .sg-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--white);
+  font-weight: 600;
+  color: var(--ink);
   margin-bottom: 0.75rem;
+  letter-spacing: -.03em;
 }
 
 .sg-body {
   font-size: 0.9rem;
-  color: var(--parchment);
+  color: var(--steel);
   line-height: 1.8;
 }
 
@@ -616,7 +629,7 @@ body.assessment-page {
 }
 
 .spc-label {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -625,14 +638,15 @@ body.assessment-page {
 }
 
 .spc-name {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.5rem;
+  letter-spacing: -.03em;
 }
 
 .spc-score {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.7rem;
   color: var(--steel);
   margin-bottom: 0.6rem;
@@ -647,7 +661,7 @@ body.assessment-page {
 .spc-warning {
   margin-top: 0.75rem;
   padding: 0.6rem 0.75rem;
-  background: #fef3ec;
+  background: #f3f3ed;
   border-left: 2px solid var(--ember);
   font-size: 0.8rem;
   color: var(--ash);
@@ -666,19 +680,20 @@ body.assessment-page {
 }
 
 .cluster-eyebrow {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.65rem;
-  letter-spacing: 0.3em;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--ember);
   margin-bottom: 0.5rem;
 }
 
 .cluster-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.75rem;
+  letter-spacing: -.03em;
 }
 
 .cluster-desc {
@@ -705,12 +720,12 @@ body.assessment-page {
 }
 
 .cluster-card.danger {
-  background: #fef3ec;
+  background: #f3f3ed;
   border-left: 3px solid var(--ember);
 }
 
 .cc-label {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -734,11 +749,12 @@ body.assessment-page {
 .cluster-placement {
   margin-top: 1.25rem;
   padding: 1rem 1.25rem;
-  background: var(--ash);
+  background: #f3f3ed;
+  border-radius: 6px;
 }
 
 .cp-label {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -748,7 +764,7 @@ body.assessment-page {
 
 .cp-body {
   font-size: 0.88rem;
-  color: var(--parchment);
+  color: var(--steel);
   line-height: 1.7;
 }
 
@@ -759,7 +775,7 @@ body.assessment-page {
 }
 
 .cp2-label {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -778,10 +794,11 @@ body.assessment-page {
 }
 
 .ns-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.4rem;
+  letter-spacing: -.03em;
 }
 
 .ns-sub {
@@ -801,7 +818,7 @@ body.assessment-page {
 }
 
 .step-num {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--ember);
@@ -824,7 +841,7 @@ body.assessment-page {
 
 .step-action {
   margin-top: 0.6rem;
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.7rem;
   color: var(--ember);
   letter-spacing: 0.1em;
@@ -843,11 +860,12 @@ body.assessment-page {
 }
 
 .email-gate {
-  background: var(--ash);
+  background: #f3f3ed;
   padding: 2.5rem;
   margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
+  border-radius: 6px;
 }
 
 .email-gate::before {
@@ -862,9 +880,9 @@ body.assessment-page {
 }
 
 .eg-eyebrow {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.65rem;
-  letter-spacing: 0.35em;
+  letter-spacing: .13em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 0.6rem;
@@ -872,18 +890,19 @@ body.assessment-page {
 }
 
 .eg-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--white);
+  font-weight: 600;
+  color: var(--ink);
   line-height: 1.2;
   margin-bottom: 0.75rem;
   position: relative;
+  letter-spacing: -.03em;
 }
 
 .eg-body {
   font-size: 0.9rem;
-  color: var(--parchment);
+  color: var(--steel);
   line-height: 1.75;
   margin-bottom: 0;
   max-width: 520px;
@@ -910,17 +929,17 @@ body.assessment-page {
 .eg-input {
   flex: 1;
   padding: 0.85rem 1rem;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: var(--white);
-  font-family: 'Inter', sans-serif;
+  background: var(--white);
+  border: 1px solid #c9cfc6;
+  color: var(--ink);
+  font-family: inherit;
   font-size: 0.9rem;
   outline: none;
   transition: border-color 0.2s;
 }
 
 .eg-input::placeholder {
-  color: rgba(255,255,255,0.35);
+  color: var(--steel);
 }
 
 .eg-input:focus {
@@ -931,19 +950,21 @@ body.assessment-page {
   background: var(--ember);
   color: var(--white);
   border: none;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  text-transform: none;
   padding: 0.85rem 1.5rem;
   cursor: pointer;
   transition: background 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
+  border-radius: 5px;
+  font-weight: 600;
 }
 
 .eg-btn:hover {
-  background: #d4601f;
+  background: #426b60;
 }
 
 .eg-btn:disabled {
@@ -954,7 +975,7 @@ body.assessment-page {
 .eg-inline-message {
   display: none;
   margin-top: 0.75rem;
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.78rem;
   position: relative;
   z-index: 1;
@@ -965,7 +986,7 @@ body.assessment-page {
   display: flex;
   gap: 0.7rem;
   align-items: flex-start;
-  color: var(--parchment);
+  color: var(--steel);
   font-size: 0.84rem;
   line-height: 1.6;
   position: relative;
@@ -998,7 +1019,7 @@ body.assessment-page {
 
 .share-card {
   background: var(--parchment);
-  border: 1px solid #d4c9b8;
+  border: 1px solid #c9cfc6;
   padding: 1.5rem;
   margin-bottom: 2rem;
   display: none;
@@ -1009,7 +1030,7 @@ body.assessment-page {
 }
 
 .sc-label {
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   font-size: 0.65rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -1019,13 +1040,13 @@ body.assessment-page {
 
 .sc-summary {
   background: var(--white);
-  border: 1px solid #d4c9b8;
+  border: 1px solid #c9cfc6;
   padding: 1.25rem;
   font-size: 0.85rem;
   line-height: 1.8;
   color: var(--ash);
   white-space: pre-wrap;
-  font-family: 'Space Mono', monospace;
+  font-family: inherit;
   margin-bottom: 1rem;
 }
 
@@ -1033,13 +1054,15 @@ body.assessment-page {
   background: var(--ash);
   color: var(--white);
   border: none;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  text-transform: none;
   padding: 0.65rem 1.25rem;
   cursor: pointer;
   transition: background 0.2s;
+  border-radius: 5px;
+  font-weight: 600;
 }
 
 .sc-copy-btn:hover {
