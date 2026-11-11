@@ -5,31 +5,31 @@
 .st-time { list-style: none; padding: 0; margin: 0.75rem 0 0; }
 .st-time li { display: grid; grid-template-columns: 4.6rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--parchment); }
 .st-time li:last-child { border-bottom: 0; }
-.st-time strong { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ember); }
+.st-time strong { font-family: inherit; font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ember); }
 .st-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 0; }
-.st-guide h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin: 2.5rem 0 0.25rem; padding-top: 1.25rem; border-top: 2px solid var(--gold); }
-.st-guide h3 { font-family: 'Inter', sans-serif; font-size: 1.05rem; margin: 1.5rem 0 0.4rem; }
-.st-guide .st-min { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); display: block; }
-.st-say { border-left: 3px solid var(--gold); background: var(--bone); padding: 0.85rem 1.1rem; margin: 0.75rem 0; font-family: 'Playfair Display', serif; font-size: 1.08rem; line-height: 1.6; }
+.st-guide h2 { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 1.6rem; margin: 2.5rem 0 0.25rem; padding-top: 1.25rem; border-top: 2px solid var(--gold); }
+.st-guide h3 { font-family: inherit; font-size: 1.05rem; margin: 1.5rem 0 0.4rem; }
+.st-guide .st-min { font-family: inherit; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); display: block; }
+.st-say { border-left: 3px solid var(--gold); background: var(--bone); padding: 0.85rem 1.1rem; margin: 0.75rem 0; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 1.08rem; line-height: 1.6; }
 .st-say p { margin: 0.35rem 0; }
 .st-ask { border-left: 3px solid var(--ember); padding: 0.6rem 1rem; margin: 0.75rem 0; background: var(--white); }
-.st-ask strong { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); display: block; }
+.st-ask strong { font-family: inherit; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); display: block; }
 .st-verse { margin: 0.75rem 0; padding: 0.75rem 1rem; background: var(--white); border: 1px solid var(--line); }
-.st-verse cite { display: block; font-style: normal; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--steel); margin-top: 0.3rem; }
-.st-flow { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin: 1rem 0; }
+.st-verse cite { display: block; font-style: normal; font-family: inherit; font-size: 0.75rem; color: var(--steel); margin-top: 0.3rem; }
+.st-flow { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; justify-content: center; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin: 1rem 0; }
 .st-flow span { border: 2px solid var(--ash); padding: 0.45rem 0.8rem; background: var(--white); }
 .st-flow i { font-style: normal; color: var(--ember); }
 .st-table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; background: var(--white); }
 .st-table th, .st-table td { border: 1px solid var(--line); padding: 0.5rem 0.7rem; text-align: left; }
 .st-table th { background: var(--ash); color: var(--white); font-weight: 600; }
-.st-lines { border-bottom: 1px solid #b9b0a3; height: 1.9rem; }
+.st-lines { border-bottom: 1px solid #c9cfc6; height: 1.9rem; }
 .st-journal { border: 1px solid var(--line); padding: 0.8rem 1rem; margin: 0.6rem 0; background: var(--white); break-inside: avoid; }
-.st-journal h4 { margin: 0 0 0.3rem; font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; color: var(--ember); }
+.st-journal h4 { margin: 0 0 0.3rem; font-family: inherit; font-size: 0.78rem; letter-spacing: 0.12em; color: var(--ember); }
 .st-journal p { margin: 0.4rem 0 0; font-size: 0.92rem; }
-.st-gem { font-family: 'Playfair Display', serif; font-size: 1.25rem; text-align: center; padding: 1.1rem; margin: 2rem 0; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
+.st-gem { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 1.25rem; text-align: center; padding: 1.1rem; margin: 2rem 0; border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); }
 .st-kits { display: grid; gap: 1rem; }
 .st-kit { display: block; background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--ember); padding: 1.2rem 1.35rem; text-decoration: none; color: var(--ink) !important; }
-.st-kit h2 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin: 0.2rem 0 0.35rem; }
+.st-kit h2 { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 1.35rem; margin: 0.2rem 0 0.35rem; }
 .st-kit p { margin: 0; }
 @media print {
   #site-header, footer, .pt-no-print, .daily-signup { display: none !important; }
@@ -48,17 +48,17 @@
 .st-card ul { margin: 0.6rem 0 0; }
 /* Share / print bar (matches the Daily share row) */
 .st-share { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin:0 0 1.25rem; padding:.85rem 0; border-bottom:1px solid rgba(0,0,0,.08); }
-.st-share .st-share-label { font-weight:700; color:#3e2c23; margin-right:.25rem; }
-.st-share a, .st-share button { font:inherit; font-size:.9rem; color:#3e2c23 !important; background:#fff; border:1px solid rgba(62,44,35,.25); border-radius:999px; padding:.35rem .8rem; cursor:pointer; text-decoration:none; }
-.st-share a:hover, .st-share button:hover { background:#ece5df; }
-.st-share .st-share-pdf { background:#3e2c23; color:#fff !important; border-color:#3e2c23; }
+.st-share .st-share-label { font-weight:700; color:#243d37; margin-right:.25rem; }
+.st-share a, .st-share button { font:inherit; font-size:.9rem; color:#243d37 !important; background:#fff; border:1px solid rgba(36,61,55,.25); border-radius:999px; padding:.35rem .8rem; cursor:pointer; text-decoration:none; }
+.st-share a:hover, .st-share button:hover { background:#edf0e7; }
+.st-share .st-share-pdf { background:#243d37; color:#fff !important; border-color:#243d37; }
 .st-rights { font-size:.82rem; color:var(--steel); border-top:1px solid var(--line); margin-top:2rem; padding-top:.8rem; }
 .st-print-brand { display:none; }
 @media print {
   .st-share { display:none !important; }
-  .st-print-brand { display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #3e2c23; padding-bottom:.5rem; margin-bottom:1rem; }
+  .st-print-brand { display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #243d37; padding-bottom:.5rem; margin-bottom:1rem; }
   .st-print-brand img { height:44px; width:auto; }
-  .st-print-brand span { font-family:'Space Mono', monospace; font-size:.8rem; letter-spacing:.08em; }
+  .st-print-brand span { font-family:inherit; font-size:.8rem; letter-spacing:.08em; }
   .pdf-mode .st-print-brand { display:none; }
   .pdf-mode .st-rights { display:none; }
 }
@@ -66,9 +66,9 @@
 .st-sessions span strong { font-family: inherit; font-size: 1rem; letter-spacing: 0; color: var(--ink); }
 /* Sessions 5–8: activities, quick check, activity sheets */
 .st-act { background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--gold); padding: 1rem 1.2rem; margin: 0.9rem 0; break-inside: avoid; }
-.st-act h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; margin: 0.15rem 0 0.4rem; }
+.st-act h4 { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 1.15rem; margin: 0.15rem 0 0.4rem; }
 .st-act p { margin: 0.45rem 0 0; }
-.st-act-meta { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); }
+.st-act-meta { font-family: inherit; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); }
 .st-act-debrief { border-top: 1px dashed var(--line); padding-top: 0.45rem; }
 .st-check { background: var(--white); border: 1px solid var(--line); border-top: 4px solid var(--ember); padding: 1rem 1.2rem; margin: 1rem 0; }
 .st-check h3 { margin: 0 0 0.3rem; }
@@ -76,18 +76,18 @@
 .st-check ol { margin: 0; padding-left: 1.3rem; }
 .st-check li { margin: 0 0 0.8rem; }
 .st-check-opts { display: grid; gap: 0.35rem; }
-.st-check-opts button { font: inherit; font-size: 0.95rem; text-align: left; line-height: 1.35; color: var(--ink); background: #faf7f3; border: 1px solid rgba(62,44,35,.25); border-radius: 10px; padding: 0.6rem 0.8rem; cursor: pointer; min-height: 44px; }
-.st-check-opts button[aria-pressed="true"] { background: #3e2c23; border-color: #3e2c23; color: #fff; }
-.st-check-or { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); padding-left: 0.8rem; }
+.st-check-opts button { font: inherit; font-size: 0.95rem; text-align: left; line-height: 1.35; color: var(--ink); background: #fffefa; border: 1px solid rgba(36,61,55,.25); border-radius: 10px; padding: 0.6rem 0.8rem; cursor: pointer; min-height: 44px; }
+.st-check-opts button[aria-pressed="true"] { background: #243d37; border-color: #243d37; color: #fff; }
+.st-check-or { font-family: inherit; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); padding-left: 0.8rem; }
 .st-check-result { font-weight: 700; margin: 0.4rem 0 0; min-height: 1.2em; }
 .st-check-reset { font: inherit; font-size: 0.85rem; background: none; border: 0; color: var(--ember); text-decoration: underline; cursor: pointer; padding: 0.3rem 0; }
 .st-sheet { border: 1px solid var(--line); padding: 1rem 1.2rem; margin: 1rem 0; background: var(--white); }
-.st-sheet h4 { font-family: 'Space Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); margin: 0.9rem 0 0.3rem; }
+.st-sheet h4 { font-family: inherit; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember); margin: 0.9rem 0 0.3rem; }
 .st-sheet h4:first-child { margin-top: 0; }
 .st-sheet p { margin: 0.4rem 0 0; }
 .st-two td { height: 2.2rem; width: 50%; }
-.st-pace { display: flex; justify-content: space-between; border-top: 3px solid #3e2c23; padding-top: 0.4rem; font-size: 0.85rem; }
-.st-commission { font-family: 'Playfair Display', serif; font-size: 1.1rem; text-align: center; margin-top: 1rem !important; }
+.st-pace { display: flex; justify-content: space-between; border-top: 3px solid #243d37; padding-top: 0.4rem; font-size: 0.85rem; }
+.st-commission { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 1.1rem; text-align: center; margin-top: 1rem !important; }
 @media print {
   .st-check { break-inside: avoid; padding: 0.7rem 1rem; }
   .st-guide h2.st-newpage { break-before: page; }

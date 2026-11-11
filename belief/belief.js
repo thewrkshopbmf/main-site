@@ -197,7 +197,7 @@
         '</div>';
       }).join('');
       html += '<div class="bp-start">' +
-          '<span class="pt-label" style="color:#d6ad61">A suggested place to begin</span>' +
+          '<span class="pt-label" style="color:#3f6f5c">A suggested place to begin</span>' +
           '<h3 class="pt-h3">' + esc(T[top].name) + '</h3>' +
           '<p>This is the most frequently reported theme among those with enough answers, not necessarily your deepest issue.</p>' +
           '<div class="pt-actions pt-no-print">' +
