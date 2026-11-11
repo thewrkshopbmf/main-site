@@ -1,55 +1,83 @@
 /* What We Believe (/beliefs/): TheWrkShop's foundational identity statement.
-   Builds on patterns.css (pt-*) and prayer.css (pr-guide). */
-.bl-page .pt-hero .bl-conviction { font-family: 'Playfair Display', serif; font-size: clamp(1.15rem, 2.6vw, 1.45rem); line-height: 1.45; color: var(--parchment); margin: 0 0 .9rem; }
-.bl-page .pt-hero .bl-conviction strong { color: var(--gold); font-weight: 700; }
+   Uses the site's editorial design system (style.css :root): paper, ink green, sage wash,
+   soft card tints, dark-green primary button. Same look as /studies/ and /resources.html. */
+.bl-page { background: var(--paper); color: var(--ink); }
+.bl-narrow { max-width: 780px; margin: 0 auto; padding: 0 28px; }
+.bl-eyebrow { color: #557265; font-size: 11px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; margin: 0 0 16px; }
 
-.bl-toc { background: var(--white); border: 1px solid var(--line); padding: 1.1rem 1.35rem; margin: 0 0 1rem; }
-.bl-toc ol { margin: .4rem 0 0; padding-left: 1.3rem; columns: 2; column-gap: 2rem; }
-.bl-toc li { margin: .25rem 0; break-inside: avoid; }
-.bl-toc a { color: var(--ink); }
+/* Hero */
+.bl-hero { background: #edf0e7; padding: 72px 0 64px; text-align: center; }
+.bl-hero h1 { font-size: clamp(34px, 5vw, 54px); font-weight: 600; line-height: 1.12; letter-spacing: -.035em; margin: 0 0 24px; color: var(--ink); }
+.bl-hero h1 span { display: block; color: #497b66; }
+.bl-hero .bl-conviction { font-size: clamp(17px, 2.2vw, 20px); line-height: 1.6; color: var(--ink); margin: 0 auto 12px; max-width: 620px; }
+.bl-hero .bl-conviction strong { font-weight: 700; }
+.bl-hero .bl-refs { margin: 0; }
 
-.bl-refs { font-family: 'Space Mono', monospace; font-size: .78rem; letter-spacing: .04em; color: var(--steel); margin: .4rem 0 0; }
-.bl-tagline { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.3rem; line-height: 1.35; margin: 0 0 .75rem; }
+/* Body */
+.bl-body { padding: 56px 0 24px; }
+.bl-body p { color: var(--muted); line-height: 1.8; margin: 0 0 16px; }
+.bl-h2 { font-size: clamp(26px, 3vw, 34px); line-height: 1.2; font-weight: 600; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--line); scroll-margin-top: 110px; color: var(--ink); }
+.bl-tagline { font-size: clamp(19px, 2.4vw, 22px); font-weight: 600; line-height: 1.4; letter-spacing: -.01em; }
+.bl-body p.bl-tagline { color: var(--ink); margin-bottom: 16px; }
+.bl-body p.bl-refs, .bl-refs { font-size: 12px; font-weight: 600; letter-spacing: .04em; color: #557265; margin: 4px 0 0; }
 
-.bl-values { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 1rem; }
-.bl-values li { background: var(--white); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 0; }
-.bl-values h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin: 0 0 .35rem; }
-.bl-values p { margin: 0; }
+/* On this page */
+.bl-toc { background: var(--wash); border-radius: 6px; padding: 28px 32px; }
+.bl-toc ol { margin: 0; padding-left: 1.2rem; columns: 2; column-gap: 32px; }
+.bl-toc li { margin: 6px 0; break-inside: avoid; color: #557265; }
+.bl-toc a { color: var(--ink); font-size: 15px; }
 
-.bl-verse { border-left: 3px solid var(--ember); background: var(--parchment); padding: 1rem 1.25rem; margin: 1.2rem 0; font-family: 'Playfair Display', serif; font-size: 1.25rem; }
-.bl-verse cite { display: block; font-family: 'Space Mono', monospace; font-style: normal; font-size: .78rem; color: var(--steel); margin-top: .4rem; }
+/* Values: soft tinted cards, like the Tools page starting points */
+.bl-values { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.bl-values li { background: #e9eee5; border-radius: 6px; padding: 26px 28px; margin: 0; }
+.bl-values li:nth-child(3n+2) { background: #e5ecec; }
+.bl-values li:nth-child(3n) { background: #f0e8da; }
+.bl-values li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.bl-values h3 { font-size: 21px; font-weight: 600; margin: 0 0 10px; color: var(--ink); }
+.bl-body .bl-values p { color: #56675f; font-size: 15px; line-height: 1.7; margin: 0; }
+.bl-body .bl-values p.bl-refs { margin-top: 12px; font-size: 12px; line-height: 1.5; color: #557265; }
 
-.bl-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0; }
-.bl-compare > div { padding: 1.2rem 1.25rem; border: 1px solid var(--line); background: var(--white); }
-.bl-compare .bl-christ { background: var(--ash); color: var(--parchment); border-color: var(--ash); }
-.bl-compare .pt-eyebrow { margin-bottom: .5rem; }
-.bl-compare .bl-christ .pt-eyebrow { color: var(--gold); }
-.bl-compare .bl-source { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.35rem; margin: 0 0 .5rem; }
-.bl-compare p:last-child { margin-bottom: 0; }
+/* Scripture */
+.bl-verse { margin: 24px 0; padding: 26px 30px; background: #edf0e7; border-left: 3px solid #557265; border-radius: 0 6px 6px 0; font-size: clamp(20px, 2.6vw, 24px); font-weight: 600; line-height: 1.4; color: var(--ink); }
+.bl-verse cite { display: block; font-style: normal; font-size: 12px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #557265; margin-top: 10px; }
 
-.bl-summary { list-style: none; padding: 0; margin: 1rem 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; }
-.bl-summary li { margin: 0; text-align: center; padding: .8rem .5rem; background: var(--parchment); font-size: .95rem; }
-.bl-summary li strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.05rem; }
-.bl-summary li.bl-sum-christ { background: var(--ink); color: var(--parchment); }
+/* Self-improvement vs. Christ-centered formation */
+.bl-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0 16px; }
+.bl-compare > div { padding: 28px; border-radius: 6px; background: var(--wash); }
+.bl-compare .bl-christ { background: var(--ink); }
+.bl-compare .bl-christ .bl-eyebrow { color: #b9cfc2; }
+.bl-compare .bl-source { font-size: 24px; font-weight: 600; letter-spacing: -.02em; margin: 0 0 10px; }
+.bl-body .bl-compare p { margin: 0; }
+.bl-body .bl-compare p.bl-source { color: var(--ink); margin-bottom: 10px; }
+.bl-body .bl-compare .bl-christ p { color: #e3ebe5; }
+.bl-body .bl-compare .bl-christ p.bl-source { color: #fffefa; }
 
-.bl-close { background: var(--ash); color: var(--parchment); padding: 3rem 0; text-align: center; }
-.bl-close .bl-conviction { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; }
-.bl-close .pt-btn { margin: .3rem; }
-.bl-page .bl-close a.pt-btn--ghost { color: var(--parchment); border-color: var(--parchment); }
-.bl-page .bl-close a.pt-btn--ghost:hover { color: var(--ink); background: var(--parchment); }
+.bl-summary { list-style: none; padding: 0; margin: 0 0 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.bl-summary li { margin: 0; text-align: center; padding: 18px 10px; background: #e9eee5; border-radius: 6px; font-size: 14px; color: #56675f; }
+.bl-summary li:nth-child(2) { background: #e5ecec; }
+.bl-summary li:nth-child(3) { background: #f0e8da; }
+.bl-summary li strong { display: block; font-size: 17px; color: var(--ink); margin-bottom: 2px; }
+.bl-summary li.bl-sum-christ { background: var(--ink); color: #e3ebe5; }
+.bl-summary li.bl-sum-christ strong { color: #fffefa; }
 
-@media (max-width: 640px) {
+/* Closing */
+.bl-close { background: #f3f3ed; margin: 40px 0 0; padding: 64px 0; text-align: center; }
+.bl-close .bl-conviction { font-size: clamp(24px, 3.4vw, 34px); font-weight: 600; line-height: 1.25; letter-spacing: -.03em; color: var(--ink); margin: 0 auto 28px; max-width: 640px; }
+.bl-actions { display: flex; flex-wrap: wrap; gap: 16px 28px; justify-content: center; align-items: center; }
+.bl-link { color: var(--ink); font-size: 14px; font-weight: 600; text-underline-offset: 4px; }
+
+.bl-page a:focus-visible { outline: 3px solid #557265; outline-offset: 5px; }
+
+@media (max-width: 700px) {
+  .bl-hero { padding: 48px 0 44px; }
+  .bl-narrow { padding: 0 22px; }
+  .bl-toc { padding: 22px 24px; }
   .bl-toc ol { columns: 1; }
-  .bl-compare { grid-template-columns: 1fr; }
+  .bl-values, .bl-compare { grid-template-columns: 1fr; }
   .bl-summary { grid-template-columns: 1fr 1fr; }
+  .bl-h2 { margin-top: 40px; padding-top: 28px; }
 }
 @media print {
-  .bl-close .pt-btn, #site-header, footer { display: none; }
+  #site-header, footer, .bl-actions, .site-breadcrumbs { display: none; }
+  .bl-hero, .bl-close { background: none; }
 }
-
-/* paragraph rhythm */
-.bl-page .pr-guide p { margin: 0 0 1rem; }
-.bl-page .pr-guide .bl-refs { margin-top: -.25rem; margin-bottom: 0; }
-.bl-page .bl-values li p { margin: 0; }
-.bl-page .bl-values li .bl-refs { margin-top: .4rem; }
-.bl-page .bl-compare p { margin: 0 0 .5rem; }
