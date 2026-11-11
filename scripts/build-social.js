@@ -182,23 +182,23 @@ async function main() {
   <title>Social Pack | TheWrkShop</title>
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#f4f1ee; color:#2b2b2b; margin:0; }
-    header { background:#3e2c23; color:#f4f1ee; padding:1.25rem 1rem; }
+    header { background:#edf0e7; color:#243d37; padding:1.25rem 1rem; }
     header h1 { margin:0 0 .25rem; font-size:1.4rem; }
     header p { margin:0; opacity:.9; font-size:.95rem; }
     nav.sp-jump { padding:.75rem 1rem; display:flex; gap:.4rem; flex-wrap:wrap; }
-    nav.sp-jump a { background:#fff; border-radius:999px; padding:.25rem .7rem; color:#3e2c23; text-decoration:none; font-size:.85rem; }
+    nav.sp-jump a { background:#fff; border-radius:999px; padding:.25rem .7rem; color:#243d37; text-decoration:none; font-size:.85rem; }
     main { max-width:860px; margin:0 auto; padding:0 1rem 3rem; }
     .sp-day { background:#fff; border-radius:12px; padding:1rem; margin:1rem 0; box-shadow:0 2px 6px rgba(0,0,0,.06); }
-    .sp-day h2 { color:#3e2c23; font-size:1.15rem; margin:0 0 .25rem; }
-    .sp-link a { color:#3e2c23; font-size:.85rem; word-break:break-all; }
+    .sp-day h2 { color:#243d37; font-size:1.15rem; margin:0 0 .25rem; }
+    .sp-link a { color:#243d37; font-size:.85rem; word-break:break-all; }
     .sp-imgs { display:flex; gap:.75rem; overflow-x:auto; padding:.5rem 0; }
     .sp-imgs figure { margin:0; flex:0 0 auto; }
     .sp-imgs img { border-radius:8px; display:block; height:auto; }
     .sp-imgs figcaption { font-size:.8rem; }
     .sp-item { border-top:1px solid #eee; padding-top:.75rem; margin-top:.75rem; }
     .sp-head { display:flex; justify-content:space-between; align-items:center; gap:.5rem; }
-    .sp-head button { background:#3e2c23; color:#fff; border:0; border-radius:6px; padding:.35rem .8rem; cursor:pointer; }
-    .sp-note { font-size:.82rem; color:#5a4a42; margin:.2rem 0 .4rem; }
+    .sp-head button { background:#243d37; color:#fff; border:0; border-radius:6px; padding:.35rem .8rem; cursor:pointer; }
+    .sp-note { font-size:.82rem; color:#59655f; margin:.2rem 0 .4rem; }
     textarea { width:100%; box-sizing:border-box; font:inherit; font-size:.9rem; border:1px solid #ddd; border-radius:8px; padding:.6rem; background:#fbfaf8; }
   </style>
 </head>

@@ -15,9 +15,9 @@
 //   "link": { "href": "/upstream/", "text": "See the Upstream Formation Framework" }   (optional)
 // }
 
-const BROWN = '#3e2c23';
-const CREAM = '#f4f1ee';
-const TAN = '#c9aa8c';
+const BROWN = '#243d37'; // ink green (editorial palette)
+const CREAM = '#f3f3ed';
+const TAN = '#a5b4a2';
 
 const clean = (v) => String(v ?? '').replace(/\s+/g, ' ').trim();
 
@@ -50,13 +50,13 @@ export function flowPlainText(block, { arrows = false } = {}) {
   return parts.join(arrows ? '\n' : ' ');
 }
 
-// Light cream at the top, deepening step by step, ending in solid brown.
+// White at the top, deepening to sage step by step, ending in solid ink green.
 function shade(i, n) {
-  if (i === n - 1) return { bg: BROWN, fg: CREAM, note: '#e8dccf', border: BROWN };
+  if (i === n - 1) return { bg: BROWN, fg: CREAM, note: '#d6e2da', border: BROWN };
   const t = n <= 2 ? 0 : i / (n - 2);
-  const from = [255, 255, 255], to = [234, 217, 200];
+  const from = [255, 255, 255], to = [221, 232, 222];
   const c = from.map((f, k) => Math.round(f + (to[k] - f) * t));
-  return { bg: `rgb(${c.join(',')})`, fg: BROWN, note: '#6b5b53', border: 'rgba(62,44,35,.18)' };
+  return { bg: `rgb(${c.join(',')})`, fg: BROWN, note: '#59655f', border: 'rgba(36,61,55,.18)' };
 }
 
 // Website version (classes styled by FLOW_CSS).
@@ -78,17 +78,17 @@ export function renderFlowHtml(block, escapeHtml) {
 
 export const FLOW_CSS = `
     .daily-flow { margin: 1.25rem auto 1.4rem; max-width: 440px; text-align: center; }
-    .daily-flow-title { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; margin-bottom: .6rem; }
+    .daily-flow-title { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #4b665a; margin-bottom: .6rem; }
     .daily-flow-steps { list-style: none; margin: 0; padding: 0; }
     .daily-flow-step { margin: 0; padding: 0; }
     .daily-flow-step + .daily-flow-step::before { content: "↓"; display: block; color: ${TAN}; font-size: 1.15rem; line-height: 1; margin: .3rem 0; }
     .daily-flow-box { display: block; border: 1px solid; border-radius: 10px; padding: .6rem .9rem; }
     .daily-flow-label { display: block; font-weight: 700; line-height: 1.35; }
     .daily-flow-note { display: block; font-size: .92rem; font-style: italic; line-height: 1.4; margin-top: .2rem; }
-    .daily-flow-loop { margin: .7rem 0 0; color: #6b4a36; font-weight: 600; font-size: .95rem; }
-    .daily-flow-caption { margin: .6rem 0 0; color: #6b5b53; font-style: italic; font-size: .95rem; }
+    .daily-flow-loop { margin: .7rem 0 0; color: #3f6f5c; font-weight: 600; font-size: .95rem; }
+    .daily-flow-caption { margin: .6rem 0 0; color: #59655f; font-style: italic; font-size: .95rem; }
     .daily-flow-link { margin: .7rem 0 0; }
-    .daily-flow-link a { color: #3e2c23; font-weight: 700; }
+    .daily-flow-link a { color: #243d37; font-weight: 700; }
 `;
 
 // Email version: tables and inline styles only.
@@ -100,10 +100,10 @@ export function renderFlowEmailHtml(block, escapeHtml) {
     return `${arrow}<tr><td align="center" style="background:${c.bg};color:${c.fg};border:1px solid ${c.border};border-radius:8px;padding:10px 14px;font-weight:700;line-height:1.35;">${escapeHtml(s.label)}${s.note ? `<br><span style="font-weight:400;font-style:italic;font-size:14px;color:${c.note};">${escapeHtml(s.note)}</span>` : ''}</td></tr>`;
   }).join('');
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:420px;margin:8px auto 16px;border-collapse:separate;">`
-    + (block.title ? `<tr><td align="center" style="padding-bottom:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a6a52;">${escapeHtml(block.title)}</td></tr>` : '')
+    + (block.title ? `<tr><td align="center" style="padding-bottom:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4b665a;">${escapeHtml(block.title)}</td></tr>` : '')
     + rows
-    + (block.loop ? `<tr><td align="center" style="padding-top:10px;color:#6b4a36;font-weight:700;">&#8635; ${escapeHtml(block.loop)}</td></tr>` : '')
-    + (block.caption ? `<tr><td align="center" style="padding-top:8px;color:#6b5b53;font-style:italic;">${escapeHtml(block.caption)}</td></tr>` : '')
+    + (block.loop ? `<tr><td align="center" style="padding-top:10px;color:#3f6f5c;font-weight:700;">&#8635; ${escapeHtml(block.loop)}</td></tr>` : '')
+    + (block.caption ? `<tr><td align="center" style="padding-top:8px;color:#59655f;font-style:italic;">${escapeHtml(block.caption)}</td></tr>` : '')
     + (block.link ? `<tr><td align="center" style="padding-top:10px;"><a href="${escapeHtml(block.link.href.startsWith('/') ? 'https://thewrkshop.com' + block.link.href : block.link.href)}" style="color:${BROWN};font-weight:700;">${escapeHtml(block.link.text)} &rarr;</a></td></tr>` : '')
     + `</table>`;
 }
