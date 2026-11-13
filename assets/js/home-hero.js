@@ -9,17 +9,36 @@
   const canvas = hero.querySelector('.hh-motes');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  // ---- Waterline: just below the first line of the headline ----
+  // ---- Waterline: centred in the gap between the two lines of the headline ----
+  // Uses the real ink of the letters (the "g" in "begins" above, the tops of "beneath" below),
+  // so the wave never cuts into either line at any screen size.
+  const l2 = hero.querySelector('.hh-l2');
+  const meter = document.createElement('canvas').getContext('2d');
   function placeWaterline() {
     if (!l1) return;
-    // Measure the untransformed layout (the first line slides in on load, so its box moves)
+    // Measure the untransformed layout (the lines slide in on load, so their boxes move)
     const h1 = l1.parentElement;
-    const h = hero.getBoundingClientRect();
-    const top = h1.getBoundingClientRect().top - h.top;
-    const fs = parseFloat(getComputedStyle(l1).fontSize) || 60;
-    // Just under the first line, so descenders ("g") stay above the water
-    const wl = Math.round(top + l1.offsetHeight + fs * 0.06);
-    hero.style.setProperty('--wl', wl + 'px');
+    const heroTop = hero.getBoundingClientRect().top;
+    const top = h1.getBoundingClientRect().top - heroTop;
+    const cs = getComputedStyle(l1);
+    const fs = parseFloat(cs.fontSize) || 60;
+    let wl = top + l1.offsetHeight + fs * 0.06;   // fallback: just under the first line
+    if (l2 && meter) {
+      meter.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+      const m1 = meter.measureText(l1.textContent);
+      const m2 = meter.measureText(l2.textContent);
+      if (m1.fontBoundingBoxAscent && m1.actualBoundingBoxDescent != null) {
+        const lh = parseFloat(cs.lineHeight) || fs * 1.04;
+        const lead = (lh - (m1.fontBoundingBoxAscent + m1.fontBoundingBoxDescent)) / 2;
+        const base1 = top + lead + m1.fontBoundingBoxAscent;
+        const base2 = top + l1.offsetHeight + (parseFloat(getComputedStyle(l2).paddingTop) || 0) + lead + m1.fontBoundingBoxAscent;
+        const inkBottom = base1 + m1.actualBoundingBoxDescent;
+        const inkTop = base2 - m2.actualBoundingBoxAscent;
+        // The drawn surface line rides about 2px above --wl
+        wl = (inkBottom + inkTop) / 2 + 2;
+      }
+    }
+    hero.style.setProperty('--wl', Math.round(wl) + 'px');
   }
   placeWaterline();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeWaterline);
