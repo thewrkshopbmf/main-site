@@ -7,7 +7,7 @@
   --pad-top: clamp(150px, 15vw, 220px);
   --h1s: clamp(46px, 5.4vw, 84px);
   --eyebrow-block: 36px;            /* 16px line + 20px margin */
-  --wl: calc(var(--pad-top) + var(--eyebrow-block) + var(--h1s) * 1.04 + 8px);
+  --wl: calc(var(--pad-top) + var(--eyebrow-block) + var(--h1s) * 1.04 + 16px);
   --artw: min(64vw, 980px, calc(var(--wl) * 2.45));   /* the scene is 900x360: keep it inside the sky */
   --sun-x: calc(100% - var(--artw) * .3333);   /* sun sits at x=600 of the 900-wide scene */
   --px: 0;                          /* pointer parallax, -1..1, set by JS */
@@ -187,7 +187,7 @@
 .hh-l1, .hh-l2 { display: block; }
 .hh-l1 { white-space: nowrap; }
 .hh-l2 {
-  padding-top: 22px;
+  padding-top: 34px;
   color: #f6f1e4;
   text-shadow: 0 1px 24px rgba(10, 35, 30, .35);
 }
@@ -269,7 +269,7 @@
   .hh-roots { opacity: .45; top: auto; bottom: -40px; }
   .home-hero.hh .hh-copy { padding: var(--pad-top) 24px 96px; }
   .home-hero.hh .hh-below p { font-size: 16px; }
-  .hh-l2 { padding-top: 18px; }
+  .hh-l2 { padding-top: 30px; }
 }
 @media (max-width: 480px) {
   .home-hero.hh .button-primary { width: 100%; }
