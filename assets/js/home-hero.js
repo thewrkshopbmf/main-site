@@ -40,10 +40,27 @@
     }
     hero.style.setProperty('--wl', Math.round(wl) + 'px');
   }
-  placeWaterline();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeWaterline);
-  if ('ResizeObserver' in window) new ResizeObserver(placeWaterline).observe(hero);
-  else window.addEventListener('resize', placeWaterline);
+  // ---- Keep "The work begins" on one line inside the margins, whatever font the phone uses ----
+  function fitHeadline() {
+    if (!l1) return;
+    const h1 = l1.parentElement;
+    h1.style.fontSize = '';
+    const avail = h1.clientWidth;
+    const range = document.createRange();
+    range.selectNodeContents(l1);
+    const used = range.getBoundingClientRect().width;
+    if (avail > 0 && used > avail) {
+      const fs = parseFloat(getComputedStyle(h1).fontSize) || 48;
+      h1.style.fontSize = Math.floor(fs * (avail / used) * 0.98 * 10) / 10 + 'px';
+    }
+  }
+  function layout() { fitHeadline(); placeWaterline(); }
+  layout();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  let lastW = 0;
+  const onResize = () => { const w = hero.clientWidth; if (w !== lastW) { lastW = w; layout(); } else placeWaterline(); };
+  if ('ResizeObserver' in window) new ResizeObserver(onResize).observe(hero);
+  else window.addEventListener('resize', layout);
 
   // ---- Pointer parallax (mouse/trackpad only) ----
   if (window.matchMedia('(pointer: fine)').matches && !reduce.matches) {

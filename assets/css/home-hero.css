@@ -177,6 +177,9 @@
   color: #557265;
 }
 .home-hero.hh h1 {
+  /* Segoe UI on Windows; the phone's own system font on iPhone/Mac/Android
+     (otherwise iOS falls back to Verdana, which is too wide for this line) */
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: var(--h1s);
   line-height: 1.04;
   letter-spacing: -.055em;
@@ -184,7 +187,7 @@
   margin: 0;
   color: var(--ink);
 }
-.hh-l1, .hh-l2 { display: block; }
+.hh-l1, .hh-l2 { display: block; font-family: inherit; }
 .hh-l1 { white-space: nowrap; }
 .hh-l2 {
   padding-top: 34px;
