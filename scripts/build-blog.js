@@ -188,7 +188,10 @@ function accent4321(html) {
 const is4321 = e => /4-3-2-1/.test(e.category || '');
 function heroHtml(e, esc) {
   const src = String(e.hero_image || '').trim();
-  if (!/^\/[A-Za-z0-9/_.-]+\.(jpe?g|png|webp)$/i.test(src)) return '';
+  // A site path (/assets/...) or an image in the site's public Supabase image folder (site-media)
+  const ok = /^\/[A-Za-z0-9/_.-]+\.(jpe?g|png|webp)$/i.test(src) ||
+    /^https:\/\/dtgkcjuhrwjpvhycydfq\.supabase\.co\/storage\/v1\/object\/public\/site-media\/[A-Za-z0-9/_.-]+\.(jpe?g|png|webp)$/i.test(src);
+  if (!ok) return '';
   return `<figure class="post-hero"><img src="${esc(src)}" alt="${esc(e.hero_image_alt || '')}" width="1600" height="800" loading="eager" fetchpriority="high"></figure>`;
 }
 
@@ -280,7 +283,7 @@ async function main() {
       reading_minutes: latest.reading_minutes || 0,
       href: `/blog/${path.dirname(fileNameFor(latest))}/`,
       one_minute_win: oneMinuteWinOf(buildBlogBodyHTML(latest)),
-      hero_image: latest.hero_image ? `${SITE_URL}${latest.hero_image}` : '',
+      hero_image: latest.hero_image ? (/^https:/.test(latest.hero_image) ? latest.hero_image : `${SITE_URL}${latest.hero_image}`) : '',
       hero_image_alt: latest.hero_image_alt || '',
       week_dailies: latest.date >= GO_DEEPER_FROM ? weekDailiesFor(latest, dailyArchive) : []
     };

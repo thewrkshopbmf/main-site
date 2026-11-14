@@ -13,6 +13,8 @@
     "integrity"
   ],
   "og_image": "/assets/og/when-success-hides-whats-wrong.png",
+  "hero_image": "https://dtgkcjuhrwjpvhycydfq.supabase.co/storage/v1/object/public/site-media/blog/when-success-hides-whats-wrong.jpg",
+  "hero_image_alt": "An empty boardroom at dusk, a wall screen still glowing with rising charts and one chair pushed back from the table",
   "body_html": [
     "<section class=\"section\">",
     "  <div class=\"kicker\">TheWrkShop Happy 4-3-2-1 Weekend Edition</div>",
