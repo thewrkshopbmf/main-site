@@ -137,6 +137,9 @@ async function buildBonusPages(tpl) {
   for (const f of files) {
     const e = JSON.parse(await fs.readFile(path.join(BONUS_SRC, f), 'utf-8'));
     const slug = f.replace(/\.json$/, '');
+    // "hold": true keeps a bonus page on the staging preview only (not built on thewrkshop.com)
+    const isStagingPreview = process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging';
+    if (e.hold && !isStagingPreview) { console.log(' - bonus on hold (staging only):', `/bonus/${slug}/`); continue; }
     const bodyHTML = is4321(e) ? accent4321(buildBlogBodyHTML(e)) : buildBlogBodyHTML(e);
     const canonical = `${SITE_URL}/bonus/${slug}/`;
     const title = String(e.title || 'Bonus').trim();
