@@ -45,6 +45,21 @@
   </section>
 
   <main class="content-section container">
+    <div style="max-width:760px;margin:0 auto 1.5rem;">
+    <section class="weekend-signup" aria-labelledby="weekendSignupTitle">
+      <h2 id="weekendSignupTitle">Get the Weekend 4-3-2-1 in your inbox</h2>
+      <p>Four Scriptures, three insights, two questions and one step to carry into the week. Every Friday afternoon. One email.</p>
+      <form class="weekend-signup-form" novalidate>
+        <input type="text" name="first_name" placeholder="First name (optional)" autocomplete="given-name" maxlength="60" aria-label="First name (optional)" />
+        <input type="email" name="email" placeholder="Your email" autocomplete="email" required aria-label="Email address" />
+        <label class="ws-daily"><input type="checkbox" name="also_daily" /> <span>Want to go deeper? Also send me The Daily every weekday morning.</span></label>
+        <input type="text" name="company" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button type="submit">Send Me the 4-3-2-1</button>
+      </form>
+      <p class="weekend-signup-msg" role="status" aria-live="polite"></p>
+      <p class="weekend-signup-note">Already getting it? You’re all set.</p>
+    </section>
+    </div>
     <section class="cards archive-grid preload" id="blogGrid" aria-label="Blog posts"></section>
     <p class="empty" id="emptyMsg" style="display:none">No posts yet.</p>
   </main>
