@@ -123,6 +123,81 @@ function goDeeperHtml(week) {
   return `<section class="go-deeper" aria-labelledby="goDeeperTitle"><h2 id="goDeeperTitle">Want to go deeper?</h2><p>This week’s 4-3-2-1 came from these Dailies. Tap any one to sit with the full day.</p><ul>${items}</ul></section>`;
 }
 
+// Unlisted bonus posts (content/bonus/*.json -> /bonus/<slug>/): same page design as the blog,
+// but not in the blog list, sitemap, search or the Friday email, and marked noindex.
+// Used for extras such as a thank-you 4-3-2-1 for new subscribers.
+async function buildBonusPages(tpl) {
+  const BONUS_SRC = path.join(ROOT, 'content', 'bonus');
+  const BONUS_OUT = path.join(ROOT, 'bonus');
+  let files = [];
+  try { files = (await fs.readdir(BONUS_SRC)).filter(f => f.endsWith('.json')); } catch {}
+  await fs.rm(BONUS_OUT, { recursive: true, force: true });
+  if (!files.length) return;
+  const attr = v => String(v ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  for (const f of files) {
+    const e = JSON.parse(await fs.readFile(path.join(BONUS_SRC, f), 'utf-8'));
+    const slug = f.replace(/\.json$/, '');
+    // "hold": true keeps a bonus page on the staging preview only (not built on thewrkshop.com)
+    const isStagingPreview = process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging';
+    if (e.hold && !isStagingPreview) { console.log(' - bonus on hold (staging only):', `/bonus/${slug}/`); continue; }
+    const bodyHTML = is4321(e) ? accent4321(buildBlogBodyHTML(e)) : buildBlogBodyHTML(e);
+    const canonical = `${SITE_URL}/bonus/${slug}/`;
+    const title = String(e.title || 'Bonus').trim();
+    const spokenWords = `${title} ${bodyHTML}`.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    const html = fill(tpl, {
+      SEO_TITLE: attr(`${title} | TheWrkShop`),
+      SOCIAL_TITLE: attr(title),
+      SOCIAL_TITLE_ENC: attr(encodeURIComponent(title)),
+      SEO_DESCRIPTION: attr(e.excerpt || ''),
+      CANONICAL_URL: attr(canonical),
+      CANONICAL_URL_ENC: attr(encodeURIComponent(canonical)),
+      ROBOTS_META: '<meta name="robots" content="noindex"/>',
+      ARTICLE_CLASS: is4321(e) ? 'blog-post w4321 is-bonus' : 'blog-post is-bonus',
+      HERO_HTML: heroHtml(e, attr),
+      OG_IMAGE: attr(`${SITE_URL}/assets/og/site.png`),
+      JSON_LD: '{}',
+      TITLE: title,
+      CATEGORY: e.category || 'Bonus',
+      DATE: '',
+      HUMAN_DATE: '',
+      EXCERPT: e.excerpt || '',
+      AUTHOR: e.author || '',
+      READING_MIN: String(e.reading_minutes || 0),
+      BODY_HTML: bodyHTML,
+      TOPICS_HTML: topicsLineHtml(topicsFor(e)),
+      NEXT_STEPS_HTML: nextStepsHtml(e, 'blog'),
+      POST_KEY: '',
+      LISTEN_MIN: String(Math.max(1, Math.round(spokenWords / 155))),
+      AUDIO_HTML: audioHtml(e, attr),
+      GO_DEEPER_HTML: '',
+      PREV_HREF: '#',
+      NEXT_HREF: '#'
+    });
+    const out = path.join(BONUS_OUT, slug, 'index.html');
+    await fs.mkdir(path.dirname(out), { recursive: true });
+    await fs.writeFile(out, html, 'utf-8');
+    console.log(' - bonus (unlisted):', `/bonus/${slug}/`);
+  }
+}
+
+// Weekend 4-3-2-1 accents: mark the numbered headings, Gems and the 1 Action Step so the
+// template can give them the bronze accent (text stays exactly as written).
+function accent4321(html) {
+  return String(html)
+    .replace(/<h2 class="h2">(?=[1-4]\s)/g, '<h2 class="h2 h2-num">')
+    .replace(/<p><em>Gem:<\/em>/g, '<p class="gem"><em>Gem:</em>')
+    .replace(/<section class="section">(\s*<h2 class="h2 h2-num">1 Action Step)/g, '<section class="section action">$1');
+}
+const is4321 = e => /4-3-2-1/.test(e.category || '');
+function heroHtml(e, esc) {
+  const src = String(e.hero_image || '').trim();
+  // A site path (/assets/...) or an image in the site's public Supabase image folder (site-media)
+  const ok = /^\/[A-Za-z0-9/_.-]+\.(jpe?g|png|webp)$/i.test(src) ||
+    /^https:\/\/dtgkcjuhrwjpvhycydfq\.supabase\.co\/storage\/v1\/object\/public\/site-media\/[A-Za-z0-9/_.-]+\.(jpe?g|png|webp)$/i.test(src);
+  if (!ok) return '';
+  return `<figure class="post-hero"><img src="${esc(src)}" alt="${esc(e.hero_image_alt || '')}" width="1600" height="800" loading="eager" fetchpriority="high"></figure>`;
+}
+
 async function main() {
   await ensurePassthroughs();
   let dailyArchive = [];
@@ -191,6 +266,7 @@ async function main() {
       reading_minutes: e.reading_minutes || 0,
       href: `/blog/${path.dirname(fileNameFor(e))}/`,
       description: String(e.seo_description || e.excerpt || '').replace(/\s+/g, ' ').trim(),
+      image: e.hero_image || '',
       topics: topicsFor(e)
     }));
 
@@ -210,6 +286,8 @@ async function main() {
       reading_minutes: latest.reading_minutes || 0,
       href: `/blog/${path.dirname(fileNameFor(latest))}/`,
       one_minute_win: oneMinuteWinOf(buildBlogBodyHTML(latest)),
+      hero_image: latest.hero_image ? (/^https:/.test(latest.hero_image) ? latest.hero_image : `${SITE_URL}${latest.hero_image}`) : '',
+      hero_image_alt: latest.hero_image_alt || '',
       week_dailies: latest.date >= GO_DEEPER_FROM ? weekDailiesFor(latest, dailyArchive) : []
     };
 
@@ -230,7 +308,7 @@ async function main() {
     const prev = visible[i - 1];
     const next = visible[i + 1];
 
-    const bodyHTML = buildBlogBodyHTML(e);
+    const bodyHTML = is4321(e) ? accent4321(buildBlogBodyHTML(e)) : buildBlogBodyHTML(e);
     const source = bodyHTML
       ? (e.body_html !== undefined && e.body_html !== null ? 'body_html' : 'legacy')
       : 'empty';
@@ -303,6 +381,9 @@ async function main() {
       TOPICS_HTML: topicsLineHtml(topicsFor(e)),
       NEXT_STEPS_HTML: nextStepsHtml(e, 'blog'),
       // Root-relative links: blog pages carry <base href="/">, so "../" would resolve to the site root (404)
+      ROBOTS_META: '',
+      ARTICLE_CLASS: is4321(e) ? 'blog-post w4321' : 'blog-post',
+      HERO_HTML: heroHtml(e, attr),
       PREV_HREF: prev ? `/blog/${path.dirname(fileNameFor(prev))}/` : '#',
       NEXT_HREF: next ? `/blog/${path.dirname(fileNameFor(next))}/` : '#'
     });
@@ -311,6 +392,8 @@ async function main() {
     await fs.mkdir(path.dirname(outPath), { recursive: true });
     await fs.writeFile(outPath, html, 'utf-8');
   }
+
+  await buildBonusPages(tpl);
 
   const guardLines = [
     ...older.map(e => `/blog/${path.dirname(fileNameFor(e))}/   /blog-archive.html   302!`),

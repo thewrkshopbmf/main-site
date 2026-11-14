@@ -22,6 +22,9 @@ export default async (req) => {
       .select('id, first_name, status, wants_daily, confirm_token, confirm_sent_at').eq('email', email).maybeSingle();
     if (findErr) throw findErr;
 
+    // Paused by TheWrkShop: stays paused until S changes it, even if he signs up again.
+    if (existing?.status === 'paused') return json({ ok: true, status: 'pending' });
+
     if (existing?.status === 'active' && !wantsDaily) {
       return json({ ok: true, status: 'active', message: "You're already on the list. The next 4-3-2-1 will come to your inbox Friday." });
     }

@@ -35,3 +35,4 @@ Assesment.html
 # Topic hubs (generated from content/topics.json by scripts/build-topics.js)
 /topics/
 /admin/social.html
+/bonus/

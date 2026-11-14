@@ -52,6 +52,9 @@ export function weekendEmail(post, { unsubscribeUrl: unsub }) {
   const dailies = Array.isArray(post.week_dailies) ? post.week_dailies : [];
   const win = clean(post.one_minute_win);
   const parts = [];
+  if (/^https:\/\//.test(clean(post.hero_image))) {
+    parts.push(`<a href="${escapeHtml(url)}"><img src="${escapeHtml(post.hero_image)}" alt="${escapeHtml(post.hero_image_alt || '')}" width="544" style="display:block;width:100%;max-width:544px;height:auto;border-radius:10px;margin:0 0 18px;border:0;"></a>`);
+  }
   if (post.excerpt) parts.push(`<p style="margin:0 0 16px;line-height:1.6;">${escapeHtml(post.excerpt)}</p>`);
   if (win) parts.push(`<div style="margin:0 0 18px;padding:12px 14px;border-left:4px solid ${BROWN};background:${CREAM};"><p style="margin:0 0 4px;font-weight:700;color:${BROWN};font-family:Arial,Helvetica,sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.05em;">One-Minute Win of the Week</p><p style="margin:0;line-height:1.6;">${escapeHtml(win)}</p></div>`);
   parts.push(`<p style="margin:22px 0;">${button(url, 'Read &amp; listen to the 4-3-2-1 →')}</p>`);

@@ -40,6 +40,12 @@
   X-Robots-Tag = "noindex, nofollow"
 
 [[headers]]
+  for = "/bonus/*"
+  [headers.values]
+  X-Robots-Tag = "noindex"
+  Cache-Control = "no-store"
+
+[[headers]]
   for = "/login.html"
   [headers.values]
   X-Robots-Tag = "noindex, nofollow"

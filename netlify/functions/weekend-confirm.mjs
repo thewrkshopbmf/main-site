@@ -18,7 +18,7 @@ export default async (req) => {
     if (error) throw error;
     if (!sub) return bad(404, 'We couldn’t find this signup. It may have been replaced by a newer confirmation email. You can sign up again at the end of any 4-3-2-1 post.');
 
-    if (sub.status !== 'active') {
+    if (sub.status !== 'active' && sub.status !== 'paused') {
       const now = new Date().toISOString();
       const { error: upErr } = await supabase.from(TABLE)
         .update({ status: 'active', confirmed_at: now, unsubscribed_at: null, updated_at: now }).eq('id', sub.id);
