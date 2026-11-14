@@ -1,0 +1,28 @@
+# Icebreaker and rapport library for group mode.
+# Each line: - Title | type | group stage | format | minutes | prompt
+#   type:        light, story, or theme
+#   group stage: first, established, returning, or any (several allowed, separated by commas)
+#   format:      video, in-person, or both
+#   minutes:     a suggested length (the facilitator's setting wins)
+# Every study's own "icebreaker:" line is added to this list automatically as a themed option.
+# Keep them low-pressure: nothing that requires personal disclosure. Everyone may pass.
+
+[icebreakers]
+- Name and one good thing | light | first | both | 4 | Say your name and one good thing from your week, big or small.
+- Where you're joining from | light | first | video | 3 | Tell us where you're joining from and one thing in the room with you right now.
+- First job | story | first, established | both | 5 | What was your first paying job, and what did it teach you?
+- Hidden skill | light | first, established | both | 4 | What's one skill you have that most people here wouldn't guess?
+- Best advice | story | first, established | both | 5 | What's the best piece of advice a man ever gave you?
+- Hometown | light | first | both | 4 | Where did you grow up, and what's one thing you miss about it?
+- High and low | light | established, returning | both | 5 | Share one high and one low from the past week, in a sentence each.
+- Weather report | light | established, returning | both | 3 | If your week were a weather report, what would it be, and why?
+- Since we last met | light | returning | both | 5 | What's one thing that's happened since we last met?
+- Mentor | story | established | both | 6 | Who is a man who shaped you, and what did he do that stuck?
+- Tool of choice | light | any | both | 4 | If you could only keep one tool in your garage or toolbox, what would it be?
+- Proud moment | story | established | both | 5 | What's something you finished recently that you're glad you did?
+- Unfinished project | light | any | both | 4 | What's one project you've started but never finished?
+- Show one thing | light | first, established | video | 4 | Hold up one object within reach that says something about you, and tell us about it in one sentence.
+- One word | light | any | both | 2 | Give one word for how you're arriving tonight. No explanation needed.
+- Last time you laughed | story | established, returning | both | 4 | What's the last thing that made you really laugh?
+- Where you met God | story | established | both | 6 | Describe a place, not a story, where you've sensed God's presence: a road, a field, a kitchen table.
+- Two lanes | light | any | in-person | 4 | Coffee or tea, sunrise or sunset, mountains or water? Pick fast, then say why one of your picks matters to you.

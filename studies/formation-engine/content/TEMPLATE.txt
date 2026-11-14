@@ -1,0 +1,72 @@
+# ============================================================
+# TheWrkShop Formation Engine: study template
+# ============================================================
+# HOW TO ADD A STUDY
+# 1. Copy this file and rename it, e.g. content/whats-in-your-hand.txt
+#    (lowercase, dashes, no spaces).
+# 2. Fill in every line below. Replace the text after each colon.
+# 3. Add the file name to content/studies.txt (one per line, in the order
+#    the studies should appear in the menu).
+# 4. Push to staging and check it at /studies/formation-engine/
+#
+# RULES
+# - Lines starting with # are notes and are ignored.
+# - "label: text" lines must stay on ONE line (no line breaks inside).
+# - In a [list] section, each item starts with "- ".
+#   Items with parts separate them with " | " (space, bar, space).
+# - Scripture: quote NIV unless you mark another version.
+# - Lines marked (optional) can be left blank or deleted.
+# ============================================================
+
+id: my-study-id
+title: The Study Title
+subtitle: One sentence that says what the study is about
+anchor: John 8:12
+verse: Paste the anchor passage here, quoted from the NIV.
+version: NIV
+truth: One sentence: what the passage shows about Jesus.
+tension: One question that names the tension men feel.
+wound: The wound beneath the wound: the question under the first answer.
+action: One concrete step of obedience to take this week.
+prayer: A short closing prayer.
+icebreaker: (optional) A themed opening question for groups.
+
+# Daily mode, step 3. Each line: what a man might pick | the Go Deeper reflection for that pick
+[choices]
+- First option a man might choose | The reflection he sees when he picks it
+- Second option | Its reflection
+- Third option | Its reflection
+- Fourth option | Its reflection
+
+# 4-3-2-1: four Scriptures. Each line: reference | what it shows | discovery question
+[scriptures]
+- John 8:12 | What this passage shows | A discovery question
+- Reference 2 | Focus | Question
+- Reference 3 | Focus | Question
+- Reference 4 | Focus | Question
+
+# 4-3-2-1: three practices
+[practices]
+- Practice one
+- Practice two
+- Practice three
+
+# 4-3-2-1: two questions
+[questions]
+- Question one
+- Question two
+
+# Go Deeper questions, used in every mode
+[deeper]
+- Deeper question one
+- Deeper question two
+- Deeper question three
+
+# Group mode prompts (all optional; the engine fills in sensible defaults)
+[group]
+opening: Light, low-pressure opening question for the Connect stage
+discover: What should the group look for in the passage?
+breakout1: Breakout 1 discussion question
+breakout2: Breakout 2 (go deeper) question
+report: What each breakout reports back when the group reconvenes
+closing: How the group closes and is sent

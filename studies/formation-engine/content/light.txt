@@ -1,0 +1,48 @@
+# Study file. See TEMPLATE.txt for how this format works.
+
+id: light
+title: Where’s Your Light Leading You?
+subtitle: Following Jesus out of concealment and into truthful living
+anchor: John 8:12
+verse: When Jesus spoke again to the people, he said, “I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.”
+version: NIV
+truth: Jesus does not merely hand us a flashlight. He calls us to follow Him.
+tension: What might I be protecting from the light?
+wound: Beneath what I hide, what did I learn, and when, that made hiding feel safer than being known?
+action: Choose one truthful, safe act of obedience in the next 48 hours.
+prayer: Jesus, You are the light of the world. Search my heart, expose what needs to change, and lead me into truthful obedience by Your grace. Amen.
+icebreaker: When has light, a headlamp, a porch light, a sunrise, helped you see something you would otherwise have missed?
+
+[choices]
+- I avoid a difficult conversation | Is the silence motivated by wisdom, fear, or a desire to preserve an image?
+- I keep a struggle to myself | What makes secrecy feel safer? Who could be a trustworthy source of support?
+- I know the right thing but delay acting | What cost of obedience am I trying to avoid?
+- I am unsure what is hidden | Ask God to reveal what you need to see, without forcing an answer.
+
+[scriptures]
+- John 8:12 | Jesus is the light; following Him changes our direction. | What is the difference between admiring the light and following Jesus?
+- Ephesians 5:8–13 | Live as children of light; expose darkness rather than participate in it. | What does living as a child of light look like in ordinary choices?
+- 1 John 1:5–9 | Walking in the light includes fellowship, confession, and dependence on Christ’s cleansing. | How does verse 9 keep confession from becoming a performance?
+- Psalm 139:23–24 | Invite God to search the heart and lead in the everlasting way. | What changes when we ask God to search us rather than merely inspect ourselves?
+
+[practices]
+- Pray Psalm 139:23–24 slowly.
+- Name one concrete way to follow Jesus in truth today.
+- If appropriate and safe, invite a trusted brother into the conversation.
+
+[questions]
+- Where am I tempted to manage appearances rather than live truthfully?
+- What might obedience look like if I trusted Christ with the outcome?
+
+[deeper]
+- What am I afraid would happen if this became known?
+- What belief about God, myself, or others is underneath that fear?
+- What does Scripture actually promise, and what does it not promise?
+
+[group]
+opening: When has light helped you see something you would otherwise have missed?
+discover: What does John 8:12 reveal about Jesus, and what does “follow” require?
+breakout1: What does John 8:12 reveal about Jesus, and what is the difference between admiring Him and following Him?
+breakout2: What makes honesty difficult, and how can brothers create a safer environment for truth?
+report: Share one insight about Jesus, not another participant’s personal disclosure.
+closing: Each person names one next step privately; offer optional partner prayer.

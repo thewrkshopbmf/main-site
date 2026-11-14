@@ -1,0 +1,48 @@
+# Study file. See TEMPLATE.txt for how this format works.
+
+id: room
+title: When the Room Changes
+subtitle: When belonging begins to compete with conviction
+anchor: Galatians 2:11–14
+verse: When Cephas came to Antioch, I opposed him to his face, because he stood condemned. For before certain men came from James, he used to eat with the Gentiles. But when they arrived, he began to draw back and separate himself from the Gentiles because he was afraid of those who belonged to the circumcision group. The other Jews joined him in his hypocrisy, so that by their hypocrisy even Barnabas was led astray. When I saw that they were not acting in line with the truth of the gospel, I said to Cephas in front of them all, “You are a Jew, yet you live like a Gentile and not like a Jew. How is it, then, that you force Gentiles to follow Jewish customs?”
+version: NIV
+truth: Even mature leaders can let social pressure distort their behavior, and others follow.
+tension: Does my conviction change depending on who enters the room?
+wound: Where did I first learn that belonging had to be earned by becoming who the room wanted?
+action: Identify one room and one faithful response before you enter it.
+prayer: Lord Jesus, free me from living for approval. Form courage, humility, and truthfulness in me so my conduct reflects Your gospel. Amen.
+icebreaker: What changes in a room when a highly influential person walks in?
+
+[choices]
+- I speak honestly despite pressure | What helps you remain faithful? How do you distinguish courage from needless confrontation?
+- I stay quiet to avoid tension | When is silence wise, and when is it driven by fear?
+- I adjust my position to fit in | Was that humility and listening, or compromise for approval?
+- I do not notice the pressure | What does the room reward, punish, or quietly normalize?
+
+[scriptures]
+- Galatians 2:11–14 | Peter’s withdrawal influenced others and contradicted the truth of the gospel. | What changed when the room changed?
+- Galatians 1:10 | Paul contrasts seeking human approval with serving Christ. | Whose approval has the most influence over your choices?
+- Proverbs 29:25 | Fear of people can become a snare; trust in the Lord keeps us safe. | How can the fear of people become a leadership system?
+- Romans 12:2 | Transformation involves renewal of the mind rather than conformity. | What practices help you recognize when you are conforming?
+
+[practices]
+- Notice whose presence changes your behavior.
+- Ask whether your silence is wisdom or fear.
+- Practice one truthful, gracious response this week.
+
+[questions]
+- What room most tempts me to become someone else?
+- What would faithfulness to Christ look like there?
+
+[deeper]
+- What am I trying to gain or avoid?
+- What does this reveal about where I seek security?
+- Who is being formed by the example I set?
+
+[group]
+opening: What changes in a room when a highly influential person arrives?
+discover: Read Galatians 2:11–14. What changed, and who was affected?
+breakout1: Read Galatians 2:11–14 again. What changed when the room changed, and who was affected by it?
+breakout2: How can we challenge inconsistency without humiliation?
+report: Report one Scripture-grounded principle, not personal stories.
+closing: Pray for integrity in private and in public.

@@ -1,0 +1,3 @@
+# The studies shown in the menu, in order. One file name per line.
+light.txt
+room.txt
