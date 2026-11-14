@@ -24,6 +24,7 @@ const TPL_PATH = path.join(ROOT, 'templates', 'blog.html');
 const REDIRECTS = path.join(ROOT, '_redirects');
 
 const START_DATE = '2025-08-01';
+const GO_DEEPER_FROM = '2026-10-01';
 
 async function mergeRedirectLines(linesToEnsure) {
   let existing = '';
@@ -209,7 +210,7 @@ async function main() {
       reading_minutes: latest.reading_minutes || 0,
       href: `/blog/${path.dirname(fileNameFor(latest))}/`,
       one_minute_win: oneMinuteWinOf(buildBlogBodyHTML(latest)),
-      week_dailies: weekDailiesFor(latest, dailyArchive)
+      week_dailies: latest.date >= GO_DEEPER_FROM ? weekDailiesFor(latest, dailyArchive) : []
     };
 
     await fs.writeFile(
@@ -285,7 +286,8 @@ async function main() {
       POST_KEY: attr(`blog/${path.dirname(fileNameFor(e))}`),
       LISTEN_MIN: String(listenMin),
       AUDIO_HTML: audioHtml(e, attr),
-      GO_DEEPER_HTML: /4-3-2-1/.test(e.category || '') ? goDeeperHtml(weekDailiesFor(e, dailyArchive)) : '',
+      // Only weekend posts drawn from that week's Dailies (Oct 2026 on); earlier 4-3-2-1s stood alone
+      GO_DEEPER_HTML: /4-3-2-1/.test(e.category || '') && e.date >= GO_DEEPER_FROM ? goDeeperHtml(weekDailiesFor(e, dailyArchive)) : '',
       SEO_DESCRIPTION: attr(description),
       CANONICAL_URL: attr(canonical),
       OG_IMAGE: attr(ogImage),
