@@ -123,6 +123,59 @@ function goDeeperHtml(week) {
   return `<section class="go-deeper" aria-labelledby="goDeeperTitle"><h2 id="goDeeperTitle">Want to go deeper?</h2><p>This week’s 4-3-2-1 came from these Dailies. Tap any one to sit with the full day.</p><ul>${items}</ul></section>`;
 }
 
+// Unlisted bonus posts (content/bonus/*.json -> /bonus/<slug>/): same page design as the blog,
+// but not in the blog list, sitemap, search or the Friday email, and marked noindex.
+// Used for extras such as a thank-you 4-3-2-1 for new subscribers.
+async function buildBonusPages(tpl) {
+  const BONUS_SRC = path.join(ROOT, 'content', 'bonus');
+  const BONUS_OUT = path.join(ROOT, 'bonus');
+  let files = [];
+  try { files = (await fs.readdir(BONUS_SRC)).filter(f => f.endsWith('.json')); } catch {}
+  await fs.rm(BONUS_OUT, { recursive: true, force: true });
+  if (!files.length) return;
+  const attr = v => String(v ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  for (const f of files) {
+    const e = JSON.parse(await fs.readFile(path.join(BONUS_SRC, f), 'utf-8'));
+    const slug = f.replace(/\.json$/, '');
+    const bodyHTML = buildBlogBodyHTML(e);
+    const canonical = `${SITE_URL}/bonus/${slug}/`;
+    const title = String(e.title || 'Bonus').trim();
+    const spokenWords = `${title} ${bodyHTML}`.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    const html = fill(tpl, {
+      SEO_TITLE: attr(`${title} | TheWrkShop`),
+      SOCIAL_TITLE: attr(title),
+      SOCIAL_TITLE_ENC: attr(encodeURIComponent(title)),
+      SEO_DESCRIPTION: attr(e.excerpt || ''),
+      CANONICAL_URL: attr(canonical),
+      CANONICAL_URL_ENC: attr(encodeURIComponent(canonical)),
+      ROBOTS_META: '<meta name="robots" content="noindex"/>',
+      ARTICLE_CLASS: 'blog-post is-bonus',
+      OG_IMAGE: attr(`${SITE_URL}/assets/og/site.png`),
+      JSON_LD: '{}',
+      TITLE: title,
+      CATEGORY: e.category || 'Bonus',
+      DATE: '',
+      HUMAN_DATE: '',
+      EXCERPT: e.excerpt || '',
+      AUTHOR: e.author || '',
+      READING_MIN: String(e.reading_minutes || 0),
+      BODY_HTML: bodyHTML,
+      TOPICS_HTML: topicsLineHtml(topicsFor(e)),
+      NEXT_STEPS_HTML: nextStepsHtml(e, 'blog'),
+      POST_KEY: '',
+      LISTEN_MIN: String(Math.max(1, Math.round(spokenWords / 155))),
+      AUDIO_HTML: audioHtml(e, attr),
+      GO_DEEPER_HTML: '',
+      PREV_HREF: '#',
+      NEXT_HREF: '#'
+    });
+    const out = path.join(BONUS_OUT, slug, 'index.html');
+    await fs.mkdir(path.dirname(out), { recursive: true });
+    await fs.writeFile(out, html, 'utf-8');
+    console.log(' - bonus (unlisted):', `/bonus/${slug}/`);
+  }
+}
+
 async function main() {
   await ensurePassthroughs();
   let dailyArchive = [];
@@ -303,6 +356,8 @@ async function main() {
       TOPICS_HTML: topicsLineHtml(topicsFor(e)),
       NEXT_STEPS_HTML: nextStepsHtml(e, 'blog'),
       // Root-relative links: blog pages carry <base href="/">, so "../" would resolve to the site root (404)
+      ROBOTS_META: '',
+      ARTICLE_CLASS: 'blog-post',
       PREV_HREF: prev ? `/blog/${path.dirname(fileNameFor(prev))}/` : '#',
       NEXT_HREF: next ? `/blog/${path.dirname(fileNameFor(next))}/` : '#'
     });
@@ -311,6 +366,8 @@ async function main() {
     await fs.mkdir(path.dirname(outPath), { recursive: true });
     await fs.writeFile(outPath, html, 'utf-8');
   }
+
+  await buildBonusPages(tpl);
 
   const guardLines = [
     ...older.map(e => `/blog/${path.dirname(fileNameFor(e))}/   /blog-archive.html   302!`),
