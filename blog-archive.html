@@ -20,6 +20,8 @@
   <meta name="twitter:card" content="summary_large_image"/>
   <style>
     .archive-grid.preload { visibility: hidden; }
+    .blog-card-img { display:block; width:calc(100% + 2rem); max-width:none; aspect-ratio:2/1; object-fit:cover; margin:-1rem -1rem .85rem; border-radius:12px 12px 0 0; }
+    .blog-card { overflow:hidden; }
     .page-hero { background:#edf0e7; color:#243d37; padding:3rem 1rem; text-align:center; }
     .page-hero h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin-bottom:.4rem; }
     .page-hero p { color:#59655f; max-width:720px; margin:0 auto; }
@@ -95,7 +97,7 @@
       const a = document.createElement('a');
       a.className = 'blog-card';
       a.href = o.href;
-      a.innerHTML = `
+      a.innerHTML = (o.image ? `<img class="blog-card-img" src="${o.image}" alt="" loading="lazy" width="800" height="400">` : '') + `
         <span class="badge">${o.category || 'Article'}</span>
         <h3>${o.title}</h3>
         <div class="meta">

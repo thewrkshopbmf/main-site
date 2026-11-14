@@ -83,6 +83,23 @@
     .share-row a,.share-row button{font:inherit;font-size:.9rem;color:#243d37;background:#fff;border:1px solid rgba(36,61,55,.25);border-radius:999px;padding:.35rem .8rem;cursor:pointer;text-decoration:none}
     .share-row a:hover,.share-row button:hover{background:#ece5df}
     @media (prefers-reduced-motion: reduce){.like-btn.pop svg{animation:none}}
+    /* Weekend 4-3-2-1 accents: one warm bronze accent beside the green, used sparingly */
+    .w4321 .h2-num::first-letter{color:#b47737;font-size:1.75em;font-weight:800;line-height:1;padding-right:.3rem}
+    .w4321 .tip{background:#fbf3e4;border:1px solid rgba(180,119,55,.25);border-left:5px solid #b47737;border-radius:12px;padding:1rem 1.1rem}
+    .w4321 .tip strong:first-child{display:inline-block;color:#8a5524;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem;margin-bottom:.15rem}
+    .w4321 .kv .k{color:#243d37;border-left:3px solid #b47737;padding-left:.55rem}
+    .w4321 p.gem{background:#fbf3e4;border-radius:8px;padding:.5rem .7rem .5rem 1.9rem;position:relative;color:#3b2a17;font-weight:600}
+    .w4321 p.gem::before{content:"◆";position:absolute;left:.7rem;top:.5rem;color:#b47737;font-size:.85rem}
+    .w4321 p.gem em{color:#8a5524;font-style:normal;text-transform:uppercase;letter-spacing:.04em;font-size:.8rem;margin-right:.2rem}
+    .w4321 .section.action{background:#243d37;color:#f4f1ee;border-radius:14px;padding:1.1rem 1.2rem}
+    .w4321 .section.action .h2{color:#f4f1ee}
+    .w4321 .section.action .h2-num::first-letter{color:#e0a867}
+    .w4321 .section.action strong{color:#f0c58f}
+    .w4321 .section.action a{color:#f0c58f}
+    .w4321 .tts-reading{color:inherit}
+    .w4321 .section.action.tts-reading,.w4321 .section.action .tts-reading{background:#355a50;box-shadow:0 0 0 .4rem #355a50}
+    .post-hero{margin:1rem 0 .5rem;border-radius:14px;overflow:hidden;background:#e9eee5;aspect-ratio:2/1}
+    .post-hero img{display:block;width:100%;height:100%;object-fit:cover}
     /* Unlisted bonus posts: no date, likes or prev/next */
     .is-bonus .meta time,.is-bonus .post-like,.is-bonus .nav-rows{display:none!important}
     @media print{.post-listen,.tts-controls,.daily-audio,.post-actions,.nav-rows{display:none!important}}
@@ -106,6 +123,7 @@
           <span>• {{READING_MIN}} min</span>
           <span id="authorSlot" hidden>• <span id="authorText">{{AUTHOR}}</span></span>
         </div>
+        {{HERO_HTML}}
         <p id="excerptSlot" class="excerpt" hidden>{{EXCERPT}}</p>
         <div class="post-listen">
           <button type="button" class="listen-btn" id="listenPostBtn" aria-pressed="false">▶ Listen to this post</button>
