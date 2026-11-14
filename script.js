@@ -222,6 +222,59 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Daily email signup — saves to TheWrkShop's own list (see netlify/functions/daily-subscribe.mjs)
+  // Weekend 4-3-2-1 signup (blog posts, blog archive, homepage). See netlify/functions/weekend-subscribe.mjs
+  const WEEKEND_KEY = 'tws-weekend-signed-up';
+  let weekendDone = false;
+  try { weekendDone = localStorage.getItem(WEEKEND_KEY) === '1'; } catch (e) {}
+  document.querySelectorAll('.weekend-signup').forEach(box => {
+    if (weekendDone) {
+      // He already signed up in this browser: a quiet line instead of the form.
+      box.classList.add('is-subscribed');
+      box.innerHTML = '<p>✓ You’re on the Weekend 4-3-2-1 list. It comes every Friday afternoon.</p>';
+    }
+  });
+  document.querySelectorAll('form.weekend-signup-form').forEach(f => {
+    const box = f.closest('.weekend-signup');
+    const msg = box && box.querySelector('.weekend-signup-msg');
+    const say = (text, ok) => { if (msg) { msg.textContent = text; msg.classList.toggle('is-error', !ok); } };
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = (f.email.value || '').trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('Please enter a valid email address.', false); return; }
+      const alsoDaily = !!(f.also_daily && f.also_daily.checked);
+      const btn = f.querySelector('button');
+      btn.disabled = true;
+      say('Signing you up…', true);
+      try {
+        const res = await fetch('/email/weekend/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            first_name: (f.first_name ? f.first_name.value : '').trim(),
+            also_daily: alsoDaily,
+            company: f.company ? f.company.value : '',
+            source: location.pathname === '/' || location.pathname === '/index.html' ? 'home'
+              : location.pathname.startsWith('/blog/') ? 'blog-post' : 'blog-archive'
+          })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+        f.reset();
+        try { localStorage.setItem(WEEKEND_KEY, '1'); } catch (e) {}
+        try { if (window.gtag) gtag('event', 'weekend_signup', { source: location.pathname, also_daily: alsoDaily, already_active: data.status === 'active' }); } catch (e) {}
+        say(data.status === 'active'
+          ? (data.message || "You're already on the list.")
+          : 'Almost done. Check your inbox and tap the confirm button' + (alsoDaily ? ', and both will start coming to you.' : ', and the 4-3-2-1 will come to you each Friday.'), true);
+      } catch (err) {
+        console.error(err);
+        say(err.message || 'Something went wrong. Please try again.', false);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+
   document.querySelectorAll('form.daily-signup-form').forEach(f => {
     const msg = f.parentElement.querySelector('.daily-signup-msg');
     const say = (text, ok) => { if (msg) { msg.textContent = text; msg.classList.toggle('is-error', !ok); } };

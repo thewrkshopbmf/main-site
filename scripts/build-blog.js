@@ -91,8 +91,43 @@ function audioHtml(e, esc) {
   return `<div class="daily-audio"><a class="daily-audio-btn" href="${esc(url)}" target="_blank" rel="noopener" aria-label="${esc(label)} (opens in a new tab)"><span aria-hidden="true">🎧</span><span>${esc(label)}</span></a><p class="daily-audio-note">${esc(note)}</p></div>`;
 }
 
+// The Dailies a weekend post was drawn from: everything published in the 7 days up to the post.
+const SERIES_TITLE_RE = /^the battle before the battle$/i;
+function dailyName(d) {
+  const t = String(d.title || '').trim();
+  return (SERIES_TITLE_RE.test(t) && d.subtitle) ? String(d.subtitle).trim() : (t || String(d.subtitle || '').trim());
+}
+function weekDailiesFor(post, dailies) {
+  const end = post.date;
+  const start = new Date(new Date(end + 'T12:00:00Z').getTime() - 6 * 864e5).toISOString().slice(0, 10);
+  return dailies
+    .filter(d => d.date >= start && d.date <= end && d.href)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map(d => ({
+      date: d.date,
+      day: new Date(d.date + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' }),
+      title: dailyName(d),
+      verse_ref: d.verse_ref || '',
+      href: d.href
+    }));
+}
+function oneMinuteWinOf(bodyHTML) {
+  const m = String(bodyHTML).match(/One-Minute Win[^<]*<\/strong>\s*(?:<br\s*\/?>)?\s*([\s\S]*?)<\/p>/i);
+  return m ? m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : '';
+}
+const escText = v => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function goDeeperHtml(week) {
+  if (!week.length) return '';
+  const items = week.map(d => `<li><a href="${escText(d.href)}"><span class="gd-title">${escText(d.title)}</span><span class="gd-meta">${escText(d.day)}${d.verse_ref ? ' · ' + escText(d.verse_ref) : ''}</span></a></li>`).join('');
+  return `<section class="go-deeper" aria-labelledby="goDeeperTitle"><h2 id="goDeeperTitle">Want to go deeper?</h2><p>This week’s 4-3-2-1 came from these Dailies. Tap any one to sit with the full day.</p><ul>${items}</ul></section>`;
+}
+
 async function main() {
   await ensurePassthroughs();
+  let dailyArchive = [];
+  try { dailyArchive = JSON.parse(await fs.readFile(path.join(DATA_DIR, 'daily-archive.json'), 'utf-8')); } catch {
+    console.warn('[blog] data/daily-archive.json not found (run build:daily first); "go deeper" lists will be empty');
+  }
   await fs.mkdir(DATA_DIR, { recursive: true });
 
   let files = [];
@@ -172,7 +207,9 @@ async function main() {
       excerpt: latest.excerpt || '',
       author: latest.author || '',
       reading_minutes: latest.reading_minutes || 0,
-      href: `/blog/${path.dirname(fileNameFor(latest))}/`
+      href: `/blog/${path.dirname(fileNameFor(latest))}/`,
+      one_minute_win: oneMinuteWinOf(buildBlogBodyHTML(latest)),
+      week_dailies: weekDailiesFor(latest, dailyArchive)
     };
 
     await fs.writeFile(
@@ -248,6 +285,7 @@ async function main() {
       POST_KEY: attr(`blog/${path.dirname(fileNameFor(e))}`),
       LISTEN_MIN: String(listenMin),
       AUDIO_HTML: audioHtml(e, attr),
+      GO_DEEPER_HTML: /4-3-2-1/.test(e.category || '') ? goDeeperHtml(weekDailiesFor(e, dailyArchive)) : '',
       SEO_DESCRIPTION: attr(description),
       CANONICAL_URL: attr(canonical),
       OG_IMAGE: attr(ogImage),
