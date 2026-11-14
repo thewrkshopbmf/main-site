@@ -49,6 +49,41 @@
     .nav-rows{display:flex;justify-content:space-between;gap:1rem;margin:1.5rem 0 2.25rem}
     .nav-rows a{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;color:#243d37;border:1px solid rgba(36,61,55,.3);padding:.6rem .9rem;border-radius:10px}
     .nav-rows a.is-disabled{color:#a5b4a2;border-color:rgba(36,61,55,.18);opacity:.8;pointer-events:none;cursor:default}
+
+    /* Listen (read-aloud with follow-along) */
+    .post-listen{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem;margin:1rem 0 .4rem}
+    .post-listen[hidden]{display:none!important}
+    .post-listen .listen-btn{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;font-size:.95rem}
+    .post-listen .tts-speed{min-height:44px;flex:0 0 auto}
+    .blog-post .tts-controls .tts-btn{flex:1 1 0;white-space:nowrap;padding:.5rem .6rem}
+    .blog-post .tts-controls .tts-status{flex-basis:100%;margin-left:0}
+    .post-listen .reading-audio-note{font-size:.85rem;color:#59655f}
+    .blog-post .tts-controls[hidden]{display:none!important}
+    .blog-post .tts-reading{background:#e2eadb;box-shadow:0 0 0 .4rem #e2eadb;border-radius:6px;transition:background .25s,box-shadow .25s}
+    .daily-audio{background:#f7f4f1;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:1rem;margin:1rem 0}
+    .daily-audio-title{font-weight:700;color:#243d37;margin:0 0 .5rem}
+    .daily-audio-player{width:100%}
+    .daily-audio-note{font-size:.85rem;color:#59655f;margin:.4rem 0 0}
+    .daily-audio-btn{display:inline-flex;align-items:center;gap:.4rem;color:#243d37;font-weight:700;text-decoration:none;border:1px solid rgba(36,61,55,.3);border-radius:999px;padding:.45rem .9rem;background:#fff}
+
+    /* Like + share */
+    .post-actions{margin:2rem 0 .5rem;padding-top:1.25rem;border-top:1px solid rgba(0,0,0,.08)}
+    .post-like{display:flex;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .like-btn{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;font:inherit;font-weight:700;font-size:.95rem;color:#243d37;background:#fff;border:1px solid rgba(36,61,55,.35);border-radius:999px;padding:.5rem 1.1rem;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+    .like-btn:hover{background:#edf0e7}
+    .like-btn svg{width:1.15rem;height:1.15rem;flex:none}
+    .like-btn svg path{fill:none;stroke:currentColor;stroke-width:2;transition:fill .2s}
+    .like-btn.is-liked{background:#243d37;border-color:#243d37;color:#f4f1ee}
+    .like-btn.is-liked svg path{fill:currentColor}
+    .like-btn.pop svg{animation:likePop .45s ease}
+    @keyframes likePop{0%{transform:scale(1)}35%{transform:scale(1.35)}100%{transform:scale(1)}}
+    .like-count{font-size:.9rem;color:#59655f}
+    .share-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:1rem 0 .25rem}
+    .share-row .share-label{font-weight:700;color:#243d37;margin-right:.25rem}
+    .share-row a,.share-row button{font:inherit;font-size:.9rem;color:#243d37;background:#fff;border:1px solid rgba(36,61,55,.25);border-radius:999px;padding:.35rem .8rem;cursor:pointer;text-decoration:none}
+    .share-row a:hover,.share-row button:hover{background:#ece5df}
+    @media (prefers-reduced-motion: reduce){.like-btn.pop svg{animation:none}}
+    @media print{.post-listen,.tts-controls,.daily-audio,.post-actions,.nav-rows{display:none!important}}
   </style>
   <!-- Google Analytics (same GA4 property as the homepage's Firebase analytics) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N48478JV2Z"></script>
@@ -70,10 +105,32 @@
           <span id="authorSlot" hidden>• <span id="authorText">{{AUTHOR}}</span></span>
         </div>
         <p id="excerptSlot" class="excerpt" hidden>{{EXCERPT}}</p>
+        <div class="post-listen">
+          <button type="button" class="listen-btn" id="listenPostBtn" aria-pressed="false">▶ Listen to this post</button>
+          <button type="button" class="tts-btn tts-speed" data-tts="speed">Speed 1×</button>
+          <span class="reading-audio-note">About {{LISTEN_MIN}} min · follows along as it reads</span>
+        </div>
       </header>
+      {{AUDIO_HTML}}
 
       <!-- Rich body -->
       {{BODY_HTML}}
+
+      <section class="post-actions" aria-label="Like and share this post">
+        <div class="post-like" data-post-key="{{POST_KEY}}">
+          <button type="button" class="like-btn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.7s-7.6-4.6-9.6-9.3C1 8.1 3 4.5 6.6 4.5c2.1 0 3.6 1.1 4.4 2.6.8-1.5 2.3-2.6 4.4-2.6 3.6 0 5.6 3.6 4.2 6.9-2 4.7-9.6 9.3-9.6 9.3z"/></svg><span class="like-label">Like this post</span></button>
+          <span class="like-count" aria-live="polite" hidden></span>
+        </div>
+        <div class="share-row" aria-label="Share this post">
+          <span class="share-label">Share</span>
+          <button type="button" class="share-native" data-url="{{CANONICAL_URL}}" data-title="{{SOCIAL_TITLE}}">Share…</button>
+          <button type="button" class="share-copy" data-url="{{CANONICAL_URL}}">Copy link</button>
+          <a data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url={{CANONICAL_URL_ENC}}" target="_blank" rel="noopener">LinkedIn</a>
+          <a data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u={{CANONICAL_URL_ENC}}" target="_blank" rel="noopener">Facebook</a>
+          <a data-share="x" href="https://twitter.com/intent/tweet?url={{CANONICAL_URL_ENC}}&amp;text={{SOCIAL_TITLE_ENC}}" target="_blank" rel="noopener">X</a>
+          <a data-share="email" href="mailto:?subject={{SOCIAL_TITLE_ENC}}&amp;body={{CANONICAL_URL_ENC}}">Email</a>
+        </div>
+      </section>
 
       {{TOPICS_HTML}}
 
@@ -139,6 +196,7 @@
   })();
   </script>
 
-  <script src="/script.js?v=blogfmt1"></script>
+  <script src="/assets/js/post-actions.js?v=1"></script>
+  <script src="/script.js?v=bloglisten1"></script>
 </body>
 </html>
