@@ -31,3 +31,7 @@ create table if not exists public.weekend_email_sends (
 comment on table public.weekend_email_sends is 'One row per Weekend 4-3-2-1 email send, with running totals.';
 alter table public.weekend_email_sends enable row level security;
 revoke all on public.weekend_email_sends from anon, authenticated;
+
+-- 2026-11-14: "paused" status (held by TheWrkShop; no emails until S says otherwise)
+alter table public.weekend_subscribers drop constraint if exists weekend_subscribers_status_check;
+alter table public.weekend_subscribers add constraint weekend_subscribers_status_check check (status in ('pending','active','unsubscribed','paused'));
