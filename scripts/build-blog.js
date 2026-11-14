@@ -73,6 +73,24 @@ async function ensurePassthroughs() {
   console.log('✅ Ensured passthrough rules for /blog/* and /daily/*.');
 }
 
+// Optional podcast/audio for a post, same fields as the Dailies:
+// audio_file (a site path like /assets/audio/....m4a) or audio_link (https://, e.g. a Spotify episode),
+// plus optional audio_label and audio_note.
+function audioHtml(e, esc) {
+  const clean = v => String(v ?? '').trim();
+  const file = clean(e.audio_file);
+  const label = clean(e.audio_label) || 'Listen to the Conversation';
+  if (/^\/[A-Za-z0-9/_.-]+$/.test(file)) {
+    const note = clean(e.audio_note) || 'An audio discussion of this post.';
+    const type = /\.mp3$/i.test(file) ? 'audio/mpeg' : 'audio/mp4';
+    return `<div class="daily-audio daily-audio--player"><p class="daily-audio-title"><span aria-hidden="true">🎧</span> ${esc(label)}</p><audio class="daily-audio-player" controls preload="metadata" aria-label="${esc(label)}"><source src="${esc(file)}" type="${type}"><a href="${esc(file)}">Download the audio</a></audio><p class="daily-audio-note">${esc(note)}</p></div>`;
+  }
+  const url = clean(e.audio_link);
+  if (!/^https:\/\//i.test(url)) return '';
+  const note = clean(e.audio_note) || 'An audio discussion of this post. Opens in a new tab.';
+  return `<div class="daily-audio"><a class="daily-audio-btn" href="${esc(url)}" target="_blank" rel="noopener" aria-label="${esc(label)} (opens in a new tab)"><span aria-hidden="true">🎧</span><span>${esc(label)}</span></a><p class="daily-audio-note">${esc(note)}</p></div>`;
+}
+
 async function main() {
   await ensurePassthroughs();
   await fs.mkdir(DATA_DIR, { recursive: true });
@@ -216,10 +234,20 @@ async function main() {
       isPartOf: { '@id': 'https://thewrkshop.com/#website' }
     }).replace(/</g, '\\u003c');
     const attr = v => String(v ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const socialTitle = plainTitle.replace(/\s*\|\s*TheWrkShop\s*$/i, '');
+    // Spoken length of the post (read-aloud runs ~155 words a minute)
+    const spokenWords = `${e.title || ''} ${bodyHTML}`.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ')
+      .split(/\s+/).filter(Boolean).length;
+    const listenMin = Math.max(1, Math.round(spokenWords / 155));
 
     const html = fill(tpl, {
       SEO_TITLE: attr(/\|\s*TheWrkShop\s*$/i.test(plainTitle) ? plainTitle : `${plainTitle} | TheWrkShop`),
-      SOCIAL_TITLE: attr(plainTitle.replace(/\s*\|\s*TheWrkShop\s*$/i, '')),
+      SOCIAL_TITLE: attr(socialTitle),
+      SOCIAL_TITLE_ENC: attr(encodeURIComponent(socialTitle)),
+      CANONICAL_URL_ENC: attr(encodeURIComponent(canonical)),
+      POST_KEY: attr(`blog/${path.dirname(fileNameFor(e))}`),
+      LISTEN_MIN: String(listenMin),
+      AUDIO_HTML: audioHtml(e, attr),
       SEO_DESCRIPTION: attr(description),
       CANONICAL_URL: attr(canonical),
       OG_IMAGE: attr(ogImage),

@@ -589,9 +589,91 @@ function chunkText(text, max = 160) {
 // ---- Read-aloud player: one play/pause control with optional sentence navigation ----
 const tts = {
   chunks: [], idx: 0, playing: false, session: 0,
-  voiceName: null, targetSelector: null, button: null, idleLabel: '▶ Read aloud',
-  bars: []
+  voiceName: null, targetSelector: null, button: null, idleLabel: null,
+  bars: [],
+  // "Follow-along" mode (blog posts): each chunk knows the paragraph it came from, so the
+  // reader highlights it and keeps it on screen; plus speed, time left and resume.
+  follow: false, els: [], words: [], current: null,
+  speed: 1, resumeKey: null
 };
+const TTS_BASE_RATE = 0.95;
+const TTS_SPEEDS = [1, 1.25, 1.5];
+const TTS_WPM = 155;                          // spoken words per minute at 1x
+try { const sp = Number(localStorage.getItem('tws-tts-speed')); if (TTS_SPEEDS.includes(sp)) tts.speed = sp; } catch (e) {}
+
+// Parts of a post the reader skips in follow-along mode.
+const TTS_FOLLOW_SKIP = '.tts-controls, .post-listen, .daily-listen, .daily-audio, .share-row, .post-actions, .topic-links, .nav-rows, .meta, .badge, .excerpt, button, time, script, style, noscript, [hidden], [aria-hidden="true"]';
+
+// Walk the post's text in reading order and group it by the paragraph/heading/list item
+// it sits in. Repeated headings (the title printed again inside the body) are read once.
+function ttsFollowChunks(root) {
+  const blockOf = (node) => {
+    for (let el = node.parentElement; el && el !== root; el = el.parentElement) {
+      const d = getComputedStyle(el).display;
+      if (d && d !== 'inline' && d !== 'contents') return el;
+    }
+    return root;
+  };
+  const groups = [];
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode: (n) => (!n.nodeValue.trim() || n.parentElement.closest(TTS_FOLLOW_SKIP))
+      ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+  });
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    const el = blockOf(n);
+    const last = groups[groups.length - 1];
+    if (last && last.el === el) last.text += ' ' + n.nodeValue;
+    else groups.push({ el, text: n.nodeValue });
+  }
+  const chunks = [], els = [], words = [], seenHeads = new Set();
+  groups.forEach(({ el, text }) => {
+    let t = text.replace(/\s+/g, ' ').trim();
+    if (!t) return;
+    if (/^H[1-6]$/.test(el.tagName)) {
+      const k = t.toLowerCase();
+      if (seenHeads.has(k)) return;
+      seenHeads.add(k);
+    }
+    if (/,$/.test(t)) t = t.slice(0, -1) + '.';
+    else if (!/[.!?:;"”’)—]$/.test(t)) t += '.';
+    chunkText(t).forEach(c => { chunks.push(c); els.push(el); words.push(c.split(' ').length); });
+  });
+  return { chunks, els, words };
+}
+
+function ttsHighlight() {
+  const el = tts.follow && tts.chunks.length ? tts.els[tts.idx] : null;
+  if (tts.current && tts.current !== el) tts.current.classList.remove('tts-reading');
+  tts.current = el || null;
+  if (!el) return;
+  el.classList.add('tts-reading');
+  if (!tts.playing) return;
+  if (Date.now() - (tts.userScrollAt || 0) < 8000) return;   // he's scrolling on his own: don't pull the page back
+  const r = el.getBoundingClientRect();
+  const vh = window.innerHeight || document.documentElement.clientHeight;
+  if (r.top < 80 || r.bottom > vh - 40) {
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  }
+}
+
+function ttsMinutesLeft() {
+  let w = 0;
+  for (let i = tts.idx; i < tts.words.length; i++) w += tts.words[i];
+  return Math.max(1, Math.round(w / (TTS_WPM * tts.speed)));
+}
+
+function ttsSaveSpot(done) {
+  if (!tts.resumeKey) return;
+  try {
+    if (done) localStorage.removeItem(tts.resumeKey);
+    else if (tts.chunks.length) localStorage.setItem(tts.resumeKey, String(tts.idx));
+  } catch (e) {}
+}
+
+function ttsHasSavedSpot() {
+  try { return tts.resumeKey && Number(localStorage.getItem(tts.resumeKey)) > 0; } catch (e) { return false; }
+}
 
 // Read only the devotional text (skip buttons, badges, the control bar, nav links).
 function ttsTextFrom(el) {
@@ -614,17 +696,31 @@ function ttsUpdateUI() {
   const total = tts.chunks.length;
   const pos = total ? Math.min(tts.idx + 1, total) : 0;
   if (tts.button) {
-    tts.button.textContent = tts.playing ? 'Ⅱ Pause reading'
-      : (total ? '▶ Resume reading' : tts.idleLabel);
+    if (tts.follow) {
+      tts.button.textContent = tts.playing ? 'Ⅱ Pause'
+        : ((total ? tts.idx > 0 : ttsHasSavedSpot()) ? '▶ Resume listening' : tts.idleLabel);
+    } else {
+      tts.button.textContent = tts.playing ? 'Ⅱ Pause reading'
+        : (total ? '▶ Resume reading' : tts.idleLabel);
+    }
     tts.button.setAttribute('aria-pressed', String(tts.playing));
   }
+  document.querySelectorAll('[data-tts="speed"]').forEach(b => {
+    b.textContent = `Speed ${tts.speed}×`;
+    b.setAttribute('aria-label', `Reading speed ${tts.speed} times. Tap to change.`);
+  });
+  ttsHighlight();
+  ttsSaveSpot();
   const staging = location.hostname.startsWith('staging--');
   tts.bars.forEach(bar => {
     bar.hidden = !total;
     bar.querySelector('[data-tts="back"]').disabled = !total || tts.idx === 0;
+    const restart = bar.querySelector('[data-tts="restart"]');
+    if (restart) restart.disabled = !total || tts.idx === 0;
     bar.querySelector('[data-tts="fwd"]').disabled = !total || tts.idx >= total - 1;
     const status = bar.querySelector('.tts-status');
     status.textContent = total ? `Passage ${pos} of ${total}` : '';
+    if (total && tts.follow) status.textContent += ` · about ${ttsMinutesLeft()} min left`;
     if (staging && tts.voiceName) status.textContent += ` · ${tts.voiceName}`;
   });
 }
@@ -632,12 +728,12 @@ function ttsUpdateUI() {
 function ttsSpeakCurrent(session) {
   if (session !== tts.session) return;
   if (tts.idx >= tts.chunks.length) {           // finished
-    tts.playing = false; tts.idx = 0; tts.chunks = []; ttsUpdateUI(); return;
+    tts.playing = false; tts.idx = 0; tts.chunks = []; tts.els = []; tts.words = []; ttsSaveSpot(true); ttsUpdateUI(); return;
   }
   const utter = new SpeechSynthesisUtterance(tts.chunks[tts.idx]);
   const voice = ttsCurrentVoice();
   if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = 'en-GB'; }
-  utter.rate = 0.95;
+  utter.rate = TTS_BASE_RATE * tts.speed;
   utter.pitch = 0.82; // deeper voice
   utter.volume = 1.0;
   window.__ttsUtterance = utter; // keep a reference so Chrome doesn't drop it mid-read
@@ -666,8 +762,17 @@ function ttsLoad(targetSelector) {
   const el = document.querySelector(targetSelector);
   if (!el) return false;
   if (tts.targetSelector !== targetSelector || !tts.chunks.length) {
-    tts.chunks = chunkText(ttsTextFrom(el));
-    tts.idx = 0;
+    if (tts.follow) {
+      const f = ttsFollowChunks(el);
+      tts.chunks = f.chunks; tts.els = f.els; tts.words = f.words;
+      let saved = 0;
+      try { saved = Number(localStorage.getItem(tts.resumeKey)) || 0; } catch (e) {}
+      tts.idx = saved > 0 && saved < tts.chunks.length ? saved : 0;
+    } else {
+      tts.chunks = chunkText(ttsTextFrom(el));
+      tts.els = []; tts.words = [];
+      tts.idx = 0;
+    }
     tts.targetSelector = targetSelector;
   }
   return tts.chunks.length > 0;
@@ -707,7 +812,14 @@ function ttsStep(delta) {
   else { tts.idx = target; ttsUpdateUI(); }
 }
 
-function ttsBuildBar(anchor) {
+function ttsSetSpeed() {
+  const i = TTS_SPEEDS.indexOf(tts.speed);
+  tts.speed = TTS_SPEEDS[(i + 1) % TTS_SPEEDS.length];
+  try { localStorage.setItem('tws-tts-speed', String(tts.speed)); } catch (e) {}
+  if (tts.playing) ttsPlayFrom(tts.idx); else ttsUpdateUI();
+}
+
+function ttsBuildBar(anchor, follow) {
   const bar = document.createElement('div');
   bar.className = 'tts-controls';
   bar.hidden = true;
@@ -716,8 +828,14 @@ function ttsBuildBar(anchor) {
   bar.innerHTML = `
     <button type="button" class="tts-btn" data-tts="back" aria-label="Previous passage">← Back</button>
     <button type="button" class="tts-btn" data-tts="fwd" aria-label="Next passage">Forward →</button>
+    ${follow ? '<button type="button" class="tts-btn" data-tts="restart" aria-label="Start over from the beginning">↺ Start over</button>' : ''}
     <span class="tts-status" aria-live="polite"></span>`;
   anchor.insertAdjacentElement('afterend', bar);
+  const restart = bar.querySelector('[data-tts="restart"]');
+  if (restart) restart.addEventListener('click', () => {
+    if (!tts.chunks.length) return;
+    if (tts.playing) ttsPlayFrom(0); else { tts.idx = 0; ttsUpdateUI(); }
+  });
   bar.querySelector('[data-tts="back"]').addEventListener('click', () => ttsStep(-1));
   bar.querySelector('[data-tts="fwd"]').addEventListener('click', () => ttsStep(1));
   tts.bars.push(bar);
@@ -726,19 +844,28 @@ function ttsBuildBar(anchor) {
 document.addEventListener('DOMContentLoaded', () => {
   const setups = [
     { id: 'listenDailyBtn', target: '.daily-article, .daily-feature', idle: '▶ Read aloud' },
-    { id: 'listenHomeBtn',  target: '.daily-feature', idle: '🔊 Listen to Today’s Devotional' }
+    { id: 'listenHomeBtn',  target: '.daily-feature', idle: '🔊 Listen to Today’s Devotional' },
+    { id: 'listenPostBtn',  target: '.blog-post', idle: '▶ Listen to this post', follow: true }
   ];
 
-  setups.forEach(({ id, target, idle }) => {
+  setups.forEach(({ id, target, idle, follow }) => {
     const btn = document.getElementById(id);
     if (!btn) return;
     if (!('speechSynthesis' in window)) {
-      btn.closest('.daily-listen')?.setAttribute('hidden', '');
+      btn.closest('.daily-listen, .post-listen')?.setAttribute('hidden', '');
       btn.hidden = true;
       return;
     }
     // Keep secondary controls hidden until a reading has been loaded.
-    ttsBuildBar(btn.parentElement);
+    ttsBuildBar(btn.parentElement, follow);
+    if (follow) {
+      tts.follow = true;
+      ['wheel', 'touchmove', 'keydown'].forEach(ev => window.addEventListener(ev, (e) => {
+        if (ev !== 'keydown' || /^(Arrow|Page|Home|End|\s)/.test(e.key || '')) tts.userScrollAt = Date.now();
+      }, { passive: true }));
+      tts.resumeKey = 'tws-tts-pos:' + location.pathname;
+      btn.parentElement.querySelectorAll('[data-tts="speed"]').forEach(b => b.addEventListener('click', ttsSetSpeed));
+    }
     const choose = () => {
       if (tts.button !== btn) {        // switching which devotional is being read
         if (tts.playing) ttsPause();
@@ -756,6 +883,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('beforeunload', () => {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  });
+  // If the voice is stopped by leaving the tab on a phone, show it as paused, not playing.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && tts.playing && tts.follow && !window.speechSynthesis.speaking) ttsPause();
   });
 });
 
