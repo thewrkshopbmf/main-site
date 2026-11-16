@@ -1,0 +1,96 @@
+/* Homepage options A and B (issue #29). Staging previews only: noindex, not in the sitemap.
+   When Steven picks one, its markup moves into index.html and this folder is deleted. */
+
+/* Preview bar (not part of either design) */
+.hp-bar { background: #173f36; color: #e7efe9; font: 600 13px/1.4 system-ui, sans-serif; padding: 10px 16px; text-align: center; }
+.hp-bar a { color: #f2d49b; margin: 0 6px; }
+.hp-bar strong { color: #fff; }
+
+/* ---------- Hero sign-up (sits on the dark water) ---------- */
+.home-hero.hh .hp-hero-lead { font-size: 18px; line-height: 1.6; color: #e7efe9; margin: 0 0 18px; }
+.home-hero.hh .hp-hero-lead strong { color: #fff; font-weight: 700; }
+.hp-hero-form form { display: flex; gap: 8px; flex-wrap: wrap; }
+.hp-hero-form input[type=email] { flex: 1 1 220px; min-width: 0; padding: 14px 14px; border: 0; border-radius: 6px; font: inherit; font-size: 16px; color: #173f36; background: #fffefa; }
+.hp-hero-form button,
+.home-hero.hh .hp-hero-btn { display: inline-block; padding: 14px 20px; border: 0; border-radius: 6px; background: #f6f1e4; color: #173f36; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none; }
+.hp-hero-form button:hover:not(:disabled),
+.home-hero.hh .hp-hero-btn:hover { background: #f2d49b; }
+.hp-hero-form .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.hp-hero-form .daily-signup-msg { margin: 10px 0 0; min-height: 1.2em; font-weight: 600; color: #f2d49b; font-size: 15px; }
+.hp-hero-form .daily-signup-msg.is-error { color: #ffb4a6; }
+.home-hero.hh .hp-hero-note { font-size: 14px; color: #a9c2b7; margin: 10px 0 0; line-height: 1.5; }
+.home-hero.hh .hp-hero-note a,
+.home-hero.hh .hp-hero-alt { color: #e7efe9; }
+.home-hero.hh .hp-hero-alt { display: inline-block; margin-top: 18px; font-size: 16px; }
+@media (max-width: 480px) {
+  .hp-hero-form button, .home-hero.hh .hp-hero-btn { width: 100%; text-align: center; }
+}
+
+/* ---------- Sections ---------- */
+.hp-section { max-width: 1128px; margin: 0 auto; padding: 56px 24px; }
+.hp-section > .eyebrow { margin: 0 0 8px; }
+.hp-section h2 { font-size: clamp(26px, 3vw, 34px); line-height: 1.2; margin: 0 0 10px; color: var(--ink); }
+.hp-section > p.hp-sub { color: var(--muted); font-size: 16px; margin: 0 0 24px; max-width: 640px; }
+
+/* Today's Daily + side sign-up */
+.hp-signup-card { background: #e9eee7; border-radius: 6px; padding: 32px; display: flex; flex-direction: column; justify-content: center; }
+.hp-signup-card h2 { font-size: 26px; margin: 0 0 8px; color: var(--ink); }
+.hp-signup-card p { color: var(--muted); font-size: 15px; margin: 0 0 16px; }
+.hp-signup-card form { display: flex; flex-direction: column; gap: 8px; }
+.hp-signup-card input[type=email], .hp-signup-card input[type=text] { padding: 13px 12px; border: 1px solid #ccd5c7; border-radius: 4px; font: inherit; font-size: 16px; background: #fffefa; }
+.hp-signup-card button { padding: 13px 16px; border: 0; border-radius: 4px; background: var(--ink); color: #fff; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.hp-signup-card button:hover:not(:disabled) { background: #426b60; }
+.hp-signup-card .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.hp-signup-card .daily-signup-msg { margin: 10px 0 0; min-height: 1.2em; font-weight: 600; color: var(--ink); font-size: 15px; }
+.hp-signup-card .daily-signup-msg.is-error { color: #923728; }
+.hp-signup-card .hp-small { font-size: 13px; margin: 12px 0 0; }
+
+/* Pattern Finder band (A: second option; B: how it works) */
+.hp-band { background: #173f36; color: #e7efe9; }
+.hp-band .hp-section { padding-top: 48px; padding-bottom: 48px; }
+.hp-band h2 { color: #f6f1e4; }
+.hp-band .eyebrow { color: #a9c2b7; }
+.hp-band p { color: #cfdcd4; }
+.hp-band .hp-btn-light { display: inline-block; margin-top: 8px; padding: 13px 20px; border-radius: 6px; background: #f6f1e4; color: #173f36; font-weight: 700; text-decoration: none; }
+.hp-band .hp-btn-light:hover { background: #f2d49b; }
+.hp-patterns { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 18px 0 22px; }
+.hp-patterns li { border: 1px solid rgba(231, 239, 233, .35); border-radius: 999px; padding: 6px 12px; font-size: 14px; color: #e7efe9; }
+
+.hp-steps { list-style: none; counter-reset: s; padding: 0; margin: 24px 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.hp-steps li { counter-increment: s; background: rgba(255, 255, 255, .06); border-radius: 6px; padding: 20px; }
+.hp-steps li::before { content: counter(s); display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #f6f1e4; color: #173f36; font-weight: 700; margin-bottom: 10px; }
+.hp-steps b { display: block; color: #fff; font-size: 17px; margin-bottom: 4px; }
+.hp-steps span { color: #cfdcd4; font-size: 15px; }
+
+/* Go deeper cards */
+.hp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.hp-card { display: block; background: #fffefa; border: 1px solid var(--line); border-radius: 6px; padding: 22px; color: var(--ink); text-decoration: none; }
+.hp-card:hover { border-color: #8ea596; }
+.hp-card h3 { margin: 0 0 6px; font-size: 19px; color: var(--ink); }
+.hp-card p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.hp-card .hp-go { display: inline-block; margin-top: 12px; font-weight: 700; font-size: 14px; color: #426b60; }
+
+/* Groups line */
+.hp-groups { background: #f1f2e9; border-radius: 6px; padding: 28px; display: flex; gap: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.hp-groups h2 { font-size: 24px; margin: 0 0 4px; }
+.hp-groups p { margin: 0; color: var(--muted); }
+.hp-groups a { display: inline-block; padding: 12px 18px; border-radius: 6px; background: var(--ink); color: #fff; font-weight: 700; text-decoration: none; }
+
+/* Chooser page */
+.hp-choose { max-width: 720px; margin: 0 auto; padding: 40px 20px 64px; }
+.hp-choose h1 { font-size: 30px; margin: 0 0 8px; color: var(--ink); }
+.hp-choose > p { color: var(--muted); }
+.hp-choose .hp-card { margin-top: 14px; }
+
+/* Phones: a shorter hero so the one next step shows in the first screen */
+@media (max-width: 768px) {
+  .home-hero.hh {
+    --artw: 100vw;
+    --pad-top: calc(100vw * .4 - 10px);
+    --h1s: clamp(34px, 10.5vw, 52px);
+  }
+  .hh-l2 { padding-top: 20px; }
+  .home-hero.hh .hh-copy { padding-bottom: 56px; }
+  .hh-below { margin-top: 18px; }
+  .home-hero.hh .hp-hero-lead { font-size: 16px; margin-bottom: 14px; }
+}

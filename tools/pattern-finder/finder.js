@@ -196,7 +196,7 @@
           '<div class="pt-field"><label for="ptPlanEmail">Email</label><input id="ptPlanEmail" type="email" autocomplete="email" required></div>' +
         '</div>' +
         '<div class="pt-hp" aria-hidden="true"><label for="ptPlanCompany">Company</label><input id="ptPlanCompany" type="text" tabindex="-1" autocomplete="off"></div>' +
-        '<label class="pt-check" for="ptPlanDaily"><input id="ptPlanDaily" type="checkbox"><span>Also send me The Daily: one Scripture, one hard question and one step, every weekday morning.</span></label>' +
+        '<label class="pt-check" for="ptPlanDaily"><input id="ptPlanDaily" type="checkbox" checked><span>Also send me The Daily: one Scripture, one hard question and one step, every weekday morning.</span></label>' +
         '<button class="pt-btn pt-btn--ember" type="submit" id="ptPlanBtn">Email me my plan</button>' +
         '<p class="pt-small pt-muted" style="margin-top:.8rem">Your answers are used to write your reflection email and aren’t stored. We keep only your email, first name and pattern to send the 7 days.</p>' +
       '</form>' +
