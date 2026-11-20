@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:image" content="{{OG_IMAGE}}"/>
   <script type="application/ld+json">{{JSON_LD}}</script>
-  <link rel="stylesheet" href="/style.css"/>
+  <link rel="stylesheet" href="/style.css"/>{{EXTRA_HEAD}}
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=2">
   <style>
     /* Layout */
@@ -83,21 +83,111 @@
     .share-row a,.share-row button{font:inherit;font-size:.9rem;color:#243d37;background:#fff;border:1px solid rgba(36,61,55,.25);border-radius:999px;padding:.35rem .8rem;cursor:pointer;text-decoration:none}
     .share-row a:hover,.share-row button:hover{background:#ece5df}
     @media (prefers-reduced-motion: reduce){.like-btn.pop svg{animation:none}}
-    /* Weekend 4-3-2-1 accents: one warm bronze accent beside the green, used sparingly */
-    .w4321 .h2-num::first-letter{color:#b47737;font-size:1.75em;font-weight:800;line-height:1;padding-right:.3rem}
-    .w4321 .tip{background:#fbf3e4;border:1px solid rgba(180,119,55,.25);border-left:5px solid #b47737;border-radius:12px;padding:1rem 1.1rem}
-    .w4321 .tip strong:first-child{display:inline-block;color:#8a5524;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem;margin-bottom:.15rem}
-    .w4321 .kv .k{color:#243d37;border-left:3px solid #b47737;padding-left:.55rem}
-    .w4321 p.gem{background:#fbf3e4;border-radius:8px;padding:.5rem .7rem .5rem 1.9rem;position:relative;color:#3b2a17;font-weight:600}
-    .w4321 p.gem::before{content:"◆";position:absolute;left:.7rem;top:.5rem;color:#b47737;font-size:.85rem}
-    .w4321 p.gem em{color:#8a5524;font-style:normal;text-transform:uppercase;letter-spacing:.04em;font-size:.8rem;margin-right:.2rem}
-    .w4321 .section.action{background:#243d37;color:#f4f1ee;border-radius:14px;padding:1.1rem 1.2rem}
-    .w4321 .section.action .h2{color:#f4f1ee}
-    .w4321 .section.action .h2-num::first-letter{color:#e0a867}
+    /* ===== Weekend 4-3-2-1: a slower, roomier reading page (Nov 2026) =====
+       A serif reading face (Lora) at a comfortable size in a narrow column, generous space
+       between the movements, quiet letter-spaced labels, and one warm bronze accent beside
+       the green. Structure comes from scripts/build-blog.js (accent4321); the text is unchanged. */
+    .w4321{--r-ink:#243d37;--r-text:#2f3b37;--r-muted:#5f6b65;--r-bronze:#b47737;--r-bronze-text:#8a5524;--r-bronze-tint:#fbf3e4;--r-wash:#f3f3ed;--r-sage:#edf0e7;--r-line:#dedfd6;--r-serif:"Lora",Georgia,"Times New Roman",serif;--r-sans:"Segoe UI",Arial,Helvetica,sans-serif;--r-gap:4.5rem;max-width:680px}
+    .w4321 .blog-head{margin:3rem 0 3.25rem}
+    .w4321 .blog-head h1{font-size:clamp(2rem,4.6vw,2.75rem);font-weight:600;letter-spacing:-.025em;line-height:1.15;color:var(--r-ink);margin:1rem 0 .9rem}
+    .w4321 .meta{color:var(--r-muted);font-size:.9rem}
+    .w4321 .post-listen{margin-top:1.6rem}
+    .w4321 .post-hero{margin:1.75rem 0 .5rem;border-radius:18px}
+
+    /* Reading type */
+    .w4321 .section{font-family:var(--r-serif);font-size:1.1875rem;line-height:1.8;color:var(--r-text);margin:0}
+    .w4321 .section *{font-family:var(--r-serif)} /* style.css sets a font on every element, so set it on each */
+    .w4321 .section p{margin:0 0 1.2em}
+    .w4321 .section p:last-child{margin-bottom:0}
+    .w4321 .section + .section{margin-top:var(--r-gap)}
+    .w4321 .section strong{font-weight:600;color:var(--r-ink)}
+    .w4321 .section a{color:var(--r-ink);text-decoration-color:rgba(36,61,55,.35);text-underline-offset:.22em}
+    .w4321 .section a:hover{text-decoration-color:currentColor}
+
+    /* Opening: the masthead line, a quiet dek, the letter */
+    .w4321 .kicker{display:flex;align-items:center;gap:1.1rem;font-family:var(--r-sans);font-size:.7rem;font-weight:700;letter-spacing:.22em;line-height:1.5;text-transform:uppercase;color:var(--r-bronze-text);text-align:center;margin:0 0 1.5rem}
+    .w4321 .kicker::before,.w4321 .kicker::after{content:"";flex:1 1 1.5rem;height:1px;background:var(--r-line)}
+    .w4321 .opening .h1{display:none} /* same as the page title above */
+    .w4321 .opening h3.sub{font-family:var(--r-serif);font-style:italic;font-weight:400;font-size:1.3rem;line-height:1.6;color:var(--r-muted);text-align:center;max-width:30em;margin:0 auto 3rem}
+    .w4321 .salute{font-style:italic;color:var(--r-ink)}
+
+    /* One-Minute Win */
+    .w4321 .tip{margin:2.75rem 0 0;background:var(--r-bronze-tint);border:1px solid rgba(180,119,55,.16);border-radius:18px;padding:1.9rem 2rem}
+    .w4321 .tip p{margin:0}
+    .w4321 .tip p + p{margin-top:1em}
+    .w4321 .tip strong:first-child{display:block;font-family:var(--r-sans);font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--r-bronze-text);margin-bottom:.7rem}
+    .w4321 .tip strong:first-child + br,.w4321 .callout strong:first-child + br{display:none}
+
+    /* Breaks between movements */
+    .w4321 .rule{border:0;margin:var(--r-gap) 0;text-align:center;line-height:1;color:var(--r-bronze)}
+    .w4321 .rule::before{content:"\25C6\00a0\00a0\00a0\25C6\00a0\00a0\00a0\25C6";font-size:.5rem;opacity:.65}
+    .w4321 .rule + .section{margin-top:0}
+
+    /* Section headings: a quiet label; numbered ones carry a large bronze numeral */
+    .w4321 .h2{font-family:var(--r-sans);font-size:.78rem;font-weight:700;letter-spacing:.2em;line-height:1.5;text-transform:uppercase;color:var(--r-ink);text-align:center;margin:0 0 2.25rem}
+    .w4321 .h2:not(.h2-num)::before{content:"";display:block;width:2.25rem;height:2px;border-radius:2px;background:var(--r-bronze);opacity:.75;margin:0 auto 1.1rem}
+    .w4321 .h2-num .num{display:block;font-family:var(--r-serif);font-size:3.75rem;font-weight:400;line-height:1;letter-spacing:0;color:var(--r-bronze);margin:0 0 .75rem}
+    .w4321 .h2-num .lbl{display:block;font-family:var(--r-sans)}
+
+    /* Picture This: a scene to step into */
+    .w4321 .picture{background:var(--r-sage);border-radius:22px;padding:2.75rem 2.5rem}
+
+    /* 4 Scriptures: open space instead of boxes */
+    .w4321 .kv{display:block}
+    .w4321 .kv > div{background:none;border:0;border-radius:0;padding:0}
+    .w4321 .kv > div + div{margin-top:3.25rem;padding-top:3.25rem;border-top:1px solid var(--r-line)}
+    .w4321 .kv .k{font-family:var(--r-sans);font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--r-bronze-text);border:0;padding:0;margin:0 0 1rem}
+    .w4321 .quote{font-size:1.32rem;line-height:1.65;font-style:italic;color:var(--r-ink);border-left:2px solid rgba(180,119,55,.4);padding:.1rem 0 .1rem 1.4rem;margin:0 0 1.5rem}
+    .w4321 .kv .sub{color:var(--r-text);margin:0 0 1.2em}
+    .w4321 .insight .lbl,.w4321 p.gem em{font-family:var(--r-sans);font-style:normal;font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-right:.45rem;vertical-align:.08em}
+    .w4321 .insight .lbl{color:var(--r-muted)}
+    .w4321 p.gem{background:var(--r-bronze-tint);border-radius:14px;padding:1.05rem 1.35rem 1.05rem 2.85rem;position:relative;color:#3b2a17;font-weight:500;margin-top:1.5rem}
+    .w4321 p.gem::before{content:"\25C6";position:absolute;left:1.2rem;top:1.15rem;color:var(--r-bronze);font-size:.8rem;line-height:1.8}
+    .w4321 p.gem em{color:var(--r-bronze-text)}
+
+    /* Numbered lists: bronze numerals, room between items */
+    .w4321 .list{list-style:none;counter-reset:r;padding:0;margin:0 0 1.2em}
+    .w4321 .list:last-child{margin-bottom:0}
+    .w4321 .list li{counter-increment:r;position:relative;padding-left:2.4rem;margin:0}
+    .w4321 .list li + li{margin-top:.7rem}
+    .w4321 .list li::before{content:counter(r);position:absolute;left:0;top:0;font-family:var(--r-serif);font-size:1.2rem;color:var(--r-bronze)}
+    .w4321 .s3 .list li + li,.w4321 .s2 .list li + li{margin-top:1.75rem}
+    .w4321 .s3 .list li::before,.w4321 .s2 .list li::before{font-size:1.6rem;line-height:1.1}
+    .w4321 .s2 .list li{font-size:1.3rem;line-height:1.6;font-style:italic;color:var(--r-ink)}
+
+    /* 1 Action Step: the one dark moment, given room */
+    .w4321 .section.action{background:var(--r-ink);color:#e6ede8;border-radius:22px;padding:3rem 2.5rem}
+    .w4321 .section.action .h2{color:#cfe0d5}
+    .w4321 .section.action .h2-num .num{color:#e0a867}
     .w4321 .section.action strong{color:#f0c58f}
     .w4321 .section.action a{color:#f0c58f}
     .w4321 .tts-reading{color:inherit}
     .w4321 .section.action.tts-reading,.w4321 .section.action .tts-reading{background:#355a50;box-shadow:0 0 0 .4rem #355a50}
+
+    /* Prayer and Declaration: a hush */
+    .w4321 .callout{background:var(--r-wash);border:0;border-radius:22px;padding:3rem 2.5rem;text-align:center}
+    .w4321 .callout p{font-style:italic;color:var(--r-ink);max-width:32em;margin-left:auto;margin-right:auto}
+    .w4321 .callout p + p{margin-top:2.5rem}
+    .w4321 .callout strong:first-child{display:block;font-family:var(--r-sans);font-style:normal;font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--r-bronze-text);margin-bottom:1rem}
+
+    /* Close */
+    .w4321 .sign{font-style:italic;color:var(--r-ink);margin-top:2.25rem}
+    .w4321 .section > p.sub{font-size:1rem;line-height:1.7;color:var(--r-muted);border-top:1px solid var(--r-line);padding-top:1.5rem;margin-top:2.25rem}
+    .w4321 .post-actions{margin-top:var(--r-gap)}
+
+    @media (max-width:600px){
+      .w4321{--r-gap:3.5rem}
+      .w4321 .blog-head{margin:2rem 0 2.5rem}
+      .w4321 .section{font-size:1.125rem;line-height:1.75}
+      .w4321 .opening h3.sub{font-size:1.18rem}
+      .w4321 .quote{font-size:1.2rem;padding-left:1.1rem}
+      .w4321 .s2 .list li{font-size:1.2rem}
+      .w4321 .h2-num .num{font-size:3.25rem}
+      .w4321 .picture,.w4321 .section.action,.w4321 .callout{padding:2.25rem 1.5rem;border-radius:18px}
+      .w4321 .tip{padding:1.6rem 1.5rem}
+      .w4321 .kicker{letter-spacing:.18em;justify-content:center}
+      .w4321 .kicker::before,.w4321 .kicker::after{display:none}
+    }
     .post-hero{margin:1rem 0 .5rem;border-radius:14px;overflow:hidden;background:#e9eee5;aspect-ratio:2/1}
     .post-hero img{display:block;width:100%;height:100%;object-fit:cover}
     /* Unlisted bonus posts: no date, likes or prev/next */

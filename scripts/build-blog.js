@@ -153,6 +153,7 @@ async function buildBonusPages(tpl) {
       CANONICAL_URL_ENC: attr(encodeURIComponent(canonical)),
       ROBOTS_META: '<meta name="robots" content="noindex"/>',
       ARTICLE_CLASS: is4321(e) ? 'blog-post w4321 is-bonus' : 'blog-post is-bonus',
+      EXTRA_HEAD: is4321(e) ? FONT_4321 : '',
       HERO_HTML: heroHtml(e, attr),
       OG_IMAGE: attr(`${SITE_URL}/assets/og/site.png`),
       JSON_LD: '{}',
@@ -180,14 +181,23 @@ async function buildBonusPages(tpl) {
   }
 }
 
-// Weekend 4-3-2-1 accents: mark the numbered headings, Gems and the 1 Action Step so the
-// template can give them the bronze accent (text stays exactly as written).
+// Weekend 4-3-2-1 reading layout: tag the parts so the template can give each its own space
+// (opening, numbered movements, Picture This, Gems, Insights, sign-off). Text stays exactly as written;
+// the numeral keeps its space so Listen still reads "4 Scriptures".
 function accent4321(html) {
   return String(html)
-    .replace(/<h2 class="h2">(?=[1-4]\s)/g, '<h2 class="h2 h2-num">')
+    .replace(/<section class="section">(\s*<div class="kicker">)/g, '<section class="section opening">$1')
+    .replace(/<section class="section">(\s*)<h2 class="h2">([1-4])\s+([^<]*)<\/h2>/g, (m, ws, n, label) =>
+      `<section class="section s${n}${n === '1' && /action/i.test(label) ? ' action' : ''}">${ws}<h2 class="h2 h2-num"><span class="num">${n}</span> <span class="lbl">${label}</span></h2>`)
+    .replace(/<h2 class="h2">([1-4])\s+([^<]*)<\/h2>/g, '<h2 class="h2 h2-num"><span class="num">$1</span> <span class="lbl">$2</span></h2>')
+    .replace(/<section class="section">(\s*<h2 class="h2">Picture This)/g, '<section class="section picture">$1')
     .replace(/<p><em>Gem:<\/em>/g, '<p class="gem"><em>Gem:</em>')
-    .replace(/<section class="section">(\s*<h2 class="h2 h2-num">1 Action Step)/g, '<section class="section action">$1');
+    .replace(/<p class="sub">Insight:\s*/g, '<p class="sub insight"><span class="lbl">Insight:</span> ')
+    .replace(/<p>(Dear WorkShopper,?)<\/p>/g, '<p class="salute">$1</p>')
+    .replace(/<p>(Here for you,)/g, '<p class="sign">$1');
 }
+// Lora (reading face) for Weekend 4-3-2-1 pages only
+const FONT_4321 = '\n  <link rel="preconnect" href="https://fonts.googleapis.com"/>\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>\n  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"/>';
 const is4321 = e => /4-3-2-1/.test(e.category || '');
 function heroHtml(e, esc) {
   const src = String(e.hero_image || '').trim();
@@ -383,6 +393,7 @@ async function main() {
       // Root-relative links: blog pages carry <base href="/">, so "../" would resolve to the site root (404)
       ROBOTS_META: '',
       ARTICLE_CLASS: is4321(e) ? 'blog-post w4321' : 'blog-post',
+      EXTRA_HEAD: is4321(e) ? FONT_4321 : '',
       HERO_HTML: heroHtml(e, attr),
       PREV_HREF: prev ? `/blog/${path.dirname(fileNameFor(prev))}/` : '#',
       NEXT_HREF: next ? `/blog/${path.dirname(fileNameFor(next))}/` : '#'
