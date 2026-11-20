@@ -12,6 +12,8 @@ import { todayCentralISO } from './shared/render-content.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const INDEX = path.join(ROOT, 'index.html');
+// Homepage previews (none right now). Each only carries the Today's Daily card.
+const PREVIEWS = [];
 
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -162,6 +164,15 @@ async function main() {
 
   await fs.writeFile(INDEX, html);
   console.log(`Homepage baked: ${done.join(', ') || 'nothing (data missing)'}`);
+
+  // Copy the freshly baked Today's Daily card into any homepage previews that exist.
+  const card = /<article class="daily-feature">[\s\S]*?<\/article>/.exec(html);
+  for (const file of PREVIEWS) {
+    let page;
+    try { page = await fs.readFile(file, 'utf-8'); } catch { continue; }
+    if (card) await fs.writeFile(file, page.replace(/<article class="daily-feature">[\s\S]*?<\/article>/, () => card[0]));
+    console.log(`Preview baked: ${path.relative(ROOT, file)}`);
+  }
 }
 
 main().catch((err) => { console.error('build-home failed:', err); process.exit(0); });

@@ -293,15 +293,15 @@ document.addEventListener("DOMContentLoaded", function () {
             email,
             first_name: (f.first_name ? f.first_name.value : '').trim(),
             company: f.company ? f.company.value : '',
-            source: location.pathname === '/' || location.pathname === '/index.html' ? 'home'
+            source: f.dataset.source || (location.pathname === '/' || location.pathname === '/index.html' ? 'home'
               : location.pathname.startsWith('/leadership/') ? 'leadership'
-              : location.pathname.startsWith('/daily/') ? 'daily-page' : 'daily-today'
+              : location.pathname.startsWith('/daily/') ? 'daily-page' : 'daily-today')
           })
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
         f.reset();
-        try { if (window.gtag) gtag('event', 'daily_signup', { source: location.pathname, already_active: data.status === 'active' }); } catch (e) {}
+        try { if (window.gtag) gtag('event', 'daily_signup', { source: f.dataset.source || location.pathname, already_active: data.status === 'active' }); } catch (e) {}
         say(data.status === 'active'
           ? (data.message || "You're already on the list.")
           : "Almost done. Check your inbox and tap the confirm button, and the Daily will come to you.", true);
