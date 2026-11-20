@@ -1,10 +1,6 @@
-/* Homepage options A and B (issue #29). Staging previews only: noindex, not in the sitemap.
-   When Steven picks one, its markup moves into index.html and this folder is deleted. */
+/* Homepage (Option A, "The Daily first", chosen Nov 20 2026): hero sign-up, Daily card,
+   Pattern Finder band, Go deeper cards and the Groups line. */
 
-/* Preview bar (not part of either design) */
-.hp-bar { background: #173f36; color: #e7efe9; font: 600 13px/1.4 system-ui, sans-serif; padding: 10px 16px; text-align: center; }
-.hp-bar a { color: #f2d49b; margin: 0 6px; }
-.hp-bar strong { color: #fff; }
 
 /* ---------- Hero sign-up (sits on the dark water) ---------- */
 .home-hero.hh .hp-hero-lead { font-size: 18px; line-height: 1.6; color: #e7efe9; margin: 0 0 18px; }

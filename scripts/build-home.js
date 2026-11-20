@@ -12,8 +12,8 @@ import { todayCentralISO } from './shared/render-content.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const INDEX = path.join(ROOT, 'index.html');
-// Staging previews of homepage options (issue #29). They only carry the Today's Daily card.
-const PREVIEWS = ['home-preview/daily-first/index.html', 'home-preview/pattern-first/index.html'].map((p) => path.join(ROOT, p));
+// Homepage previews (none right now). Each only carries the Today's Daily card.
+const PREVIEWS = [];
 
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
