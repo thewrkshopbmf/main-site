@@ -399,7 +399,10 @@ def write(rel, content):
     print('wrote', rel)
 
 
-def make_pdfs():
+def make_pdfs(pages=None):
+    """Print the leader guide and handout pages to PDF. pages: [(page path, pdf path)]; default: this kit."""
+    pages = pages or [(f'studies/{SLUG}/leader-guide/', f'downloads/{SLUG}-leader-guide.pdf'),
+                      (f'studies/{SLUG}/handout/', f'downloads/{SLUG}-handout.pdf')]
     import http.server
     import socketserver
     import threading
@@ -416,15 +419,14 @@ def make_pdfs():
             import base64
             logo = base64.b64encode(open(os.path.join(ROOT, 'assets/images/thewrkshop-logo-transparent-trimmed.png'), 'rb').read()).decode()
             header = ('<div style="width:100%;margin:0 0.6in;display:flex;justify-content:space-between;align-items:center;'
-                      'border-bottom:1px solid #c9aa8c;padding-bottom:4px;font-family:Helvetica,Arial,sans-serif;font-size:9px;color:#3e2c23;">'
+                      'border-bottom:1px solid #243d37;padding-bottom:4px;font-family:Helvetica,Arial,sans-serif;font-size:9px;color:#243d37;">'
                       f'<img src="data:image/png;base64,{logo}" style="height:42px;width:auto;">'
                       '<span style="letter-spacing:1px;">THEWRKSHOP.COM</span></div>')
             footer = ('<div style="width:100%;margin:0 0.6in;display:flex;justify-content:space-between;gap:12px;'
-                      'border-top:1px solid #c9aa8c;padding-top:4px;font-family:Helvetica,Arial,sans-serif;font-size:8px;color:#6b5b53;">'
+                      'border-top:1px solid #dedfd6;padding-top:4px;font-family:Helvetica,Arial,sans-serif;font-size:8px;color:#59655f;">'
                       f'<span>{html.escape(RIGHTS)}</span>'
                       '<span style="white-space:nowrap;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>')
-            for src, out in [(f'studies/{SLUG}/leader-guide/', f'downloads/{SLUG}-leader-guide.pdf'),
-                             (f'studies/{SLUG}/handout/', f'downloads/{SLUG}-handout.pdf')]:
+            for src, out in pages:
                 pg.goto(f'http://127.0.0.1:{port}/{src}', wait_until='networkidle')
                 pg.emulate_media(media='print')
                 pg.evaluate("document.body.classList.add('pdf-mode')")

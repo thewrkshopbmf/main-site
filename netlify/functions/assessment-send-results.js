@@ -136,7 +136,7 @@ export default async (request) => {
           reply_to: email,
           subject: `Spiritual gifts results: ${email}`,
           text: `${email} took the spiritual gifts assessment.\nWants messages from TheWrkShop: ${messageOptIn ? 'Yes' : 'No'}\nReply to this email to reach them.\n\n${text}`,
-          html: `<div style="font-family:Arial,Helvetica,sans-serif;padding:12px 16px;margin:0 0 12px;background:#f4f1ee;border-left:4px solid #3e2c23;color:#3e2c23;">`
+          html: `<div style="font-family:Arial,Helvetica,sans-serif;padding:12px 16px;margin:0 0 12px;background:#edf0e7;border-left:4px solid #243d37;color:#243d37;">`
             + `<strong>${safeEmail}</strong> took the spiritual gifts assessment.<br>`
             + `Wants messages from TheWrkShop: <strong>${messageOptIn ? 'Yes' : 'No'}</strong><br>`
             + `Reply to this email to reach them directly.</div>${html}`

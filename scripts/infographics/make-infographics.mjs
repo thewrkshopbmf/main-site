@@ -141,16 +141,16 @@ export const INFOGRAPHICS = [
 const esc = (s = '') => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 function shade(i, n) {
-  if (i === n - 1) return 'background:#3e2c23;color:#f4f1ee;border-color:#3e2c23;';
+  if (i === n - 1) return 'background:#243d37;color:#f4f1ee;border-color:#243d37;';
   const t = n <= 2 ? 0 : i / (n - 2);
-  const c = [255, 255, 255].map((f, k) => Math.round(f + ([234, 217, 200][k] - f) * t));
-  return `background:rgb(${c.join(',')});color:#3e2c23;border-color:rgba(62,44,35,.2);`;
+  const c = [255, 255, 255].map((f, k) => Math.round(f + ([221, 232, 222][k] - f) * t));
+  return `background:rgb(${c.join(',')});color:#243d37;border-color:rgba(36,61,55,.2);`;
 }
 
 function body(g) {
   if (g.kind === 'flow') {
     const n = g.steps.length;
-    const box = (s, i) => `<div class="step${g.compact ? ' compact' : ''}" style="${s.up ? 'background:#efe4d8;color:#3e2c23;border-color:rgba(62,44,35,.2);' : shade(i, n)}"><b>${esc(s.label)}</b>${s.note ? `<span>${esc(s.note)}</span>` : ''}</div>`;
+    const box = (s, i) => `<div class="step${g.compact ? ' compact' : ''}" style="${s.up ? 'background:#e9eee5;color:#243d37;border-color:rgba(36,61,55,.2);' : shade(i, n)}"><b>${esc(s.label)}</b>${s.note ? `<span>${esc(s.note)}</span>` : ''}</div>`;
     let html = '';
     let i = 0;
     while (i < n) {
@@ -190,11 +190,11 @@ function page(g, logoData) {
   @font-face { font-family: Inter; src: url('file://${INTER_BOLD}'); font-weight: 700; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 1080px; height: 1350px; }
-  body { background: #f4f1ee; font-family: Inter, sans-serif; color: #2b2b2b; display: flex; flex-direction: column; }
-  header { background: #3e2c23; color: #f4f1ee; padding: 56px 72px 44px; position: relative; }
-  .eyebrow { font-size: 22px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #c9aa8c; }
+  body { background: #f3f3ed; font-family: Inter, sans-serif; color: #2b2b2b; display: flex; flex-direction: column; }
+  header { background: #243d37; color: #f4f1ee; padding: 56px 72px 44px; position: relative; }
+  .eyebrow { font-size: 22px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #a5b4a2; }
   h1 { font-family: Lora, serif; font-weight: 700; font-size: 62px; line-height: 1.08; margin-top: 14px; max-width: 820px; }
-  .sub { font-family: Lora, serif; font-style: italic; font-size: 30px; line-height: 1.3; margin-top: 16px; color: #e8dccf; max-width: 840px; }
+  .sub { font-family: Lora, serif; font-style: italic; font-size: 30px; line-height: 1.3; margin-top: 16px; color: #d6e2da; max-width: 840px; }
   .logo { position: absolute; right: 64px; top: 52px; width: 120px; }
   main { flex: 1; padding: 34px 110px 22px; display: flex; flex-direction: column; justify-content: center; }
   .flow { display: flex; flex-direction: column; align-items: stretch; }
@@ -202,26 +202,26 @@ function page(g, logoData) {
   .step b { display: block; font-size: 30px; font-weight: 700; }
   .step span { display: block; font-size: 22px; font-style: italic; margin-top: 2px; opacity: .85; }
   .step.compact { padding: 9px 24px; } .step.compact b { font-size: 26px; }
-  .arrow { text-align: center; color: #c9aa8c; font-size: 26px; line-height: 1; margin: 5px 0; }
-  .upstream { border: 3px dashed #c9aa8c; border-radius: 22px; padding: 14px 16px 18px; }
-  .up-label { text-align: center; font-size: 19px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8a6a52; margin-bottom: 10px; }
-  .loop { text-align: center; margin-top: 16px; font-size: 26px; font-weight: 600; color: #6b4a36; }
-  .caption { text-align: center; margin-top: 16px; font-family: Lora, serif; font-style: italic; font-size: 28px; color: #6b4a36; }
-  .caption.strong { font-style: normal; font-weight: 700; color: #3e2c23; margin-top: 28px; }
+  .arrow { text-align: center; color: #a5b4a2; font-size: 26px; line-height: 1; margin: 5px 0; }
+  .upstream { border: 3px dashed #a5b4a2; border-radius: 22px; padding: 14px 16px 18px; }
+  .up-label { text-align: center; font-size: 19px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #557265; margin-bottom: 10px; }
+  .loop { text-align: center; margin-top: 16px; font-size: 26px; font-weight: 600; color: #3f6f5c; }
+  .caption { text-align: center; margin-top: 16px; font-family: Lora, serif; font-style: italic; font-size: 28px; color: #3f6f5c; }
+  .caption.strong { font-style: normal; font-weight: 700; color: #243d37; margin-top: 28px; }
   .tbl { width: 100%; border-collapse: collapse; font-size: 28px; }
-  .tbl th { text-align: left; font-size: 22px; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; padding: 0 0 14px; }
-  .tbl td { padding: 14px 0; border-top: 2px solid rgba(62,44,35,.12); color: #3e2c23; vertical-align: middle; }
-  .tbl td.to { color: #c9aa8c; text-align: center; width: 70px; }
+  .tbl th { text-align: left; font-size: 22px; letter-spacing: .08em; text-transform: uppercase; color: #557265; padding: 0 0 14px; }
+  .tbl td { padding: 14px 0; border-top: 2px solid rgba(36,61,55,.12); color: #243d37; vertical-align: middle; }
+  .tbl td.to { color: #a5b4a2; text-align: center; width: 70px; }
   .arenas { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-  .arena { background: #fff; border: 2px solid rgba(62,44,35,.14); border-radius: 18px; padding: 22px 24px; }
-  .a-name { font-family: Lora, serif; font-weight: 700; font-size: 30px; color: #3e2c23; margin-bottom: 10px; }
-  .a-row { display: grid; grid-template-columns: 112px 1fr; gap: 10px; font-size: 21px; line-height: 1.35; margin-top: 8px; color: #3e2c23; }
-  .a-k { font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8a6a52; padding-top: 4px; }
-  .a-row.learn { background: #3e2c23; color: #f4f1ee; border-radius: 10px; padding: 10px 12px; margin-top: 12px; }
-  .a-row.learn .a-k { color: #c9aa8c; }
-  .foot { padding: 0 110px 26px; text-align: center; font-size: 18px; color: #6b5b53; font-style: italic; }
-  footer { background: #3e2c23; color: #f4f1ee; padding: 26px 72px; display: flex; justify-content: space-between; align-items: center; font-size: 22px; }
-  footer b { color: #c9aa8c; font-weight: 700; letter-spacing: .02em; }
+  .arena { background: #fff; border: 2px solid rgba(36,61,55,.14); border-radius: 18px; padding: 22px 24px; }
+  .a-name { font-family: Lora, serif; font-weight: 700; font-size: 30px; color: #243d37; margin-bottom: 10px; }
+  .a-row { display: grid; grid-template-columns: 112px 1fr; gap: 10px; font-size: 21px; line-height: 1.35; margin-top: 8px; color: #243d37; }
+  .a-k { font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #557265; padding-top: 4px; }
+  .a-row.learn { background: #243d37; color: #f4f1ee; border-radius: 10px; padding: 10px 12px; margin-top: 12px; }
+  .a-row.learn .a-k { color: #a5b4a2; }
+  .foot { padding: 0 110px 26px; text-align: center; font-size: 18px; color: #59655f; font-style: italic; }
+  footer { background: #243d37; color: #f4f1ee; padding: 26px 72px; display: flex; justify-content: space-between; align-items: center; font-size: 22px; }
+  footer b { color: #a5b4a2; font-weight: 700; letter-spacing: .02em; }
   </style></head><body>
   <header><div class="eyebrow">${esc(g.eyebrow)}</div><h1>${esc(g.title)}</h1>${g.subtitle ? `<div class="sub">${esc(g.subtitle)}</div>` : ''}<img class="logo" src="${logoData}"></header>
   <main>${body(g)}</main>

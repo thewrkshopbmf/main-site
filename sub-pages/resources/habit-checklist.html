@@ -6,15 +6,15 @@
   <title>Weekly Habit Checklist for Christian Men | TheWrkShop</title>
   <style>
     :root{
-      --bg:#f7f7f9;
+      --bg:#f3f3ed;
       --card:#ffffff;
-      --ink:#1c1c21;
-      --muted:#6a6f7a;
-      --brand:#5c4b8a;     /* subtle purple tie-in */
-      --brand-2:#b79cff;   /* accent */
-      --ring: rgba(92,75,138,.25);
-      --border:#e8e8ef;
-      --check:#2f855a;
+      --ink:#243d37;
+      --muted:#64706a;
+      --brand:#243d37;     /* ink green (editorial palette) */
+      --brand-2:#3f6f5c;   /* accent */
+      --ring: rgba(36,61,55,.25);
+      --border:#dedfd6;
+      --check:#3f6f5c;
     }
     /* Page shell */
     body{
@@ -90,7 +90,7 @@
       border:1px solid var(--border);
       border-radius:18px;
       padding:18px;
-      box-shadow:0 8px 28px rgba(20,20,40,.06);
+      box-shadow:0 8px 28px rgba(36,61,55,.06);
     }
     .card h2{
       font-size:18px; margin:0 0 10px;
@@ -107,7 +107,7 @@
       padding:10px 10px; border-radius:12px;
       transition:background .15s ease;
     }
-    .item:hover{ background:#fafafe; }
+    .item:hover{ background:#f6f7f2; }
     .item + .item{ margin-top:6px; }
     input[type="checkbox"]{
       width:20px; height:20px; margin-top:2px;
@@ -133,6 +133,15 @@
       .card{ break-inside:avoid; box-shadow:none; }
       a[href]:after{ content:""; }
     }
+    /* Printed copies carry the logo, the web address and the rights line (screen: hidden) */
+    .print-brand,.print-rights{display:none;}
+    @media print{
+      .print-brand{display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #243d37; padding-bottom:8px; margin-bottom:16px;}
+      .print-brand img{height:44px; width:auto;}
+      .print-brand span{font-size:12px; letter-spacing:.08em; color:#243d37;}
+      .print-rights{display:block; font-size:11px; color:#64706a; border-top:1px solid #dedfd6; margin-top:20px; padding-top:8px;}
+      #site-header, footer, .site-footer{display:none!important;}
+    }
   </style>
   <meta name="description" content="A simple weekly habit checklist for faith, family and work. Print it or use it on your phone to keep one small step going all week."/>
   <link rel="canonical" href="https://thewrkshop.com/sub-pages/resources/habit-checklist.html"/>
@@ -156,6 +165,7 @@
 <body>
 <div id="site-header"></div>
   <div class="wrap">
+    <div class="print-brand"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop"><span>THEWRKSHOP.COM</span></div>
     <header>
       <div>
         <div class="badge">THEWRKSHOP</div>
@@ -258,6 +268,7 @@
     </section>
 
     <p class="note">Tip: progress is saved in your browser so you can return to it during the week.</p>
+    <p class="print-rights">© 2026 TheWrkShop · thewrkshop.com. Free to copy and use in your church or men’s group. Please don’t sell, edit or republish it without permission.</p>
   </div>
 
   <script>

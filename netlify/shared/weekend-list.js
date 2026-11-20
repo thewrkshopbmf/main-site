@@ -3,7 +3,7 @@
 // the newest Weekend 4-3-2-1 is emailed once when it goes live (Fridays 2 pm Central).
 // A man can also ask for The Daily on the same form; confirming adds him to that list too.
 import { db, json, html, isEmail, isToken, newToken, centralNow, sendEmail, FROM, SITE_URL } from './daily-list.js';
-import { emailLayout, escapeHtml } from './daily-email.js';
+import { emailLayout, escapeHtml, EMAIL_COLORS as C } from './daily-email.js';
 
 export { db, json, html, isEmail, isToken, newToken };
 export const TABLE = 'weekend_subscribers';
@@ -13,8 +13,7 @@ const BATCH_SIZE = 100;
 const SEND_FROM_HOUR = 14;   // the post goes live at 2 pm Central
 const SEND_UNTIL_HOUR = 22;  // don't start a send after 10 pm Central
 
-const BROWN = '#3e2c23';
-const CREAM = '#f4f1ee';
+const INK = C.ink;
 const clean = (v) => String(v ?? '').trim();
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -22,7 +21,7 @@ export const confirmUrl = (t) => `${SITE_URL}/email/weekend/confirm?token=${t}`;
 export const unsubscribeUrl = (t) => `${SITE_URL}/email/weekend/unsubscribe?token=${t}`;
 
 const button = (href, label) =>
-  `<a href="${escapeHtml(href)}" style="display:inline-block;background:${BROWN};color:${CREAM};padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-family:Arial,Helvetica,sans-serif;">${label}</a>`;
+  `<a href="${escapeHtml(href)}" style="display:inline-block;background:${INK};color:${C.onInk};padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-family:Arial,Helvetica,sans-serif;">${label}</a>`;
 
 export function confirmEmail({ firstName, wantsDaily, url }) {
   const hi = firstName ? `${escapeHtml(firstName)}, one` : 'One';
@@ -32,7 +31,7 @@ export function confirmEmail({ firstName, wantsDaily, url }) {
   const bodyHtml = `
 <p style="margin:0 0 14px;line-height:1.6;">${hi} quick step: confirm your email and we’ll send you ${what}.</p>
 <p style="margin:22px 0;">${button(url, wantsDaily ? 'Yes, send me both' : 'Yes, send me the 4-3-2-1')}</p>
-<p style="margin:0 0 14px;line-height:1.6;color:#555;font-size:15px;">Four Scriptures, three insights, two questions and one step to carry into the week.</p>`;
+<p style="margin:0 0 14px;line-height:1.6;color:${C.muted};font-size:15px;">Four Scriptures, three insights, two questions and one step to carry into the week.</p>`;
   const footerHtml = `If you didn't sign up at thewrkshop.com, you can ignore this email and you won't hear from us.<br>— TheWrkShop`;
   return {
     subject: 'Confirm your email for the Weekend 4-3-2-1',
@@ -56,17 +55,17 @@ export function weekendEmail(post, { unsubscribeUrl: unsub }) {
     parts.push(`<a href="${escapeHtml(url)}"><img src="${escapeHtml(post.hero_image)}" alt="${escapeHtml(post.hero_image_alt || '')}" width="544" style="display:block;width:100%;max-width:544px;height:auto;border-radius:10px;margin:0 0 18px;border:0;"></a>`);
   }
   if (post.excerpt) parts.push(`<p style="margin:0 0 16px;line-height:1.6;">${escapeHtml(post.excerpt)}</p>`);
-  if (win) parts.push(`<div style="margin:0 0 18px;padding:12px 14px;border-left:4px solid ${BROWN};background:${CREAM};"><p style="margin:0 0 4px;font-weight:700;color:${BROWN};font-family:Arial,Helvetica,sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.05em;">One-Minute Win of the Week</p><p style="margin:0;line-height:1.6;">${escapeHtml(win)}</p></div>`);
+  if (win) parts.push(`<div style="margin:0 0 18px;padding:12px 14px;border-left:4px solid ${C.bronze};background:${C.bronzeTint};border-radius:0 8px 8px 0;"><p style="margin:0 0 4px;font-weight:700;color:${C.bronzeText};font-family:Arial,Helvetica,sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.05em;">One-Minute Win of the Week</p><p style="margin:0;line-height:1.6;">${escapeHtml(win)}</p></div>`);
   parts.push(`<p style="margin:22px 0;">${button(url, 'Read &amp; listen to the 4-3-2-1 →')}</p>`);
   if (dailies.length) {
-    parts.push(`<h3 style="margin:26px 0 6px;color:${BROWN};font-size:18px;">Want to go deeper?</h3>`);
-    parts.push(`<p style="margin:0 0 10px;line-height:1.6;color:#555;font-size:15px;">This week’s 4-3-2-1 came from these Dailies. Tap any one to sit with the full day.</p>`);
+    parts.push(`<h3 style="margin:26px 0 6px;color:${INK};font-size:18px;">Want to go deeper?</h3>`);
+    parts.push(`<p style="margin:0 0 10px;line-height:1.6;color:${C.muted};font-size:15px;">This week’s 4-3-2-1 came from these Dailies. Tap any one to sit with the full day.</p>`);
     parts.push(`<ul style="margin:0 0 14px;padding-left:20px;line-height:1.7;">${dailies.map(d =>
-      `<li><a href="${escapeHtml(SITE_URL + d.href)}" style="color:${BROWN};font-weight:700;">${escapeHtml(d.title)}</a>${d.day ? ` <span style="color:#7a6a60;font-size:14px;">(${escapeHtml(d.day)})</span>` : ''}</li>`).join('')}</ul>`);
+      `<li><a href="${escapeHtml(SITE_URL + d.href)}" style="color:${INK};font-weight:700;">${escapeHtml(d.title)}</a>${d.day ? ` <span style="color:${C.muted};font-size:14px;">(${escapeHtml(d.day)})</span>` : ''}</li>`).join('')}</ul>`);
   }
-  parts.push(`<p style="margin:0 0 6px;line-height:1.6;font-size:15px;color:#555;">Want one every weekday? <a href="${SITE_URL}/daily.html" style="color:${BROWN};">Get The Daily →</a></p>`);
+  parts.push(`<p style="margin:0 0 6px;line-height:1.6;font-size:15px;color:${C.muted};">Want one every weekday? <a href="${SITE_URL}/daily.html" style="color:${INK};">Get The Daily →</a></p>`);
   const footerHtml = `You're receiving the Weekend 4-3-2-1 because you signed up at thewrkshop.com.<br>
-<a href="${escapeHtml(unsub)}" style="color:#7a6a60;">Unsubscribe</a> · <a href="${SITE_URL}/blog-archive.html" style="color:#7a6a60;">Past 4-3-2-1s</a><br>— TheWrkShop`;
+<a href="${escapeHtml(unsub)}" style="color:${C.muted};">Unsubscribe</a> · <a href="${SITE_URL}/blog-archive.html" style="color:${C.muted};">Past 4-3-2-1s</a><br>— TheWrkShop`;
   const text = [
     `Weekend 4-3-2-1: ${clean(post.title)}`, '',
     clean(post.excerpt),

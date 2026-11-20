@@ -1,6 +1,6 @@
 // Group intake ("Get known"): field lists, validation and emails.
 // Pure functions except where noted; used by netlify/functions/group-apply.mjs.
-import { emailLayout, escapeHtml, SITE_URL } from './daily-email.js';
+import { emailLayout, escapeHtml, SITE_URL, EMAIL_COLORS as C } from './daily-email.js';
 
 export const TABLE = 'group_intakes';
 
@@ -80,7 +80,7 @@ export function applicantEmail(row) {
 <p style="margin:0 0 14px;line-height:1.6;">${escapeHtml(row.first_name)}, thanks for taking the first step.</p>
 <p style="margin:0 0 14px;line-height:1.6;">Here's what happens next. Someone from TheWrkShop will reach out within a few days to set up ${how}. It's about 20 minutes, with no pressure and no pitch. We just want to hear what's going on and figure out the right next step with you.</p>
 <p style="margin:0 0 14px;line-height:1.6;">Until then, you can start with The Daily: one Scripture, one hard question and one step, every weekday.</p>
-<p style="margin:22px 0;"><a href="${SITE_URL}/daily.html" style="display:inline-block;background:#3e2c23;color:#f4f1ee;padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-family:Arial,Helvetica,sans-serif;">Read today's Daily</a></p>`;
+<p style="margin:22px 0;"><a href="${SITE_URL}/daily.html" style="display:inline-block;background:${C.ink};color:${C.onInk};padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-family:Arial,Helvetica,sans-serif;">Read today's Daily</a></p>`;
   const footerHtml = `Only TheWrkShop's leaders see what you shared. If you didn't fill out this form, you can ignore this email.<br>— TheWrkShop`;
   return {
     subject: 'Got it. Here’s what happens next',
@@ -107,11 +107,11 @@ export function notifyEmail(row) {
     ['Heard about us', row.heard_from || '—']
   ];
   const rows = lines.map(([k, v]) =>
-    `<tr><td style="padding:6px 10px 6px 0;vertical-align:top;color:#6b5b53;white-space:nowrap;">${escapeHtml(k)}</td><td style="padding:6px 0;vertical-align:top;">${escapeHtml(v)}</td></tr>`).join('');
+    `<tr><td style="padding:6px 10px 6px 0;vertical-align:top;color:${C.muted};white-space:nowrap;">${escapeHtml(k)}</td><td style="padding:6px 0;vertical-align:top;">${escapeHtml(v)}</td></tr>`).join('');
   const bodyHtml = `
 <p style="margin:0 0 14px;line-height:1.6;">${escapeHtml(name)} wants to get known.</p>
 <table style="border-collapse:collapse;font-size:15px;line-height:1.5;">${rows}</table>
-<p style="margin:22px 0;"><a href="${SITE_URL}/admin/group-intakes.html" style="display:inline-block;background:#3e2c23;color:#f4f1ee;padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-family:Arial,Helvetica,sans-serif;">Open Group Intakes</a></p>`;
+<p style="margin:22px 0;"><a href="${SITE_URL}/admin/group-intakes.html" style="display:inline-block;background:${C.ink};color:${C.onInk};padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-family:Arial,Helvetica,sans-serif;">Open Group Intakes</a></p>`;
   return {
     subject: `New group intake: ${name}`,
     html: emailLayout({ title: 'New group intake', preheader: `${name} · ${CONTACT[row.contact_pref]}`, bodyHtml }),
