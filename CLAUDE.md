@@ -31,3 +31,6 @@ still missing its plain-words sentence.
 - S's own wording stays his. Don't rewrite a Daily's body beyond the one plain-words sentence
   unless he asks.
 - Scripture: NIV unless the post says otherwise.
+- Short pauses: when an instruction asks a man to pause for 90 seconds or less, write "take a moment"
+  (e.g. "take a moment and ask…"), not "take 60 seconds". Keep the number when it is the name of an
+  idea (The 90-Second Window, the 3-Second Reflex Interrupt) or a description of what happened.
