@@ -4,11 +4,11 @@
 // The 7-day spine comes from the One Verse Man facilitator guide's "Seven-day follow-through".
 // Each day adds one line written for the man's focus area (his highest-scoring area).
 
-import { emailLayout, escapeHtml, SITE_URL } from './daily-email.js';
+import { emailLayout, escapeHtml, SITE_URL, EMAIL_COLORS as C } from './daily-email.js';
 
-const BROWN = '#3e2c23';
-const EMBER = '#c4501a';
-const MUTED = '#7a6a60';
+const INK = C.ink;
+const ACCENT = C.accent;
+const MUTED = C.muted;
 const PAGE_URL = `${SITE_URL}/one-verse-man/diagnostic/`;
 
 // Same order as the questions on the page. Keys are what the browser sends.
@@ -141,7 +141,7 @@ const bibleLink = (ref) =>
 
 const p = (html, extra = '') => `<p style="margin:0 0 14px;line-height:1.6;${extra}">${html}</p>`;
 const btn = (href, text) =>
-  `<p style="margin:22px 0;"><a href="${escapeHtml(href)}" style="display:inline-block;background:${BROWN};color:#f4f1ee;padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-family:Arial,Helvetica,sans-serif;">${escapeHtml(text)}</a></p>`;
+  `<p style="margin:22px 0;"><a href="${escapeHtml(href)}" style="display:inline-block;background:${INK};color:${C.onInk};padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-family:Arial,Helvetica,sans-serif;">${escapeHtml(text)}</a></p>`;
 
 function planFooter(unsubscribeUrl, day) {
   const where = day ? `Day ${day} of ${TOTAL_DAYS} of the plan` : 'Your 7-day plan';
@@ -169,15 +169,15 @@ export function resultsEmail({ firstName, scores, focusKey, strengthKey, nextSte
 
   const rows = ranked.map(a => {
     const pct = Math.round((a.score - 5) / 20 * 100);
-    const color = a.key === focusKey ? EMBER : '#9a8f84';
-    return `<tr><td style="padding:6px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#2b2b2b;">${escapeHtml(a.title)}</td>
+    const color = a.key === focusKey ? ACCENT : C.sage;
+    return `<tr><td style="padding:6px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:${C.text};">${escapeHtml(a.title)}</td>
 <td style="padding:6px 0 6px 10px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:${MUTED};text-align:right;white-space:nowrap;">${a.score}/25</td></tr>
-<tr><td colspan="2" style="padding:0 0 8px;"><div style="height:8px;background:#ece5dc;"><div style="height:8px;width:${pct}%;background:${color};"></div></div></td></tr>`;
+<tr><td colspan="2" style="padding:0 0 8px;"><div style="height:8px;background:${C.tint};"><div style="height:8px;width:${pct}%;background:${color};"></div></div></td></tr>`;
   }).join('');
 
   const nextStepHtml = String(nextStep || '').trim()
-    ? `<p style="margin:18px 0 6px;font-weight:700;color:${BROWN};">The next step you wrote</p>
-<blockquote style="margin:0 0 14px;padding:8px 14px;border-left:4px solid ${BROWN};background:#f4f1ee;color:${BROWN};">${escapeHtml(String(nextStep).trim()).replace(/\n/g, '<br>')}</blockquote>`
+    ? `<p style="margin:18px 0 6px;font-weight:700;color:${INK};">The next step you wrote</p>
+<blockquote style="margin:0 0 14px;padding:8px 14px;border-left:4px solid ${INK};background:${C.wash};color:${INK};">${escapeHtml(String(nextStep).trim()).replace(/\n/g, '<br>')}</blockquote>`
     : '';
 
   const strengthHtml = strength
@@ -187,11 +187,11 @@ export function resultsEmail({ firstName, scores, focusKey, strengthKey, nextSte
   const bodyHtml = `
 ${p(`${hello(firstName)}here are your results. Higher scores mean you reported these obstacles more often. They describe patterns you noticed, not a diagnosis or a measure of your worth.`)}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 18px;">${rows}</table>
-<div style="background:#2e2923;color:#e8e0d4;padding:18px 20px;margin:0 0 18px;border-radius:8px;">
-  <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#d6ad61;">Your focus this week</p>
-  <p style="margin:0 0 8px;font-size:20px;font-weight:700;color:#fafaf8;">${escapeHtml(focus.title)}</p>
+<div style="background:${INK};color:${C.onInkSoft};padding:18px 20px;margin:0 0 18px;border-radius:8px;">
+  <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:${C.onInkLabel};">Your focus this week</p>
+  <p style="margin:0 0 8px;font-size:20px;font-weight:700;color:${C.paper};">${escapeHtml(focus.title)}</p>
   <p style="margin:0 0 8px;line-height:1.6;">${escapeHtml(focus.prompt)}</p>
-  <p style="margin:0;line-height:1.6;"><strong style="color:#fafaf8;">Scripture to study:</strong> <a href="${bibleLink(focus.verse.split(';')[0])}" style="color:#d6ad61;">${escapeHtml(focus.verse)}</a></p>
+  <p style="margin:0;line-height:1.6;"><strong style="color:${C.paper};">Scripture to study:</strong> <a href="${bibleLink(focus.verse.split(';')[0])}" style="color:${C.onInkLabel};">${escapeHtml(focus.verse)}</a></p>
 </div>
 ${strengthHtml}
 ${nextStepHtml}
@@ -241,14 +241,14 @@ export function dayEmail({ day, focusKey, firstName, unsubscribeUrl }) {
     ? `${p(`That’s the week. Some men are known for chapters. Others are known for moments. God uses both, and He isn’t finished with you.`)}
 ${p(`If you want to keep going, The Daily brings one Scripture, one hard question and one step to your inbox every weekday morning.`)}
 ${btn(`${SITE_URL}/daily.html`, 'Get The Daily')}
-${p(`Want other men to walk this out with you? <a href="${SITE_URL}/get-known.html" style="color:${BROWN};">Join a group</a>.`, 'font-size:15px;')}`
+${p(`Want other men to walk this out with you? <a href="${SITE_URL}/get-known.html" style="color:${INK};">Join a group</a>.`, 'font-size:15px;')}`
     : '';
 
   const bodyHtml = `
-<p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:${EMBER};">Day ${day} of ${TOTAL_DAYS} · Focus: ${escapeHtml(area.title)}</p>
-${p(`<strong>Read:</strong> <a href="${bibleLink(d.ref)}" style="color:${BROWN};">${escapeHtml(d.ref)}</a>`)}
+<p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:${ACCENT};">Day ${day} of ${TOTAL_DAYS} · Focus: ${escapeHtml(area.title)}</p>
+${p(`<strong>Read:</strong> <a href="${bibleLink(d.ref)}" style="color:${INK};">${escapeHtml(d.ref)}</a>`)}
 ${p(`${day === 1 ? hello(firstName) : ''}${escapeHtml(d.body)}`)}
-<div style="border-left:4px solid ${EMBER};padding:4px 0 4px 14px;margin:0 0 16px;">
+<div style="border-left:4px solid ${ACCENT};padding:4px 0 4px 14px;margin:0 0 16px;">
   <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:${MUTED};">For ${escapeHtml(area.title)}</p>
   <p style="margin:0;line-height:1.6;">${escapeHtml(lens)}</p>
 </div>

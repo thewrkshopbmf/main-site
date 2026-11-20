@@ -6,9 +6,9 @@
   <title>30-Day “Seek First” Plan (Matthew 6:33) | TheWrkShop</title>
   <style>
     :root{
-      --bg:#f7f7f9; --surface:#ffffff; --ink:#1c1c21; --muted:#6a6f7a;
-      --brand:#5c4b8a; --brand2:#b79cff; --border:#e8e8ef; --ring:rgba(92,75,138,.20);
-      --accent:#2f855a;
+      --bg:#f3f3ed; --surface:#ffffff; --ink:#243d37; --muted:#64706a;
+      --brand:#243d37; --brand2:#3f6f5c; --border:#dedfd6; --ring:rgba(36,61,55,.20);
+      --accent:#3f6f5c;
     }
     html,body{background:var(--bg); color:var(--ink); margin:0; font:16px/1.55 system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial,sans-serif;}
     .wrap{max-width:1100px; margin:0 auto; padding:28px 16px 64px;}
@@ -21,13 +21,13 @@
     .btn.primary{color:#fff; border-color:transparent; background:linear-gradient(135deg,var(--brand),var(--brand2));}
     .grid{display:grid; grid-template-columns:1fr; gap:16px; margin-top:16px;}
     @media (min-width:900px){ .grid{ grid-template-columns:2fr 1fr; } }
-    .card{background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:18px; box-shadow:0 8px 28px rgba(20,20,40,.06);}
+    .card{background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:18px; box-shadow:0 8px 28px rgba(36,61,55,.06);}
     .legend{display:grid; grid-template-columns:1fr 1fr; gap:10px; color:var(--muted); font-size:14px;}
     @media (min-width:700px){ .legend{grid-template-columns:repeat(4,1fr);} }
     /* Day list */
     .days{display:grid; grid-template-columns:1fr; gap:10px;}
     .day{border:1px solid var(--border); border-radius:14px; background:#fff;}
-    .head{display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border); background:linear-gradient(180deg,#fff, #fbfbff);}
+    .head{display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border); background:linear-gradient(180deg,#fff, #f6f7f2);}
     .dot{width:10px; height:10px; border-radius:50%; background:var(--brand); box-shadow:0 0 0 4px var(--ring);}
     .title{font-weight:800;}
     .ref{margin-left:auto; color:var(--muted); font-size:13px;}
@@ -50,6 +50,15 @@
       .wrap{padding:0;}
       .card{box-shadow:none; break-inside:avoid;}
       a[href]:after{content:"";}
+    }
+    /* Printed copies carry the logo, the web address and the rights line (screen: hidden) */
+    .print-brand,.print-rights{display:none;}
+    @media print{
+      .print-brand{display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #243d37; padding-bottom:8px; margin-bottom:16px;}
+      .print-brand img{height:44px; width:auto;}
+      .print-brand span{font-size:12px; letter-spacing:.08em; color:#243d37;}
+      .print-rights{display:block; font-size:11px; color:#64706a; border-top:1px solid #dedfd6; margin-top:20px; padding-top:8px;}
+      #site-header, footer, .site-footer{display:none!important;}
     }
   </style>
   <meta name="description" content="A 30-day discipleship journey to seek first the Kingdom (Matthew 6:33): daily Scripture, focus, prompt and one simple action."/>
@@ -74,6 +83,7 @@
 <body>
 <div id="site-header"></div>
   <div class="wrap">
+    <div class="print-brand"><img src="/assets/images/thewrkshop-logo-transparent-trimmed.png" alt="TheWrkShop"><span>THEWRKSHOP.COM</span></div>
     <header>
       <div>
         <span class="eyebrow">THEWRKSHOP</span>
@@ -124,6 +134,7 @@
         </section>
       </aside>
     </div>
+    <p class="print-rights">© 2026 TheWrkShop · thewrkshop.com. Free to copy and use in your church or men’s group. Please don’t sell, edit or republish it without permission.</p>
   </div>
 
   <script>
