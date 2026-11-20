@@ -2,7 +2,7 @@
 // Saves the message, emails it to TheWrkShop (reply goes straight to the sender),
 // and sends the sender a short "we got it" note.
 import { db, json, sendEmail, FROM } from '../shared/daily-list.js';
-import { emailLayout, escapeHtml } from '../shared/daily-email.js';
+import { emailLayout, escapeHtml, EMAIL_COLORS as C } from '../shared/daily-email.js';
 
 const NOTIFY_TO = process.env.CONTACT_NOTIFY_EMAIL || 'steven@thewrkshop.com';
 const TABLE = 'contact_messages';
@@ -58,9 +58,9 @@ export default async (req) => {
     title: 'New message from the website',
     preheader: `${name}: ${message.slice(0, 80)}`,
     bodyHtml: `<p style="margin:0 0 6px;"><strong>${escapeHtml(name)}</strong> &lt;${escapeHtml(email)}&gt;</p>
-<p style="margin:0 0 16px;color:#6b5b53;font-size:14px;">Reply to this email to answer them directly.</p>
-<div style="white-space:pre-wrap;line-height:1.6;padding:12px 14px;background:#ffffff;border-left:4px solid #3e2c23;">${escapeHtml(message)}</div>
-<p style="margin:18px 0 0;"><a href="https://thewrkshop.com/admin/messages.html" style="color:#3e2c23;font-weight:700;">Open Messages in admin</a></p>`
+<p style="margin:0 0 16px;color:${C.muted};font-size:14px;">Reply to this email to answer them directly.</p>
+<div style="white-space:pre-wrap;line-height:1.6;padding:12px 14px;background:${C.wash};border-left:4px solid ${C.ink};">${escapeHtml(message)}</div>
+<p style="margin:18px 0 0;"><a href="https://thewrkshop.com/admin/messages.html" style="color:${C.ink};font-weight:700;">Open Messages in admin</a></p>`
   });
   const thanksHtml = emailLayout({
     title: 'We got your message',

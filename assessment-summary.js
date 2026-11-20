@@ -67,13 +67,20 @@ export function escapeHtml(value = '') {
 
 export function buildResultsEmailHtml(results) {
   const summary = buildShareSummary(results);
+  // Colors: the site's editorial palette (same values as netlify/shared/email-colors.js).
   return `
-    <div style="background:#f2ede6;padding:32px;font-family:Inter,Arial,sans-serif;color:#1a1612;">
-      <div style="max-width:680px;margin:0 auto;background:#fafaf8;border:1px solid #e8e0d4;padding:32px;">
-        <p style="font-size:12px;letter-spacing:0.28em;text-transform:uppercase;color:#c4501a;margin:0 0 16px;">TheWrkShop Assessment</p>
-        <h1 style="font-family:'Georgia',serif;font-size:32px;line-height:1.15;color:#2e2923;margin:0 0 16px;">Your Spiritual Gifts Results</h1>
-        <p style="font-size:16px;line-height:1.7;color:#2e2923;margin:0 0 24px;">Here is your saved assessment summary so you can come back to it anytime, share it with your group, or bring it into your next leadership conversation.</p>
-        <pre style="white-space:pre-wrap;font-family:'Courier New',monospace;font-size:14px;line-height:1.75;background:#f2ede6;border:1px solid #e8e0d4;padding:20px;color:#1a1612;margin:0;">${escapeHtml(summary)}</pre>
+    <div style="background:#edf0e7;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;color:#2b2b2b;">
+      <div style="max-width:680px;margin:0 auto;background:#fffefa;border:1px solid #dedfd6;border-radius:12px;overflow:hidden;">
+        <div style="background:#243d37;padding:18px;text-align:center;">
+          <a href="https://thewrkshop.com"><img src="https://thewrkshop.com/assets/images/thewrkshop-logo-transparent-trimmed.png" width="104" height="80" alt="TheWrkShop" style="display:inline-block;border:0;"></a>
+        </div>
+        <div style="padding:32px;">
+          <p style="font-size:12px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:#3f6f5c;margin:0 0 16px;">TheWrkShop Assessment</p>
+          <h1 style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-weight:600;font-size:30px;line-height:1.15;color:#243d37;margin:0 0 16px;">Your Spiritual Gifts Results</h1>
+          <p style="font-size:16px;line-height:1.7;color:#2b2b2b;margin:0 0 24px;">Here is your saved assessment summary so you can come back to it anytime, share it with your group, or bring it into your next leadership conversation.</p>
+          <pre style="white-space:pre-wrap;font-family:'Courier New',monospace;font-size:14px;line-height:1.75;background:#edf0e7;border-left:4px solid #243d37;border-radius:0 8px 8px 0;padding:20px;color:#243d37;margin:0;">${escapeHtml(summary)}</pre>
+          <p style="font-size:12px;line-height:1.6;color:#59655f;margin:24px 0 0;">— TheWrkShop · <a href="https://thewrkshop.com" style="color:#59655f;">thewrkshop.com</a></p>
+        </div>
       </div>
     </div>
   `;

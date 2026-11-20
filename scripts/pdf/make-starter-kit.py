@@ -32,11 +32,13 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 FONT_DIR = '/usr/share/fonts/truetype/google-fonts'
 LOGO = os.path.join(ROOT, 'assets', 'images', 'thewrkshop-logo-transparent-trimmed.png')
 
-BROWN = colors.HexColor('#3e2c23')
-CREAM = colors.HexColor('#f4f1ee')
-TAN = colors.HexColor('#c9aa8c')
-MUTED = colors.HexColor('#6b5b53')
-RULE = colors.HexColor('#ddd3ca')
+# Editorial palette (Nov 2026), same as the website and emails
+INK = colors.HexColor('#243d37')    # ink green: header band, headings, table heads
+CREAM = colors.HexColor('#f4f1ee')  # light text on the ink band
+WASH = colors.HexColor('#edf0e7')   # light sage: alternate table rows
+SAGE = colors.HexColor('#a5b4a2')   # band eyebrow, write-in lines
+MUTED = colors.HexColor('#59655f')
+RULE = colors.HexColor('#dedfd6')
 
 for name, file in [('Pop', 'Poppins-Regular.ttf'), ('PopM', 'Poppins-Medium.ttf'),
                    ('PopB', 'Poppins-Bold.ttf'), ('PopI', 'Poppins-Italic.ttf')]:
@@ -45,12 +47,12 @@ pdfmetrics.registerFont(TTFont('Box', '/usr/share/fonts/truetype/dejavu/DejaVuSa
 pdfmetrics.registerFontFamily('Pop', normal='Pop', bold='PopB', italic='PopI', boldItalic='PopB')
 
 S = {
-    'h2': ParagraphStyle('h2', fontName='PopB', fontSize=12.5, leading=16, textColor=BROWN, spaceBefore=10, spaceAfter=4),
+    'h2': ParagraphStyle('h2', fontName='PopB', fontSize=12.5, leading=16, textColor=INK, spaceBefore=10, spaceAfter=4),
     'body': ParagraphStyle('body', fontName='Pop', fontSize=10, leading=14.5, textColor=colors.HexColor('#2b2b2b')),
     'small': ParagraphStyle('small', fontName='Pop', fontSize=8.8, leading=12.5, textColor=MUTED),
-    'verse': ParagraphStyle('verse', fontName='PopI', fontSize=10, leading=14.5, textColor=BROWN),
+    'verse': ParagraphStyle('verse', fontName='PopI', fontSize=10, leading=14.5, textColor=INK),
     'cell': ParagraphStyle('cell', fontName='Pop', fontSize=9.3, leading=13, textColor=colors.HexColor('#2b2b2b')),
-    'cellb': ParagraphStyle('cellb', fontName='PopB', fontSize=9.3, leading=13, textColor=BROWN),
+    'cellb': ParagraphStyle('cellb', fontName='PopB', fontSize=9.3, leading=13, textColor=INK),
     'th': ParagraphStyle('th', fontName='PopB', fontSize=8.5, leading=11, textColor=colors.white),
     'center': ParagraphStyle('center', fontName='Pop', fontSize=10, leading=14, alignment=TA_CENTER, textColor=MUTED),
 }
@@ -63,11 +65,11 @@ def page_frame(title, subtitle):
     def draw(c, doc):
         c.saveState()
         band = 1.25 * inch
-        c.setFillColor(BROWN)
+        c.setFillColor(INK)
         c.rect(0, H - band, W, band, stroke=0, fill=1)
         c.drawImage(LOGO, W - M - 0.95 * inch, H - band + 0.2 * inch, width=0.95 * inch,
                     height=0.95 * inch * 180 / 233, mask='auto')
-        c.setFillColor(TAN)
+        c.setFillColor(SAGE)
         c.setFont('PopB', 8.5)
         c.drawString(M, H - 0.45 * inch, 'THEWRKSHOP  ·  STARTER KIT')
         c.setFillColor(CREAM)
@@ -112,11 +114,11 @@ def table(rows, widths, header=True, row_heights=None, zebra=True):
         ('BOX', (0, 0), (-1, -1), 0.6, RULE),
     ]
     if header:
-        style += [('BACKGROUND', (0, 0), (-1, 0), BROWN)]
+        style += [('BACKGROUND', (0, 0), (-1, 0), INK)]
     if zebra:
         for i in range(1 if header else 0, len(rows)):
             if i % 2 == 0:
-                style.append(('BACKGROUND', (0, i), (-1, i), CREAM))
+                style.append(('BACKGROUND', (0, i), (-1, i), WASH))
     t.setStyle(TableStyle(style))
     return t
 
@@ -125,13 +127,13 @@ def lines(label, n=1, width=None):
     width = width or (W - 2 * M)
     rows = [[P(label, 'cellb') if i == 0 else '', ''] for i in range(n)]
     t = Table(rows, colWidths=[1.35 * inch, width - 1.35 * inch], rowHeights=[0.32 * inch] * n)
-    t.setStyle(TableStyle([('LINEBELOW', (1, 0), (1, -1), 0.6, TAN), ('VALIGN', (0, 0), (-1, -1), 'BOTTOM'),
+    t.setStyle(TableStyle([('LINEBELOW', (1, 0), (1, -1), 0.6, SAGE), ('VALIGN', (0, 0), (-1, -1), 'BOTTOM'),
                            ('LEFTPADDING', (0, 0), (-1, -1), 0), ('BOTTOMPADDING', (0, 0), (-1, -1), 3)]))
     return t
 
 
 CW = W - 2 * M
-BOX = '<font name="Box" color="#6b5b53">☐</font>'  # Poppins has no checkbox glyph
+BOX = '<font name="Box" color="#59655f">☐</font>'  # Poppins has no checkbox glyph
 
 
 # ---------- 1. Meeting Agenda ----------
