@@ -1,0 +1,234 @@
+{
+  "date": "2026-11-27",
+  "title": "Advent",
+  "subtitle": "Gratitude Remembers. Advent Waits.",
+  "tagline": "Yesterday we looked back at what God did. Today we start waiting on what He said He would do.",
+  "headline": "Gratitude Remembers. Advent Waits.",
+  "headline_sub": "What Advent Is, and the Battle in the Waiting",
+  "slug": "gratitude-remembers-advent-waits",
+  "series": "Advent",
+  "seo_title": "What Is Advent? Waiting for Jesus Before Christmas",
+  "seo_description": "What is Advent? The four weeks before Christmas are a season of waiting. A devotional for men on what the wait reveals and how to enter Advent this year.",
+  "search_phrase": "what is Advent",
+  "keywords": [
+    "what is Advent",
+    "Advent devotional for men",
+    "waiting on God",
+    "first Sunday of Advent",
+    "Psalm 130:5-6"
+  ],
+  "topics": [
+    "waiting-on-god",
+    "trusting-god"
+  ],
+  "og_image": "/assets/og/gratitude-remembers-advent-waits.png",
+  "og_image_alt": "Gratitude Remembers. Advent Waits.: Yesterday we looked back at what God did. Today we start waiting on what He said He would do. TheWrkShop.",
+  "scriptures": [
+    {
+      "ref": "Psalm 130:5-6",
+      "text": "I wait for the LORD, my whole being waits, and in his word I put my hope. I wait for the Lord more than watchmen wait for the morning, more than watchmen wait for the morning."
+    }
+  ],
+  "sections": [
+    {
+      "key": "the_revelation",
+      "label": "Today",
+      "blocks": [
+        {
+          "type": "lines",
+          "items": [
+            "Yesterday we looked back.",
+            "What God carried us through.",
+            "What He gave.",
+            "Who He gave it through."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Today the season turns."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "GRATITUDE REMEMBERS WHAT GOD HAS DONE. ADVENT WAITS FOR WHAT GOD HAS SAID HE WILL DO."
+        }
+      ]
+    },
+    {
+      "key": "the_truth",
+      "label": "The Truth",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "So what is Advent? It is the four weeks before Christmas when Christians wait and prepare for the coming of Jesus."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "The word means arrival.",
+            "But before every arrival there is a wait.",
+            "And in the wait, there is a battle."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "nobody_trains_us_to_wait",
+      "label": "Nobody Trains Us to Wait",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Most men are trained to work. Few are trained to wait."
+        },
+        {
+          "type": "paragraph",
+          "text": "Waiting feels like losing ground. So we fill it."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "We fix.",
+            "We plan.",
+            "We stay busy.",
+            "We buy."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Today a lot of the country starts getting ready for Christmas with a shopping list. That’s not wrong. But it isn’t Advent."
+        },
+        {
+          "type": "paragraph",
+          "text": "The world gets ready for Christmas by gathering. Advent gets ready by watching."
+        }
+      ]
+    },
+    {
+      "key": "the_upstream_battle",
+      "label": "Waiting Is a Trigger",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "A delay always asks a question: What does this mean?"
+        },
+        {
+          "type": "lines",
+          "items": [
+            "“God forgot.”",
+            "“It’s all on me.”",
+            "“Nothing is going to change.”",
+            "“I’ll believe it when I see it.”"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Those aren’t facts. They’re interpretations."
+        },
+        {
+          "type": "callout",
+          "prefix": "👉",
+          "text": "WHATEVER WE AGREE WITH IN THE WAITING IS WHAT WE BRING TO THE ARRIVAL."
+        }
+      ]
+    },
+    {
+      "key": "before_bethlehem",
+      "label": "Before Bethlehem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Every person in the Christmas story had to wait. Every one of them had to decide what God’s interruption meant."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "A priest who had stopped expecting an answer.",
+            "A young woman whose yes would cost her reputation.",
+            "A good man about to make a reasonable, quiet, wrong decision.",
+            "Shepherds on the night shift."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Four times, before God said anything else, He said the same thing: “Do not be afraid.”"
+        },
+        {
+          "type": "paragraph",
+          "text": "God spoke to the fear before He spoke the news."
+        }
+      ]
+    },
+    {
+      "key": "the_surrender",
+      "label": "Take a Moment",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Take a moment and name what you’re waiting on God for this year."
+        },
+        {
+          "type": "lines",
+          "items": [
+            "Don’t fix it.",
+            "Don’t explain it.",
+            "Just name it."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Then ask: What have I been telling myself this wait means?"
+        }
+      ]
+    },
+    {
+      "key": "take_it_with_you",
+      "label": "Take It With You",
+      "blocks": [
+        {
+          "type": "quote",
+          "text": "Gratitude remembers. Advent waits."
+        }
+      ]
+    },
+    {
+      "key": "the_prayer",
+      "label": "The Prayer",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Father, thank You for what You have already done. As this season turns, teach me to wait on what You have said You will do. Show me what I have been telling myself the waiting means, and give me the courage to agree with You instead. In Jesus’ name, Amen."
+        }
+      ]
+    },
+    {
+      "key": "hidden_gems",
+      "label": "Hidden Gems 💎",
+      "blocks": [
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "Gratitude looks back. Advent leans forward."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "What we agree with in the waiting is what we bring to the arrival."
+        },
+        {
+          "type": "callout",
+          "prefix": "💎",
+          "text": "Christmas was decided upstream."
+        },
+        {
+          "type": "paragraph",
+          "text": "Starting Tuesday, December 1: Advent with TheWrkShop. Every day through Christmas."
+        },
+        {
+          "type": "paragraph",
+          "text": "—TheWrkShop"
+        }
+      ]
+    }
+  ],
+  "__insert_block_header": "2026-11-27_psalm-130-5-6_gratitude-remembers-advent-waits|"
+}
